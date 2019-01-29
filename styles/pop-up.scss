@@ -1,0 +1,36 @@
+.addLayout {
+    height: 40vh;
+    padding: 20px;
+    .navBox{
+        span{
+            display: block;
+            width: 20%;
+            height: 100%;
+        }
+    }
+    .adopt{
+        margin-top: 12vh;
+        span{
+            display: block;
+        }
+    }
+    .leave{
+        margin-top: 25vh;
+        span{
+            display: block;
+        }
+    }
+}
+.microLayout{
+    height: 60vh;
+    .pitch{
+        margin-top: 20px;
+        span{
+            display: block;
+            padding-top: 20px;
+        }
+    }
+    .userList{
+        margin-top: 20px;
+    }
+}
