@@ -12,15 +12,8 @@
       <!-- 上传 -->
       <div class="dataUp">
         <span style="padding-top: 1vw;">导入工程数据:</span>
-        <span>
-          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange">
-            <el-input v-model="input" placeholder="请选择需要上传的文件"></el-input>
-          </el-upload>
-        </span>
         <span style="padding-top: 0.7vw;">
-          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange">
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>
+          <el-button size="small" type="primary" @click="action('add')">新增</el-button>
         </span>
       </div>
     </div>
@@ -35,14 +28,25 @@
         </el-table-column>
       </tree-table>
     </div>
+
+    <!-- 新增弹框 -->
+    <el-dialog title="新增" :visible.sync="dialogFormVisible">
+      <Xcadd :nowItem="nowItem" v-if="nowItem"></Xcadd>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import treeTable from "@/components/TreeTable";
+import Xcadd from "./popUp/Xcadd";
+import api from "../../api/project.js";
 export default {
   name: "TreeTableDemo",
-  components: { treeTable },
+  components: {
+    treeTable,
+    Xcadd
+  },
   data() {
     return {
       options: [
@@ -92,89 +96,25 @@ export default {
           event: "上海同望",
           timeLine: "K0+503-K13+900",
           comment: "单位工程"
-        },
-        {
-          id: "H1",
-          event: "研发部",
-          timeLine: "K0-K0",
-          comment: "单位工程",
-          children: [
-            {
-              id: "Q01",
-              event: "一分部",
-              timeLine: "K1+93-K1+93",
-              comment: "单位工程"
-            },
-            {
-              id: "Q02",
-              event: "二分部",
-              timeLine: "K3+274-K3+274",
-              comment: "单位工程",
-              children: [
-                {
-                  id: "Q03",
-                  event: "事件4",
-                  timeLine: "K6+740-K6+740",
-                  comment: "单位工程"
-                },
-                {
-                  id: "Q04",
-                  event: "事件5",
-                  timeLine: "K7+903-K7+903",
-                  comment: "单位工程"
-                },
-                {
-                  id: "Q05",
-                  event: "事件6",
-                  timeLine: "K10+797-K10+797",
-                  comment: "单位工程",
-                  children: [
-                    {
-                      id: 7,
-                      event: "事件7",
-                      timeLine: "K11+285-K11+285",
-                      comment: "单位工程",
-                      children: [
-                        {
-                          id: 71,
-                          event: "事件71",
-                          timeLine: 25,
-                          comment: "单位工程"
-                        },
-                        {
-                          id: 72,
-                          event: "事件72",
-                          timeLine: 5,
-                          comment: "单位工程"
-                        },
-                        {
-                          id: 73,
-                          event: "事件73",
-                          timeLine: 20,
-                          comment: "单位工程"
-                        }
-                      ]
-                    },
-                    {
-                      id: "S1",
-                      event: "事件8",
-                      timeLine: "K10+090-K26+034",
-                      comment: "单位工程"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
         }
       ],
+    
+       nowItem: "",
+      dialogFormVisible: false,
       value: "",
       input: ""
     };
   },
+ 
   methods: {
-    handleChange(file, fileList) {
-      this.fileList3 = fileList.slice(-3);
+     action(val) {
+      this.nowItem = val;
+      this.dialogFormVisible = true;
+    },
+  },
+  watch: {
+    dialogFormVisible(val) {
+      !val && (this.nowItem = "");
     }
   }
 };
