@@ -83,7 +83,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '123456'
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -117,6 +117,7 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then(() => {
+              localStorage.setItem('pass',this.loginForm.password)
               this.loading = false;
               this.$router.push({ path: this.redirect || "/" });
             })

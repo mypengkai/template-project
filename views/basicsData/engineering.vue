@@ -19,14 +19,43 @@
     </div>
     <!-- 操作列表 -->
     <div class="app-container">
-      <tree-table :data="data" :columns="columns" border>
-        <el-table-column label="操作" width="200">
+      <el-table :data="dataList" style="width: 100%">
+        <el-table-column label="工程分部分项">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle></el-button>
+            <span>{{ scope.row.projectItem }}</span>
           </template>
         </el-table-column>
-      </tree-table>
+        <el-table-column label="所属组织机构">
+          <template slot-scope="scope">
+            <span>{{ scope.row.userGroupIdName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <span>{{ scope.row.projectType1 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="起始桩号">
+          <template slot-scope="scope">
+            <span>{{ scope.row.startStation }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="终止桩号">
+          <template slot-scope="scope">
+            <span>{{ scope.row.endStation }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建人">
+          <template slot-scope="scope">
+            <span>{{ scope.row.useridName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
 
     <!-- 新增弹框 -->
@@ -71,44 +100,60 @@ export default {
           label: "二分部"
         }
       ],
-      columns: [
-        {
-          text: "组织机构",
-          value: "event",
-          width: 200
-        },
-        {
-          text: "代码",
-          value: "id"
-        },
-        {
-          text: "桩号",
-          value: "timeLine"
-        },
-        {
-          text: "工程类型",
-          value: "comment"
-        }
-      ],
-      data: [
-        {
-          id: "J",
-          event: "上海同望",
-          timeLine: "K0+503-K13+900",
-          comment: "单位工程"
-        }
-      ],
+      // columns: [
+      //   {
+      //     text: "组织机构",
+      //     value: "org",
+      //     width: 200
+      //   },
+      //   {
+      //     text: "起始桩号",
+      //     value: "start"
+      //   },
+      //   {
+      //     text: "结束桩号",
+      //     value: "termination"
+      //   },
+      //   {
+      //     text: "工程类型",
+      //     value: "project"
+      //   }
+      // ],
+      dataList: "",
       nowItem: "",
       dialogFormVisible: false,
       value: "",
       input: ""
     };
   },
-
+  created() {
+    this.getprojectList();
+    this._getItem();
+  },
   methods: {
     action(val) {
       this.nowItem = val;
       this.dialogFormVisible = true;
+    },
+    getprojectList() {
+      api.projectList().then(res => {
+        let dataList = res.data.data;
+        this.dataList = dataList;
+        dataList.forEach(v => {
+          v.projectType == 1 && (v.projectType1 = "单位工程");
+          v.projectType == 2 && (v.projectType1 = "子单位工程");
+          v.projectType == 3 && (v.projectType1 = "分部工程");
+          v.projectType == 4 && (v.projectType1 = "子分部工程");
+          v.projectType == 5 && (v.projectType1 = "分项工程");
+          v.projectType == 6 && (v.projectType1 = "子分项工程");
+        });
+        console.log(dataList);
+      });
+    },
+    _getItem() {
+      this.$tool._vue.$on("getItem", val => {
+        this.data = val;
+      });
     }
   },
   watch: {
