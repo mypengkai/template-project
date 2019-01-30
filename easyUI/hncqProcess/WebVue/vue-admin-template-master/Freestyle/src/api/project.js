@@ -3,6 +3,9 @@ import request from '@/utils/request'
 export default {
     projectAdd(data) {
         return request.post('/rest/ProjectItemInfoController/projectadd', data)
+    },
+    projectList(data) {
+        return request.post('/rest/ProjectItemInfoController/getList', data)
     }
 }
 
@@ -10,7 +13,4 @@ export default {
 //   return request.get('/rest/user', {params})
 // }
 
-// export function logout(data) {
-//   return request.post('/rest/tokens', data)
-// }
 

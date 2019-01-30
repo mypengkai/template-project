@@ -5,7 +5,6 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img src="../../../../static/timg.jpg" alt="" class="user-avatar">
-
           <i class="el-icon-caret-bottom" />
         </div>
 
@@ -14,6 +13,9 @@
           <!-- <router-link class="inlineBlock"> -->
           <el-dropdown-item>
             <span style="display:block;" @click="xiugai">修改个人信息</span>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <span style="display:block;" @click="xiuPass">修改密码</span>
           </el-dropdown-item>
           <!-- </router-link> -->
           <el-dropdown-item divided>
@@ -50,8 +52,22 @@
         <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 修改密码弹框 -->
+    <el-dialog title="修改个人信息" :visible.sync="xiuFormVisible">
+      <el-form :model="formPass" :rules="ruleses" ref="wordForm">
+        <el-form-item label="原密码" label-width="120px" prop="passWord">
+          <el-input v-model="formPass.passWord"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" label-width="120px" prop="xinpassWoed">
+          <el-input v-model="formPass.xinpassWoed"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="quxiaoForm()">取 消</el-button>
+        <el-button type="primary" @click="xiuForm()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
-
 </template>
 
 <script>
@@ -71,16 +87,29 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
+      xiuFormVisible:false,
+      formPass:{
+        passWord:"",
+        xinpassWoed:""
+      },
       form: {
         name: "",
         createName: "",
         mobilePhone: "",
         officePhone: "",
         email: ""
+      },
+      ruleses: {
+        passWord: [
+            { required: true, message: '请输入原密码', trigger: 'blur' },
+          ],
+        xinpassWoed: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, message: '请输入打入6位以上的密码', trigger: 'blur' }
+        ],
       }
     };
   },
-
   mounted() {
     this.fn();
   },
@@ -91,6 +120,55 @@ export default {
     xiugai() {
       this.dialogFormVisible = true;
     },
+    xiuPass(){
+      this.xiuFormVisible = true;
+    },
+    quxiaoForm(){
+      this.formPass.passWord='';
+      this.formPass.xinpassWoed='';
+      this.xiuFormVisible=false;
+    },
+    xiuForm(){
+      let pass = localStorage.getItem('pass');
+      this.$refs.wordForm.validate(valid => {
+        if (valid) {
+          if(this.formPass.passWord ==this.formPass.xinpassWoed){
+              this.$message({
+              showClose: true,
+              message: '请输入不一样的密码',
+              type: 'warning'
+            });
+            return false;
+          };
+          if(this.formPass.passWord !=pass){
+              this.$message({
+              showClose: true,
+              message: '请输入正确的原密码',
+              type: 'warning'
+            });
+            return false;
+          }
+          let passData={password:this.formPass.xinpassWoed,oldpassword:this.formPass.passWord};
+            return request.post("/rest/UsersController/resetPassword",passData).then(res=>{
+              if(res.status==200){
+                this.$message({
+                  showClose: true,
+                  message: '恭喜你，修改密码成功',
+                  type: 'success'
+                });
+                this.formPass.passWord='';
+                this.formPass.xinpassWoed='';
+                this.xiuFormVisible=false;
+              }
+          })
+        } else{
+          console.log("error submit!!");
+          return false;
+        }
+      });
+     
+      
+    },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
         location.reload(); // 为了重新实例化vue-router对象 避免bug
@@ -99,12 +177,13 @@ export default {
     // 请求接口
     fn() {
       return request.get("/rest/user").then(res => {
-        console.log(res);
-        this.form.name = res.data[0].createBy;
-        this.form.createName = res.data[0].createName;
-        this.form.mobilePhone = res.data[0].mobilePhone;
-        this.form.officePhone = res.data[0].officePhone;
-        this.form.email = res.data[0].email;
+        if(res.status==200){
+          this.form.name = res.data[0].createBy;
+          this.form.createName = res.data[0].createName;
+          this.form.mobilePhone = res.data[0].mobilePhone;
+          this.form.officePhone = res.data[0].officePhone;
+          this.form.email = res.data[0].email;
+        }
       });
     }
   }

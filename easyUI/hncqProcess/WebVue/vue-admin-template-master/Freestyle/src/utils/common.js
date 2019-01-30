@@ -6,6 +6,7 @@ const tool = {
   //环境自动切换 适应域名
   baseURL: process.env.BASE_API,
 };
+tool._vue = new Vue();
 tool.message = (msg, sec = 3) => {
   Message({
     message: msg,
@@ -64,6 +65,7 @@ tool.getColor = (max, base) => {
   }
   return arr;
 }
+
 tool.fullscreen = (callback) => {
   window.onresize = () => {
     let isfull = (document.body.scrollHeight == window.screen.height && document.body.scrollWidth == window.screen.width);
