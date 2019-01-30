@@ -1,37 +1,41 @@
 <template>
     <div>
-        <el-form :model="form">
-            <el-form-item label="所属机构" :label-width="formLabelWidth">
-                <el-input v-model="form.name"></el-input>
+        <el-form :model="form" :rules="rules">
+            <el-form-item label="所属机构" :label-width="formLabelWidth" prop="org">
+                <el-input v-model="form.org"></el-input>
             </el-form-item>
 
-             <el-form-item label="所属机构是否分项" :label-width="formLabelWidths">
+            <el-form-item label="工程分部分项" :label-width="formLabelWidth" prop="region">
                 <el-select v-model="form.region" placeholder="请选择">
-                    <el-option label="是" value="data1"></el-option>
-                    <el-option label="否" value="beijing"></el-option>
+                    <el-option label="是" value=1></el-option>
+                    <el-option label="否" value=0></el-option>
                 </el-select>
             </el-form-item>
-            
-            <el-form-item label="起始桩号" :label-width="formLabelWidth">
-                <el-input v-model="form.name"></el-input>
+
+            <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="start">
+                <el-input v-model="form.start"></el-input>
             </el-form-item>
+
             <el-form-item label="终止桩号" :label-width="formLabelWidth">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.termination"></el-input>
             </el-form-item>
+
             <el-form-item label="经度" :label-width="formLabelWidth">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.longitude"></el-input>
             </el-form-item>
+
             <el-form-item label="纬度" :label-width="formLabelWidth">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.latitude"></el-input>
             </el-form-item>
+
             <el-form-item label="工程类型" :label-width="formLabelWidth">
-                <el-select v-model="form.region" placeholder="请选择">
-                    <el-option label="单位工程" value="data1"></el-option>
-                    <el-option label="子单位工程" value="beijing"></el-option>
-                    <el-option label="分部工程" value="beijing"></el-option>
-                    <el-option label="子分部工程" value="shanghai"></el-option>
-                    <el-option label="分项工程" value="beijing"></el-option>
-                    <el-option label="子分项工程" value="beijing"></el-option>
+                <el-select v-model="form.project" placeholder="请选择">
+                    <el-option label="单位工程" value="unit"></el-option>
+                    <el-option label="子单位工程" value="childUnit"></el-option>
+                    <el-option label="分部工程" value="separate"></el-option>
+                    <el-option label="子分部工程" value="childSeparate"></el-option>
+                    <el-option label="分项工程" value="itemize"></el-option>
+                    <el-option label="子分项工程" value="childItemize"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -49,19 +53,24 @@ export default {
   data() {
     return {
       form: {
-        name: "",
+        org: "",
+        start: "",
+        termination: "",
+        longitude: "",
+        latitude: "",
         region: "",
         value: "",
-        date1: "",
-        date2: "",
+        project: "",
         delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
+        type: []
+      },
+      rules: {
+        org: [{ required: true, message: "请输入所属机构", trigger: "blur" }],
+        region: [{ required: true, message: "请选择", trigger: "change" }],
+        start: [{ required: true, message: "请输入起始桩号", trigger: "blur" }]
       },
       formLabelWidth: "150px",
-      formLabelWidths: "150px",
-      dialogFormVisible: false
+      dialogFormVisible: true
     };
   },
   created() {
@@ -69,40 +78,12 @@ export default {
   },
   methods: {
     userx() {
-      if (this.nowItem == "add");
+      if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem);
     },
-    Xcadd() {
-      api.projectAdd(this.form.id).then(res => {
-        let data = res.data;
-        Object.assign(this.form, data);
-      });
+    async Xcadd() {
+      await api.projectAdd(this.form);
     }
-    // confirm() {
-    //   this.nowItem != "add" &&
-    //     api.update(this.form).then(res => {
-    //       this.$emit("diaslogConfirm");
-    //     });
-    // },
-    // open2() {
-    //   this.$Xcadd("是否保存该文件", {
-    //     confirmButtonText: "确定",
-    //     cancelButtonText: "取消",
-    //     type: "warning"
-    //   })
-    //     .then(() => {
-    //       this.$message({
-    //         type: "success",
-    //         message: "已保存!"
-    //       });
-    //     })
-    //     .catch(() => {
-    //       this.$message({
-    //         type: "info",
-    //         message: "已取消"
-    //       });
-    //     });
-    // }
   }
 };
 </script>
