@@ -40,7 +40,7 @@
 <script>
 import treeTable from "@/components/TreeTable";
 import Xcadd from "./popUp/Xcadd";
-import api from "../../api/project.js";
+import api from "@/api/project.js";
 export default {
   name: "TreeTableDemo",
   components: {
@@ -98,19 +98,18 @@ export default {
           comment: "单位工程"
         }
       ],
-    
-       nowItem: "",
+      nowItem: "",
       dialogFormVisible: false,
       value: "",
       input: ""
     };
   },
- 
+
   methods: {
-     action(val) {
+    action(val) {
       this.nowItem = val;
       this.dialogFormVisible = true;
-    },
+    }
   },
   watch: {
     dialogFormVisible(val) {
