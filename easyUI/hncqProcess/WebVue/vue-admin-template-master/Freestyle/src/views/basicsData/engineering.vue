@@ -19,41 +19,20 @@
     </div>
     <!-- 操作列表 -->
     <div class="app-container">
-      <el-table :data="dataList" style="width: 100%">
-        <el-table-column label="工程分部分项">
-          <template slot-scope="scope">
-            <span>{{ scope.row.projectItem }}</span>
-          </template>
+      <el-table :data="dataList" height="62vh">
+         <el-table-column prop="projectItem" label="工程分布分项">
         </el-table-column>
-        <el-table-column label="所属组织机构">
-          <template slot-scope="scope">
-            <span>{{ scope.row.userGroupIdName }}</span>
-          </template>
+        <el-table-column prop="projectType1" label="类型">
         </el-table-column>
-        <el-table-column label="类型">
-          <template slot-scope="scope">
-            <span>{{ scope.row.projectType1 }}</span>
-          </template>
+        <el-table-column prop="userGroupIdName" label="所属组织机构">
         </el-table-column>
-        <el-table-column label="起始桩号">
-          <template slot-scope="scope">
-            <span>{{ scope.row.startStation }}</span>
-          </template>
+        <el-table-column prop="startStation" label="起始桩号">
         </el-table-column>
-        <el-table-column label="终止桩号">
-          <template slot-scope="scope">
-            <span>{{ scope.row.endStation }}</span>
-          </template>
+        <el-table-column prop="endStation" label="终止桩号">
         </el-table-column>
-        <el-table-column label="创建人">
-          <template slot-scope="scope">
-            <span>{{ scope.row.useridName }}</span>
-          </template>
+        <el-table-column prop="useridName" label="创建人">
         </el-table-column>
-        <el-table-column label="创建时间">
-          <template slot-scope="scope">
-            <span>{{ scope.row.createTime }}</span>
-          </template>
+        <el-table-column prop="createTime" label="创建时间">
         </el-table-column>
       </el-table>
     </div>
@@ -100,26 +79,13 @@ export default {
           label: "二分部"
         }
       ],
-      // columns: [
-      //   {
-      //     text: "组织机构",
-      //     value: "org",
-      //     width: 200
-      //   },
-      //   {
-      //     text: "起始桩号",
-      //     value: "start"
-      //   },
-      //   {
-      //     text: "结束桩号",
-      //     value: "termination"
-      //   },
-      //   {
-      //     text: "工程类型",
-      //     value: "project"
-      //   }
-      // ],
-      dataList: "",
+      dataList: [
+        {
+          start: "start",
+          termination: "termination",
+          project: "project"
+        }
+      ],
       nowItem: "",
       dialogFormVisible: false,
       value: "",
@@ -137,8 +103,8 @@ export default {
     },
     getprojectList() {
       api.projectList().then(res => {
-        let dataList = res.data.data;
-        this.dataList = dataList;
+        this.dataList = res.data.data;
+        let dataList = this.dataList;
         dataList.forEach(v => {
           v.projectType == 1 && (v.projectType1 = "单位工程");
           v.projectType == 2 && (v.projectType1 = "子单位工程");
@@ -147,7 +113,6 @@ export default {
           v.projectType == 5 && (v.projectType1 = "分项工程");
           v.projectType == 6 && (v.projectType1 = "子分项工程");
         });
-        console.log(dataList);
       });
     },
     _getItem() {
