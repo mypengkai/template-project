@@ -179,8 +179,10 @@ $light_gray:#eee;
   background-size:cover;
   height: 430px;
   .logoName{
-    margin: 40px 0 0 100px;
-    font-size: 45px;
+    // margin: 40px 0 0 100px;
+    text-align: center;
+    padding-top:4vh;
+    font-size: 2.5vw;
     color: #0000ff;
     font-weight: bold;
   }
@@ -189,24 +191,23 @@ $light_gray:#eee;
   width: 100%;
   background-color: $bg;
   .login-form {
-    width: 520px;
+    width: 25vw;
     max-width: 100%;
-    padding: 35px 30px 15px 35px;
-    margin:150px auto;
+    padding: 1vw;
+    margin:15vh auto;
     background:rgba(255,255,255,0.5)
   }
   .svg-container {
-    padding: 6px 5px 6px 15px;
-    // color: $dark_gray;
+    padding: 0.5vw;
     vertical-align: middle;
-    width: 30px;
+    width: 2.5vw;
     display: inline-block;
   }
   .title {
-    font-size: 26px;
+    font-size: 1.5vw;
     font-weight: 400;
     color: #E6A23C;
-    margin: 0px auto 40px auto;
+    margin: 0px auto 1.5vw auto;
     text-align: center;
     font-weight: bold;
   }
@@ -223,14 +224,14 @@ $light_gray:#eee;
   .bq{
     text-align:center;
     color: 	#ccc;
-    font-size: 16px;
+    font-size: 0.8vw;
     // padding: 0 auto;
-    margin-top:230px;
+    margin-top:12vw;
     p{
       margin-top:20px
     }
     .phone{
-      font-size:16px
+      font-size:0.7vw;
     }
   }
 

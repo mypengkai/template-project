@@ -1,7 +1,7 @@
 <template>
   <div class="engineeringLayout">
     <!-- 选择区域 -->
-    <div class="selectArea">
+    <div class="selectArea scrollY">
       <div class="framework">
         组织机构:
         <el-select v-model="value" placeholder="请选择">
@@ -20,7 +20,7 @@
     <!-- 操作列表 -->
     <div class="app-container">
       <el-table :data="dataList" height="62vh">
-         <el-table-column prop="projectItem" label="工程分布分项">
+        <el-table-column prop="projectItem" label="工程分布分项">
         </el-table-column>
         <el-table-column prop="projectType1" label="类型">
         </el-table-column>
@@ -34,12 +34,18 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间">
         </el-table-column>
+        <el-table-column fixed="right" label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
-      <Xcadd :nowItem="nowItem" v-if="nowItem"></Xcadd>
+      <Xcadd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
     </el-dialog>
 
   </div>
@@ -93,15 +99,14 @@ export default {
     };
   },
   created() {
-    this.getprojectList();
-    this._getItem();
+    this._projectList();
   },
   methods: {
     action(val) {
       this.nowItem = val;
       this.dialogFormVisible = true;
     },
-    getprojectList() {
+    _projectList() {
       api.projectList().then(res => {
         this.dataList = res.data.data;
         let dataList = this.dataList;
@@ -115,9 +120,18 @@ export default {
         });
       });
     },
-    _getItem() {
-      this.$tool._vue.$on("getItem", val => {
-        this.data = val;
+    // 删除按钮
+    Delete(data) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => this._projectDelete(data));
+    },
+    // 删除请求
+    _projectDelete(data) {
+      api.projectDelete(data.id).then(res => {
+        this._projectList();
       });
     }
   },
@@ -139,7 +153,7 @@ export default {
     .framework {
       padding-left: 20px;
       padding-top: 0.4vw;
-      width: 20vw;
+      width: 29vw;
       height: 100%;
       float: left;
     }
@@ -147,7 +161,6 @@ export default {
       width: 35vw;
       height: 100%;
       float: left;
-
       margin-left: 15vw;
       span {
         display: block;

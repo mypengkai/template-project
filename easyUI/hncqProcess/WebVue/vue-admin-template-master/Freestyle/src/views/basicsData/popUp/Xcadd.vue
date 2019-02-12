@@ -1,64 +1,66 @@
 <template>
-    <div>
-        <el-form :model="form" :rules="rules">
-            <el-form-item label="所属机构" :label-width="formLabelWidth" prop="org">
-                <el-input v-model="form.org">
-                    <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
-                </el-input>
+  <div>
+    <el-form :model="form" :rules="rules">
+      <div style="width:50%">
+        <el-form-item label="所属机构" :label-width="formLabelWidth" prop="org">
+        <el-input v-model="form.org">
+          <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
+        </el-input>
 
-                <!-- <el-button type="primary" plain @click="innerVisible = true">点击输入</el-button> -->
-            </el-form-item>
+        <!-- <el-button type="primary" plain @click="innerVisible = true">点击输入</el-button> -->
+      </el-form-item>
 
-            <el-form-item label="工程分部分项" :label-width="formLabelWidth" prop="region">
-                <el-select v-model="form.region" placeholder="请选择">
-                    <el-option label="是" value=1></el-option>
-                    <el-option label="否" value=0></el-option>
-                </el-select>
-            </el-form-item>
+      <el-form-item label="工程分部分项" :label-width="formLabelWidth" prop="region">
+        <el-select v-model="form.region" placeholder="请选择">
+          <el-option label="是" value=1></el-option>
+          <el-option label="否" value=0></el-option>
+        </el-select>
+      </el-form-item>
 
-            <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="start">
-                <el-input v-model="form.start"></el-input>
-            </el-form-item>
+      <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="start">
+        <el-input v-model="form.start"></el-input>
+      </el-form-item>
 
-            <el-form-item label="终止桩号" :label-width="formLabelWidth">
-                <el-input v-model="form.termination"></el-input>
-            </el-form-item>
+      <el-form-item label="终止桩号" :label-width="formLabelWidth">
+        <el-input v-model="form.termination"></el-input>
+      </el-form-item>
 
-            <el-form-item label="经度" :label-width="formLabelWidth">
-                <el-input v-model="form.longitude"></el-input>
-            </el-form-item>
+      <el-form-item label="经度" :label-width="formLabelWidth">
+        <el-input v-model="form.longitude"></el-input>
+      </el-form-item>
 
-            <el-form-item label="纬度" :label-width="formLabelWidth">
-                <el-input v-model="form.latitude"></el-input>
-            </el-form-item>
+      <el-form-item label="纬度" :label-width="formLabelWidth">
+        <el-input v-model="form.latitude"></el-input>
+      </el-form-item>
 
-            <el-form-item label="工程类型" :label-width="formLabelWidth">
-                <el-select v-model="form.project" placeholder="请选择">
-                    <el-option label="单位工程" value="单位工程"></el-option>
-                    <el-option label="子单位工程" value="子单位工程"></el-option>
-                    <el-option label="分部工程" value="分部工程"></el-option>
-                    <el-option label="子分部工程" value="子分部工程"></el-option>
-                    <el-option label="分项工程" value="分项工程"></el-option>
-                    <el-option label="子分项工程" value="子分项工程"></el-option>
-                </el-select>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="Xcadd">保 存</el-button>
-        </div>
-
-        <!-- 树形表单提交 -->
-        <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
-            <el-tree :data="data2" show-checkbox node-key="id" :default-expanded-keys="[2, 3]" :default-checked-keys="[5]" :props="defaultProps">
-            </el-tree>
-
-            <div slot="footer" class="dialog-footer">
-                <el-button>取 消</el-button>
-                <el-button type="primary">保 存</el-button>
-            </div>
-        </el-dialog>
+      <el-form-item label="工程类型" :label-width="formLabelWidth">
+        <el-select v-model="form.project" placeholder="请选择">
+          <el-option label="单位工程" value="单位工程"></el-option>
+          <el-option label="子单位工程" value="子单位工程"></el-option>
+          <el-option label="分部工程" value="分部工程"></el-option>
+          <el-option label="子分部工程" value="子分部工程"></el-option>
+          <el-option label="分项工程" value="分项工程"></el-option>
+          <el-option label="子分项工程" value="子分项工程"></el-option>
+        </el-select>
+      </el-form-item>
+      </div>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="$emit('cancel')">取 消</el-button>
+      <el-button type="primary" @click="_comfirm">保 存</el-button>
     </div>
+
+    <!-- 树形表单提交 -->
+    <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
+      <el-tree :data="data2" show-checkbox node-key="id" :default-expanded-keys="[2, 3]" :default-checked-keys="[5]" :props="defaultProps">
+      </el-tree>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button>取 消</el-button>
+        <el-button type="primary">保 存</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -118,16 +120,23 @@ export default {
     };
   },
   created() {
-    this.userx();
+    this.initForm();
   },
   methods: {
-    userx() {
+    initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      console.log(this.form);
     },
-    async Xcadd() {
-      this.$tool._vue.$emit("getItem", this.form);
-      await api.projectAdd(this.form);
+    _comfirm() {
+      this.nowItem == "add" &&
+        api.projectAdd(this.form).then(res => {
+          this.$emit("comfirm");
+        });
+      this.nowItem != "add" &&
+        api.projectAdd(this.form).then(res => {
+          this.$emit("comfirm");
+        });
     }
   }
 };
