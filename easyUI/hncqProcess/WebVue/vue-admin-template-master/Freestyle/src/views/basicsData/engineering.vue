@@ -19,7 +19,7 @@
     </div>
     <!-- 操作列表 -->
     <div class="app-container">
-      <el-table :data="dataList" height="62vh">
+      <el-table :data="dataList" height="60vh">
         <el-table-column prop="projectItem" label="工程分布分项">
         </el-table-column>
         <el-table-column prop="projectType1" label="类型">
