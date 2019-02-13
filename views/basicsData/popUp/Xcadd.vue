@@ -34,12 +34,12 @@
 
         <el-form-item label="工程类型" :label-width="formLabelWidth">
           <el-select v-model="form.projectType1" placeholder="请选择">
-            <el-option label="单位工程" value="单位工程"></el-option>
-            <el-option label="子单位工程" value="子单位工程"></el-option>
-            <el-option label="分部工程" value="分部工程"></el-option>
-            <el-option label="子分部工程" value="子分部工程"></el-option>
-            <el-option label="分项工程" value="分项工程"></el-option>
-            <el-option label="子分项工程" value="子分项工程"></el-option>
+            <el-option label="单位工程" value=1></el-option>
+            <el-option label="子单位工程" value=2></el-option>
+            <el-option label="分部工程" value=3></el-option>
+            <el-option label="子分部工程" value=4></el-option>
+            <el-option label="分项工程" value=5></el-option>
+            <el-option label="子分项工程" value=6></el-option>
           </el-select>
         </el-form-item>
       </div>
@@ -102,17 +102,18 @@ export default {
         delivery: false,
         type: []
       },
-      formTree: {
-        father: "",
-        fatherId: "",
-        son: "",
-        sonId: ""
-      },
+
       rules: {
-        userGroupIdName: [{ required: true, message: "请输入所属机构", trigger: "blur" }],
+        userGroupIdName: [
+          { required: true, message: "请输入所属机构", trigger: "blur" }
+        ],
         projectItem: [{ required: true, message: "请选择", trigger: "blur" }],
-        startStation: [{ required: true, message: "请输入起始桩号", trigger: "blur" }],
-        endStation: [{ required: true, message: "请输入终止桩号", trigger: "blur" }]
+        startStation: [
+          { required: true, message: "请输入起始桩号", trigger: "blur" }
+        ],
+        endStation: [
+          { required: true, message: "请输入终止桩号", trigger: "blur" }
+        ]
       },
       formLabelWidth: "150px",
       dialogFormVisible: true,
@@ -134,7 +135,7 @@ export default {
         api.projectAdd(this.form).then(res => {
           this.$emit("comfirm");
         });
-        // 查看单个
+      // 查看单个
       this.nowItem != "add" &&
         api.projectCheck(this.form).then(res => {
           this.$emit("comfirm");
