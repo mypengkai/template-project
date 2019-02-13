@@ -32,7 +32,8 @@
         </el-table-column>
         <el-table-column prop="useridName" label="创建人">
         </el-table-column>
-       
+        <el-table-column prop="createTime" label="创建时间">
+        </el-table-column>
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
