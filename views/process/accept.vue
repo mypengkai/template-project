@@ -252,7 +252,7 @@ export default {
   .particularsList {
     float: left;
     width: 70%;
-    height: 90vh;
+    height: 75vh;
     // background-color: rgb(141, 39, 39);
     .particulars {
       height: 10vh;
@@ -269,11 +269,11 @@ export default {
     }
     .Cztab {
       margin-top: 10px;
-      height: 70vh;
+      height: 60vh;
       border: 1px solid #ccc;
       border-radius: 10px;
       .paging {
-        padding-top: 10vh;
+        padding-top: 2vh;
         padding-left: 12vw;
       }
     }
