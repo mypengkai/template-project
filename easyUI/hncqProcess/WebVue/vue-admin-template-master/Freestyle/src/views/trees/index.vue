@@ -26,9 +26,10 @@
           </el-row>
         </div>
         <!-- 表单 -->
-            <el-table
+        <div class="gaodu">
+              <el-table
             :data="tableData"
-            height="600"
+            height="75vh"
             style="width: 100%;padding-left:15px">
             <el-table-column
               label="图片"
@@ -60,16 +61,17 @@
           </template>
           </el-table-column>
       </el-table>
+      </div>
       <!-- 分页 -->
-      <div class="block" style="padding-left:15px">
+      <div class="block" style="padding-left:15px" id="blockTop">
        <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[15]"
-        :page-size="100"
+        :page-sizes="[15,30,45,60]"
+        :page-size="15"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="tableLength">
+        :total="total">
         </el-pagination>
       </div>
     </div>
@@ -80,9 +82,9 @@ export default {
   data(){
     return{
       form:{
-        // 条数
+        // 当前页
         pageNo:1,
-        // 页数
+        // 每页条数
         pageSize:15,
         // 姓名值
         userName: '',
@@ -91,33 +93,36 @@ export default {
         // 结束时间
         endTime:'',
       },
+      total:0,
       bookType:'',
       tableData:null,
-      currentPage4:4,
-      tableLength:0,
+      currentPage4:15,
     }
   },
   methods:{
      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+       this.form.pageSize=val
+       this.fn()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.form.pageNo=val;
+        this.fn()
       },
       fn(){
       let objFrom={pageNo:this.form.pageNo,pageSize:this.form.pageSize,userName:this.form.userName,startTime:this.form.startTime,endTime:this.form.endTime}
       return request.post('/rest/processInfoLog/everyDayLogPageList',objFrom).then(res=>{
         if(res.status==200){
-          var data=res.data.data;
-          console.log(data)
+          var data=res.data.data.data;
+          this.total=res.data.data.totalCount;
           this.tableData=data;
-          this.tableLength=this.tableData.length
         }
       })
     },
     chaxun(){
       this.fn()
     }
+  },
+  mounted(){
   },
   created(){
     this.fn() 
@@ -129,17 +134,6 @@ export default {
   .cx{
     margin-top: 15px;
   }
-  .fromScoll{
-     overflow-x: hidden;
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    overflow: auto;
-
-  }
-  .fromScoll::-webkit-scrollbar {
-    display: none;
-  }
-
 </style>
 
 

@@ -182,7 +182,7 @@ export const constantRouterMap = [
         path: 'user',
         name: 'user',
         component: () => import('@/views/system/user'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: { title: '用户字典', icon: 'form' }
       },
     ]
   },
