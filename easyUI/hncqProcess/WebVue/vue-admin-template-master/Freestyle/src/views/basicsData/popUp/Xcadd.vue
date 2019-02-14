@@ -104,16 +104,10 @@ export default {
       },
 
       rules: {
-        userGroupIdName: [
-          { required: true, message: "请输入所属机构", trigger: "blur" }
-        ],
+        userGroupIdName: [{ required: true, message: "请输入所属机构", trigger: "blur" }],
         projectItem: [{ required: true, message: "请选择", trigger: "blur" }],
-        startStation: [
-          { required: true, message: "请输入起始桩号", trigger: "blur" }
-        ],
-        endStation: [
-          { required: true, message: "请输入终止桩号", trigger: "blur" }
-        ]
+        startStation: [{ required: true, message: "请输入起始桩号", trigger: "blur" }],
+        endStation: [{ required: true, message: "请输入终止桩号", trigger: "blur" }]
       },
       formLabelWidth: "150px",
       dialogFormVisible: true,

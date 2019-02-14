@@ -129,9 +129,10 @@ export default {
       this.xiuFormVisible=false;
     },
     xiuForm(){
-      let pass = localStorage.getItem('pass');
       this.$refs.wordForm.validate(valid => {
         if (valid) {
+          let pass = localStorage.getItem('pass');
+          console.log(pass)
           if(this.formPass.passWord ==this.formPass.xinpassWoed){
               this.$message({
               showClose: true,
@@ -156,6 +157,7 @@ export default {
                   message: '恭喜你，修改密码成功',
                   type: 'success'
                 });
+                localStorage.setItem('pass',this.formPass.xinpassWoed)
                 this.formPass.passWord='';
                 this.formPass.xinpassWoed='';
                 this.xiuFormVisible=false;
@@ -171,6 +173,7 @@ export default {
     },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
+        localStorage.removeItem('pass')
         location.reload(); // 为了重新实例化vue-router对象 避免bug
       });
     },
