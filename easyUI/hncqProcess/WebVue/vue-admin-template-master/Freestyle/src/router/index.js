@@ -120,7 +120,7 @@ export const constantRouterMap = [
         path: 'video',
         name: 'video',
         component: () => import('@/views/video/index'),
-        meta: { title: '视频', icon: 'link' }
+        meta: { title: '视频', icon: 'video' }
       }
     ]
   },
@@ -134,7 +134,7 @@ export const constantRouterMap = [
         path: 'engineering',
         name: 'basicsData',
         component: () => import('@/views/basicsData/engineering'),
-        meta: { title: '工程管理', icon: 'form' }
+        meta: { title: '工程管理', icon: 'engineering' }
       },
     ]
   },
@@ -148,7 +148,7 @@ export const constantRouterMap = [
         path: 'accept',
         name: 'process',
         component: () => import('@/views/process/accept'),
-        meta: { title: '工序验收', icon: 'form' }
+        meta: { title: '工序验收', icon: 'acceptance' }
       },
     ]
   },
@@ -162,7 +162,7 @@ export const constantRouterMap = [
         path: 'index',
         name: 'inform',
         component: () => import('@/views/inform/index'),
-        meta: { title: '通知首页', icon: 'form' }
+        meta: { title: '通知首页', icon: 'notification' }
       },
     ]
   },
@@ -170,19 +170,25 @@ export const constantRouterMap = [
   {
     path: '/system',
     component: Layout,
-    meta: { title: '系统管理', icon: 'example' },
+    meta: { title: '系统管理', icon: 'system' },
     children: [
       {
         path: 'role',
         name: 'role',
         component: () => import('@/views/system/role'),
-        meta: { title: '角色管理', icon: 'form' }
+        meta: { title: '角色管理', icon: 'role' }
       },
       {
         path: 'user',
         name: 'user',
         component: () => import('@/views/system/user'),
-        meta: { title: '用户字典', icon: 'form' }
+        meta: { title: '用户信息', icon: 'information' }
+      },
+      {
+        path: 'userDictionaries',
+        name: 'userDictionaries',
+        component: () => import('@/views/system/userDictionaries'),
+        meta: { title: '用户字典', icon: 'dictionaries' }
       },
     ]
   },
