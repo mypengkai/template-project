@@ -17,10 +17,15 @@ var ismessage
 var loadinginstace//laoding
 // request拦截器
 service.interceptors.request.use(config => {
+  // console.log(config);
+  // if(config.url=="/rest/sysuser/add"){
+  //   config.headers["Content-Type"]="multipart/form-data";
+  // }
   // config.method == 'post' && (config.headers["Content-Type"] = 'application/json');
   ismessage = config.ismessage;
   config.qs && (config.data = qs.stringify(config.data));
   getToken() && (config.headers["X-AUTH-TOKEN"] = getToken());
+
   config.isloading && (loadinginstace = Loading.service({ text: '使劲加载中...', background: 'rgba(0, 0, 0, 0.5)' }));
   return config
 }, error => {

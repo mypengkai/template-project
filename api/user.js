@@ -2,20 +2,20 @@ import request from '@/utils/request'
 
 export default {
     // 新增
-    userAdd(data) {
-        return request.post('/rest/user', data)
+    sysuserAdd(data) {
+        return request.post('/rest/sysuser/add', data)
     },
     // 列表 
-    getUser(params) {
-        return request.get('/rest/user', {params})
+    sysuserList(data) {
+        return request.post('/rest/sysuser/getList', data)
     },
     // 删除
-    userDelete(id) {
-        return request.get(`/rest/user/${id}`)
+    sysuserDelete(id) {
+        return request.get(`/rest/sysuser/delete/${id}`)
     },
     // 查询
-    userCheck(id) {
-        return request.post(`/rest/user/${id}`)
+    sysuserCheck(id) {
+        return request.post(`/rest/sysuser/chakan/${id}`)
     }
 }
 
