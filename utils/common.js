@@ -8,7 +8,7 @@ const tool = {
 };
 tool._vue = new Vue();
 tool.upload = {
-  img: () => `${tool.baseURL}/upload?X-AUTH-TOKEN=${getToken()}`
+  img: () => `${tool.baseURL}/upload/wsww/?X-AUTH-TOKEN=${getToken()}`//图片上传地址
 }
 tool.message = (msg, sec = 3) => {
   Message({

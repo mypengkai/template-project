@@ -11,7 +11,10 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import router from './router'
 import store from './store'
-
+import $ from 'jquery'
+import "../plugins/jquery-3.3.1.min.js"
+import "../plugins/ztree_v3/js/jquery.ztree.core.min.js"
+import "../plugins/ztree_v3/js/jquery.ztree.excheck.min.js"
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -22,7 +25,7 @@ require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
 
 Vue.use(ElementUI)
-
+Vue.prototype.$ = $
 Vue.config.productionTip = false
 
 new Vue({
