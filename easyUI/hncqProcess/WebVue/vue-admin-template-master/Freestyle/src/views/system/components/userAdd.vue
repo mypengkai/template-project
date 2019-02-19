@@ -1,80 +1,94 @@
 <template>
-    <div>
-        <el-form :model="form">
-            <el-form-item label="用户账号" :label-width="formLabelWidth">
-                <el-input v-model="form.account" autocomplete="off"></el-input>
-            </el-form-item>
+  <div>
+    <el-form :model="form" label-width="100px">
+      <el-form-item label="用户账号">
+        <el-input v-model="form.userName"></el-input>
+      </el-form-item>
 
-            <el-form-item label="名称" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
+      <el-form-item label="名称">
+        <el-input v-model="form.realName"></el-input>
+      </el-form-item>
 
-            <el-form-item label="用户类型" :label-width="formLabelWidth">
-                <el-input v-model="form.userType" autocomplete="off"></el-input>
-            </el-form-item>
+      <el-form-item label="用户类型">
+        <el-input v-model="form.userType"></el-input>
+      </el-form-item>
 
-            <el-form-item label="组织机构" :label-width="formLabelWidth">
-                <el-input v-model="form.org" autocomplete="off"></el-input>
-            </el-form-item>
+      <el-form-item label="组织机构">
+        <el-input v-model="form.departname"></el-input>
+      </el-form-item>
 
-            <el-form-item label="角色" :label-width="formLabelWidth">
-                <el-input v-model="form.userRole" autocomplete="off"></el-input>
-            </el-form-item>
+      <el-form-item label="角色">
+        <el-input v-model="form.userKey"></el-input>
+      </el-form-item>
 
-            <el-form-item label="手机号码" :label-width="formLabelWidth">
-                <el-input v-model="form.mobile" autocomplete="off"></el-input>
-            </el-form-item>
+      <el-form-item label="手机号码">
+        <el-input v-model="form.mobile"></el-input>
+      </el-form-item>
 
-            <el-form-item label="上传头像" :label-width="formLabelWidth">
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
+      <el-form-item label="上传头像" v-if="nowItem=='add'">
+        <el-upload class="avatar-uploader" action="$tool.upload.img()" :show-file-list="false" :on-success="handleAvatarSuccess">
+          <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
 
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-        </div>
+      <el-form-item label="用户头像" v-else>
+        <img :src="form.imageUrl" class="avatar">
+      </el-form-item>
+
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="$emit('cancel')">取 消</el-button>
+      <el-button type="primary" @click="_comfirm">保 存</el-button>
     </div>
+  </div>
 </template>
 
 <script>
+import api from "@/api/user.js";
 export default {
   props: ["nowItem"],
   data() {
     return {
       form: {
-        name: "",
-        account: "",
+        userName: "",
+        realName: "",
         userType: "",
-        org: "",
-        userRole: "",
+        departname: "",
+        userKey: "",
         mobile: "",
-        delivery: false,
-        type: []
+        // delivery: false,
+        type: [],
+        imageUrl:''
       },
       formLabelWidth: "120px",
       dialogFormVisible: true,
       imageUrl: ""
     };
   },
+  created() {
+    this.initForm();
+  },
+
   methods: {
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.form.imageUrl = URL.createObjectURL(file.raw); // res
     },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
+    initForm() {
+      if (this.nowItem == "add") return;
+      this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+    },
+    _comfirm() {
+      // 新增
+      this.nowItem == "add" &&
+        api.sysuserAdd(this.form).then(res => {
+          this.$emit("comfirm");
+        });
+      // 查看单个 修改
+      this.nowItem != "add" &&
+        api.sysuserAdd(this.form).then(res => {
+          this.$emit("comfirm");
+        });
     }
   }
 };

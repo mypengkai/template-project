@@ -45,13 +45,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/tree',
     name: 'Example',
-    meta: { title: '日志管理', icon: 'example' },
+    meta: { title: '日志管理', icon: 'check' },
     children: [
       {
         path: 'trees',
         name: 'Trees',
         component: () => import('@/views/trees/index'),
-        meta: { title: '日志查看', icon: 'tree' }
+        meta: { title: '日志查看', icon: 'check' }
       }
     ]
   },
@@ -75,7 +75,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/table/table',
     name: 'table',
-    meta: { title: '树形控件', icon: 'example' },
+    meta: { title: '树形控件', icon: 'treeTable' },
     children: [
       {
         path: 'table',
@@ -183,6 +183,12 @@ export const constantRouterMap = [
         name: 'user',
         component: () => import('@/views/system/user'),
         meta: { title: '用户信息', icon: 'information' }
+      },
+      {
+        path: 'resource',
+        name: 'resource',
+        component: () => import('@/views/system/resource'),
+        meta: { title: '资源管理', icon: 'resource' }
       },
       {
         path: 'userDictionaries',

@@ -131,7 +131,7 @@ export default {
         });
       // 查看单个
       this.nowItem != "add" &&
-        api.projectCheck(this.form).then(res => {
+        api.projectAdd(this.form).then(res => {
           this.$emit("comfirm");
         });
     }

@@ -1,12 +1,15 @@
-import {Message, MessageBox} from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import Vue from 'vue'
-
+import { getToken } from '@/utils/auth'
 const tool = {
   //环境自动切换 适应域名
   baseURL: process.env.BASE_API,
 };
 tool._vue = new Vue();
+tool.upload = {
+  img: () => `${tool.baseURL}/upload?X-AUTH-TOKEN=${getToken()}`
+}
 tool.message = (msg, sec = 3) => {
   Message({
     message: msg,
