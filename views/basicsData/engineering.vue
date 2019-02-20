@@ -13,7 +13,13 @@
       <div class="dataUp">
         <span style="padding-top: 1vw;">导入工程数据:</span>
         <span style="padding-top: 0.7vw;">
-          <el-button size="small" type="primary" @click="action('add')">新增</el-button>
+          <el-upload action="https://jsonplaceholder.typicode.com/posts/">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </span>
+
+        <span style="padding-top: 0.5vw;padding-left: 15vw;">
+          <el-button type="primary" @click="action('add')">新增</el-button>
         </span>
       </div>
     </div>
@@ -42,6 +48,8 @@
         </el-table-column>
       </el-table>
     </div>
+    <el-pagination class="tac" background layout="prev, pager, next" :total="total" :current-page.sync="sendData.pageNo" @current-change="_projectList()">
+    </el-pagination>
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
       <Xcadd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
@@ -87,8 +95,14 @@ export default {
       dataList: [],
       nowItem: "",
       dialogFormVisible: false,
+      total: 0,
       value: "",
-      input: ""
+      input: "",
+      sendData: {
+        search: "",
+        pageNo: 1,
+        pageSize: 10
+      }
     };
   },
   created() {
@@ -101,6 +115,7 @@ export default {
     },
     _projectList() {
       api.projectList().then(res => {
+        this.total = res.data.totalCount;
         this.dataList = res.data.data;
         let dataList = this.dataList;
         dataList.forEach(v => {
