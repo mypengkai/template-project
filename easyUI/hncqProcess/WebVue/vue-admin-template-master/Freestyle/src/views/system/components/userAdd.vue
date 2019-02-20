@@ -26,14 +26,14 @@
       </el-form-item>
 
       <el-form-item label="上传头像" v-if="nowItem=='add'">
-        <el-upload class="avatar-uploader" action="$tool.upload.img()" :show-file-list="false" :on-success="handleAvatarSuccess">
-          <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
+        <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="false" :on-change="handleChange" action="">
+          <img v-if="portrait" :src="portrait" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
 
       <el-form-item label="用户头像" v-else>
-        <img :src="form.imageUrl" class="avatar">
+        <img :src="portrait" class="avatar">
       </el-form-item>
 
     </el-form>
@@ -59,11 +59,11 @@ export default {
         mobile: "",
         // delivery: false,
         type: [],
-        imageUrl:''
+        portrait: ""
       },
+      portrait: "",
       formLabelWidth: "120px",
-      dialogFormVisible: true,
-      imageUrl: ""
+      dialogFormVisible: true
     };
   },
   created() {
@@ -71,12 +71,15 @@ export default {
   },
 
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.form.imageUrl = URL.createObjectURL(file.raw); // res
+    handleChange(file) {
+      this.form.portrait = file.raw;
+      console.log(file);
+      this.portrait = URL.createObjectURL(file.raw); // res
     },
     initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      this.portrait = this.form.portrait;
     },
     _comfirm() {
       // 新增

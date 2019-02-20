@@ -129,11 +129,16 @@ export default {
         api.projectAdd(this.form).then(res => {
           this.$emit("comfirm");
         });
-      // 查看单个
+      // 查看单个 修改
       this.nowItem != "add" &&
         api.projectAdd(this.form).then(res => {
           this.$emit("comfirm");
         });
+        // 文件上传
+        //  this.nowItem != "add" &&
+        // api.projectaddbyList(this.form).then(res => {
+        //   this.$emit("comfirm");
+        // });
     }
   }
 };
