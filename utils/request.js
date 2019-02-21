@@ -22,6 +22,7 @@ service.interceptors.request.use(config => {
   //   config.headers["Content-Type"]="multipart/form-data";
   // }
   // config.method == 'post' && (config.headers["Content-Type"] = 'application/json');
+  
   ismessage = config.ismessage;
   config.qs && (config.data = qs.stringify(config.data));
   getToken() && (config.headers["X-AUTH-TOKEN"] = getToken());
@@ -52,5 +53,6 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
 
 export default service

@@ -3,19 +3,17 @@
     <!-- 新增 -->
     <el-button type="primary">新增</el-button>
     <!-- 列表 -->
-    <div>
+    <div class="pt20">
       <!-- 头部 -->
-      <div>
-        <span>1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
-        <span>5</span>        
+      <div class="treeTop">
+        <span>组织机构</span>
+        <span style="padding-left: 12vw;">id</span>
+        <span style="padding-left: 12vw;">名称</span>
+        <span style="padding-left: 12vw;">备注</span> 
       </div>
       <!-- 树 -->
       <el-tree :data="listByTree" show-checkbox node-key="id" default-expand-all :expand-on-click-node="false">
-        <div class="custom-tree-node" slot-scope="{ node, data }">
-          <span>{{ data.label }}</span>
+        <div class=" treeOrg" slot-scope="{ node, data }">
           <span>{{ data.label }}</span>
           <span>{{ data.label }}</span>
           <span>{{ data.label }}</span>

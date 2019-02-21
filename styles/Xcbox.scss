@@ -13,6 +13,9 @@
 .pr20{
     padding-right: 20px;
 }
+.pt20{
+    padding-top: 20px;
+}
 .tac{
     text-align: center;
 }
@@ -21,7 +24,16 @@
     padding-right: 10px;
     overflow-x: auto;
   }
-  
+.treeTop{
+    span{
+        padding-left: 20px;
+    }
+}
+ .treeOrg{
+     span{
+         padding: 20px;
+     }
+ }
   .scrollY::-webkit-scrollbar { /*滚动条整体样式*/
     width: 1px; /*高宽分别对应横竖滚动条的尺寸*/
     height: 1px;
