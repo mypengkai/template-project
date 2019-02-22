@@ -25,8 +25,11 @@
     overflow-x: auto;
   }
 .treeTop{
+    position: relative;
     span{
-        padding-left: 20px;
+       display: block;
+        position: absolute;
+        
     }
 }
 
