@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export default {
     // 新增
     menuAdd(data) {
-        return request.post('/rest/menu/add', data)
+        return request.post('/rest/menu/add', data,)
     },
     // 列表 
     menuList(data) {

@@ -1,101 +1,101 @@
 <template>
   <div class="p20">
     <!-- 新增 -->
-    <el-button type="primary">新增</el-button>
+    <el-button type="primary"  @click="action('add')">新增</el-button>
     <!-- 列表 -->
     <div class="pt20">
       <!-- 头部 -->
       <div class="treeTop">
-        <span>组织机构</span>
-        <span style="padding-left: 12vw;">id</span>
-        <span style="padding-left: 12vw;">名称</span>
-        <span style="padding-left: 12vw;">备注</span> 
+        <span>菜单名称</span>
+        <span style="padding-left: 20vw;">菜单排序</span>
+        <span style="padding-left: 20vw;">菜单地址</span>
+        <span style="padding-left: 20vw;">操作</span>
       </div>
       <!-- 树 -->
-      <el-tree :data="listByTree" show-checkbox node-key="id" default-expand-all :expand-on-click-node="false">
-        <div class=" treeOrg" slot-scope="{ node, data }">
-          <span>{{ data.label }}</span>
-          <span>{{ data.label }}</span>
-          <span>{{ data.label }}</span>
-          <span>{{ data.label }}</span>
+      <el-tree class="a" :data="menuList" node-key="id" :expand-on-click-node="false">
+        <div class="treeOrg" slot-scope="{ node, data }">
+          <span>{{ data.functionName }}</span>
+          <span>{{ data.functionOrder }}</span>
+          <span>{{ data.functionUrl }}</span>
+          <span style="padding-left: 3vw;">
+            <el-button type="text" @click="action(data)">编辑</el-button>
+            <el-button type="text" @click="Delete(node, data)">删除</el-button>
+          </span>
         </div>
       </el-tree>
     </div>
+    <!-- 弹框 -->
+    <el-dialog title="新增" :visible.sync="dialogFormVisible">
+      <resourceAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"  @comfirm="resourceList"></resourceAdd>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import api from "@/api/resource.js";
+import resourceAdd from "./components/resourceAdd";
 export default {
+  components: {
+    resourceAdd
+  },
   name: "CustomTreeTableDemo",
   data() {
     return {
-      menuList: [],
-      listByTree: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1"
-            },
-            {
-              id: 6,
-              label: "二级 2-2"
-            }
-          ]
-        },
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1"
-            },
-            {
-              id: 8,
-              label: "二级 3-2"
-            }
-          ]
-        }
-      ]
+      nowItem: "",
+      dialogFormVisible: false,
+      menuList: []
     };
   },
   created() {
     this.resourceList();
   },
   methods: {
+    action(val) {
+      this.nowItem = val;
+      this.dialogFormVisible = true;
+    },
+    // 树形列表
     resourceList() {
       api.menuList().then(res => {
         console.log(res.data.data);
         this.menuList = res.data.data;
       });
+    },
+    // 删除按钮
+    Delete(node, data) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => this._menuDelete(node, data));
+    },
+    // 删除请求
+    _menuDelete(node, data) {
+      api.menuDelete(data.id).then(res => {
+        this.resourceList();
+      });
+    }
+  },
+  watch: {
+    dialogFormVisible(val) {
+      !val && (this.nowItem = "");
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.a {
+  margin-top: 4vh;
+}
+.treeOrg {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  span {
+    padding-top: 3vh;
+    display: block;
+    width: 20%;
+  }
+}
 </style>
