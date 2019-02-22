@@ -28,11 +28,11 @@
         </el-form-item>
 
         <el-form-item label="手机号码" prop="mobile">
-          <el-input type="number" v-model="user.mobile"></el-input>
+          <el-input type="number" style="margin: 20px;" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'  v-model="user.mobile"></el-input>
         </el-form-item>
 
         <el-form-item label="上传头像" v-if="nowItem=='add'">
-          <el-upload ref="upload" :action="uploadUrl" name="files" :headers="headers" :limit="1" :auto-upload="false" :before-upload="handleBeforeUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :data="user">
+          <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :show-file-list="true" :limit="1" :auto-upload="false" :before-upload="handleBeforeUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :data="user">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -91,7 +91,7 @@ export default {
         realName: "",
         userKey: "",
         mobile: "",
-        departname: "",
+        departid: "",
         // delivery: false,
         type: []
       },
@@ -180,7 +180,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       console.log(data);
-      this.user.departname = data.id;
+      this.user.departid = data.id;
       this.departName = data.departName;
       this.innerVisible = false;
     }
@@ -189,14 +189,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.avatar-uploader {
+.avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
 }
-.avatar-uploader {
+.avatar-uploader .el-upload:hover {
   border-color: #409eff;
 }
 .avatar-uploader-icon {
@@ -211,5 +211,9 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
 }
 </style>
