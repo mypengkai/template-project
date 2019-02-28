@@ -57,14 +57,14 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/xsgl',
+    path: '/walkaroundInspection',
     component: Layout,
     meta: { title: '巡视管理', icon: 'example' },
     children: [
       {
-        path: 'xsck',
-        name: 'Xsck',
-        component: () => import('@/views/xsgl/xsck'),
+        path: 'PatrolCheck',
+        name: 'PatrolCheck',
+        component: () => import('@/views/walkaroundInspection/PatrolCheck'),
         meta: { title: '巡视查看', icon: 'form' }
       }
     ]

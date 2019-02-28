@@ -26,7 +26,49 @@
     <!-- 操作列表 -->
     <div class="app-container">
       <el-table :data="dataList" height="60vh">
-        <el-table-column prop="projectItem" label="工程分布分项">
+        <el-table-column label="工程分布分项">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.projectItem }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.projectType1 }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="所属组织机构">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.userGroupIdName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="起始桩号">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.startStation }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="终止桩号">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.endStation }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="创建人">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.useridName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
+
+        <!-- <el-table-column prop="projectItem" label="工程分布分项">
         </el-table-column>
         <el-table-column prop="projectType1" label="类型">
         </el-table-column>
@@ -39,7 +81,7 @@
         <el-table-column prop="useridName" label="创建人">
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
@@ -151,7 +193,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .engineeringLayout {
   padding: 20px;
   .selectArea {

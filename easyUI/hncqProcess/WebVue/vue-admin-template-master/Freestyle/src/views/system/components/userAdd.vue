@@ -10,7 +10,7 @@
           <el-input v-model="user.realName"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码" prop="password">
+        <el-form-item v-if="nowItem=='add'" label="密码" prop="password">
           <el-input v-model="user.password"></el-input>
         </el-form-item>
 
@@ -28,7 +28,7 @@
         </el-form-item>
 
         <el-form-item label="手机号码" prop="mobile">
-          <el-input type="number" style="margin: 20px;" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'  v-model="user.mobile"></el-input>
+          <el-input class="numInput" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="user.mobilePhone"></el-input>
         </el-form-item>
 
         <el-form-item label="上传头像" v-if="nowItem=='add'">
@@ -61,7 +61,7 @@
 import { getToken } from "@/utils/auth";
 import api2 from "@/api/user.js";
 import api from "@/api/role.js";
-import api1 from "../../../api/Organization.js";
+import api1 from "@/api/Organization.js";
 export default {
   props: ["nowItem"],
   data() {
@@ -79,9 +79,9 @@ export default {
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
         ],
         realName: [{ required: true, message: "必填项", trigger: "blur" }],
-        departname: [{ required: true, message: "必填项", trigger: "blur" }],
+        departName: [{ required: true, message: "必填项", trigger: "blur" }],
         userKey: [{ required: true, message: "必填项", trigger: "blur" }],
-        mobile: { required: true, message: "必填项", trigger: "blur" },
+        mobilePhone: { required: true, message: "必填项", trigger: "blur" },
         portrait: [{ required: true, message: "必填项", trigger: "blur" }]
       }, //表单校验规则
       user: {
@@ -90,7 +90,7 @@ export default {
         userName: "",
         realName: "",
         userKey: "",
-        mobile: "",
+        mobilePhone: "",
         departid: "",
         // delivery: false,
         type: []
@@ -98,6 +98,7 @@ export default {
       headers: {
         "X-AUTH-TOKEN": getToken()
       },
+      id: "",
       departName: "",
       uploadFileParams: {},
       files: null,
@@ -106,6 +107,7 @@ export default {
       imageUrl: "",
       roleList: [],
       orgTree: [],
+      Check: [],
       treeData: {}
     };
   },
@@ -122,6 +124,7 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      this.departName=this.user.departName
     },
     fileChange(file) {
       this.files = file.raw;
@@ -131,6 +134,7 @@ export default {
       if (this.$refs.userFrom.validate()) {
         this.$refs.upload.submit();
       }
+
       // // 新增
       // this.nowItem == "add" &&
       //   api2.sysuserAdd(this.form).then(res => {
@@ -142,9 +146,11 @@ export default {
       //     this.$emit("comfirm");
       //   });
     },
+    //查看
+    
     handleBeforeUpload(file) {
       //上传之前触发
-      console.log("before");
+      // console.log("before");
       if (
         !(
           file.type === "image/png" ||
@@ -166,20 +172,18 @@ export default {
     // 角色请求列表
     _roleList() {
       api.roleList().then(res => {
-        // console.log(res.data.data);
         this.roleList = res.data.data;
+        // console.log(this.roleList)
       });
     },
     // 组织机构树
     _orgTree() {
       api1.organizateTree().then(res => {
-        console.log(res.data.data);
         this.orgTree = res.data.data;
       });
     },
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
-      console.log(data);
       this.user.departid = data.id;
       this.departName = data.departName;
       this.innerVisible = false;
@@ -189,6 +193,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.numInput {
+  .el-input__inner {
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none !important;
+    }
+    margin: 20px !important;
+  }
+  .el-input__inner:hover {
+    margin: 20px !important;
+  }
+}
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -211,9 +227,5 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
 }
 </style>
