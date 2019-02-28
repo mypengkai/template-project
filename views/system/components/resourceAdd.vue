@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-form :model="form" label-width="120px">
+    <el-form :model="form" label-width="120px" :rules="rules">
       <div style="widht:40%">
-        <el-form-item label="菜单名称">
+        <el-form-item label="菜单名称" prop="functionName">
           <el-input v-model="form.functionName"></el-input>
         </el-form-item>
 
-        <el-form-item label="菜单顺序">
-          <el-input v-model="form.functionOrder"></el-input>
+        <el-form-item label="菜单顺序" prop="functionOrder">
+          <el-input type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="form.functionOrder"></el-input>
         </el-form-item>
 
         <el-form-item label="菜单等级">
@@ -22,7 +22,7 @@
           <el-input v-model="form.childcount"></el-input>
         </el-form-item>
 
-        <el-form-item label="菜单地址">
+        <el-form-item label="菜单地址" prop="functionUrl">
           <el-input v-model="form.functionUrl"></el-input>
         </el-form-item>
       </div>
@@ -47,7 +47,12 @@ export default {
         functionName: "", // 菜单名称
         functionOrder: "", // 菜单顺序
         functionUrl: "" // 菜单地址
-      }
+      },
+      rules: {
+        functionName: [{ required: true, message: "必填项", trigger: "blur" }],
+        functionOrder: { required: true, message: "必填项", trigger: "blur" },
+        functionUrl: [{ required: true, message: "必填项", trigger: "blur" }]
+      } //表单校验规则
     };
   },
   created() {
@@ -57,7 +62,6 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-      console.log(this.form);
     },
     _comfirm() {
       // 新增

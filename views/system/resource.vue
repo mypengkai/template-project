@@ -4,44 +4,56 @@
     <el-button type="primary" @click="action('add')">新增</el-button>
     <!-- 列表 -->
     <div class="pt20">
-      <!-- 头部 -->
-      <div class="treeTop">
-        <span style="left: 2vw;">菜单名称</span>
-        <span style="left: 18vw;">菜单排序</span>
-        <span style="left: 37vw;">菜单地址</span>
-        <span style="left: 71vw;">操作</span>
-      </div>
-      <!-- 树 -->
-      <div class="treeBox">
-        <el-tree :data="menuList" node-key="id" accordion :expand-on-click-node="false" :highlight-current="true">
-          <div class="treeOrg" slot-scope="{ node, data }">
-            <span>{{ data.functionName }}</span>
-            <span>{{ data.functionOrder }}</span>
-            <span style="width: 40%;">{{ data.functionUrl }}</span>
-            <span>
-              <el-button type="text" @click="action(data)">编辑</el-button>
-              <el-button type="text" @click="Delete(node, data)">删除</el-button>
-            </span>
-          </div>
-        </el-tree>
-      </div>
+      <div class="outer-container">
+        <div class="inner-container">
+          <div class="content">
+            <tree-table :data="menuList" border height="65vh">
+              <el-table-column label="菜单名称">
+                <template slot-scope="scope">
+                  <span style="">{{ scope.row.functionName }}</span>
+                </template>
+              </el-table-column>
 
+              <el-table-column label="菜单排序">
+                <template slot-scope="scope">
+                  <span style="">{{ scope.row.functionOrder }}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column label="菜单地址">
+                <template slot-scope="scope">
+                  <span style="">{{ scope.row.functionUrl }}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column label="操作" width="200">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="action(scope.row)">编辑</el-button>
+                  <el-button type="text" @click="Delete(scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </tree-table>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- 弹框 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible">
+    <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
       <resourceAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="resourceList"></resourceAdd>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import treeTable from "@/components/TreeTable";
 import api from "@/api/resource.js";
 import resourceAdd from "./components/resourceAdd";
 export default {
   components: {
+    treeTable,
     resourceAdd
   },
-  name: "CustomTreeTableDemo",
+  name: "TreeTableDemo",
   data() {
     return {
       nowItem: "",
@@ -54,7 +66,18 @@ export default {
   },
   methods: {
     action(val) {
-      this.nowItem = val;
+      console.log(val)
+      val == "add" && (this.nowItem = val);
+      val != "add" &&
+        (this.nowItem = {
+          childcount: val.childcount,
+          functionLevel: val.functionLevel,
+          functionName: val.functionName,
+          functionOrder: val.functionOrder,
+          functionUrl: val.functionUrl,
+          id: val.id,
+          pId: val.pId
+        });
       this.dialogFormVisible = true;
     },
     // 树形列表
@@ -65,15 +88,15 @@ export default {
       });
     },
     // 删除按钮
-    Delete(node, data) {
+    Delete(data) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => this._menuDelete(node, data));
+      }).then(() => this._menuDelete(data));
     },
     // 删除请求
-    _menuDelete(node, data) {
+    _menuDelete(data) {
       api.menuDelete(data.id).then(res => {
         this.resourceList();
       });
@@ -88,18 +111,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.treeBox {
-  margin-top: 4vh;
+.outer-container,
+.content {
+  width: 90vw;
   height: 65vh;
 }
-.treeOrg {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  span {
-    padding-top: 2vh;
-    display: block;
-    width: 20%;
-  }
+.outer-container {
+  position: relative;
+  overflow: hidden;
+}
+.inner-container {
+  position: absolute;
+  left: 0;
+  // overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* for Chrome */
+.inner-container::-webkit-scrollbar {
+  display: none;
 }
 </style>
