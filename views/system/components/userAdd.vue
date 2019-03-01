@@ -2,8 +2,12 @@
   <div>
     <el-form ref="userFrom" :model="user" label-width="120px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="用户账号" prop="userName">
+        <el-form-item label="用户账号" v-if="nowItem=='add'" prop="userName">
           <el-input v-model="user.userName"></el-input>
+        </el-form-item>
+
+        <el-form-item label="用户账号" v-if="nowItem!=='add'" prop="userName">
+          <el-input v-model="user.userName" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="名称" prop="realName">
@@ -44,7 +48,7 @@
 
       </div>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
       <el-button type="primary" @click="_comfirm">保 存</el-button>
     </div>
@@ -124,7 +128,7 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-      this.departName=this.user.departName
+      this.departName = this.user.departName;
     },
     fileChange(file) {
       this.files = file.raw;
@@ -147,7 +151,7 @@ export default {
       //   });
     },
     //查看
-    
+
     handleBeforeUpload(file) {
       //上传之前触发
       // console.log("before");
