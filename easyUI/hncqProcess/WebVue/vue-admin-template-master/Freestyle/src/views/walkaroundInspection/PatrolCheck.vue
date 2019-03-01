@@ -22,29 +22,9 @@
       </div>
 
       <div>
-        <!-- 单位小组分组 -->
-        <!-- <div>
-                    <span>单位:</span>
-                    <el-select v-model="value4" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                    <span>小组:</span>
-                    <el-select v-model="value4" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                    <span>分组:</span>
-                    <el-select v-model="value4" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div> -->
         <!-- 时间段 -->
-        <div>
-          <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
-          </el-date-picker>
-        </div>
+        <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
+        </el-date-picker>
       </div>
 
       <div>
@@ -77,7 +57,7 @@
     </el-pagination>
 
     <!-- 查看照片弹框 -->
-    <el-dialog title="查看" :visible.sync="dialogFormVisible">
+    <el-dialog :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible">
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
   </div>
@@ -96,19 +76,18 @@ export default {
   data() {
     return {
       nowItem: "",
-      roleList: [],
-      userList: [],
-      everyDayLogPageList: [],
-
+      roleList: [], // 角色列表
+      userList: [], // 用户列表
+      everyDayLogPageList: [], // 当前列表
       total: 0,
-      timeRange: "",
+      timeRange: "", // 时间日期范围
       sendData: {
-        rolename: "",
+        rolename: "", // 用户角色
         userName: "", // 用户名参数
-        pageNo: 1,
-        pageSize: 8,
-        startTime: "",
-        endTime: ""
+        pageNo: 1, //当前页
+        pageSize: 8, // 每页条数
+        startTime: "", // 开始时间
+        endTime: "" // 结束时间
       },
       dialogFormVisible: false
     };
@@ -118,12 +97,14 @@ export default {
     this.getRoleList();
   },
   methods: {
+    // 获取当前列表信息
     _chackList() {
       api.everyDayLogPageList(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
         this.everyDayLogPageList = res.data.data.data;
       });
     },
+    // 获取角色信息
     async getRoleList(id) {
       let { data } = await api1.roleList(id);
       this.roleList = data.data;
@@ -133,23 +114,24 @@ export default {
       this.dialogFormVisible = true;
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     changeUserType(val) {
       this.getUserNameList(val);
     },
+    // 获取用户列表数据
     async getUserNameList(id) {
       let { data } = await user.sysuserList({ id });
       this.userList = data.data.data;
     },
     changeDataRange(val) {
-      [this.sendData.startTime, this.sendData.endTime] = val;
+      [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
       console.log(this.sendData);
     }
   },
   watch: {
     dialogFormVisible(val) {
-      !val && (this.nowItem = "");
+      !val && (this.nowItem = ""); // 监听弹窗是否关闭 清空数据 防止回填
     }
   }
 };
@@ -159,8 +141,5 @@ export default {
 .navBar {
   display: flex;
   justify-content: space-between;
-  div {
-    // background-color: rgb(82, 33, 33);
-  }
 }
 </style>

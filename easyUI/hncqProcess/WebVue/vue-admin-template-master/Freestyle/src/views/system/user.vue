@@ -24,7 +24,7 @@
         <el-table-column prop="realName" label="名称">
         </el-table-column>
 
-        <el-table-column prop="departName" label="组织机构">
+        <el-table-column prop="departname" label="组织机构">
         </el-table-column>
 
         <el-table-column prop="userKey" label="角色">

@@ -27,7 +27,7 @@
         </el-form-item>
       </div>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
       <el-button type="primary" @click="_comfirm">保 存</el-button>
     </div>
