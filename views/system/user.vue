@@ -17,14 +17,14 @@
     </div>
     <!-- 列表 -->
     <div class="userList">
-      <el-table :data="userList" style="width: 100%" height="66vh">
+      <el-table :data="userList" style="width: 100%" height="68vh">
         <el-table-column prop="userName" label="用户账号">
         </el-table-column>
 
         <el-table-column prop="realName" label="名称">
         </el-table-column>
 
-        <el-table-column prop="departname" label="组织机构">
+        <el-table-column prop="departName" label="组织机构">
         </el-table-column>
 
         <el-table-column prop="userKey" label="角色">

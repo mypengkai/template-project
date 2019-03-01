@@ -19,5 +19,9 @@ export default {
     // 查询
     sysuserCheck(id) {
         return request.post(`/rest/sysuser/chakan/${id}`)
-    }
+    },
+    // 当前用户查询
+    getListByUser(data) {
+        return request.post('/rest/sysuser/getListByUser', data)
+    },
 }

@@ -2,20 +2,12 @@
   <div>
     <el-form ref="userFrom" :model="user" label-width="120px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="用户账号" v-if="nowItem=='add'" prop="userName">
+        <el-form-item label="用户账号" prop="userName">
           <el-input v-model="user.userName"></el-input>
-        </el-form-item>
-
-        <el-form-item label="用户账号" v-if="nowItem!=='add'" prop="userName">
-          <el-input v-model="user.userName" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="名称" prop="realName">
           <el-input v-model="user.realName"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="nowItem=='add'" label="密码" prop="password">
-          <el-input v-model="user.password"></el-input>
         </el-form-item>
 
         <el-form-item label="组织机构">
@@ -25,30 +17,25 @@
         </el-form-item>
 
         <el-form-item label="角色" prop="userKey">
-          <el-select v-model="user.userKey" multiple placeholder="请选择角色">
+          <el-select v-model="user.userKey" placeholder="请选择角色">
             <el-option v-for="item in roleList" :key="item.id" :label="item.rolename" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="手机号码" prop="mobile">
-          <el-input class="numInput" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="user.mobilePhone"></el-input>
+          <el-input type="number" v-model="user.mobile"></el-input>
         </el-form-item>
-
-        <el-form-item label="上传头像" v-if="nowItem=='add'">
-          <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :show-file-list="true" :limit="1" :auto-upload="false" :before-upload="handleBeforeUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :data="user">
+      
+        <el-form-item label="上传头像">
+          <el-upload ref="upload" class="avatar-uploader" :action="uploadUrl" :auto-upload="false" :show-file-list="false"  :on-change="fileChange">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-
-        <!-- <el-form-item label="用户头像" v-else>
-          <img :src="portrait" class="avatar">
-        </el-form-item> -->
-
       </div>
     </el-form>
-    <div class="tar">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="$emit('cancel')">取 消</el-button>
       <el-button type="primary" @click="_comfirm">保 存</el-button>
     </div>
@@ -65,7 +52,7 @@
 import { getToken } from "@/utils/auth";
 import api2 from "@/api/user.js";
 import api from "@/api/role.js";
-import api1 from "@/api/Organization.js";
+import api1 from "../../../api/Organization.js";
 export default {
   props: ["nowItem"],
   data() {
@@ -78,31 +65,24 @@ export default {
       },
       rules: {
         userName: { required: true, message: "必填项", trigger: "blur" },
-        password: [
-          { required: true, message: "必填项", trigger: "blur" },
-          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
-        ],
         realName: [{ required: true, message: "必填项", trigger: "blur" }],
-        departName: [{ required: true, message: "必填项", trigger: "blur" }],
+        departname: [{ required: true, message: "必填项", trigger: "blur" }],
         userKey: [{ required: true, message: "必填项", trigger: "blur" }],
-        mobilePhone: { required: true, message: "必填项", trigger: "blur" },
+        mobile: { required: true, message: "必填项", trigger: "blur" },
         portrait: [{ required: true, message: "必填项", trigger: "blur" }]
       }, //表单校验规则
       user: {
         id: "",
-        password: "",
         userName: "",
         realName: "",
         userKey: "",
-        mobilePhone: "",
-        departid: "",
-        // delivery: false,
-        type: []
+        mobile: "",
+        departname: "",
+        file:"",
       },
       headers: {
         "X-AUTH-TOKEN": getToken()
       },
-      id: "",
       departName: "",
       uploadFileParams: {},
       files: null,
@@ -111,7 +91,6 @@ export default {
       imageUrl: "",
       roleList: [],
       orgTree: [],
-      Check: [],
       treeData: {}
     };
   },
@@ -122,39 +101,51 @@ export default {
   },
 
   methods: {
+    getBase64(file) {
+      return new Promise(function(resolve, reject) {
+        let reader = new FileReader();
+        let imgResult = "";
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          imgResult = reader.result;
+        };
+        reader.onerror = function(error) {
+          reject(error);
+        };
+        reader.onloadend = function() {
+          resolve(imgResult);
+        };
+      });
+    },
     handleAvatarSuccess(res, file) {
-      this.form.files = URL.createObjectURL(file.raw); // res
+      this.user.files = URL.createObjectURL(file.raw); // res
     },
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-      this.departName = this.user.departName;
     },
     fileChange(file) {
-      this.files = file.raw;
+     this.imageUrl = URL.createObjectURL(file.raw); // res
+     this.getBase64(file.raw).then(res => {
+       this.user.file=res;
+      })
     },
     _comfirm() {
       // 表单校验
-      if (this.$refs.userFrom.validate()) {
-        this.$refs.upload.submit();
-      }
-
-      // // 新增
-      // this.nowItem == "add" &&
-      //   api2.sysuserAdd(this.form).then(res => {
-      //     this.$emit("comfirm");
-      //   });
-      // // 查看单个 修改
-      // this.nowItem != "add" &&
-      //   api2.sysuserAdd(this.form).then(res => {
-      //     this.$emit("comfirm");
-      //   });
+      // 新增
+      this.nowItem == "add" &&
+        api2.sysuserAdd(this.user).then(res => {
+          this.$emit("comfirm");
+        });
+      // 查看单个 修改
+      this.nowItem != "add" &&
+        api2.sysuserAdd(this.user).then(res => {
+          this.$emit("comfirm");
+        });
     },
-    //查看
-
     handleBeforeUpload(file) {
       //上传之前触发
-      // console.log("before");
+      console.log("before");
       if (
         !(
           file.type === "image/png" ||
@@ -176,19 +167,21 @@ export default {
     // 角色请求列表
     _roleList() {
       api.roleList().then(res => {
+        // console.log(res.data.data);
         this.roleList = res.data.data;
-        // console.log(this.roleList)
       });
     },
     // 组织机构树
     _orgTree() {
       api1.organizateTree().then(res => {
+        console.log(res.data.data);
         this.orgTree = res.data.data;
       });
     },
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
-      this.user.departid = data.id;
+      console.log(data);
+      this.user.departname = data.id;
       this.departName = data.departName;
       this.innerVisible = false;
     }
@@ -197,26 +190,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.numInput {
-  .el-input__inner {
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none !important;
-    }
-    margin: 20px !important;
-  }
-  .el-input__inner:hover {
-    margin: 20px !important;
-  }
-}
-.avatar-uploader .el-upload {
+.avatar-uploader {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
 }
-.avatar-uploader .el-upload:hover {
+.avatar-uploader {
   border-color: #409eff;
 }
 .avatar-uploader-icon {
