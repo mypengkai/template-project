@@ -140,13 +140,13 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/process',
+    path: '/accept',
     component: Layout,
     meta: { title: '工序验收', icon: 'example' },
     children: [
       {
         path: 'accept',
-        name: 'process',
+        name: 'SelectTree',
         component: () => import('@/views/process/accept'),
         meta: { title: '工序验收', icon: 'acceptance' }
       },
@@ -194,7 +194,7 @@ export const constantRouterMap = [
         path: 'userDictionaries',
         name: 'userDictionaries',
         component: () => import('@/views/system/userDictionaries'),
-        meta: { title: '用户字典', icon: 'dictionaries' }
+        meta: { title: '组织机构', icon: 'dictionaries' }
       },
     ]
   },

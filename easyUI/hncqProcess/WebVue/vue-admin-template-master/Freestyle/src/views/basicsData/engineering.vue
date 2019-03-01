@@ -40,7 +40,7 @@
 
         <el-table-column label="所属组织机构">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.userGroupIdName }}</span>
+            <span style="">{{ scope.row.departname }}</span>
           </template>
         </el-table-column>
 

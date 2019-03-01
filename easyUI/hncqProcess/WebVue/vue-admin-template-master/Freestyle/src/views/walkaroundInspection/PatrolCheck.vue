@@ -3,22 +3,12 @@
     <!-- 头部选择栏 -->
     <div class="navBar topBar">
       <div>
-        <!-- 用户类型 -->
-        <div>
-          <span>用户类型:</span>
-          <el-select v-model="sendData.rolename" @change="changeUserType" clearable placeholder="请选择">
-            <el-option v-for="(item,index) in roleList" :key="index" :label="item.rolename" :value="item.id">
-            </el-option>
-          </el-select>
-        </div>
         <!-- 姓名选择 -->
-        <div>
-          <span>姓名选择:</span>
-          <el-select v-model="sendData.userName" clearable placeholder="请选择">
-            <el-option v-for="(item,index) in userList" :key="index" :label="item.userName" :value="item.id">
-            </el-option>
-          </el-select>
-        </div>
+        <span>姓名选择:</span>
+        <el-select v-model="sendData.userName" clearable placeholder="请选择">
+          <el-option v-for="(item,index) in getListByUser" :key="index" :label="item.realname" :value="item.id">
+          </el-option>
+        </el-select>
       </div>
 
       <div>
@@ -29,9 +19,9 @@
 
       <div>
         <el-button type="primary" icon="el-icon-search" @click="_chackList()">查询</el-button>
-        <el-button type="primary" @click="action('add')">上传
+        <!-- <el-button type="primary" @click="action('add')">上传
           <i class="el-icon-upload el-icon--right"></i>
-        </el-button>
+        </el-button> -->
       </div>
     </div>
 
@@ -57,7 +47,7 @@
     </el-pagination>
 
     <!-- 查看照片弹框 -->
-    <el-dialog :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible">
+    <el-dialog :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
   </div>
@@ -66,7 +56,6 @@
 <script>
 import CheckPicture from "./components/CheckPicture";
 import api from "../../api/processInfoLog.js";
-import api1 from "@/api/role.js";
 import user from "@/api/user";
 // import { async } from "q";
 export default {
@@ -76,13 +65,11 @@ export default {
   data() {
     return {
       nowItem: "",
-      roleList: [], // 角色列表
-      userList: [], // 用户列表
+      getListByUser: [], // 用户列表
       everyDayLogPageList: [], // 当前列表
       total: 0,
       timeRange: "", // 时间日期范围
       sendData: {
-        rolename: "", // 用户角色
         userName: "", // 用户名参数
         pageNo: 1, //当前页
         pageSize: 8, // 每页条数
@@ -94,7 +81,7 @@ export default {
   },
   created() {
     this._chackList();
-    this.getRoleList();
+    this._getListByUser();
   },
   methods: {
     // 获取当前列表信息
@@ -104,11 +91,7 @@ export default {
         this.everyDayLogPageList = res.data.data.data;
       });
     },
-    // 获取角色信息
-    async getRoleList(id) {
-      let { data } = await api1.roleList(id);
-      this.roleList = data.data;
-    },
+
     action(val) {
       this.nowItem = val;
       this.dialogFormVisible = true;
@@ -116,14 +99,17 @@ export default {
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
     },
-    changeUserType(val) {
-      this.getUserNameList(val);
-    },
+
     // 获取用户列表数据
-    async getUserNameList(id) {
-      let { data } = await user.sysuserList({ id });
-      this.userList = data.data.data;
+    _getListByUser() {
+      user.getListByUser().then(res => {
+        this.getListByUser = res.data.data;
+      });
     },
+    // async getUserNameList(id) {
+    //   let { data } = await user.sysuserList({ id });
+    //   this.userList = data.data.data;
+    // },
     changeDataRange(val) {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
       console.log(this.sendData);
