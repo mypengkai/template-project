@@ -39,7 +39,6 @@ export const constantRouterMap = [
     }]
   },
 
-
   {
     path: '/trees',
     component: Layout,
@@ -126,6 +125,20 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/basicManage',
+    component: Layout,
+    meta: { title: '基础管理', icon: 'example' },
+    children: [
+      {
+        path: 'processing',
+        name: 'processing',
+        component: () => import('@/views/basicManage/processManage'),
+        meta: { title: '工序管理', icon: 'acceptance' }
+      }
+    ]
+  },
+
+  {
     path: '/basicsData',
     component: Layout,
     meta: { title: '基础数据', icon: 'example' },
@@ -135,7 +148,7 @@ export const constantRouterMap = [
         name: 'basicsData',
         component: () => import('@/views/basicsData/engineering'),
         meta: { title: '工程管理', icon: 'engineering' }
-      },
+      }
     ]
   },
 
@@ -149,7 +162,7 @@ export const constantRouterMap = [
         name: 'SelectTree',
         component: () => import('@/views/process/accept'),
         meta: { title: '工序验收', icon: 'acceptance' }
-      },
+      }
     ]
   },
 
@@ -163,7 +176,7 @@ export const constantRouterMap = [
         name: 'inform',
         component: () => import('@/views/inform/index'),
         meta: { title: '通知首页', icon: 'notification' }
-      },
+      }
     ]
   },
 
@@ -195,7 +208,7 @@ export const constantRouterMap = [
         name: 'userDictionaries',
         component: () => import('@/views/system/userDictionaries'),
         meta: { title: '组织机构', icon: 'dictionaries' }
-      },
+      }
     ]
   },
 
