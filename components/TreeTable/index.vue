@@ -3,17 +3,15 @@
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
-        <span v-if="iconShow(0,scope.row)" class="tree-ctrl" @click="toggleExpanded(scope.$index)">
-          <i v-if="!scope.row._expanded" class="el-icon-plus"/>
-          <i v-else class="el-icon-minus"/>
+        <span v-if="iconShow(0,scope.row)" class="tree-ctrl" @click="toggleExpanded(scope)">
+          <i v-if="!scope.row._expanded" class="el-icon-tickets"/>
+          <i v-else class="el-icon-document"/>
         </span>
-        {{ scope.$index }}
+        <!-- {{ scope.$index }}  -->
       </template>
     </el-table-column>
     <el-table-column v-for="(column, index) in columns" v-else :key="column.value" :label="column.text" :width="column.width">
       <template slot-scope="scope">
-        <!-- Todo -->
-        <!-- eslint-disable-next-line vue/no-confusing-v-for-v-if -->
         <span v-for="space in scope.row._level" v-if="index === 0" :key="space" class="ms-tree-space"/>
         <span v-if="iconShow(index,scope.row)" class="tree-ctrl" @click="toggleExpanded(scope.$index)">
           <i v-if="!scope.row._expanded" class="el-icon-plus"/>
@@ -73,7 +71,7 @@ export default {
     },
     // 切换下级是否展开
     toggleExpanded: function(trIndex) {
-      const record = this.formatData[trIndex]
+      const record = this.formatData[trIndex.$index]
       record._expanded = !record._expanded
     },
     // 图标显示
