@@ -31,11 +31,15 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="职位" prop="userName">
+          <el-input v-model="user.zhiwei"></el-input>
+        </el-form-item>
+
         <el-form-item label="手机号码" prop="mobile">
           <el-input class="numInput" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="user.mobilePhone"></el-input>
         </el-form-item>
 
-        <el-form-item label="上传头像" v-if="nowItem=='add'">
+        <el-form-item label="上传头像">
           <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :show-file-list="true" :limit="1" :auto-upload="false" :before-upload="handleBeforeUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :data="user">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -94,6 +98,7 @@ export default {
         userName: "",
         realName: "",
         userKey: "",
+        zhiwei: "",
         mobilePhone: "",
         departid: "",
         // delivery: false,

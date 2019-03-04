@@ -30,6 +30,9 @@
         <el-table-column prop="userKey" label="角色">
         </el-table-column>
 
+         <el-table-column prop="zhiwei" label="职位">
+        </el-table-column>
+
         <el-table-column prop="createDate" label="创建时间">
         </el-table-column>
 

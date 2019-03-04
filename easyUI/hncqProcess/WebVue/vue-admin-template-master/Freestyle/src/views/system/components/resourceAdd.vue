@@ -37,7 +37,7 @@
 <script>
 import api from "@/api/resource.js";
 export default {
-  props: ["nowItem"],
+  props: ["nowItem", "pId"],
   data() {
     return {
       form: {
@@ -52,7 +52,8 @@ export default {
         functionName: [{ required: true, message: "必填项", trigger: "blur" }],
         functionOrder: { required: true, message: "必填项", trigger: "blur" },
         functionUrl: [{ required: true, message: "必填项", trigger: "blur" }]
-      } //表单校验规则
+      }, //表单校验规则
+       dialogFormVisible: false,
     };
   },
   created() {
@@ -60,7 +61,10 @@ export default {
   },
   methods: {
     initForm() {
-      if (this.nowItem == "add") return;
+      if (this.nowItem == "add") {
+        this.pId && (this.form.pId = this.pId);
+        return;
+      }
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
     },
     _comfirm() {
