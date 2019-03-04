@@ -54,14 +54,11 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
-              <!-- ********************************************************************************** -->
-              <!-- ********************************************************************************** -->
-              <!-- ********************************************************************************** -->
-              <!-- ********************************************************************************** -->
-              <!-- ********************************************************************************** -->
-              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" >{{dzys}}</el-button>
-              <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
-              <el-button type="danger">删除</el-button>
+              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2==0">指定验收</el-button>
+              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2==1">修改指定验收</el-button>
+              <el-button @click="handleClick(scope.row)" type="primary" size="small" style="margin-left:33px" v-if="scope.row.state2==0">查看</el-button>
+              <el-button @click="handleClick(scope.row)" type="primary" size="small" v-else>查看</el-button>
+              <el-button type="danger" @click="dlet(scope)" size="small" v-if="scope.row.state2==0">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -71,9 +68,6 @@
     <!-- 添加工序弹框 -->
     <el-dialog title="指定工序" :visible.sync="dialogFormVisible">
       <el-form :model="form">
-        <el-form-item label="活动名称" label-width="120px">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item label="工序类型" label-width="120px">
           <el-select v-model="value1" :placeholder="gongxuMrz" style="width:790px" @change="tree1">
             <el-option v-for="item in options1" :key="item.index" :label="item.processType" :value="item">
@@ -86,9 +80,9 @@
               </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工序验收序号" label-width="120px">
+        <!-- <el-form-item label="工序验收序号" label-width="120px">
           <el-input v-model="form.xuhao" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="工序验收次数" label-width="120px">
           <el-input v-model="form.cishu" autocomplete="off"></el-input>
         </el-form-item>
@@ -132,7 +126,7 @@
           <el-table-column fixed="left" label="选中验收人" width="300">
             <template slot-scope="scope">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" name="Fruit" @click="xzk(scope)">
+              <input type="radio" name="Fruit" @click="xzk(scope,$event)">
             </template>
           </el-table-column>
           <el-table-column property="username" label="姓名" width="300"></el-table-column>
@@ -182,7 +176,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="bjDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="zdys($event)">确 定</el-button>
+        <el-button type="primary" @click="zdys()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -195,14 +189,13 @@ export default {
   components: {
     SelectTree,
   },
-  data() {
+  data() {  
     return {
       options: [],
       options1:[],
       options2:[],
       data:[],
       tableData: null,
-      dzys:'',
       processName:'',
       ysrData:[],
       opSlelt: [{
@@ -285,7 +278,10 @@ export default {
       processMDictId:"",
       projectItemId:"",
       processDictId:"",
+      xgzdjlId:"",
+      xgzdsgId:"",
       ysrName:"",
+      even:null,
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
@@ -299,24 +295,26 @@ export default {
     // 初始化合同段input框数据
     fn(){
       request.get('/rest/organizate/depart').then((res)=>{
+        console.log(res)
         this.options=res.data.data;
-        console.log(this.options)
+        // console.log(this.options)
       })
     },
     // 初始化新增工序类型input框数据
     fnLei(){
       request.post('/rest/processType/getList').then((res)=>{
-        this.options1=res.data.data;
+        this.options1=res.data.data.data;
+        // console.log(this.options1)
         this.fnGong(this.options1[0].id);
         this.processMDictId=this.options1[0].id;
-        console.log(this.processMDictId)
         this.gongxuMrz=this.options1[0].processType
       })
     },
     // 初始化新增工序input框数据
     fnGong(id){
-      request.post('/rest/process/getList_BuFenYe',{processTypeId:id}).then((res)=>{
-        this.options2=res.data.data
+      request.post('/rest/process/getList',{processTypeId:id}).then((res)=>{
+        // console.log(res)
+        this.options2=res.data.data.data
       })
     },
     // 根据input ID获取树形结构
@@ -329,19 +327,26 @@ export default {
         this.data=res.data.data;
       })
     },
-    // 点击树形节点展示右边详情列表
-    handleNodeClick(data) {
-      this.treeId=data.id;
-      request.post('/rest/processCheck/getProject_Process',{projectItemId:this.treeId}).then((res)=>{
-        this.tableData=res.data.data
+    // 点击树节点展示右边详情接口
+    ztrrFrom(){
+       request.post('/rest/processCheck/getProject_Process',{projectItemId:this.treeId}).then((res)=>{
         // this.treeFrom.projectItem=res.data.data[0].projectItem;
         // this.treeFrom.projectType=res.data.data[0].projectType;
         // this.treeFrom.projectCode=res.data.data[0].projectCode;
         // this.treeFrom.projectCode=res.data.data[0].zhuanghao;
         // this.treeFrom.state1=res.data.data[0].state1;
-        // console.log(this.tableData)
+        this.tableData=res.data.data;
+        this.tableData.splice(1,3)
+        this.tableData.reverse()
+        console.log(this.tableData)
         this.processName=this.tableData[0].processName;
       })
+    },
+    // 点击树形节点展示右边详情列表
+    handleNodeClick(data) {
+      this.treeId=data.id;
+      this.ztrrFrom();
+      // console.log(data);
     },
     // 新增弹框获取input框数据
     addGx(){
@@ -356,8 +361,8 @@ export default {
       console.log(this.processMDictId)
       this.value1=data.processType;
       this.gongxuId=data.id
-      request.post('/rest/process/getList_BuFenYe',{processTypeId:this.gongxuId}).then((res)=>{
-        this.options2=res.data.data
+      request.post('/rest/process/getList',{processTypeId:this.gongxuId}).then((res)=>{
+        this.options2=res.data.data.data
       })
     },
     // 监听工序窗口
@@ -368,23 +373,41 @@ export default {
     // 新增工序接口
     addXzgx(){
       let fromData={userGroupId:this.userGroupId,processMDictId:this.processMDictId,processDictId:this.processDictId,projectItemId:this.treeId,remark:this.form.beizhu,checkNum:this.form.cishu}
-      // console.log(fromData)
+      console.log(fromData)
       request.post('/rest/processCheck/addProcess',fromData).then((res)=>{
-        this.$message({
-          message: '恭喜你，新增成功',
-          type: 'success'
-        });
+        if(res.data.respCode==0){
+            this.$message({
+            message: '恭喜你，新增成功',
+            type: 'success'
+          });
+          this.form.beizhu='';
+          this.form.cishu='';
+          this.ztrrFrom();
+          this.dialogFormVisible=false;
+        }
       })
-      this.form.beizhu='';
-      this.form.cishu='';
-      this.dialogFormVisible=false;
     },
     // 编辑指定验收弹框
     tjgx(data){
-      this.bjFrom.processId=data.row.id;
-      this.bjDialogFormVisible=true;
+      console.log(data)
+      this.bjFrom.name='';
+      this.bjFrom.names='';
       this.bjFrom.time='';
       this.bjFrom.times='';
+      this.bjDialogFormVisible=true;
+      this.treeFrom.state2=data.row.state2;
+      this.bjFrom.processId=data.row.id;
+      if(data.row.state2==1){
+        request.post('/rest/processCheck/searchProcessCheckPersons',{processId:this.bjFrom.processId}).then((res)=>{
+          this.bjFrom.name=res.data.data.planSelfCheckPerson;
+          this.bjFrom.time=res.data.data.planSelfCheckTime;
+          this.bjFrom.names=res.data.data.planCheckPerson;
+          this.bjFrom.times=res.data.data.planCheckTime;
+          this.xgzdjlId=res.data.data.planCheckPersonId;
+          this.xgzdsgId=res.data.data.planSelfCheckPersonId;
+          console.log(res)
+        }) 
+      }
     },
     // 获取验收人接口
     fnYsr(){
@@ -416,35 +439,60 @@ export default {
       this.fnYsr()
     },
     // 监听验收人单选框
-    xzk(data){
-      this.pageForm.Mark=='1'?this.bjFrom.name=data.row.username:this.bjFrom.names=data.row.username
-      this.pageForm.Mark=='1'?this.bjFrom.nameId=data.row.id:this.bjFrom.nameId=data.row.id
-      this.pageForm.Mark=='1'?this.bjFrom.namesId=data.row.id:this.bjFrom.namesId=data.row.id
+    xzk(data,e){
+      this.even=e
+      this.pageForm.Mark=='1'?this.bjFrom.name=data.row.username:this.bjFrom.names=data.row.username;
+      this.pageForm.Mark=='1'?this.bjFrom.nameId=data.row.id:this.bjFrom.namesId=data.row.id;
     },
     // 选择验收人显示表框中
-    qdysr(){
+    qdysr(data){
+      this.even.target.checked=false;
       this.innerVisible=false;
     },
     // 编辑指定验收接口
     zdys(){
-        let time=new Date(this.bjFrom.time)
-        let timeDate = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds(); 
-        let times=new Date(this.bjFrom.times)
-        let timesDate = times.getFullYear() + '-' + (times.getMonth() + 1) + '-' + times.getDate() + ' ' + times.getHours() + ':' + times.getMinutes() + ':' + times.getSeconds(); 
-        let bjysForm={processId:this.bjFrom.processId,planSelfCheckTime:timeDate,planSelfCheckPerson:this.bjFrom.nameId,planCheckTime:timesDate,planCheckPerson:this.bjFrom.namesId}
-        request.post('/rest/processCheck/appointProcessCheckPersons',bjysForm).then((res)=>{
-          console.log(res)
+      let time=new Date(this.bjFrom.time)
+      let timeDate = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds(); 
+      let times=new Date(this.bjFrom.times)
+      let timesDate = times.getFullYear() + '-' + (times.getMonth() + 1) + '-' + times.getDate() + ' ' + times.getHours() + ':' + times.getMinutes() + ':' + times.getSeconds(); 
+      if(this.treeFrom.state2==0){
+          let bjysForm={processId:this.bjFrom.processId,planSelfCheckTime:timeDate,planSelfCheckPerson:this.bjFrom.nameId,planCheckTime:timesDate,planCheckPerson:this.bjFrom.namesId}
+          request.post('/rest/processCheck/appointProcessCheckPersons',bjysForm).then((res)=>{
           if(res.data.respCode==0){
               this.$message({
               message: '恭喜你，指定验收成功',
               type: 'success'
             });
-            this.bjFrom.name='';
-            this.bjFrom.names='';
-            // this.handleNodeClick();
+            console.log(bjysForm)
+            this.ztrrFrom()
             this.bjDialogFormVisible=false;
           }
         })
+      }else{
+        let xgbjysForm={processId:this.bjFrom.processId,planSelfCheckTime:timeDate,planSelfCheckPerson:this.bjFrom.nameId!=''?this.bjFrom.nameId:this.xgzdjlId,planCheckTime:timesDate,planCheckPerson:this.bjFrom.namesId!=''?this.bjFrom.namesId:this.xgzdsgId}
+        request.post('/rest/processCheck/appointProcessCheckPersons',xgbjysForm).then((res)=>{
+          if(res.data.respCode==0){
+              this.$message({
+              message: '恭喜你，指定验收成功',
+              type: 'success'
+            });
+            console.log(xgbjysForm)
+            this.bjDialogFormVisible=false;
+          }
+        })
+      }
+    },
+    // 删除接口
+    dlet(data){
+      request.get('/rest/processCheck/delete/'+data.row.id).then((res)=>{
+        if(res.data.respCode==0){
+          this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          this.ztrrFrom()
+        }
+      })
     },
     handleClick(row) {
       console.log(row);
@@ -464,9 +512,6 @@ export default {
 }
 /deep/ .el-select{
     width: 260px;
-  //  /deep/ .el-input{
-  //    width: 100%;
-  //  }
 }
 .acceptLayout {
   padding: 20px;
@@ -476,12 +521,6 @@ export default {
   /deep/ .el-popper{
     width: 400px;
   }
-//   /deep/ .el-select{
-//     width: 400px;
-//    /deep/ .el-input{
-//      width: 100%;
-//    }
-// }
   .ysr{
     color: blue;
     font-size: 18px;

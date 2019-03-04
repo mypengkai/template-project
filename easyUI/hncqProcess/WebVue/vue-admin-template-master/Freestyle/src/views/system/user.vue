@@ -3,13 +3,11 @@
     <!-- 查询 -->
     <div class="topBar">
       <span>用户账号:</span>
-      <el-input size="small" v-model="sendData.SQLusername" placeholder="请输入账号"></el-input>
+      <el-input size="small" v-model="sendData.search" placeholder="请输入账号"></el-input>
       <span>用户名称:</span>
-      <el-input size="small" v-model="sendData.SQLrealname" placeholder="请输入名称"></el-input>
+      <el-input size="small" v-model="input" placeholder="请输入名称"></el-input>
       <span>选择部门:</span>
-      <el-input size="small" v-model="sendData.SQLorgid" placeholder="请输入部门">
-        <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
-      </el-input>
+      <el-input size="small" v-model="input" placeholder="请输入部门"></el-input>
       <div class="rl">
         <el-button type="primary" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
         <el-button type="primary" icon="el-icon-search" @click="_userList">搜索</el-button>
@@ -17,20 +15,20 @@
     </div>
     <!-- 列表 -->
     <div class="userList">
-      <el-table :data="userList" style="width: 100%" height="68vh">
+      <el-table :data="userList" style="width: 100%">
         <el-table-column prop="userName" label="用户账号">
         </el-table-column>
 
         <el-table-column prop="realName" label="名称">
         </el-table-column>
 
-        <el-table-column prop="departName" label="组织机构">
+        <el-table-column prop="userType" label="用户类型">
+        </el-table-column>
+
+        <el-table-column prop="departname" label="组织机构">
         </el-table-column>
 
         <el-table-column prop="userKey" label="角色">
-        </el-table-column>
-
-         <el-table-column prop="zhiwei" label="职位">
         </el-table-column>
 
         <el-table-column prop="createDate" label="创建时间">
@@ -41,32 +39,18 @@
 
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>
+            <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
             <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
           </template>
         </el-table-column>
 
       </el-table>
     </div>
-    <!-- 分页 -->
-    <el-pagination class="" background 
-    :page-sizes="[8]"
-     :page-size="1" 
-     layout="total, sizes, prev, pager, next, jumper" 
-     :total="total" 
-     :current-page.sync="sendData.pageNo" 
-     @size-change="handleSizeChange" 
-     @current-change="_userList()">
+    <el-pagination class="tac" background layout="prev, pager, next" :total="total" :current-page.sync="sendData.pageNo" @current-change="_userList()">
     </el-pagination>
     <!-- 弹框 -->
-    <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible">
       <userAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_userList"></userAdd>
-    </el-dialog>
-
-    <!-- 组织机构树形表单搜素 -->
-    <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
-      <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
-      </el-tree>
     </el-dialog>
   </div>
 </template>
@@ -74,54 +58,36 @@
 <script>
 import userAdd from "./components/userAdd";
 import api from "@/api/user.js";
-import api2 from "@/api/user.js";
-import api1 from "@/api/Organization.js";
 export default {
   components: {
     userAdd
   },
   data() {
     return {
-      userList: [], // 用户列表数组
-      orgTree: [], //组织机构数组
-      defaultProps: {
-        children: "children",
-        label: "departName"
-      },
+      userList: [],
       input: "",
       search: "",
       nowItem: "",
-      SQLorgid:"",
       dialogFormVisible: false,
-      innerVisible: false,
       total: 0,
       sendData: {
-        SQLusername: "", //	用户账号username
-        SQLrealname: "", //用户真实姓名
-        SQLorgid: "", //部门id
+        search: "",
         pageNo: 1,
-        pageSize: 8
+        pageSize: 10
       }
     };
   },
   created() {
     this._userList();
-    this._orgTree();
   },
   methods: {
     action(val) {
       this.nowItem = val;
       this.dialogFormVisible = true;
     },
-    // 查询单个请求
-    async actionItem(val) {
-      this.nowItem = val;
-      let { data } = await api2.sysuserCheck(val.id); //异步执行取id
-      this.nowItem.mobilePhone = data.data.mobilePhone;
-      this.dialogFormVisible = true;
-    },
     _userList() {
       api.sysuserList(this.sendData).then(res => {
+        console.log(res)
         this.total = res.data.data.totalCount;
         this.userList = res.data.data.data;
         let userList = this.userList;
@@ -130,9 +96,6 @@ export default {
           v.status == 1 && (v.status1 = "激活");
         });
       });
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
     },
     // 删除按钮
     Delete(data) {
@@ -147,23 +110,12 @@ export default {
       api.sysuserDelete(data.id).then(res => {
         this._userList();
       });
-    },
-    // 组织机构树
-    _orgTree() {
-      api1.organizateTree().then(res => {
-        this.orgTree = res.data.data;
-      });
-    },
-    // 组织机构选择后的数据
-    handleCheckChange(data, checked, indeterminate) {
-      this.sendData.SQLorgid = data.id;
-      this.departName = data.departName;
-      this.innerVisible = false;
     }
+    // 搜素
   },
   watch: {
     dialogFormVisible(val) {
-      !val && (this.nowItem = ""); // 监听弹框是否关闭 清空数据 阻止数据回填
+      !val && (this.nowItem = "");
     }
   }
 };
