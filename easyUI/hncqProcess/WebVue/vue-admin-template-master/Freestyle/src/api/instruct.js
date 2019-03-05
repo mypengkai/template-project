@@ -9,6 +9,10 @@ export default {
     searchOne(data) {
         return request.post('/rest/CommandController/searchOne', data)
     },
+    // 发送指令
+    addCommand(data) {
+        return request.post('/rest/CommandController/addCommand', data)
+    },
 }
 
 
