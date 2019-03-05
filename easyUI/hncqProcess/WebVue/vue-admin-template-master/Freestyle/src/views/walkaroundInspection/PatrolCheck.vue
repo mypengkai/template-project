@@ -13,7 +13,14 @@
 
       <div>
         <!-- 时间段 -->
-        <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
+        <el-date-picker 
+        type="datetimerange" 
+        value-format="yyyy-MM-dd HH:mm:ss" 
+        range-separator="至" 
+        start-placeholder="开始日期" 
+        end-placeholder="结束日期" 
+        v-model="timeRange" 
+        @change="changeDataRange">
         </el-date-picker>
       </div>
 
