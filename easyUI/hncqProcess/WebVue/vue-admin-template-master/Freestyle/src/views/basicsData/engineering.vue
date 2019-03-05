@@ -13,14 +13,62 @@
       <div class="dataUp">
         <span style="padding-top: 1vw;">导入工程数据:</span>
         <span style="padding-top: 0.7vw;">
-          <el-button size="small" type="primary" @click="action('add')">新增</el-button>
+          <el-upload action="https://jsonplaceholder.typicode.com/posts/">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </span>
+
+        <span style="padding-top: 0.5vw;padding-left: 15vw;">
+          <el-button type="primary" @click="action('add')">新增</el-button>
         </span>
       </div>
     </div>
     <!-- 操作列表 -->
     <div class="app-container">
       <el-table :data="dataList" height="60vh">
-        <el-table-column prop="projectItem" label="工程分布分项">
+        <el-table-column label="工程分布分项">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.projectItem }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.projectType1 }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="所属组织机构">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.departname }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="起始桩号">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.startStation }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="终止桩号">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.endStation }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="创建人">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.useridName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
+
+        <!-- <el-table-column prop="projectItem" label="工程分布分项">
         </el-table-column>
         <el-table-column prop="projectType1" label="类型">
         </el-table-column>
@@ -33,7 +81,7 @@
         <el-table-column prop="useridName" label="创建人">
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
@@ -42,6 +90,8 @@
         </el-table-column>
       </el-table>
     </div>
+    <el-pagination class="tac" background layout="prev, pager, next" :total="total" :current-page.sync="sendData.pageNo" @current-change="_projectList()">
+    </el-pagination>
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
       <Xcadd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
@@ -87,8 +137,14 @@ export default {
       dataList: [],
       nowItem: "",
       dialogFormVisible: false,
+      total: 0,
       value: "",
-      input: ""
+      input: "",
+      sendData: {
+        search: "",
+        pageNo: 1,
+        pageSize: 10
+      }
     };
   },
   created() {
@@ -101,6 +157,7 @@ export default {
     },
     _projectList() {
       api.projectList().then(res => {
+        this.total = res.data.totalCount;
         this.dataList = res.data.data;
         let dataList = this.dataList;
         dataList.forEach(v => {
@@ -136,7 +193,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .engineeringLayout {
   padding: 20px;
   .selectArea {

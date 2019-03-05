@@ -57,74 +57,19 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/xsgl',
+    path: '/walkaroundInspection',
     component: Layout,
     meta: { title: '巡视管理', icon: 'example' },
     children: [
       {
-        path: 'xsck',
-        name: 'Xsck',
-        component: () => import('@/views/xsgl/xsck'),
+        path: 'PatrolCheck',
+        name: 'PatrolCheck',
+        component: () => import('@/views/walkaroundInspection/PatrolCheck'),
         meta: { title: '巡视查看', icon: 'form' }
       }
     ]
   },
-
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/table/table',
-    name: 'table',
-    meta: { title: '树形控件', icon: 'treeTable' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/treeTable/treeTable.vue'),
-        meta: { title: '基础树', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '可选择默认展开', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    meta: { title: '轮播图', icon: 'example' },
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '普通轮播', icon: 'form' }
-      },
-      {
-        path: 'lantern',
-        name: 'lantern',
-        component: () => import('@/views/lantern/index'),
-        meta: { title: '卡片3D', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/video',
-    component: Layout,
-    children: [
-      {
-        path: 'video',
-        name: 'video',
-        component: () => import('@/views/video/index'),
-        meta: { title: '视频', icon: 'video' }
-      }
-    ]
-  },
-
+  
   {
     path: '/basicsData',
     component: Layout,
@@ -136,17 +81,49 @@ export const constantRouterMap = [
         component: () => import('@/views/basicsData/engineering'),
         meta: { title: '工程管理', icon: 'engineering' }
       },
+      {
+        path: 'processing',
+        name: 'processing',
+        component: () => import('@/views/basicManage/processManage'),
+        meta: { title: '工序管理', icon: 'acceptance' }
+      }
     ]
   },
 
   {
-    path: '/process',
+    path: '/instruct',
+    component: Layout,
+    meta: { title: '指令管理', icon: 'instruct' },
+    children: [
+      {
+        path: 'instructCheck',
+        name: 'instructCheck',
+        component: () => import('@/views/instruct/instructCheck'),
+        meta: { title: '指令查看', icon: 'instructCheck' }
+      },
+      {
+        path: 'instructReceive',
+        name: 'instructReceive',
+        component: () => import('@/views/instruct/instructReceive'),
+        meta: { title: '指令接受', icon: 'instructReceive' }
+      },
+      {
+        path: 'instructSend',
+        name: 'instructSend',
+        component: () => import('@/views/instruct/instructSend'),
+        meta: { title: '指令发送', icon: 'instructSend' }
+      },
+    ]
+  },
+
+  {
+    path: '/accept',
     component: Layout,
     meta: { title: '工序验收', icon: 'example' },
     children: [
       {
         path: 'accept',
-        name: 'process',
+        name: 'SelectTree',
         component: () => import('@/views/process/accept'),
         meta: { title: '工序验收', icon: 'acceptance' }
       },
