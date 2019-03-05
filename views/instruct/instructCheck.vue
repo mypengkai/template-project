@@ -8,12 +8,12 @@
       </el-input>
 
       <span>工程选择:</span>
-      <el-input v-model="input">
-        <el-button slot="append" icon="el-icon-edit"></el-button>
+      <el-input v-model="departname" clearable placeholder="请选择分部分项">
+        <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
       </el-input>
 
       <span>时间:</span>
-      <el-date-picker v-model="value4" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+      <el-date-picker v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
       </el-date-picker>
 
       <div class="rl">
@@ -48,7 +48,7 @@
     </div>
     <!-- 分页条 -->
     <div>
-      <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="1" :page-size="[8]" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
+      <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
       </el-pagination>
     </div>
     <!-- 编辑弹框 -->
@@ -60,49 +60,54 @@
       <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
       </el-tree>
     </el-dialog>
+    <!-- 分部分项树形表单 -->
+    <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
+      <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
+      </el-tree>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import checkBox from "./components/checkBox";
 import api from "@/api/instruct.js";
-import Organization from "../../api/Organization.js";
+import Organization from "@/api/Organization.js";
+import project from "@/api/project.js";
 export default {
   components: {
     checkBox
   },
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "一标"
-        },
-        {
-          value: "选项2",
-          label: "二标"
-        }
-      ],
       getList: [], // 当前列表
+      // 组织机构树显示
       defaultProps: {
         children: "children",
         label: "departName"
       },
-      orgTree: [],
+      // 工程分项树显示
+      projectTree: {
+        children: "children",
+        label: "departname"
+      },
+      orgTree: [], // 组织机构树
+      projectList: [], // 分部分项树
       total: 0,
       sendData: {
         departId: "", //部门id
         projectItemId: "", // 分部分项id
+        starttime: "", // 开始时间
+        endtime: "", // 结束时间
         pageNo: 1, // 当前页
         pageSize: 8 // 每页条数
       },
       nowItem: "",
-      departName: "",
-      value: "",
-      input: "",
-      value4: "",
-      dialogFormVisible: false,
-      innerVisible: false
+      timeRange: "", // 时间日期范围
+      departName: "", // 组织机构回填显示
+      departname: "", // 分部分项回填显示
+      dialogFormVisible: false, // 查看编辑弹框
+      innerVisible: false, // 组织机构弹框
+      projectVisible: false // 工程分项弹框
     };
   },
   created() {
@@ -125,12 +130,27 @@ export default {
       Organization.organizateTree().then(res => {
         this.orgTree = res.data.data;
       });
+      // 分部分项树
+      project.projectList().then(res => {
+        this.projectList = res.data.data;
+      });
     },
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.sendData.departId = data.id;
       this.departName = data.departName;
       this.innerVisible = false;
+    },
+    // 分部分项选择后的数据
+    projectChange(data, checked, indeterminate) {
+      this.sendData.projectItemId = data.id;
+      this.departname = data.departname;
+      this.projectVisible = false;
+    },
+    // 给开始和结束时间赋值
+    changeDataRange(val) {
+      [this.sendData.starttime, this.sendData.endtime] = val;
+      console.log(this.sendData);
     }
   },
   watch: {

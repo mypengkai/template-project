@@ -31,11 +31,13 @@
 </template>
 
 <script>
+import api from "@/api/instruct.js";
 export default {
   props: ["nowItem"],
   data() {
     return {
       form: {
+        id: "",
         project: "",
         initiator: "",
         createTime: "",
@@ -53,7 +55,10 @@ export default {
       // console.log(this.nowItem);
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-    }
+      api.searchOne(this.form.id).then(res => {
+        console.log(res);
+      });
+    },
   }
 };
 </script>

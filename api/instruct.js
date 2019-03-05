@@ -5,7 +5,10 @@ export default {
     getList(data) {
         return request.post('/rest/CommandController/getList', data)
     },
-
+    // 指令详情
+    searchOne(data) {
+        return request.post('/rest/CommandController/searchOne', data)
+    },
 }
 
 
