@@ -3,23 +3,23 @@
         <el-form :model="form" label-width="120px">
             <div style="width:70%">
                 <el-form-item label="相关工程">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.project"></el-input>
                 </el-form-item>
 
                 <el-form-item label="发起人">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.initiator"></el-input>
                 </el-form-item>
 
                 <el-form-item label="发起时间">
-                    <el-input v-model="form.date"></el-input>
+                    <el-input v-model="form.createTime"></el-input>
                 </el-form-item>
 
                 <el-form-item label="计划时间">
-                    <el-input v-model="form.date"></el-input>
+                    <el-input v-model="form.planTime"></el-input>
                 </el-form-item>
 
                 <el-form-item label="指令内容">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.remark"></el-input>
                 </el-form-item>
             </div>
         </el-form>
@@ -36,8 +36,11 @@ export default {
   data() {
     return {
       form: {
-        name: "",
-        date: ""
+        project: "",
+        initiator: "",
+        createTime: "",
+        planTime: "",
+        remark: ""
       },
       dialogFormVisible: true
     };

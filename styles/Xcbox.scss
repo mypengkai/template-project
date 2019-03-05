@@ -13,12 +13,29 @@
 .pr20{
     padding-right: 20px;
 }
+.pt20{
+    padding-top: 20px;
+}
+.tac{
+    text-align: center;
+}
+.tar{
+    text-align: right;
+  }
 .scrollY {
     overflow-y: auto;
     padding-right: 10px;
     overflow-x: auto;
   }
-  
+.treeTop{
+    position: relative;
+    span{
+       display: block;
+        position: absolute;
+        
+    }
+}
+
   .scrollY::-webkit-scrollbar { /*滚动条整体样式*/
     width: 1px; /*高宽分别对应横竖滚动条的尺寸*/
     height: 1px;
@@ -41,8 +58,19 @@
           margin-right:10px;
           margin-bottom: 10px;
       }
-      .el-button{
-        margin-right:10px;
-        margin-bottom: 10px;
+      .el-input__inner{
+        line-height: 39px;
       }
+    //   .el-button{
+    //     margin-right:10px;
+    //     margin-bottom: 10px;
+    //   }
+  }
+  .dialogBox{
+    .el-dialog{
+        width: 35%;
+    }
+    .el-dialog__header{
+        text-align: center;
+    }
   }
