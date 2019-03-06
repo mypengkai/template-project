@@ -5,6 +5,10 @@ export default {
     getCheckPerson(data) {
         return request.post('/rest/processCheck/getCheckPerson', data)
     },
+    // 查询图片信息
+    getPictureDetail(data) {
+        return request.post('/rest/processCheck/getPictureDetail', data)
+    },
 }
 
 

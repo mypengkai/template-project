@@ -40,7 +40,7 @@
 
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="action(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="actionItem(scope.row)">编辑</el-button>
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -118,6 +118,13 @@ export default {
       this.nowItem = val;
       this.dialogFormVisible = true;
     },
+
+    // 查询单个请求
+    async actionItem(id) {
+      this.nowItem = id;
+      this.dialogFormVisible = true;
+    },
+
     _searchList() {
       // 列表请求
       api.getList(this.sendData).then(res => {
@@ -125,6 +132,7 @@ export default {
         this.getList = res.data.data.data;
       });
     },
+
     instructList() {
       // 组织机构树
       Organization.organizateTree().then(res => {
