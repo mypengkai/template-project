@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       form: {
+        id:"",
         pId: "", //父菜单id
         childcount: "", // 子集数量
         functionLevel: "", // 菜单等级
