@@ -37,9 +37,14 @@
                     <el-input v-model="form.remark"></el-input>
                 </el-form-item>
 
-                <!-- <el-form-item label="图片选择" v-if="nowItem =='add'">
-                    <el-input v-model="form.remark"></el-input>
-                </el-form-item> -->
+                <el-form-item label="图片选择" v-if="nowItem =='add'">
+                    <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                    <el-dialog :visible.sync="dialogVisible">
+                        <img width="100%" :src="dialogImageUrl" alt="">
+                    </el-dialog>
+                </el-form-item>
 
                 <!-- 查看 -->
                 <el-form-item label="相关工程" v-if="nowItem !=='add'">
@@ -128,6 +133,10 @@
                         <el-input v-model="formSon.projectItem"></el-input>
                     </el-form-item>
 
+                    <el-form-item label="状态">
+                        <el-input v-model="formSon.state"></el-input>
+                    </el-form-item>
+
                     <el-form-item label="照片">
                         <el-carousel :interval="3000" arrow="always" height="30vh">
                             <el-carousel-item v-for="item in 1" :key="item">
@@ -135,7 +144,6 @@
                             </el-carousel-item>
                         </el-carousel>
                     </el-form-item>
-
                 </div>
             </el-form>
         </el-dialog>
@@ -151,6 +159,8 @@ export default {
   props: ["nowItem"],
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
       value: "",
       planTime: "",
       form: {
@@ -177,7 +187,7 @@ export default {
         commandType: "类型1",
         remark: "内容",
         projectItem: "项目11",
-        state: "1"
+        state: "已处理"
       },
       // 组织机构树显示
       defaultProps: {
@@ -288,6 +298,13 @@ export default {
         api.addCommand(this.form).then(res => {
           this.$emit("comfirm");
         });
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     }
   }
 };
