@@ -3,7 +3,7 @@
     <el-form :model="form" :rules="rules">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth" prop="userGroupId">
-          <el-input v-model="form.userGroupId">
+          <el-input v-model="departName">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
           <!-- <el-button type="primary" plain @click="innerVisible = true">点击输入</el-button> -->
@@ -67,6 +67,7 @@ export default {
   data() {
     return {
       orgTree: [],
+      departName: "",
       data2: [
         {
           id: 1,
