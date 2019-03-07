@@ -184,8 +184,6 @@ export default {
   data() {
     return {
       dialogImageUrl: "",
-      nowItemSon: "",
-      dialogVisible: false,
       value: "",
       planTime: "",
       form: {
@@ -236,7 +234,7 @@ export default {
         children: "children",
         label: "departname"
       },
-      //   用户类型下拉选择
+      // 用户类型下拉选择
       MarkList: [
         { label: "项目", value: 1 },
         { label: "业主", value: 2 },
@@ -261,17 +259,17 @@ export default {
 
       total: 0,
       picture: [], // 图片数组,
-      imgData:[], // 下一层图片数组
+      imgData: [], // 下一层图片数组
       orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
       departName: "", // 组织机构回填显示
       departname: "", // 分部分项回填显示
-      dialogFormVisible: true,
-      innerVisibleSon: false,
+      innerVisibleSon: false, // 内层照片详情弹框
       innerVisible: false, // 组织机构弹框
       projectVisible: false, // 工程分项弹框
-      acceptUser: false // 接受人id弹框
+      acceptUser: false, // 接受人id弹框
+      dialogVisible: false // 上传图片
     };
   },
   created() {
@@ -286,8 +284,7 @@ export default {
       this.form = ObCopyData.data; // 第一层查看
       this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
       this.picture = ObCopyData.data.picture; // 图片数组
-      this.sendDataSon = this.form.processLogId;
-      console.log(this.sendDataSon.processLogId);
+      this.sendDataSon = this.form.processLogId; // 发送工序id
     },
     sendList() {
       // 组织机构树
@@ -309,9 +306,8 @@ export default {
     // 工序id拿图片详情
     actionImg() {
       process.getPictureDetail(this.sendDataSon).then(res => {
-        this.formSon = res.data.data[0];
-        this.imgData = res.data.data;
-        console.log(res.data.data);
+        this.formSon = res.data.data[0]; // 图片详情信息
+        this.imgData = res.data.data; // 内层图片数组
       });
       this.innerVisibleSon = true;
     },
@@ -357,6 +353,7 @@ export default {
       //       console.log(res);
       //     });
     },
+    // 上传图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
