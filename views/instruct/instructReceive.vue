@@ -53,7 +53,7 @@
     </div>
     <!-- 编辑弹框 -->
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible"></checkBox>
+      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
     <!-- 组织机构树形表单 -->
     <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>

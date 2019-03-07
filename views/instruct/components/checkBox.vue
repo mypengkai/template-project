@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-form :model="form" label-width="120px">
-            <div style="width:70%">
+        <el-form :model="form" label-width="100px">
+            <div style="width:47vw">
                 <!-- 新增 -->
                 <el-form-item label="组织机构id" v-if="nowItem =='add'">
                     <el-input v-model="departName">
@@ -48,11 +48,11 @@
 
                 <!-- 查看 -->
                 <el-form-item label="相关工程" v-if="nowItem !=='add'">
-                    <el-input v-model="form.project"></el-input>
+                    <el-input v-model="form.projectItem"></el-input>
                 </el-form-item>
 
                 <el-form-item label="发起人" v-if="nowItem !=='add'">
-                    <el-input v-model="form.initiator"></el-input>
+                    <el-input v-model="form.realname"></el-input>
                 </el-form-item>
 
                 <el-form-item label="发起时间" v-if="nowItem !=='add'">
@@ -64,16 +64,39 @@
                 </el-form-item>
 
                 <el-form-item label="指令内容" v-if="nowItem !=='add'">
-                    <el-input v-model="form.remark"></el-input>
+                    <div class="topBar">
+                        <span>发起人:</span>
+                        <el-input v-model="commandUser.faqiren"></el-input>
+
+                        <span>接收人:</span>
+                        <el-input v-model="commandUser.jieshouren"></el-input>
+
+                        <span>开始时间:</span>
+                        <el-input v-model="commandUser.createTime"></el-input>
+
+                        <span>结束时间:</span>
+                        <el-input v-model="commandUser.finishTime"></el-input>
+
+                        <span>状态:</span>
+                        <el-input v-model="commandUser.state"></el-input>
+
+                        <span>相关描述:</span>
+                        <el-input v-model="commandUser.remark"></el-input>
+                    </div>
+
                 </el-form-item>
 
                 <el-form-item label="相关照片" v-if="nowItem !=='add'">
-                    <img src="http://192.168.10.23:8080/hncqProcess/img/server/RolePic/20190221/%E6%95%88%E6%9E%9C%E5%9B%BE_1550735367257.jpg" style="cursor:pointer" class="avatar" @click="innerVisibleSon = true">
+                    <el-carousel :interval="3000" arrow="always" height="25vh">
+                        <el-carousel-item v-for="item in picture" :key="item">
+                            <img :src="item" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                        </el-carousel-item>
+                    </el-carousel>
                 </el-form-item>
             </div>
         </el-form>
         <div class="tar">
-            <el-button>取 消</el-button>
+            <el-button @click="$emit('cancel')">取 消</el-button>
             <el-button type="primary" @click="_comfirm">确 定</el-button>
         </div>
 
@@ -112,35 +135,36 @@
         <!-- 照片详情查看 -->
         <el-dialog width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
             <el-form :model="formSon" label-width="200px">
-                <div style="width:50%">
-                    <el-form-item label="姓名">
-                        <el-input v-model="formSon.realname"></el-input>
+                <div style="width:60%">
+
+                    <el-form-item label="指令描述">
+                        <el-input v-model="formSon.describe"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="开始时间">
+                    <el-form-item label="拍摄时间">
                         <el-input v-model="formSon.createTime"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="结束时间">
-                        <el-input v-model="formSon.finishTime"></el-input>
+                    <el-form-item label="经度">
+                        <el-input v-model="formSon.lat"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="指令类型">
-                        <el-input v-model="formSon.commandType"></el-input>
+                    <el-form-item label="纬度">
+                        <el-input v-model="formSon.lgt"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="工程项目">
-                        <el-input v-model="formSon.projectItem"></el-input>
+                    <el-form-item label="照片描述">
+                        <el-input v-model="formSon.photoDescribe"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="状态">
-                        <el-input v-model="formSon.state"></el-input>
+                    <el-form-item label="拍摄地点">
+                        <el-input v-model="formSon.photoLocation"></el-input>
                     </el-form-item>
 
                     <el-form-item label="照片">
                         <el-carousel :interval="3000" arrow="always" height="30vh">
-                            <el-carousel-item v-for="item in 1" :key="item">
-                                <img src="http://192.168.10.23:8080/hncqProcess/img/server/RolePic/20190221/%E6%95%88%E6%9E%9C%E5%9B%BE_1550735367257.jpg" alt="">
+                            <el-carousel-item v-for="item in imgData" :key="item">
+                                <img :src="item.filePath" alt="">
                             </el-carousel-item>
                         </el-carousel>
                     </el-form-item>
@@ -160,12 +184,14 @@ export default {
   data() {
     return {
       dialogImageUrl: "",
+      nowItemSon: "",
       dialogVisible: false,
       value: "",
       planTime: "",
       form: {
         id: "",
-        username: "", // 接收人姓名
+        infologid: "", // 工序id
+        realname: "", // 接收人姓名
         project: "", // 相关工程
         initiator: "", // 发起人
         createTime: "", // 发起时间
@@ -177,17 +203,28 @@ export default {
         ReceiveUserid: "", // 接收人id
         planCheckTime: "", // 计划检查时间
         commandType: "", // 指令类型
+        projectItem: "", // 工程项目
         files: "" // 图片
       },
+      commandUser:
+        // 指令内容框框
+        {
+          createTime: "", // 开始时间
+          finishTime: "", // 结束时间
+          faqiren: "", // 发起人
+          jieshouren: "", // 接受人
+          remark: "", // 相关描述
+          state: "" // 处理状态
+        },
+
       //   查看详情
       formSon: {
-        realname: "李四",
-        createTime: "2019-03-04 13:53:06",
-        finishTime: "2019-03-06 16:29:51",
-        commandType: "类型1",
-        remark: "内容",
-        projectItem: "项目11",
-        state: "已处理"
+        createTime: "", // 拍照时间
+        describe: "", // 指令描述
+        lat: "", // 经度
+        lgt: "", // 纬度
+        photoDescribe: "", // 照片描述
+        photoLocation: "" // 拍摄地点
       },
       // 组织机构树显示
       defaultProps: {
@@ -217,7 +254,14 @@ export default {
         pageSize: 8, // 每页条数
         Mark: "" // 标记， 1项目，2业主，3监理，4标段
       },
+      //发送工序id
+      sendDataSon: {
+        processLogId: "" // 工序id
+      },
+
       total: 0,
+      picture: [], // 图片数组,
+      imgData:[], // 下一层图片数组
       orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
@@ -238,12 +282,12 @@ export default {
   methods: {
     initForm() {
       if (this.nowItem == "add") return;
-      this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-      // 查看单个
-      this.nowItem != "add" &&
-        api.searchOne(this.form).then(res => {
-          console.log(res);
-        });
+      let ObCopyData = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      this.form = ObCopyData.data; // 第一层查看
+      this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
+      this.picture = ObCopyData.data.picture; // 图片数组
+      this.sendDataSon = this.form.processLogId;
+      console.log(this.sendDataSon.processLogId);
     },
     sendList() {
       // 组织机构树
@@ -261,6 +305,15 @@ export default {
         this.total = res.data.data.totalCount;
         this.userList = res.data.data.data;
       });
+    },
+    // 工序id拿图片详情
+    actionImg() {
+      process.getPictureDetail(this.sendDataSon).then(res => {
+        this.formSon = res.data.data[0];
+        this.imgData = res.data.data;
+        console.log(res.data.data);
+      });
+      this.innerVisibleSon = true;
     },
     // 下拉框传值表格
     changeUserList(val) {
@@ -298,6 +351,11 @@ export default {
         api.addCommand(this.form).then(res => {
           this.$emit("comfirm");
         });
+      // 查看单个
+      //   this.nowItem != "add" &&
+      //     api.searchOne(this.form).then(res => {
+      //       console.log(res);
+      //     });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

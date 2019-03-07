@@ -7,7 +7,7 @@
       <span>用户名称:</span>
       <el-input size="small" v-model="sendData.SQLrealname" placeholder="请输入名称"></el-input>
       <span>选择部门:</span>
-      <el-input size="small" v-model="sendData.SQLorgid" placeholder="请输入部门">
+      <el-input size="small" v-model="departName" placeholder="请输入部门">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input>
       <div class="rl">
@@ -92,6 +92,7 @@ export default {
       search: "",
       nowItem: "",
       SQLorgid:"",
+      departName:"",
       dialogFormVisible: false,
       innerVisible: false,
       total: 0,

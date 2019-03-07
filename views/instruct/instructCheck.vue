@@ -40,7 +40,7 @@
 
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="actionItem(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="actionItem(scope.row.id)">编辑</el-button>
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -53,7 +53,7 @@
     </div>
     <!-- 编辑弹框 -->
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible"></checkBox>
+      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
     <!-- 组织机构树形表单 -->
     <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
@@ -121,7 +121,8 @@ export default {
 
     // 查询单个请求
     async actionItem(id) {
-      this.nowItem = id;
+      let { data } = await api.searchOne({ id });
+      this.nowItem = data;
       this.dialogFormVisible = true;
     },
 
