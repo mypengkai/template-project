@@ -13,6 +13,10 @@ export default {
     addCommand(data) {
         return request.post('/rest/CommandController/addCommand', data)
     },
+    // 转发指令
+    InstructionCommand(data) {
+        return request.post('/rest/CommandController/InstructionCommand', data)
+    },
 }
 
 
