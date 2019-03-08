@@ -78,7 +78,7 @@
                         <el-input v-model="commandUser.finishTime"></el-input>
 
                         <span>状态:</span>
-                        <el-input v-model="commandUser.state"></el-input>
+                        <el-input v-model="commandUser.state1"></el-input>
 
                         <span>相关描述:</span>
                         <el-input v-model="commandUser.remark"></el-input>
@@ -88,7 +88,7 @@
 
                 <el-form-item label="相关照片" v-if="nowItem !=='add'">
                     <el-carousel :interval="3000" arrow="always" height="25vh">
-                        <el-carousel-item v-for="item in picture" :key="item">
+                        <el-carousel-item v-for="(item,index) in picture" :key="index">
                             <img :src="item" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
                         </el-carousel-item>
                     </el-carousel>
@@ -135,7 +135,7 @@
         <!-- 照片详情查看 -->
         <el-dialog width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
             <el-form :model="formSon" label-width="200px">
-                <div style="width:60%">
+                <div style="width:80%">
 
                     <el-form-item label="指令描述">
                         <el-input v-model="formSon.describe"></el-input>
@@ -163,7 +163,7 @@
 
                     <el-form-item label="照片">
                         <el-carousel :interval="3000" arrow="always" height="30vh">
-                            <el-carousel-item v-for="item in imgData" :key="item">
+                            <el-carousel-item v-for="(item,index) in imgData" :key="index">
                                 <img :src="item.filePath" alt="">
                             </el-carousel-item>
                         </el-carousel>
@@ -280,7 +280,7 @@ export default {
   methods: {
     initForm() {
       if (this.nowItem == "add") return;
-      let ObCopyData = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
       this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
       this.picture = ObCopyData.data.picture; // 图片数组
@@ -323,6 +323,7 @@ export default {
     //用户列表点击回填
     tableClick(item) {
       this.form.username = item.username;
+      this.acceptUser = false;
     },
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
@@ -347,11 +348,6 @@ export default {
         api.addCommand(this.form).then(res => {
           this.$emit("comfirm");
         });
-      // 查看单个
-      //   this.nowItem != "add" &&
-      //     api.searchOne(this.form).then(res => {
-      //       console.log(res);
-      //     });
     },
     // 上传图片
     handleRemove(file, fileList) {

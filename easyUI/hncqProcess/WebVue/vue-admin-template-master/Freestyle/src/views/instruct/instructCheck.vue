@@ -2,7 +2,7 @@
   <div class="p20">
     <!-- 选项栏 -->
     <div class="topBar">
-      <span>单位:</span>
+      <span>组织机构:</span>
       <el-input v-model="departName" clearable placeholder="请选择单位">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input>

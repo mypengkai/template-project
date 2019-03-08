@@ -2,7 +2,7 @@
   <div class="p20">
     <!-- 选项栏 -->
     <div class="topBar">
-      <span>单位:</span>
+      <span>组织机构:</span>
       <el-input v-model="departName" clearable placeholder="请选择单位">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input>
@@ -40,7 +40,7 @@
 
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="actionItem(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="actionItem(scope.row.id)">编辑</el-button>
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -99,7 +99,8 @@ export default {
         starttime: "", // 开始时间
         endtime: "", // 结束时间
         pageNo: 1, // 当前页
-        pageSize: 8 // 每页条数
+        pageSize: 8, // 每页条数
+        Mark: 2 //  标记：1：发送、2：接收
       },
       nowItem: "",
       timeRange: "", // 时间日期范围
@@ -121,7 +122,8 @@ export default {
 
     // 查询单个请求
     async actionItem(id) {
-      this.nowItem = id;
+      let { data } = await api.searchOne({ id });
+      this.nowItem = data;
       this.dialogFormVisible = true;
     },
 
