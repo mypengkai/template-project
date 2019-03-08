@@ -9,21 +9,21 @@
             <el-input v-model="input" placeholder="请输入内容"></el-input>
           </span>
         </div>
-
         <div class="rl">
           <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
-          <el-button type="primary" icon="el-icon-refresh" @click="addtan()">新增</el-button>
+          <el-button type="primary" icon="el-icon-circle-plus" @click="dialogFormVisible=true">新增</el-button>
         </div>
       </div>
       <!-- table表 -->
       <div style="padding-top: 3vw;">
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="tableData" height="74vh">
           <el-table-column prop="rolecode" label="角色编码">
           </el-table-column>
           <el-table-column prop="rolename" label="角色名称">
           </el-table-column>
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
+              <el-button type="primary" icon="el-icon-edit" @click="bianTan(scope.row)"></el-button>
               <el-button type="danger" icon="el-icon-delete" @click="open2(scope.row.id)"></el-button>
               <el-button type="success" @click="sxlb(scope.row.id)">查看列表</el-button>
             </template>
@@ -32,7 +32,7 @@
       </div>
       <!-- 分页条 -->
       <!-- 分页 -->
-      <div class="block" style="" id="blockTop">
+      <!-- <div class="block" style="" id="blockTop">
        <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -42,7 +42,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
         </el-pagination>
-      </div>
+      </div> -->
     </div>
      <!-- 新增弹框 -->
         <el-dialog title="新增详情" :visible.sync="dialogFormVisible">
@@ -57,6 +57,21 @@
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="addJia()">确 定</el-button>
+          </div>
+      </el-dialog>
+      <!-- 编辑弹框 -->
+        <el-dialog title="编辑详情" :visible.sync="xiudialogSxlbVisible">
+          <el-form :model="formGet">
+            <el-form-item label="角色编码" label-width="120px">
+              <el-input v-model="formGet.rolecode" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="角色名称" label-width="120px">
+              <el-input v-model="formGet.rolename" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="xiudialogSxlbVisible = false">取 消</el-button>
+            <el-button type="primary" @click="xiuGai()">确 定</el-button>
           </div>
       </el-dialog>
     <!-- 树形列表弹框 -->
@@ -90,6 +105,7 @@ export default {
   data() {
     return {
       dialogSxlbVisible:false,
+      xiudialogSxlbVisible:false,
       tableData:null,
       input: '',
       dialogFormVisible:false,
@@ -98,6 +114,11 @@ export default {
           rolename: '',
           rolecode:''
       },
+       formGet: {
+          rolename: '',
+          rolecode:''
+      },
+      getId:'',
       // 分页总条数
       total:0,
       // 一页多少条
@@ -128,19 +149,41 @@ export default {
         this.tableData=res.data.data
       })
     },
-    // 点击弹出新增框
-    addtan(){
-      this.dialogFormVisible=true
-    },
     // 新增接口
     addJia(){
-      var objForm={roleName:this.formSet.rolename,roleCode:this.formSet.rolecode}
+      let objForm={roleName:this.formSet.rolename,roleCode:this.formSet.rolecode}
       return request.post('/rest/role/add',objForm).then((res)=>{
-        if(res.data.respCode=="0"){
+          if(res.data.respCode=="0"){
+            this.$message({
+            message: '恭喜你，新增成功',
+            type: 'success'
+          });
+          this.fn()
           this.formSet.rolename='';
           this.formSet.rolecode='';
-          this.fn()
           this.dialogFormVisible=false;
+        }
+      })
+    },
+    // 编辑弹框
+    bianTan(data){
+      this.xiudialogSxlbVisible=true;
+      this.formGet.rolename=data.rolename;
+      this.formGet.rolecode=data.rolecode;
+      this.getId=data.id
+    },
+    // 编辑接口
+    xiuGai(data){
+      let objxiuForm={roleName:this.formGet.rolename,roleCode:this.formGet.rolecode,id:this.getId}
+      // console.log(objxiuForm)
+      return request.post('/rest/role/add',objxiuForm).then((res)=>{
+        if(res.data.respCode=="0"){
+          this.$message({
+            message: '恭喜你，修改成功',
+            type: 'success'
+          });
+          this.fn()
+          this.xiudialogSxlbVisible=false;
         }
       })
     },
@@ -151,7 +194,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          var idDelete={roleid:id}
+          let idDelete={roleid:id}
           return request.get(`/rest/role/delete/${id}`,idDelete).then((res)=>{
               this.$message({
               type: 'success',
@@ -169,7 +212,6 @@ export default {
         console.log(res)
         this.shuData=res.data.data
       })
-      console.log(1)
     },
     // 查询接口
     chaxun(){
@@ -199,7 +241,6 @@ export default {
         });
         console.log(res)
       })
-      console.log(idForm)
       this.dialogSxlbVisible=false;
     }
   }
