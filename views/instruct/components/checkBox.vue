@@ -82,6 +82,8 @@
 
                         <span>相关描述:</span>
                         <el-input v-model="commandUser.remark"></el-input>
+
+                        <el-button round @click="innerTranspond = true">转发指令</el-button>
                     </div>
 
                 </el-form-item>
@@ -132,6 +134,25 @@
                 </el-pagination>
             </div>
         </el-dialog>
+        <!-- 转发信息 -->
+        <el-dialog width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
+            <el-form :model="transpondForm" label-width="80px">
+                <el-form-item label="指定人">
+                    <el-input v-model="transpondName">
+                        <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item label="备注">
+                    <el-input v-model="transpondForm.remark"></el-input>
+                </el-form-item>
+
+            </el-form>
+            <div class="tar">
+                <el-button @click="innerTranspond = false">取 消</el-button>
+                <el-button type="primary" @click="_delivery">确 定</el-button>
+            </div>
+        </el-dialog>
         <!-- 照片详情查看 -->
         <el-dialog width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
             <el-form :model="formSon" label-width="200px">
@@ -176,6 +197,7 @@
 
 <script>
 import api from "@/api/instruct.js";
+import instruct from "@/api/instruct.js";
 import project from "@/api/project.js";
 import Organization from "@/api/Organization.js";
 import process from "@/api/process.js";
@@ -203,6 +225,12 @@ export default {
         commandType: "", // 指令类型
         projectItem: "", // 工程项目
         files: "" // 图片
+      },
+      //   转发指令
+      transpondForm: {
+        commanduserId: "", // 指令用户表id
+        zhidingren: "", // 指定人id
+        remark: "" // 备注
       },
       commandUser:
         // 指令内容框框
@@ -256,7 +284,7 @@ export default {
       sendDataSon: {
         processLogId: "" // 工序id
       },
-
+      transpondName: "", // 转发用户名回填中文
       total: 0,
       picture: [], // 图片数组,
       imgData: [], // 下一层图片数组
@@ -269,6 +297,7 @@ export default {
       innerVisible: false, // 组织机构弹框
       projectVisible: false, // 工程分项弹框
       acceptUser: false, // 接受人id弹框
+      innerTranspond: false, // 转发指令信息
       dialogVisible: false // 上传图片
     };
   },
@@ -282,6 +311,8 @@ export default {
       if (this.nowItem == "add") return;
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
+      //   console.log(ObCopyData.data.commanduserId);
+      this.transpondForm.commanduserId = ObCopyData.data.commanduserId;
       this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
       this.picture = ObCopyData.data.picture; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
@@ -323,6 +354,8 @@ export default {
     //用户列表点击回填
     tableClick(item) {
       this.form.username = item.username;
+      this.transpondForm.zhidingren = item.id;
+      this.transpondName = item.username;
       this.acceptUser = false;
     },
     // 组织机构选择后的数据
@@ -348,6 +381,12 @@ export default {
         api.addCommand(this.form).then(res => {
           this.$emit("comfirm");
         });
+    },
+    // 转发指令
+    _delivery() {
+      instruct.InstructionCommand(this.transpondForm).then(res => {
+        console.log(res);
+      });
     },
     // 上传图片
     handleRemove(file, fileList) {

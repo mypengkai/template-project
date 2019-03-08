@@ -85,6 +85,7 @@
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+            <el-button type="text" @click="action('add',scope.row.pId)">新增</el-button>
             <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
           </template>
         </el-table-column>
@@ -94,9 +95,8 @@
     </el-pagination>
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
-      <Xcadd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
+      <Xcadd :nowItem="nowItem" :pId="pId" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
     </el-dialog>
-
   </div>
 </template>
 
@@ -136,6 +136,7 @@ export default {
       ],
       dataList: [],
       nowItem: "",
+      pId: "",
       dialogFormVisible: false,
       total: 0,
       value: "",
@@ -151,8 +152,22 @@ export default {
     this._projectList();
   },
   methods: {
-    action(val) {
-      this.nowItem = val;
+    action(val, pId) {
+      pId && (this.pId = pId);
+      val == "add" && (this.nowItem = val);
+      val != "add" &&
+        (this.nowItem = {
+          userGroupId: val.userGroupId,
+          startStation: val.startStation,
+          endStation: val.endStation,
+          lgt: val.lgt,
+          lat: val.lat,
+          projectItem: val.projectItem,
+          value: val.value,
+          projectType: val.projectType,
+          id: val.id,
+          pId: val.pId
+        });
       this.dialogFormVisible = true;
     },
     _projectList() {

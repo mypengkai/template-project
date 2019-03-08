@@ -10,12 +10,11 @@
         </el-form-item>
 
         <el-form-item label="工程分部分项" :label-width="formLabelWidth" prop="projectItem">
-
           <el-input v-model="form.projectItem"></el-input>
-          <!-- <el-select v-model="form.projectItem" placeholder="请选择">
-            <el-option label="是" value=1></el-option>
-            <el-option label="否" value=0></el-option>
-          </el-select> -->
+        </el-form-item>
+
+        <el-form-item label="父ID" :label-width="formLabelWidth">
+          <el-input v-model="form.pId"></el-input>
         </el-form-item>
 
         <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="startStation">
@@ -63,7 +62,7 @@
 import api from "@/api/project.js";
 import api1 from "@/api/Organization.js";
 export default {
-  props: ["nowItem"],
+  props: ["nowItem", "pId"],
   data() {
     return {
       orgTree: [],
@@ -91,6 +90,7 @@ export default {
         label: "departName"
       },
       form: {
+        pId: "",
         userGroupId: "",
         startStation: "",
         endStation: "",
@@ -126,7 +126,10 @@ export default {
   },
   methods: {
     initForm() {
-      if (this.nowItem == "add") return;
+      if (this.nowItem == "add") {
+        this.pId && (this.form.pId = this.pId);
+        return;
+      }
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
       console.log(this.form);
     },
