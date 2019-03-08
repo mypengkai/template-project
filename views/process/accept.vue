@@ -15,36 +15,33 @@
     </div>
     <!-- 右边详情列表 -->
     <div class="particularsList">
-      <!-- v-if="treeFrom.projectItem!=''" -->
-      <div class="particulars" >
+      <div class="particulars" v-if="treeFrom.projectItem!=''&&treeFrom.projectItem!=undefined">
         <p>
           <span>工程名称:</span>
-          <input placeholder="" v-model="treeFrom.projectItem" v-if="treeFrom.projectItem!=''" readonly="true">
+          <input placeholder="" v-model="treeFrom.projectItem" readonly="true">
         </p>
         <p>
           <span>工程类型:</span>
-          <input v-model="treeFrom.projectType" v-if="treeFrom.projectType!=''" readonly="true">
+          <input v-model="treeFrom.projectType" readonly="true">
         </p>
         <p>
           <span>代码:</span>
-          <input v-model="treeFrom.projectCode" v-if="treeFrom.projectCode!=''" readonly="true">
+          <input v-model="treeFrom.projectCode" readonly="true">
         </p>
         <p>
           <span>桩号:</span>
-          <input v-model="treeFrom.zhuanghao" v-if="treeFrom.zhuanghao!=''" readonly="true">
+          <input v-model="treeFrom.zhuanghao" readonly="true">
         </p>
         <p>
-          <span v-if="processName!=undefined && processName!='' ">状态:</span>
-          <input v-model="treeFrom.state1" v-if="processName!=undefined && processName!='' " readonly="true">
+          <span v-if="processName!=null && processName!='' ">状态:</span>
+          <input v-model="treeFrom.state1" v-if="processName!=null && processName!=''" readonly="true">
         </p>
         <p>
-          <!-- v-if="processName!=undefined && processName!=''" -->
-          <el-button type="primary" plain  @click="addGx()">添加工序</el-button>
+          <el-button type="primary" icon="el-icon-circle-plus" plain  @click="addGx()" v-if="processName!=null && processName!=''">添加工序</el-button>
         </p>
       </div>
       <!-- 操作列表 -->
-      <!-- v-if="processName!=undefined && processName!='' " -->
-       <div class="Cztab">
+       <div class="Cztab" v-if="processName!=null && processName!='' ">
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column prop="planCheckTime" label="时间" >
           </el-table-column>
@@ -56,6 +53,7 @@
             <template slot-scope="scope">
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2==0">指定验收</el-button>
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2==1">修改指定验收</el-button>
+              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" style="display: none" v-else></el-button>
               <el-button @click="handleClick(scope.row)" type="primary" size="small" style="margin-left:33px" v-if="scope.row.state2==0">查看</el-button>
               <el-button @click="handleClick(scope.row)" type="primary" size="small" v-else>查看</el-button>
               <el-button type="danger" @click="dlet(scope)" size="small" v-if="scope.row.state2==0">删除</el-button>
@@ -98,30 +96,13 @@
     <!-- 编辑指定验收弹框 -->
     <el-dialog title="指定验收" :visible.sync="bjDialogFormVisible" width="35%">
       <!-- 内嵌验收人弹框 -->
-      <el-dialog width="50%" title="内层 Dialog" :visible.sync="innerVisible" append-to-body>
+      <el-dialog   title="选中验收人" :visible.sync="innerVisible" append-to-body>
         <el-form>
-        <el-form-item label="用户类型" label-width="120px">
-          <el-select v-model="value3" placeholder="请选择">
-            <!-- <el-option v-for="item in opSlelt" :key="item.value" :label="item.label" :value="item.value">
-             </el-option> -->
-          </el-select> 
-          <span class="dwmc">单位名称</span>
-          <el-select v-model="value3" placeholder="请选择">
-            <!-- <el-option v-for="item in opTions" :key="item.value" :label="item.label" :value="item.value">
-             </el-option> -->
-          </el-select>
-        </el-form-item>
-        <el-form-item label="小组" label-width="120px">
-          <el-select v-model="value3" placeholder="请选择">
-            <!-- <el-option v-for="item in opTions" :key="item.value" :label="item.label" :value="item.value">
-             </el-option> -->
-          </el-select>
-          <span class="fz">分组</span>
-           <el-select v-model="value3" placeholder="请选择">
-            <!-- <el-option v-for="item in opTions" :key="item.value" :label="item.label" :value="item.value">
-             </el-option> -->
-          </el-select>
-        </el-form-item>
+          <el-row>
+            <el-col :span="11"><span>姓名：</span><el-input v-model="ysrVul" placeholder="请输入内容" style="width:65%"></el-input></el-col>
+            <el-col :span="11"><span>职务：</span><el-input v-model="ysrZhiwu" placeholder="请输入内容" style="width:65%"></el-input></el-col>
+            <el-col :span="2"><el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button></el-col>
+          </el-row>
         <el-table :data="ysrData" height="40vh">
           <el-table-column fixed="left" label="选中验收人" width="300">
             <template slot-scope="scope">
@@ -151,7 +132,7 @@
       <el-form :model="bjFrom">
         <el-form-item label="监理验收人" label-width="125px">
           <el-input v-model="bjFrom.name" autocomplete="off" style="width:50%"></el-input>
-          &nbsp;&nbsp;&nbsp;<span class="ysr" @click="jlYsr()">[选择验收人]</span>
+          &nbsp;&nbsp;&nbsp;<span class="ysr" @click="jlYsr('3')">[选择验收人]</span>
         </el-form-item>
         <el-form-item label="监理验收时间" label-width="125px">
           <el-date-picker
@@ -163,7 +144,7 @@
         </el-form-item>
         <el-form-item label="施工单位验收人" label-width="125px">
           <el-input v-model="bjFrom.names" autocomplete="off" style="width:50%"></el-input>
-          &nbsp;&nbsp;&nbsp;<span class="ysr" @click="sgYsr()">[选择验收人]</span>
+          &nbsp;&nbsp;&nbsp;<span class="ysr" @click="jlYsr('4')">[选择验收人]</span>
         </el-form-item>
         <el-form-item label="施工单位验收时间" label-width="125px">
          <el-date-picker
@@ -179,41 +160,40 @@
         <el-button type="primary" @click="zdys()">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 查看弹框 -->
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%">
+    <imgList :chakanData='chakanData' :imgData='imgData' :imgData2='imgData2' :imgId='imgId' :zijian='zijian' :yanshou='yanshou' :imgForm='imgForm' :imgData3='imgData3' @imgLeft='imgLeft'></imgList>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import imgList from './components/imgList'
 import request from '@/utils/request'
 import SelectTree from '@/components/SelectTree/selectTree.vue';
 export default {
   components: {
     SelectTree,
+    imgList
   },
   data() {  
     return {
       options: [],
       options1:[],
       options2:[],
+      imgData:null,
+      imgData2:null,
+      imgData3:null,
       data:[],
       tableData: null,
+      chakanData:[],
       processName:'',
       ysrData:[],
-      opSlelt: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+      gridData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }], 
       treeFrom:{
         projectItem:'',
         zhuanghao:'',
@@ -222,6 +202,15 @@ export default {
         zhuangtai:'',
         state1:'',
         state2:''
+      },
+      imgForm:{
+        describe:"",
+        createTime:"",
+        lat:"",
+        lgt:"",
+        photoDescribe:"",
+        photoLocation:"",
+        state:""
       },
       form: {
           name: '',
@@ -266,10 +255,13 @@ export default {
       dialogFormVisible:false,
       bjDialogFormVisible:false,
       innerVisible:false,
+      // imginnerVisible:false,
+      dialogTableVisible:false,
       value: "",
       value1:"",
       value2:"",
-      value3:"",
+      ysrVul:"",
+      ysrZhiwu:"",
       valId:"",
       treeId:"",
       gongxuId:"",
@@ -282,6 +274,9 @@ export default {
       xgzdsgId:"",
       ysrName:"",
       even:null,
+      zijian:'',
+      yanshou:'',
+      imgId:'',
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
@@ -319,6 +314,7 @@ export default {
     },
     // 根据input ID获取树形结构
     noDe(data){
+      console.log(data)
       this.valId=data.id;
       this.userGroupId=data.id;
       this.processName='';
@@ -330,16 +326,17 @@ export default {
     // 点击树节点展示右边详情接口
     ztrrFrom(){
        request.post('/rest/processCheck/getProject_Process',{projectItemId:this.treeId}).then((res)=>{
-        // this.treeFrom.projectItem=res.data.data[0].projectItem;
-        // this.treeFrom.projectType=res.data.data[0].projectType;
-        // this.treeFrom.projectCode=res.data.data[0].projectCode;
-        // this.treeFrom.projectCode=res.data.data[0].zhuanghao;
-        // this.treeFrom.state1=res.data.data[0].state1;
         this.tableData=res.data.data;
+        this.treeFrom.projectItem=this.tableData[0].projectItem;
+        this.treeFrom.projectType=this.tableData[0].projectType;
+        this.treeFrom.projectCode=this.tableData[0].projectCode;
+        this.treeFrom.zhuanghao=this.tableData[0].zhuanghao;
+        this.treeFrom.state1=this.tableData[0].state1;
+        this.tableData[0].processName!=null?this.processName=this.tableData[0].processName:this.processName=null;
         this.tableData.splice(1,3)
         this.tableData.reverse()
-        console.log(this.tableData)
-        this.processName=this.tableData[0].processName;
+        console.log(this.tableData[0])
+        
       })
     },
     // 点击树形节点展示右边详情列表
@@ -411,22 +408,23 @@ export default {
     },
     // 获取验收人接口
     fnYsr(){
-      let ysr ={pageNo:this.pageForm.pageNo,pageSize:this.pageForm.pageSize,Mark:this.pageForm.Mark};
+      let ysr ={pageNo:this.pageForm.pageNo,pageSize:this.pageForm.pageSize,Mark:this.pageForm.Mark,name:this.ysrVul,work:this.ysrZhiwu};
       request.post('/rest/processCheck/getCheckPerson',ysr).then((res)=>{
-        this.ysrData=res.data.data.data
-        this.pageForm.total=res.data.data.totalCount
-        this.innerVisible=true
+        this.ysrData=res.data.data.data;
+        this.pageForm.total=res.data.data.totalCount;
+        this.innerVisible=true;
       })
     },
-    // 监理验收人弹框数据
-    jlYsr(){
-      this.pageForm.Mark='1';
+    // 验收人弹框数据
+    jlYsr(data){
+      this.ysrVul='';
+      this.ysrZhiwu='';
+      this.pageForm.Mark=data;
       this.fnYsr();
     },
-    // 施工单位验收人弹框数据
-    sgYsr(){
-      this.pageForm.Mark='2';
-      this.fnYsr();
+    // 验收人查询接口
+    chaxun(){
+      this.fnYsr()
     },
     // 监听总条数
     handleSizeChange(val) {
@@ -440,9 +438,9 @@ export default {
     },
     // 监听验收人单选框
     xzk(data,e){
-      this.even=e
-      this.pageForm.Mark=='1'?this.bjFrom.name=data.row.username:this.bjFrom.names=data.row.username;
-      this.pageForm.Mark=='1'?this.bjFrom.nameId=data.row.id:this.bjFrom.namesId=data.row.id;
+      this.even=e;
+      this.pageForm.Mark=='3'?this.bjFrom.name=data.row.username:this.bjFrom.names=data.row.username;
+      this.pageForm.Mark=='3'?this.bjFrom.nameId=data.row.id:this.bjFrom.namesId=data.row.id;
     },
     // 选择验收人显示表框中
     qdysr(data){
@@ -484,19 +482,52 @@ export default {
     },
     // 删除接口
     dlet(data){
-      request.get('/rest/processCheck/delete/'+data.row.id).then((res)=>{
-        if(res.data.respCode==0){
-          this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-          this.ztrrFrom()
+          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          request.get('/rest/processCheck/delete/'+data.row.id).then((res)=>{
+            if(res.data.respCode==0){
+                this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            this.ztrrFrom()
+          }
+        })
+      })  
+    },
+    // 查看接口
+    handleClick(row) {
+      this.chakanData.length=0;
+      this.dialogTableVisible=true;
+      request.post('/rest/processCheck/getProcessDetail',{id:row.id}).then(res=>{
+        if(res.data.respCode=="0"){
+          this.chakanData.push(res.data.data)
+          this.zijian=this.chakanData.selfCheckDescribe;
+          this.yanshou=this.chakanData.checkDescribe;
+          this.imgData=res.data.data.pictures.selfFilePath;
+          this.imgData2=res.data.data.pictures.filePath;
+          this.imgId=this.chakanData[0].processLogId;
         }
       })
     },
-    handleClick(row) {
-      console.log(row);
-    }
+    // 点击图片展示图片详情接口
+    imgLeft(data,imgTan){
+      imgTan;
+      request.post('/rest/processCheck/getPictureDetail',{processLogId:this.imgId,Mark:data}).then((res)=>{
+        this.imgForm.describe=res.data.data[0].describe;
+        this.imgForm.createTime=res.data.data[0].createTime;
+        this.imgForm.lat=res.data.data[0].lat;
+        this.imgForm.lgt=res.data.data[0].lgt;
+        this.imgForm.photoDescribe=res.data.data[0].photoDescribe;
+        this.imgForm.photoLocation=res.data.data[0].photoLocation;
+        this.imgForm.state=res.data.data[1].state=='0'?'自检':'验收';
+        res.data.data.shift();
+        this.imgData3=res.data.data;
+      })
+    },
   }
 };
 </script>

@@ -127,9 +127,20 @@ export const constantRouterMap = [
         component: () => import('@/views/process/accept'),
         meta: { title: '工序验收', icon: 'acceptance' }
       },
+      {
+        path: 'acceptjh',
+        name: 'acceptjh',
+        component: () => import('@/views/process/acceptjihua'),
+        meta: { title: '验收计划查询', icon: 'acceptance' }
+      },
+      {
+        path: 'accepthj',
+        name: 'accepthj',
+        component: () => import('@/views/process/accepthenji'),
+        meta: { title: '验收痕迹查询', icon: 'acceptance' }
+      }
     ]
   },
-
   {
     path: '/inform',
     component: Layout,

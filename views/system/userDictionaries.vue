@@ -9,7 +9,7 @@
         </div>
         <div class="rl">
           <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
-          <el-button type="primary" icon="el-icon-refresh" @click="addtan()">新增</el-button>
+          <el-button type="primary" icon="el-icon-circle-plus" @click="addtan()">新增</el-button>
         </div>
       </div>
       <tree-table :data="shuData" border>
@@ -68,7 +68,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addJia()">确 定</el-button>
+            <el-button type="primary" @click="addJia(0)">确 定</el-button>
           </div>
       </el-dialog>
     
@@ -97,7 +97,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
               <el-button @click="biandialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="bianJia()">确 定</el-button>
+              <el-button type="primary" @click="bianJia(1)">确 定</el-button>
           </div>
       </el-dialog>
   </div>
@@ -161,7 +161,6 @@ export default {
           return false
         }
         request.get('/rest/organizate/depart/'+this.input).then((res)=>{
-          console.log(res)
           this.shuData=[];
           this.shuData=res.data.data
         })
@@ -180,38 +179,39 @@ export default {
       }, 100);
       this.parentdepartid=data.parentdepartid;
     },
-      // 编辑
-    bianJia(){
-      this.addBian()
-      this.$message({
-        message: '恭喜你，修改成功',
-        type: 'success'
-      });
+    // 编辑
+    bianJia(data){
+      this.addBian(data)
       this.formSet.roleCode='';
       this.formSet.miaoCode='';
       this.biandialogFormVisible=false;
     },
-     // 新增弹框
-      addtan(){
-      this.roleCode='';
-      this.miaoCode='';
-      this.dialogFormVisible=true
-    },
+    // 新增弹框
+    addtan(){
+    this.formSet.roleCode='';
+    this.formSet.miaoCode='';
+    this.departid='';
+    this.parentdepartid='';
+    this.value='';
+    this.dialogFormVisible=true
+  },
       // 新增
-      addJia(){
-          this.addBian()
-          this.$message({
-          message: '恭喜你，新增成功',
-          type: 'success'
-        });
+      addJia(data){
+        this.addBian(data)
         this.dialogFormVisible=false
       },
-      // 新增编辑接口
-      addBian(){
+      // 新增编辑接口 
+      addBian(data){
         let addForm={departid:this.departid,departname:this.formSet.roleCode,description:this.formSet.miaoCode,parentdepartid:this.parentdepartid,orgtype:this.leiXing}
+        console.log(addForm)
         request.post('/rest/organizate/addDepart',addForm).then((res)=>{
-        console.log(res)
-        this.fn()
+          if(res.data.respCode=='0'){
+              this.$message({
+              message: data==0?'恭喜你，新增成功':'恭喜你，修改成功',
+              type: 'success'
+            });
+            this.fn()
+          }
         })
       },
       // 删除接口
@@ -253,5 +253,8 @@ export default {
 }
 /deep/ .el-select{
     width: 800px;
+}
+/deep/ .el-tree-node:focus>.el-tree-node__content{
+background-color: #ffff99;
 }
 </style>
