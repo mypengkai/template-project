@@ -4,7 +4,7 @@ import app from './modules/app'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
 import getters from './getters'
-import ceshi from './modules/ceshi'
+
 
 Vue.use(Vuex)
 
@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     app,
     user,
     tagsView,
-    ceshi
+   
   },
   getters
 })
