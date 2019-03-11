@@ -90,7 +90,7 @@
                         <div class="fl">
                             <div>
                                 <span>状态:</span>
-                                <el-input v-model="commandUser.state1"></el-input>
+                                <el-input v-model="commandUser.state"></el-input>
                             </div>
                             <div>
                                 <span>相关描述:</span>
@@ -248,16 +248,15 @@ export default {
         zhidingren: "", // 指定人id
         remark: "" // 备注
       },
-      commandUser:
-        // 指令内容框框
-        {
-          createTime: "", // 开始时间
-          finishTime: "", // 结束时间
-          faqiren: "", // 发起人
-          jieshouren: "", // 接受人
-          remark: "", // 相关描述
-          state: "" // 处理状态
-        },
+      // 指令内容框框
+      commandUser: {
+        createTime: "", // 开始时间
+        finishTime: "", // 结束时间
+        faqiren: "", // 发起人
+        jieshouren: "", // 接受人
+        remark: "", // 相关描述
+        state: "" // 处理状态
+      },
 
       //   查看详情
       formSon: {
@@ -328,11 +327,15 @@ export default {
       if (this.nowItem == "add") return;
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
-      //   console.log(ObCopyData.data.commanduserId);
-      this.transpondForm.commanduserId = ObCopyData.data.commanduserId;
+      this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
       this.picture = ObCopyData.data.picture; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
+      let commandUser = this.commandUser;
+      //   commandUser.forEach(v => {
+      //     v.state == 0 && (v.state1 = "已处理");
+      //     v.state == 1 && (v.state1 = "未处理");
+      //   });
     },
     sendList() {
       // 组织机构树
