@@ -3,7 +3,7 @@
     <el-form :model="form" :rules="rules">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth" prop="userGroupId">
-          <el-input v-model="departName">
+          <el-input v-model="name">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
           <!-- <el-button type="primary" plain @click="innerVisible = true">点击输入</el-button> -->
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       orgTree: [],
-      departName: "",
+      name: "",
       data2: [
         {
           id: 1,
@@ -87,7 +87,7 @@ export default {
       ],
       defaultProps: {
         children: "children",
-        label: "departName"
+        label: "name"
       },
       form: {
         pId: "",
@@ -159,7 +159,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.form.userGroupId = data.id;
-      this.departName = data.departName;
+      this.name = data.name;
       this.innerVisible = false;
     }
   }

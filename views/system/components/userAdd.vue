@@ -19,7 +19,7 @@
         </el-form-item>
 
         <el-form-item label="组织机构">
-          <el-input v-model="departName">
+          <el-input v-model="name">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
         </el-form-item>
@@ -31,7 +31,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="职位" prop="userName">
+        <el-form-item label="职位">
           <el-input v-model="user.zhiwei"></el-input>
         </el-form-item>
 
@@ -78,7 +78,7 @@ export default {
       orgTree: [],
       defaultProps: {
         children: "children",
-        label: "departName"
+        label: "name"
       },
       rules: {
         userName: { required: true, message: "必填项", trigger: "blur" },
@@ -87,7 +87,7 @@ export default {
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
         ],
         realName: [{ required: true, message: "必填项", trigger: "blur" }],
-        departName: [{ required: true, message: "必填项", trigger: "blur" }],
+        name: [{ required: true, message: "必填项", trigger: "blur" }],
         userKey: [{ required: true, message: "必填项", trigger: "blur" }],
         mobilePhone: { required: true, message: "必填项", trigger: "blur" },
         portrait: [{ required: true, message: "必填项", trigger: "blur" }]
@@ -108,7 +108,7 @@ export default {
         "X-AUTH-TOKEN": getToken()
       },
       id: "",
-      departName: "",
+      name: "",
       uploadFileParams: {},
       files: null,
       dialogFormVisible: true,
@@ -133,7 +133,7 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-      this.departName = this.user.departName;
+      this.name = this.user.name;
     },
     fileChange(file) {
       this.files = file.raw;
@@ -194,7 +194,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.user.departid = data.id;
-      this.departName = data.departName;
+      this.name = data.name;
       this.innerVisible = false;
     }
   }
