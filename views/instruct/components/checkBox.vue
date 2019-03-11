@@ -16,7 +16,7 @@
                 </el-form-item>
 
                 <el-form-item label="接收人id" v-if="nowItem =='add'">
-                    <el-input v-model="form.username">
+                    <el-input v-model="username">
                         <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
                     </el-input>
                 </el-form-item>
@@ -65,27 +65,43 @@
 
                 <el-form-item label="指令内容" v-if="nowItem !=='add'">
                     <div class="topBar">
-                        <span>发起人:</span>
-                        <el-input v-model="commandUser.faqiren"></el-input>
+                        <div class="fl">
+                            <div>
+                                <span>发起人:</span>
+                                <el-input v-model="commandUser.faqiren"></el-input>
+                            </div>
+                            <div>
+                                <span>接收人:</span>
+                                <el-input v-model="commandUser.jieshouren"></el-input>
+                            </div>
+                        </div>
 
-                        <span>接收人:</span>
-                        <el-input v-model="commandUser.jieshouren"></el-input>
+                        <div class="fl">
+                            <div>
+                                <span>开始时间:</span>
+                                <el-input v-model="commandUser.createTime"></el-input>
+                            </div>
+                            <div>
+                                <span>结束时间:</span>
+                                <el-input v-model="commandUser.finishTime"></el-input>
+                            </div>
+                        </div>
 
-                        <span>开始时间:</span>
-                        <el-input v-model="commandUser.createTime"></el-input>
+                        <div class="fl">
+                            <div>
+                                <span>状态:</span>
+                                <el-input v-model="commandUser.state1"></el-input>
+                            </div>
+                            <div>
+                                <span>相关描述:</span>
+                                <el-input v-model="commandUser.remark"></el-input>
+                            </div>
+                        </div>
 
-                        <span>结束时间:</span>
-                        <el-input v-model="commandUser.finishTime"></el-input>
-
-                        <span>状态:</span>
-                        <el-input v-model="commandUser.state1"></el-input>
-
-                        <span>相关描述:</span>
-                        <el-input v-model="commandUser.remark"></el-input>
-
-                        <el-button round @click="innerTranspond = true">转发指令</el-button>
+                        <div class="rl">
+                            <el-button type="primary" round @click="innerTranspond = true">转发指令</el-button>
+                        </div>
                     </div>
-
                 </el-form-item>
 
                 <el-form-item label="相关照片" v-if="nowItem !=='add'">
@@ -292,6 +308,7 @@ export default {
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
       name: "", // 组织机构回填显示
+      username: "", // 接收人id回填
       departname: "", // 分部分项回填显示
       innerVisibleSon: false, // 内层照片详情弹框
       innerVisible: false, // 组织机构弹框
@@ -353,9 +370,10 @@ export default {
     },
     //用户列表点击回填
     tableClick(item) {
-      this.form.username = item.username;
-      this.transpondForm.zhidingren = item.id;
-      this.transpondName = item.username;
+      this.form.ReceiveUserid = item.id; // 新增传接收人id
+      this.username = item.username; // 新增接收人id名回填
+      this.transpondForm.zhidingren = item.id; // 转发指定人id
+      this.transpondName = item.username; // 转发指定人姓名回填
       this.acceptUser = false;
     },
     // 组织机构选择后的数据
@@ -385,7 +403,7 @@ export default {
     // 转发指令
     _delivery() {
       instruct.InstructionCommand(this.transpondForm).then(res => {
-        console.log(res);
+        this.innerTranspond = false;
       });
     },
     // 上传图片
