@@ -1,30 +1,11 @@
 <template>
   <div class="engineeringLayout">
     <!-- 选择区域 -->
-    <div class="selectArea scrollY">
-      <div class="framework">
-        组织机构:
-        <el-select v-model="value" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
-      <!-- 上传 -->
-      <div class="dataUp">
-        <span style="padding-top: 1vw;">导入工程数据:</span>
-        <span style="padding-top: 0.7vw;">
-          <el-upload action="https://jsonplaceholder.typicode.com/posts/">
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>
-        </span>
-
-        <span style="padding-top: 0.5vw;padding-left: 15vw;">
-          <el-button type="primary" @click="action('add')">新增</el-button>
-        </span>
-      </div>
+    <div class="">
+      <el-button type="primary" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <div class="app-container">
+    <div class="">
       <el-table :data="dataList" height="60vh">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
@@ -85,7 +66,7 @@
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-            <el-button type="text" @click="action('add',scope.row.id)">新增</el-button>
+            <el-button type="primary" icon="el-icon-plus" circle @click="action('add',scope.row.id)"></el-button>
             <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
           </template>
         </el-table-column>
@@ -112,34 +93,11 @@ export default {
   },
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "上海同望"
-        },
-        {
-          value: "选项2",
-          label: "研发部"
-        },
-        {
-          value: "选项3",
-          label: "工程部"
-        },
-        {
-          value: "选项4",
-          label: "一分部"
-        },
-        {
-          value: "选项5",
-          label: "二分部"
-        }
-      ],
       dataList: [],
       nowItem: "",
       pId: "",
       dialogFormVisible: false,
       total: 0,
-      value: "",
       input: "",
       sendData: {
         search: "",
@@ -214,7 +172,7 @@ export default {
   padding: 20px;
   .selectArea {
     height: 6vh;
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
     border-radius: 10px;
     .framework {
       padding-left: 20px;

@@ -3,7 +3,7 @@
     <!-- 选项栏 -->
     <div class="topBar">
       <span>组织机构:</span>
-      <el-input v-model="departName" clearable placeholder="请选择单位">
+      <el-input v-model="name" clearable placeholder="请选择单位">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input>
 
@@ -83,7 +83,7 @@ export default {
       // 组织机构树显示
       defaultProps: {
         children: "children",
-        label: "departName"
+        label: "name"
       },
       // 工程分项树显示
       projectTree: {
@@ -103,7 +103,7 @@ export default {
       },
       nowItem: "",
       timeRange: "", // 时间日期范围
-      departName: "", // 组织机构回填显示
+      name: "", // 组织机构回填显示
       departname: "", // 分部分项回填显示
       dialogFormVisible: false, // 查看编辑弹框
       innerVisible: false, // 组织机构弹框
@@ -147,7 +147,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.sendData.departId = data.id;
-      this.departName = data.departName;
+      this.name = data.name;
       this.innerVisible = false;
     },
     // 分部分项选择后的数据

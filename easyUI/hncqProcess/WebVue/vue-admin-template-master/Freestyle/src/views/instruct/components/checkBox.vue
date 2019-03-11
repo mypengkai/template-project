@@ -4,7 +4,7 @@
             <div style="width:47vw">
                 <!-- 新增 -->
                 <el-form-item label="组织机构id" v-if="nowItem =='add'">
-                    <el-input v-model="departName">
+                    <el-input v-model="name">
                         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
                     </el-input>
                 </el-form-item>
@@ -255,7 +255,7 @@ export default {
       // 组织机构树显示
       defaultProps: {
         children: "children",
-        label: "departName"
+        label: "name"
       },
       // 工程分项树显示
       projectTree: {
@@ -291,7 +291,7 @@ export default {
       orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
-      departName: "", // 组织机构回填显示
+      name: "", // 组织机构回填显示
       departname: "", // 分部分项回填显示
       innerVisibleSon: false, // 内层照片详情弹框
       innerVisible: false, // 组织机构弹框
@@ -361,7 +361,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.form.userGroupId = data.id;
-      this.departName = data.departName;
+      this.name = data.name;
       this.innerVisible = false;
     },
     // 分部分项选择后的数据
