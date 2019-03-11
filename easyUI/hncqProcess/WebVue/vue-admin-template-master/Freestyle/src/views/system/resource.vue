@@ -54,7 +54,7 @@ export default {
     treeTable,
     resourceAdd
   },
-  name: "TreeTableDemo",
+  name: "TreeTable",
   data() {
     return {
       nowItem: "",

@@ -4,8 +4,8 @@
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
         <span v-if="iconShow(0,scope.row)" class="tree-ctrl" @click="toggleExpanded(scope)">
-          <i v-if="!scope.row._expanded" class="el-icon-tickets"/>
-          <i v-else class="el-icon-document"/>
+          <i v-if="!scope.row._expanded" class="el-icon-plus"/>
+          <i v-else class="el-icon-minus"/>
         </span>
         <!-- {{ scope.$index }}  -->
       </template>
