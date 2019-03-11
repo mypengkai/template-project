@@ -5,8 +5,8 @@
       <el-button type="primary" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <div class="">
-      <el-table :data="dataList" height="60vh">
+    <div class="content">
+      <tree-table :data="dataList" border height="60vh">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
             <span style="">{{ scope.row.projectItem }}</span>
@@ -56,7 +56,7 @@
             <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </tree-table>
     </div>
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     action(val, pId) {
-      pId && (this.pId = pId);
+      this.pId = pId;
       val == "add" && (this.nowItem = val);
       val != "add" &&
         (this.nowItem = {
@@ -110,7 +110,7 @@ export default {
     _projectList() {
       api.projectList().then(res => {
         this.dataList = res.data.data;
-        console.log(res.data.data)
+        console.log(res.data.data);
         let dataList = this.dataList;
         dataList.forEach(v => {
           v.projectType == 1 && (v.projectType1 = "单位工程");
@@ -179,5 +179,8 @@ export default {
     border-radius: 10px;
     border: 1px solid #ccc;
   }
+}
+.content {
+  height: 65vh;
 }
 </style>
