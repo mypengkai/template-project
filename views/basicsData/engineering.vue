@@ -49,21 +49,7 @@
           </template>
         </el-table-column>
 
-        <!-- <el-table-column prop="projectItem" label="工程分布分项">
-        </el-table-column>
-        <el-table-column prop="projectType1" label="类型">
-        </el-table-column>
-        <el-table-column prop="userGroupIdName" label="所属组织机构">
-        </el-table-column>
-        <el-table-column prop="startStation" label="起始桩号">
-        </el-table-column>
-        <el-table-column prop="endStation" label="终止桩号">
-        </el-table-column>
-        <el-table-column prop="useridName" label="创建人">
-        </el-table-column>
-        <el-table-column prop="createTime" label="创建时间">
-        </el-table-column> -->
-        <el-table-column fixed="right" label="操作">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
             <el-button type="primary" icon="el-icon-plus" circle @click="action('add',scope.row.id)"></el-button>
@@ -72,8 +58,6 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-pagination class="tac" background layout="prev, pager, next" :total="total" :current-page.sync="sendData.pageNo" @current-change="_projectList()">
-    </el-pagination>
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
       <Xcadd :nowItem="nowItem" :pId="pId" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
@@ -86,11 +70,11 @@ import treeTable from "@/components/TreeTable";
 import Xcadd from "./popUp/Xcadd";
 import api from "@/api/project.js";
 export default {
-  name: "TreeTableDemo",
   components: {
     treeTable,
     Xcadd
   },
+  name: "TreeTable",
   data() {
     return {
       dataList: [],
@@ -98,12 +82,7 @@ export default {
       pId: "",
       dialogFormVisible: false,
       total: 0,
-      input: "",
-      sendData: {
-        search: "",
-        pageNo: 1,
-        pageSize: 10
-      }
+      input: ""
     };
   },
   created() {
@@ -130,8 +109,8 @@ export default {
     },
     _projectList() {
       api.projectList().then(res => {
-        this.total = res.data.totalCount;
         this.dataList = res.data.data;
+        console.log(res.data.data)
         let dataList = this.dataList;
         dataList.forEach(v => {
           v.projectType == 1 && (v.projectType1 = "单位工程");

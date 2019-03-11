@@ -16,6 +16,10 @@ export default {
     // 查询
     sysuserCheck(id) {
         return request.post(`/rest/sysuser/chakan/${id}`)
+    },
+    // 巡检查询
+    getListByUser(data) {
+        return request.post('/rest/sysuser/getListByUser', data)
     }
 }
 
