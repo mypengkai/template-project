@@ -29,7 +29,7 @@
               <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
                   <el-button type="text" @click="action(scope.row)">编辑</el-button>
-                  <el-button type="text" @click="action('add',scope.row.pId)">新增</el-button>
+                  <el-button type="text" @click="action('add',scope.row.id)">新增</el-button>
                   <el-button type="text" @click="Delete(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     action(val, pId) {
-      pId && (this.pId = pId);
+      this.pId = pId;
       val == "add" && (this.nowItem = val);
       val != "add" &&
         (this.nowItem = {
@@ -80,7 +80,7 @@ export default {
           id: val.id,
           pId: val.pId
         });
-         this.dialogFormVisible = true;
+      this.dialogFormVisible = true;
     },
     // 树形列表
     resourceList() {
@@ -107,6 +107,7 @@ export default {
   watch: {
     dialogFormVisible(val) {
       !val && (this.nowItem = "");
+      !val && (this.pId = "");      
     }
   }
 };

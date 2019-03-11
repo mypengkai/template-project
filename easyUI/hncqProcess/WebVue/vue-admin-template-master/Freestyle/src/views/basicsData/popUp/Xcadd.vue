@@ -127,7 +127,7 @@ export default {
   methods: {
     initForm() {
       if (this.nowItem == "add") {
-        this.pId && (this.form.pId = this.pId);
+        this.pId && (this.form.pId = this.pId || 0);
         return;
       }
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
