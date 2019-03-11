@@ -13,22 +13,12 @@
 
       <div>
         <!-- 时间段 -->
-        <el-date-picker 
-        type="datetimerange" 
-        value-format="yyyy-MM-dd HH:mm:ss" 
-        range-separator="至" 
-        start-placeholder="开始日期" 
-        end-placeholder="结束日期" 
-        v-model="timeRange" 
-        @change="changeDataRange">
+        <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
         </el-date-picker>
       </div>
 
       <div>
         <el-button type="primary" icon="el-icon-search" @click="_chackList()">查询</el-button>
-        <!-- <el-button type="primary" @click="action('add')">上传
-          <i class="el-icon-upload el-icon--right"></i>
-        </el-button> -->
       </div>
     </div>
 
@@ -62,7 +52,7 @@
 
 <script>
 import CheckPicture from "./components/CheckPicture";
-import api from "../../api/processInfoLog.js";
+import api from "@/api/processInfoLog.js";
 import user from "@/api/user";
 // import { async } from "q";
 export default {
@@ -113,10 +103,6 @@ export default {
         this.getListByUser = res.data.data;
       });
     },
-    // async getUserNameList(id) {
-    //   let { data } = await user.sysuserList({ id });
-    //   this.userList = data.data.data;
-    // },
     changeDataRange(val) {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
       console.log(this.sendData);
