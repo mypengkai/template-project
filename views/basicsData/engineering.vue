@@ -85,7 +85,7 @@
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-            <el-button type="text" @click="action('add',scope.row.pId)">新增</el-button>
+            <el-button type="text" @click="action('add',scope.row.id)">新增</el-button>
             <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
           </template>
         </el-table-column>
@@ -203,6 +203,7 @@ export default {
   watch: {
     dialogFormVisible(val) {
       !val && (this.nowItem = "");
+      !val && (this.pId = "");
     }
   }
 };

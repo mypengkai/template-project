@@ -13,7 +13,6 @@ const store = new Vuex.Store({
     app,
     user,
     tagsView,
-   
   },
   getters
 })
