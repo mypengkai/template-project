@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules">
+    <el-form :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth" prop="userGroupId">
           <el-input v-model="name">
@@ -47,7 +47,7 @@
     </el-form>
     <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
-      <el-button type="primary" @click="_comfirm">保 存</el-button>
+      <el-button type="primary" @click="_comfirm('addForm')">保 存</el-button>
     </div>
 
     <!-- 树形表单提交 -->
@@ -133,22 +133,24 @@ export default {
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
       console.log(this.form);
     },
-    _comfirm() {
-      // 新增
-      this.nowItem == "add" &&
-        api.projectAdd(this.form).then(res => {
-          this.$emit("comfirm");
-        });
-      // 查看单个 修改
-      this.nowItem != "add" &&
-        api.projectAdd(this.form).then(res => {
-          this.$emit("comfirm");
-        });
-      // 文件上传
-      //  this.nowItem != "add" &&
-      // api.projectaddbyList(this.form).then(res => {
-      //   this.$emit("comfirm");
-      // });
+    _comfirm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // 新增
+          this.nowItem == "add" &&
+            api.projectAdd(this.form).then(res => {
+              this.$emit("comfirm");
+            });
+          // 查看单个 修改
+          this.nowItem != "add" &&
+            api.projectAdd(this.form).then(res => {
+              this.$emit("comfirm");
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     // 组织机构树
     _orgTree() {
