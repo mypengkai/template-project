@@ -65,7 +65,7 @@
     </div>
     <!-- 添加工序弹框 -->
     <el-dialog title="指定工序" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
+      <el-form :model="form" :rules="acceptRule" ref="addAccept">
         <el-form-item label="工序类型" label-width="120px">
           <el-select v-model="value1" :placeholder="gongxuMrz" style="width:790px" @change="tree1">
             <el-option v-for="item in options1" :key="item.index" :label="item.processType" :value="item">
@@ -81,16 +81,16 @@
         <!-- <el-form-item label="工序验收序号" label-width="120px">
           <el-input v-model="form.xuhao" autocomplete="off"></el-input>
         </el-form-item> -->
-        <el-form-item label="工序验收次数" label-width="120px">
+        <el-form-item label="工序验收次数" label-width="120px" prop="cishu">
           <el-input v-model="form.cishu" autocomplete="off"></el-input>
         </el-form-item>
-         <el-form-item label="备注" label-width="120px">
+         <el-form-item label="备注" label-width="120px" prop="beizhu">
           <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="form.beizhu"></el-input>
         </el-form-item> 
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addXzgx()">确 定</el-button>
+        <el-button type="primary" @click="addXzgx('addAccept')">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 编辑指定验收弹框 -->
@@ -218,6 +218,10 @@ export default {
           xuhao: '',
           beizhu: ''
         },
+      acceptRule: {
+      cishu: [{ required: true, message: "请输入工序次数", trigger: "blur" }],
+      beizhu: [{ required: true, message: "请输入内容", trigger: "blur" }]
+      },
       bjFrom:{
         name:'',
         nameId:'',
@@ -246,11 +250,11 @@ export default {
       },
       defaultProps: {
         children: "children",
-        label: "projectItem"
+        label: "name"
       },
       defaultProp:{
         children: "children",
-        label: "departName"
+        label: "name"
       },
       dialogFormVisible:false,
       bjDialogFormVisible:false,
@@ -314,12 +318,12 @@ export default {
     },
     // 根据input ID获取树形结构
     noDe(data){
-      console.log(data)
       this.valId=data.id;
       this.userGroupId=data.id;
       this.processName='';
       this.treeFrom.projectItem='';
       request.post('/rest/projectItemInfo/getList',{orgId:this.valId}).then((res)=>{
+        console.log(res)
         this.data=res.data.data;
       })
     },
@@ -368,21 +372,28 @@ export default {
       this.value2=data.process
     },
     // 新增工序接口
-    addXzgx(){
-      let fromData={userGroupId:this.userGroupId,processMDictId:this.processMDictId,processDictId:this.processDictId,projectItemId:this.treeId,remark:this.form.beizhu,checkNum:this.form.cishu}
-      console.log(fromData)
-      request.post('/rest/processCheck/addProcess',fromData).then((res)=>{
-        if(res.data.respCode==0){
-            this.$message({
-            message: '恭喜你，新增成功',
-            type: 'success'
-          });
-          this.form.beizhu='';
-          this.form.cishu='';
-          this.ztrrFrom();
-          this.dialogFormVisible=false;
+    addXzgx(formName){
+      this.$refs[formName].validate(valid => {
+      if (valid) {
+          let fromData={userGroupId:this.userGroupId,processMDictId:this.processMDictId,processDictId:this.processDictId,projectItemId:this.treeId,remark:this.form.beizhu,checkNum:this.form.cishu}
+          console.log(fromData)
+          request.post('/rest/processCheck/addProcess',fromData).then((res)=>{
+            if(res.data.respCode==0){
+                this.$message({
+                message: '恭喜你，新增成功',
+                type: 'success'
+              });
+              this.form.beizhu='';
+              this.form.cishu='';
+              this.ztrrFrom();
+              this.dialogFormVisible=false;
+            }
+          })
+        }else {
+          console.log("error submit!!");
+          return false;
         }
-      })
+      });
     },
     // 编辑指定验收弹框
     tjgx(data){

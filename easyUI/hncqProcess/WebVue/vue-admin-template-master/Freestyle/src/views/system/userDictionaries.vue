@@ -15,7 +15,7 @@
       <tree-table :data="shuData" border>
       <el-table-column label="组织机构">
         <template slot-scope="scope">
-          <span style="">{{ scope.row.departName }}</span>
+          <span style="">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="组织机构编码">

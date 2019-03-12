@@ -65,7 +65,7 @@ export default {
         return{
             defaultProp: {
                 children: "children",
-                label: "departName"
+                label: "name"
             },
             imgForm:{
                 describe:"",
