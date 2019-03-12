@@ -9,7 +9,7 @@
       <tree-table :data="dataList" border height="60vh">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.projectItem }}</span>
+            <span style="">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
@@ -99,7 +99,7 @@ export default {
           endStation: val.endStation,
           lgt: val.lgt,
           lat: val.lat,
-          projectItem: val.projectItem,
+          name: val.name,
           value: val.value,
           projectType: val.projectType,
           id: val.id,

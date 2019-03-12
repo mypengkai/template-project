@@ -69,7 +69,7 @@ export const constantRouterMap = [
       }
     ]
   },
-  
+
   {
     path: '/basicsData',
     component: Layout,
@@ -139,19 +139,6 @@ export const constantRouterMap = [
         component: () => import('@/views/process/accepthenji'),
         meta: { title: '验收痕迹查询', icon: 'acceptance' }
       }
-    ]
-  },
-  {
-    path: '/inform',
-    component: Layout,
-    meta: { title: '通知', icon: 'example' },
-    children: [
-      {
-        path: 'index',
-        name: 'inform',
-        component: () => import('@/views/inform/index'),
-        meta: { title: '通知首页', icon: 'notification' }
-      },
     ]
   },
 

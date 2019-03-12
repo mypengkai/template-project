@@ -90,7 +90,7 @@
                         <div class="fl">
                             <div>
                                 <span>状态:</span>
-                                <el-input v-model="commandUser.state"></el-input>
+                                <el-input v-model="states"></el-input>
                             </div>
                             <div>
                                 <span>相关描述:</span>
@@ -307,6 +307,7 @@ export default {
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
       name: "", // 组织机构回填显示
+      states: "", //指令内容状态 0 已处理 1未处理
       username: "", // 接收人id回填
       departname: "", // 分部分项回填显示
       innerVisibleSon: false, // 内层照片详情弹框
@@ -331,11 +332,12 @@ export default {
       this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
       this.picture = ObCopyData.data.picture; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
-      let commandUser = this.commandUser;
-      //   commandUser.forEach(v => {
-      //     v.state == 0 && (v.state1 = "已处理");
-      //     v.state == 1 && (v.state1 = "未处理");
-      //   });
+      this.states = this.commandUser.state;
+      if (this.states == 0) {
+        this.states = "已处理";
+      } else {
+        this.states = "未处理";
+      }
     },
     sendList() {
       // 组织机构树
