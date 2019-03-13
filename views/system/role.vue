@@ -187,6 +187,24 @@ export default {
         })
       },
     // 查看树形列表接口
+<<<<<<< .mine
+    sxlb(id){
+      this.dialogSxlbVisible=true;
+      this.shuId=id;
+      request.post('/rest/menu/getList').then((res)=>{
+        this.shuData=res.data.data;
+      })
+    },
+||||||| .r11697
+    sxlb(id){
+      this.dialogSxlbVisible=true;
+      this.shuId=id;
+      request.post('/rest/menu/getList').then((res)=>{
+        console.log(res)
+        this.shuData=res.data.data
+      })
+    },
+=======
       sxlb(id){
         this.jueId=id;
         this.dialogSxlbVisible=true;
@@ -198,6 +216,7 @@ export default {
             }
           })
       },
+>>>>>>> .r11698
     // 查询接口
     chaxun(){
       var idCha={id:'402881f36468e19e016468e7f12a0003'}
@@ -206,7 +225,13 @@ export default {
           return false
         }
         return request.post('/rest/role/chakan/'+this.input).then((res)=>{
+<<<<<<< .mine
+          console.log(this.tableData)
+          console.log(res)
+||||||| .r11697
+=======
         console.log(res.data.data)
+>>>>>>> .r11698
         this.tableData=[]
         this.tableData.push(res.data.data)
         console.log(this.tableData)
@@ -214,9 +239,36 @@ export default {
     },
     // 关联角色和菜单接口
     addZre(){
+<<<<<<< .mine
+      this.shuMo.length=0;
+      for(let val of this.$refs.tree.getCheckedNodes()){
+        this.shuMo.push(val.id)
+      }
+      this.shuidData=this.shuMo.join(',')
+      let idForm={roleid:this.shuId,functions:this.shuidData}
+      request.post('/rest/role/updataFunction',idForm).then((res)=>{
+        this.$message({
+          message: '恭喜你，保存成功',
+          type: 'success'
+        });
+||||||| .r11697
+      this.shuMo.length=0;
+      this.shuData='';
+      for(let val of Array.from(this.$refs.tree.getCheckedNodes())){
+        this.shuMo.push(val.id)
+      }
+      this.shuidData=this.shuMo.join(',')
+      let idForm={roleid:this.shuId,functions:this.shuidData}
+      request.post('/rest/role/updataFunction',idForm).then((res)=>{
+        this.$message({
+          message: '恭喜你，保存成功',
+          type: 'success'
+        });
+=======
       let ztreeFrom = {roleid:this.jueId,functions:this.str}
       request.post('/rest/role/updataFunction',ztreeFrom).then((res)=>{
         console.log(this.zNodes)
+>>>>>>> .r11698
         console.log(res)
       })
     }
