@@ -38,8 +38,8 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle v-if="scope.row.orgCode!='A01'" @click="bianTan(scope.row)"></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle v-if="scope.row.orgCode!='A01'" @click="dlelTan(scope.row)"></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle  @click="bianTan(scope.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="dlelTan(scope.row)"></el-button>
         </template>
       </el-table-column>
     </tree-table>
@@ -89,7 +89,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="上级组织机构" label-width="120px">
-              <el-tree :data="shuData" highlight-current :props="defaultProps" ref="vuetree" node-key="id" :default-expanded-keys="shumo"></el-tree>
+              <el-tree :data="shuData" highlight-current :props="defaultProps" ref="vuetree" node-key="id" :default-expanded-keys="shumo" @node-click="dlestleNodeClick"></el-tree>
             </el-form-item>
             <el-form-item label="描述" label-width="120px">
                 <textarea style="height:100px;width:800px" v-model="formSet.miaoCode"></textarea>
@@ -178,7 +178,6 @@ export default {
       setTimeout(() => {
           this.$refs.vuetree.setCurrentKey(this.shumo.toString())
       }, 100);
-      this.parentdepartid=data.parentdepartid;
     },
     // 编辑
     bianJia(data){
@@ -232,9 +231,15 @@ export default {
         })
       })
     },
+    // 新增树监听事件
     handleNodeClick(data) {
-      this.parentdepartid=''
+      console.log(data)
       this.parentdepartid=data.id
+    },
+    // 编辑树监听事件
+    dlestleNodeClick(data){
+      this.parentdepartid=data.id
+      console.log(data)
     },
       // 初始化树列表
       fn(){
