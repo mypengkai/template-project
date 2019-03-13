@@ -47,7 +47,9 @@
             </el-carousel-item>
           </el-carousel>
         </el-form-item>
+
       </el-form>
+
     </el-dialog>
   </div>
 </template>

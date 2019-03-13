@@ -29,7 +29,6 @@
               <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
                   <el-button type="text" @click="action(scope.row)">编辑</el-button>
-                  <el-button type="text" @click="action('add',scope.row.id)">新增</el-button>
                   <el-button type="text" @click="Delete(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
@@ -40,7 +39,7 @@
     </div>
     <!-- 弹框 -->
     <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
-      <resourceAdd :nowItem="nowItem" :pId="pId" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="resourceList"></resourceAdd>
+      <resourceAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="resourceList"></resourceAdd>
     </el-dialog>
   </div>
 </template>
@@ -54,11 +53,10 @@ export default {
     treeTable,
     resourceAdd
   },
-  name: "TreeTable",
+  name: "TreeTableDemo",
   data() {
     return {
       nowItem: "",
-      pId: "",
       dialogFormVisible: false,
       menuList: []
     };
@@ -67,8 +65,8 @@ export default {
     this.resourceList();
   },
   methods: {
-    action(val, pId) {
-      this.pId = pId;
+    action(val) {
+      console.log(val)
       val == "add" && (this.nowItem = val);
       val != "add" &&
         (this.nowItem = {
@@ -106,7 +104,6 @@ export default {
   watch: {
     dialogFormVisible(val) {
       !val && (this.nowItem = "");
-      !val && (this.pId = "");
     }
   }
 };

@@ -19,7 +19,7 @@
         </el-form-item>
 
         <el-form-item label="组织机构">
-          <el-input v-model="name">
+          <el-input v-model="departName">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
         </el-form-item>
@@ -31,15 +31,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="职位">
-          <el-input v-model="user.zhiwei"></el-input>
-        </el-form-item>
-
         <el-form-item label="手机号码" prop="mobile">
           <el-input class="numInput" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="user.mobilePhone"></el-input>
         </el-form-item>
 
-        <el-form-item label="上传头像">
+        <el-form-item label="上传头像" v-if="nowItem=='add'">
           <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :show-file-list="true" :limit="1" :auto-upload="false" :before-upload="handleBeforeUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :data="user">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -78,7 +74,7 @@ export default {
       orgTree: [],
       defaultProps: {
         children: "children",
-        label: "name"
+        label: "departName"
       },
       rules: {
         userName: { required: true, message: "必填项", trigger: "blur" },
@@ -87,7 +83,7 @@ export default {
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
         ],
         realName: [{ required: true, message: "必填项", trigger: "blur" }],
-        name: [{ required: true, message: "必填项", trigger: "blur" }],
+        departName: [{ required: true, message: "必填项", trigger: "blur" }],
         userKey: [{ required: true, message: "必填项", trigger: "blur" }],
         mobilePhone: { required: true, message: "必填项", trigger: "blur" },
         portrait: [{ required: true, message: "必填项", trigger: "blur" }]
@@ -98,7 +94,6 @@ export default {
         userName: "",
         realName: "",
         userKey: "",
-        zhiwei: "",
         mobilePhone: "",
         departid: "",
         // delivery: false,
@@ -108,7 +103,7 @@ export default {
         "X-AUTH-TOKEN": getToken()
       },
       id: "",
-      name: "",
+      departName: "",
       uploadFileParams: {},
       files: null,
       dialogFormVisible: true,
@@ -133,7 +128,7 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-      this.name = this.user.name;
+      this.departName = this.user.departName;
     },
     fileChange(file) {
       this.files = file.raw;
@@ -194,7 +189,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.user.departid = data.id;
-      this.name = data.name;
+      this.departName = data.departName;
       this.innerVisible = false;
     }
   }

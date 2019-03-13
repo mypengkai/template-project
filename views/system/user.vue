@@ -7,7 +7,7 @@
       <span>用户名称:</span>
       <el-input size="small" v-model="sendData.SQLrealname" clearable placeholder="请输入名称"></el-input>
       <span>选择部门:</span>
-      <el-input size="small" v-model="name" clearable placeholder="请输入部门">
+      <el-input size="small" v-model="sendData.SQLorgid" placeholder="请输入部门">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input>
       <div class="rl">
@@ -30,9 +30,6 @@
         <el-table-column prop="userKey" label="角色">
         </el-table-column>
 
-        <el-table-column prop="zhiwei" label="职位">
-        </el-table-column>
-
         <el-table-column prop="createDate" label="创建时间">
         </el-table-column>
 
@@ -49,7 +46,14 @@
       </el-table>
     </div>
     <!-- 分页 -->
-    <el-pagination class="" background :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_userList()">
+    <el-pagination class="" background
+    :page-sizes="[8]"
+     :page-size="1"
+     layout="total, sizes, prev, pager, next, jumper"
+     :total="total"
+     :current-page.sync="sendData.pageNo"
+     @size-change="handleSizeChange"
+     @current-change="_userList()">
     </el-pagination>
     <!-- 弹框 -->
     <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
@@ -79,13 +83,12 @@ export default {
       orgTree: [], //组织机构数组
       defaultProps: {
         children: "children",
-        label: "name"
+        label: "departName"
       },
       input: "",
       search: "",
       nowItem: "",
-      SQLorgid: "",
-      name: "",
+      SQLorgid:"",
       dialogFormVisible: false,
       innerVisible: false,
       total: 0,
@@ -151,7 +154,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.sendData.SQLorgid = data.id;
-      this.name = data.name;
+      this.departName = data.departName;
       this.innerVisible = false;
     }
   },
