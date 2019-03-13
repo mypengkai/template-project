@@ -1,0 +1,216 @@
+<template>
+    <div>
+        <el-form :model="user" label-width="120px" :rules="rules">
+            <div style="width:50%">
+                <el-form-item label="用户账号" prop="userName">
+                    <el-input v-model="user.userName"></el-input>
+                </el-form-item>
+
+                <el-form-item label="名称" prop="realName">
+                    <el-input v-model="user.realName"></el-input>
+                </el-form-item>
+
+                <el-form-item label="组织机构">
+                    <el-input v-model="departName">
+                        <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item label="角色" prop="userKey">
+                    <el-select v-model="user.userKey" placeholder="请选择角色">
+                        <el-option v-for="item in roleList" :key="item.id" :label="item.rolename" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="手机号码" prop="mobile">
+                    <el-input type="number" v-model="user.mobile"></el-input>
+                </el-form-item>
+
+                <el-form-item label="上传头像">
+                    <el-upload ref="upload" class="avatar-uploader" :action="uploadUrl" :auto-upload="false" :show-file-list="false" :on-change="fileChange">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+            </div>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="$emit('cancel')">取 消</el-button>
+            <el-button type="primary" @click="_comfirm">保 存</el-button>
+        </div>
+
+        <!-- 组织机构树形表单提交 -->
+        <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
+            <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
+            </el-tree>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+import { getToken } from "@/utils/auth";
+import api2 from "@/api/user.js";
+import api from "@/api/role.js";
+import api1 from "../../../api/Organization.js";
+export default {
+  props: ["nowItem"],
+  data() {
+    return {
+      uploadUrl: "/a1/rest/sysuser/add",
+      orgTree: [],
+      defaultProps: {
+        children: "children",
+        label: "departName"
+      },
+      rules: {
+        userName: { required: true, message: "必填项", trigger: "blur" },
+        realName: [{ required: true, message: "必填项", trigger: "blur" }],
+        departname: [{ required: true, message: "必填项", trigger: "blur" }],
+        userKey: [{ required: true, message: "必填项", trigger: "blur" }],
+        mobile: { required: true, message: "必填项", trigger: "blur" },
+        portrait: [{ required: true, message: "必填项", trigger: "blur" }]
+      }, //表单校验规则
+      user: {
+        id: "",
+        userName: "",
+        realName: "",
+        userKey: "",
+        mobile: "",
+        departname: "",
+        file: ""
+      },
+      headers: {
+        "X-AUTH-TOKEN": getToken()
+      },
+      departName: "",
+      uploadFileParams: {},
+      files: null,
+      dialogFormVisible: true,
+      innerVisible: false,
+      imageUrl: "",
+      roleList: [],
+      orgTree: [],
+      treeData: {}
+    };
+  },
+  created() {
+    this.initForm();
+    this._roleList();
+    this._orgTree();
+  },
+
+  methods: {
+    getBase64(file) {
+      return new Promise(function(resolve, reject) {
+        let reader = new FileReader();
+        let imgResult = "";
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          imgResult = reader.result;
+        };
+        reader.onerror = function(error) {
+          reject(error);
+        };
+        reader.onloadend = function() {
+          resolve(imgResult);
+        };
+      });
+    },
+    handleAvatarSuccess(res, file) {
+      this.user.files = URL.createObjectURL(file.raw); // res
+    },
+    initForm() {
+      if (this.nowItem == "add") return;
+      this.user = this.$tool.ObCopy(this.nowItem); //复制父组件传来的user数据 处理复杂类型
+    },
+    fileChange(file) {
+      this.imageUrl = URL.createObjectURL(file.raw); // res
+      this.getBase64(file.raw).then(res => {
+        this.user.file = res;
+      });
+    },
+    _comfirm() {
+      // 表单校验
+      // 新增
+      this.nowItem == "add" &&
+        api2.sysuserAdd(this.user).then(res => {
+          this.$emit("comfirm");
+        });
+      // 查看单个 修改
+      this.nowItem != "add" &&
+        api2.sysuserAdd(this.user).then(res => {
+          this.$emit("comfirm");
+        });
+    },
+    handleBeforeUpload(file) {
+      //上传之前触发
+      console.log("before");
+      if (
+        !(
+          file.type === "image/png" ||
+          file.type === "image/gif" ||
+          file.type === "image/jpg" ||
+          file.type === "image/jpeg"
+        )
+      ) {
+        this.$notify.warning({
+          title: "警告",
+          message:
+            "请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片"
+        });
+      }
+    },
+    handlePictureCardPreview(file, fileList) {
+      this.imageUrl = file.url;
+    },
+    // 角色请求列表
+    _roleList() {
+      api.roleList().then(res => {
+        // console.log(res.data.data);
+        this.roleList = res.data.data;
+      });
+    },
+    // 组织机构树
+    _orgTree() {
+      api1.organizateTree().then(res => {
+        console.log(res.data.data);
+        this.orgTree = res.data.data;
+      });
+    },
+    // 组织机构选择后的数据
+    handleCheckChange(data, checked, indeterminate) {
+      console.log(data);
+      this.user.departname = data.id;
+      this.departName = data.departName;
+      this.innerVisible = false;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.avatar-uploader {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>

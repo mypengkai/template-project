@@ -85,7 +85,6 @@ export default {
     // 树形列表
     resourceList() {
       api.menuList().then(res => {
-        console.log(res.data.data);
         this.menuList = res.data.data;
       });
     },
@@ -107,7 +106,7 @@ export default {
   watch: {
     dialogFormVisible(val) {
       !val && (this.nowItem = "");
-      !val && (this.pId = "");      
+      !val && (this.pId = "");
     }
   }
 };

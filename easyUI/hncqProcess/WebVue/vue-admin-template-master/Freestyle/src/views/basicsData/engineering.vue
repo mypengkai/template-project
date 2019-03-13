@@ -5,7 +5,7 @@
       <el-button type="primary" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <div class="content">
+    <div class="">
       <tree-table :data="dataList" border height="60vh">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
@@ -34,12 +34,6 @@
         <el-table-column label="终止桩号">
           <template slot-scope="scope">
             <span style="">{{ scope.row.endStation }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="创建人">
-          <template slot-scope="scope">
-            <span style="">{{ scope.row.useridName }}</span>
           </template>
         </el-table-column>
 
@@ -181,6 +175,6 @@ export default {
   }
 }
 .content {
-  height: 65vh;
+  width: 98%;
 }
 </style>
