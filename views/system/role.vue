@@ -23,9 +23,9 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" @click="bianTan(scope.row)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" @click="open2(scope.row.id)"></el-button>
-              <el-button type="success" @click="sxlb(scope.row.id)">查看列表</el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="bianTan(scope.row)" v-if="tableData.length!=0"></el-button>
+            <el-button type="danger" icon="el-icon-delete" @click="open2(scope.row.id)" v-if="tableData.length!=0"></el-button>
+              <el-button type="success" @click="sxlb(scope.row.id)" v-if="tableData.length!=0">查看列表</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -99,7 +99,6 @@
 </template>
 
 <script>
-// default-checked-keys
 import request from '@/utils/request'
 export default {
   data() {
@@ -137,12 +136,12 @@ export default {
     this.fn() 
   },
   methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
+    // handleSizeChange(val) {
+    //   console.log(`每页 ${val} 条`);
+    // },
+    // handleCurrentChange(val) {
+    //   console.log(`当前页: ${val}`);
+    // },
     // 获取列表数据
     fn(){
       return request.post('/rest/role/getList').then((res)=>{
@@ -219,11 +218,11 @@ export default {
           this.fn();
           return false
         }
-        return request.post('/rest/role/chakan/'+this.input).then((res)=>{
-          console.log(this.tableData)
-          console.log(res)
+        return request.post('/rest/role/chakan',{rolename:this.input}).then((res)=>{
         this.tableData=[]
-        this.tableData.push(res.data.data)
+        if(res.data.data!=undefined) {
+          this.tableData.push(res.data.data)
+        }
       })
     },
     // 关联角色和菜单接口
