@@ -2,7 +2,7 @@
   <div class="engineeringLayout">
     <!-- 选择区域 -->
     <div class="">
-      <el-button type="primary" @click="action('add')">新增</el-button>
+      <el-button type="primary" @click="action('add', true)">新增</el-button>
     </div>
     <!-- 操作列表 -->
     <div class="">
@@ -46,7 +46,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-            <el-button type="primary" icon="el-icon-plus" circle @click="action('add',scope.row.id)"></el-button>
+            <el-button type="primary" icon="el-icon-plus" circle @click="action('add')"></el-button>
             <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
           </template>
         </el-table-column>
@@ -54,7 +54,7 @@
     </div>
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
-      <Xcadd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
+      <Xcadd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
     </el-dialog>
   </div>
 </template>
@@ -75,14 +75,16 @@ export default {
       nowItem: "",
       dialogFormVisible: false,
       total: 0,
-      input: ""
+      input: "",
+      nopId: ""
     };
   },
   created() {
     this._projectList();
   },
   methods: {
-    action(val) {
+    action(val, nopId) {
+      this.nopId = nopId;
       val == "add" && (this.nowItem = val);
       val != "add" &&
         (this.nowItem = {
@@ -147,7 +149,7 @@ export default {
   watch: {
     dialogFormVisible(val) {
       !val && (this.nowItem = "");
-      !val && (this.pId = "");
+      !val && (this.nopId = "");
     }
   }
 };

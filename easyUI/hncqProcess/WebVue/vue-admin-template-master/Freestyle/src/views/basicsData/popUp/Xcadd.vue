@@ -13,7 +13,7 @@
           <el-input v-model="form.projectItem"></el-input>
         </el-form-item>
 
-        <el-form-item label="父ID" :label-width="formLabelWidth">
+        <el-form-item v-if="!nopId" label="父ID" :label-width="formLabelWidth">
           <el-input v-model="form.pId">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
@@ -69,7 +69,7 @@
 import api from "@/api/project.js";
 import api1 from "@/api/Organization.js";
 export default {
-  props: ["nowItem"],
+  props: ["nowItem", "nopId"],
   data() {
     return {
       orgTree: [],
