@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
-<<<<<<< .mine
-
+      <div class="inquire" style="">
         <!-- <div class="fl">
           <span class="fl" style="padding-top: 1vh;">组织机构名称:</span>
           <span class="fl" style="padding-left: 0.5vw;margin-bottom: 2vh">
@@ -12,39 +11,11 @@
           <!-- <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button> -->
           <el-button type="primary" icon="el-icon-circle-plus" @click="addtan()">新增</el-button>
         </div>
-||||||| .r11697
-    <div class="inquire" style="">
-      <div class="fl">
-        <span class="fl" style="padding-top: 1vh;">组织机构名称:</span>
-        <span class="fl" style="padding-left: 0.5vw;margin-bottom: 2vh">
-          <el-input v-model="input" placeholder="请输入内容"></el-input>
-        </span>
       </div>
-      <div class="rl">
-        <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus" @click="addtan()">新增</el-button>
-      </div>
-    </div>
-    <tree-table :data="shuData" border>
+      <tree-table :data="shuData" border style="">
       <el-table-column label="组织机构">
-=======
-      <div class="inquire" style="">
-        <div class="fl">
-          <span class="fl" style="padding-top: 1vh;">组织机构名称:</span>
-          <span class="fl" style="padding-left: 0.5vw;margin-bottom: 2vh">
-            <el-input v-model="input" placeholder="请输入内容"></el-input>
-          </span>
-        </div>
-        <div class="rl">
-          <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
-          <el-button type="primary" icon="el-icon-refresh" @click="addtan()">新增</el-button>
-        </div>
-      </div>
-      <tree-table :data="shuData" border>
-      <el-table-column label="组织机构">
->>>>>>> .r11698
         <template slot-scope="scope">
-          <span style="">{{ scope.row.departName }}</span>
+          <span style="">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="组织机构编码">
@@ -67,7 +38,6 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-
           <el-button type="primary" icon="el-icon-edit" circle v-if="scope.row.orgCode!='A01'" @click="bianTan(scope.row)"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle v-if="scope.row.orgCode!='A01'" @click="dlelTan(scope.row)"></el-button>
         </template>
@@ -98,7 +68,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addJia()">确 定</el-button>
+            <el-button type="primary" @click="addJia(0)">确 定</el-button>
           </div>
       </el-dialog>
     
@@ -127,7 +97,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
               <el-button @click="biandialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="bianJia()">确 定</el-button>
+              <el-button type="primary" @click="bianJia(1)">确 定</el-button>
           </div>
       </el-dialog>
   </div>
@@ -149,23 +119,10 @@ export default {
           firstCode:'',
           miaoCode:''
         },
-<<<<<<< .mine
-<<<<<<< .mine        defaultProps: {
-          children: 'children',
-          label: 'name'
-=======        {
-          value: "2",
-          label: "业主"
-||||||| .r11697
-        {
-          value: "2",
-          label: "业主"
-=======
         defaultProps: {
           children: 'children',
-          label: 'departName'
->>>>>>> .r11698
->>>>>>> .theirs        },
+          label: 'name'
+        },
       shuData:[],
       parentdepartid:'',
       departid:'',
@@ -198,8 +155,7 @@ export default {
       this.leiXing=data
     },
     // 查询接口
-<<<<<<< .mine
-<<<<<<< .mine      // chaxun(){
+      // chaxun(){
       //   if(this.input==''){
       //     this.fn();
       //     return false
@@ -209,43 +165,8 @@ export default {
       //     this.shuData=res.data.data
       //   })
       // },
-=======    chaxun() {
-      if (this.input == "") {
-        this.fn();
-        return false;
-      }
-      request.get("/rest/organizate/depart/" + this.input).then(res => {
-        this.shuData = [];
-        this.shuData = res.data.data;
-      });
-    },
-||||||| .r11697
-    chaxun() {
-      if (this.input == "") {
-        this.fn();
-        return false;
-      }
-      request.get("/rest/organizate/depart/" + this.input).then(res => {
-        this.shuData = [];
-        this.shuData = res.data.data;
-      });
-    },
-=======
-      chaxun(){
-        if(this.input==''){
-          this.fn();
-          return false
-        }
-        request.get('/rest/organizate/depart/'+this.input).then((res)=>{
-          console.log(res)
-          this.shuData=[];
-          this.shuData=res.data.data
-        })
-      },
->>>>>>> .r11698
-<<<<<<< .mine
->>>>>>> .theirs    // 编辑弹框
-<<<<<<< .mine    bianTan(data){
+    // 编辑弹框
+    bianTan(data){
       console.log(data)
       this.biandialogFormVisible=true;
       this.shumo.length=0;
@@ -254,82 +175,44 @@ export default {
       this.formSet.miaoCode=data.description;
       this.departid=data.id;
       this.shumo.push(data.parentdepartid)
-=======    bianTan(data) {
-      this.biandialogFormVisible = true;
-      this.shumo.length = 0;
-      this.value =
-        data.orgTpye == "1"
-          ? "项目"
-          : data.orgTpye == "2"
-            ? "业主"
-            : data.orgTpye == "3" ? "监理" : data.orgTpye == "4" ? "标段" : "";
-      this.formSet.roleCode = data.departName;
-      this.formSet.miaoCode = data.description;
-      this.departid = data.id;
-      this.shumo.push(data.parentdepartid);
-||||||| .r11697
-    // 编辑弹框
-    bianTan(data) {
-      this.biandialogFormVisible = true;
-      this.shumo.length = 0;
-      this.value =
-        data.orgTpye == "1"
-          ? "项目"
-          : data.orgTpye == "2"
-            ? "业主"
-            : data.orgTpye == "3" ? "监理" : data.orgTpye == "4" ? "标段" : "";
-      this.formSet.roleCode = data.departName;
-      this.formSet.miaoCode = data.description;
-      this.departid = data.id;
-      this.shumo.push(data.parentdepartid);
-=======
-    // 编辑弹框
-    bianTan(data){
-      this.biandialogFormVisible=true;
-      this.shumo.length=0;
-      this.value=data.orgTpye=='1'?'项目':(data.orgTpye=='2'?'业主':(data.orgTpye=='3'?'监理':(data.orgTpye=='4'?'标段':'')))
-      this.formSet.roleCode=data.departName;
-      this.formSet.miaoCode=data.description;
-      this.departid=data.id;
-      this.shumo.push(data.parentdepartid)
->>>>>>> .r11698
->>>>>>> .theirs      setTimeout(() => {
+      setTimeout(() => {
           this.$refs.vuetree.setCurrentKey(this.shumo.toString())
       }, 100);
       this.parentdepartid=data.parentdepartid;
     },
-      // 编辑
-    bianJia(){
-      this.addBian()
-      this.$message({
-        message: '恭喜你，修改成功',
-        type: 'success'
-      });
+    // 编辑
+    bianJia(data){
+      this.addBian(data)
       this.formSet.roleCode='';
       this.formSet.miaoCode='';
       this.biandialogFormVisible=false;
     },
-     // 新增弹框
-      addtan(){
-      this.roleCode='';
-      this.miaoCode='';
-      this.dialogFormVisible=true
-    },
+    // 新增弹框
+    addtan(){
+    this.formSet.roleCode='';
+    this.formSet.miaoCode='';
+    this.departid='';
+    this.parentdepartid='';
+    this.value='';
+    this.dialogFormVisible=true
+  },
       // 新增
-      addJia(){
-          this.addBian()
-          this.$message({
-          message: '恭喜你，新增成功',
-          type: 'success'
-        });
+      addJia(data){
+        this.addBian(data)
         this.dialogFormVisible=false
       },
-      // 新增编辑接口
-      addBian(){
+      // 新增编辑接口 
+      addBian(data){
         let addForm={departid:this.departid,departname:this.formSet.roleCode,description:this.formSet.miaoCode,parentdepartid:this.parentdepartid,orgtype:this.leiXing}
+        console.log(addForm)
         request.post('/rest/organizate/addDepart',addForm).then((res)=>{
-        console.log(res)
-        this.fn()
+          if(res.data.respCode=='0'){
+              this.$message({
+              message: data==0?'恭喜你，新增成功':'恭喜你，修改成功',
+              type: 'success'
+            });
+            this.fn()
+          }
         })
       },
       // 删除接口
@@ -371,5 +254,8 @@ export default {
 }
 /deep/ .el-select{
     width: 800px;
+}
+/deep/ .el-tree-node:focus>.el-tree-node__content{
+background-color: #ffff99;
 }
 </style>
