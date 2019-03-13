@@ -14,7 +14,9 @@
         </el-form-item>
 
         <el-form-item label="父ID" :label-width="formLabelWidth">
-          <el-input v-model="form.pId"></el-input>
+          <el-input v-model="form.pId">
+            <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
+          </el-input>
         </el-form-item>
 
         <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="startStation">
@@ -55,6 +57,11 @@
       <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
       </el-tree>
     </el-dialog>
+    <!-- 分部分项树形表单 -->
+    <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
+      <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
+      </el-tree>
+    </el-dialog>
   </div>
 </template>
 
@@ -62,40 +69,29 @@
 import api from "@/api/project.js";
 import api1 from "@/api/Organization.js";
 export default {
-  props: ["nowItem", "pId"],
+  props: ["nowItem"],
   data() {
     return {
       orgTree: [],
+      projectList: [], // 分部分项树
       name: "",
-      data2: [
-        {
-          id: 1,
-          label: "路基工程",
-          children: [
-            {
-              id: 4,
-              label: "基石土方工程",
-              children: [
-                {
-                  id: 9,
-                  label: "排水工程"
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      // pId: "",
       defaultProps: {
         children: "children",
         label: "name"
       },
+      // 工程分项树显示
+      projectTree: {
+        children: "children",
+        label: "name"
+      },
       form: {
-        pId: "",
         userGroupId: "",
         startStation: "",
         endStation: "",
         lgt: "",
         lat: "",
+        pId: "",
         projectItem: "",
         value: "",
         projectType: "",
@@ -117,7 +113,8 @@ export default {
       },
       formLabelWidth: "150px",
       dialogFormVisible: true,
-      innerVisible: false
+      innerVisible: false,
+      projectVisible: false // 工程分项弹框
     };
   },
   created() {
@@ -126,12 +123,8 @@ export default {
   },
   methods: {
     initForm() {
-      if (this.nowItem == "add") {
-        this.pId && (this.form.pId = this.pId || 0);
-        return;
-      }
+      if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
-      console.log(this.form);
     },
     _comfirm(formName) {
       this.$refs[formName].validate(valid => {
@@ -157,12 +150,22 @@ export default {
       api1.organizateTree().then(res => {
         this.orgTree = res.data.data;
       });
+      // 分部分项树
+      api.projectList().then(res => {
+        this.projectList = res.data.data;
+        console.log(res);
+      });
     },
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.form.userGroupId = data.id;
       this.name = data.name;
       this.innerVisible = false;
+    },
+    // 分部分项选择后的数据
+    projectChange(data, checked, indeterminate) {
+      this.form.pId = data.id;
+      this.projectVisible = false;
     }
   }
 };
