@@ -29,7 +29,7 @@
         <div class="gaodu">
               <el-table
             :data="tableData"
-            height="73vh"
+            height="75vh"
             style="width: 100%;padding-left:15px">
             <el-table-column
               label="图片"
@@ -110,13 +110,11 @@ export default {
       },
       fn(){
       let objFrom={pageNo:this.form.pageNo,pageSize:this.form.pageSize,userName:this.form.userName,startTime:this.form.startTime,endTime:this.form.endTime}
-      console.log(objFrom)
       return request.post('/rest/processInfoLog/everyDayLogPageList',objFrom).then(res=>{
         if(res.status==200){
           var data=res.data.data.data;
           this.total=res.data.data.totalCount;
           this.tableData=data;
-          console.log(res)
         }
       })
     },
