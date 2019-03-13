@@ -115,7 +115,7 @@
         </el-form>
         <div class="tar">
             <el-button @click="$emit('cancel')">取 消</el-button>
-            <el-button type="primary" @click="_comfirm">确 定</el-button>
+            <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
         </div>
 
         <!-- 组织机构树形表单 -->
@@ -332,7 +332,7 @@ export default {
       this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
       this.picture = ObCopyData.data.picture; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
-      this.states = this.commandUser.state;
+      this.states = this.commandUser.state; // 指令内容是否处理
       if (this.states == 0) {
         this.states = "已处理";
       } else {

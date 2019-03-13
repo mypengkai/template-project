@@ -3,11 +3,11 @@
     <!-- 查询 -->
     <div class="topBar">
       <span>用户账号:</span>
-      <el-input size="small" v-model="sendData.SQLusername" placeholder="请输入账号"></el-input>
+      <el-input size="small" v-model="sendData.SQLusername" clearable placeholder="请输入账号"></el-input>
       <span>用户名称:</span>
-      <el-input size="small" v-model="sendData.SQLrealname" placeholder="请输入名称"></el-input>
+      <el-input size="small" v-model="sendData.SQLrealname" clearable placeholder="请输入名称"></el-input>
       <span>选择部门:</span>
-      <el-input size="small" v-model="name" placeholder="请输入部门">
+      <el-input size="small" v-model="name" clearable placeholder="请输入部门">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input>
       <div class="rl">
