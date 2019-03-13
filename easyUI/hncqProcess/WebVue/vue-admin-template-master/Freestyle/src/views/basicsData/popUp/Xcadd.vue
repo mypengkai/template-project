@@ -1,21 +1,20 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules">
+    <el-form :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth" prop="userGroupId">
-          <el-input v-model="form.userGroupId">
+          <el-input v-model="name">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
           <!-- <el-button type="primary" plain @click="innerVisible = true">点击输入</el-button> -->
         </el-form-item>
 
         <el-form-item label="工程分部分项" :label-width="formLabelWidth" prop="projectItem">
-
           <el-input v-model="form.projectItem"></el-input>
-          <!-- <el-select v-model="form.projectItem" placeholder="请选择">
-            <el-option label="是" value=1></el-option>
-            <el-option label="否" value=0></el-option>
-          </el-select> -->
+        </el-form-item>
+
+        <el-form-item label="父ID" :label-width="formLabelWidth">
+          <el-input v-model="form.pId"></el-input>
         </el-form-item>
 
         <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="startStation">
@@ -48,7 +47,7 @@
     </el-form>
     <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
-      <el-button type="primary" @click="_comfirm">保 存</el-button>
+      <el-button type="primary" @click="_comfirm('addForm')">保 存</el-button>
     </div>
 
     <!-- 树形表单提交 -->
@@ -63,10 +62,11 @@
 import api from "@/api/project.js";
 import api1 from "@/api/Organization.js";
 export default {
-  props: ["nowItem"],
+  props: ["nowItem", "pId"],
   data() {
     return {
       orgTree: [],
+      name: "",
       data2: [
         {
           id: 1,
@@ -87,9 +87,10 @@ export default {
       ],
       defaultProps: {
         children: "children",
-        label: "departName"
+        label: "name"
       },
       form: {
+        pId: "",
         userGroupId: "",
         startStation: "",
         endStation: "",
@@ -125,26 +126,31 @@ export default {
   },
   methods: {
     initForm() {
-      if (this.nowItem == "add") return;
+      if (this.nowItem == "add") {
+        this.pId && (this.form.pId = this.pId || 0);
+        return;
+      }
       this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
       console.log(this.form);
     },
-    _comfirm() {
-      // 新增
-      this.nowItem == "add" &&
-        api.projectAdd(this.form).then(res => {
-          this.$emit("comfirm");
-        });
-      // 查看单个 修改
-      this.nowItem != "add" &&
-        api.projectAdd(this.form).then(res => {
-          this.$emit("comfirm");
-        });
-      // 文件上传
-      //  this.nowItem != "add" &&
-      // api.projectaddbyList(this.form).then(res => {
-      //   this.$emit("comfirm");
-      // });
+    _comfirm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // 新增
+          this.nowItem == "add" &&
+            api.projectAdd(this.form).then(res => {
+              this.$emit("comfirm");
+            });
+          // 查看单个 修改
+          this.nowItem != "add" &&
+            api.projectAdd(this.form).then(res => {
+              this.$emit("comfirm");
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     // 组织机构树
     _orgTree() {
@@ -155,7 +161,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.form.userGroupId = data.id;
-      this.departName = data.departName;
+      this.name = data.name;
       this.innerVisible = false;
     }
   }
