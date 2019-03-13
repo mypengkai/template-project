@@ -54,7 +54,7 @@
     </div>
     <!-- 新增弹框 -->
     <el-dialog title="新增" :visible.sync="dialogFormVisible">
-      <Xcadd :nowItem="nowItem" :pId="pId" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
+      <Xcadd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
     </el-dialog>
   </div>
 </template>
@@ -73,7 +73,6 @@ export default {
     return {
       dataList: [],
       nowItem: "",
-      pId: "",
       dialogFormVisible: false,
       total: 0,
       input: ""
@@ -83,8 +82,7 @@ export default {
     this._projectList();
   },
   methods: {
-    action(val, pId) {
-      this.pId = pId;
+    action(val) {
       val == "add" && (this.nowItem = val);
       val != "add" &&
         (this.nowItem = {
@@ -104,7 +102,6 @@ export default {
     _projectList() {
       api.projectList().then(res => {
         this.dataList = res.data.data;
-        console.log(res.data.data);
         let dataList = this.dataList;
         dataList.forEach(v => {
           v.projectType == 1 && (v.projectType1 = "单位工程");
@@ -113,6 +110,22 @@ export default {
           v.projectType == 4 && (v.projectType1 = "子分部工程");
           v.projectType == 5 && (v.projectType1 = "分项工程");
           v.projectType == 6 && (v.projectType1 = "子分项工程");
+          v.children.forEach(v => {
+            v.projectType == 1 && (v.projectType1 = "单位工程");
+            v.projectType == 2 && (v.projectType1 = "子单位工程");
+            v.projectType == 3 && (v.projectType1 = "分部工程");
+            v.projectType == 4 && (v.projectType1 = "子分部工程");
+            v.projectType == 5 && (v.projectType1 = "分项工程");
+            v.projectType == 6 && (v.projectType1 = "子分项工程");
+            v.children.forEach(v => {
+              v.projectType == 1 && (v.projectType1 = "单位工程");
+              v.projectType == 2 && (v.projectType1 = "子单位工程");
+              v.projectType == 3 && (v.projectType1 = "分部工程");
+              v.projectType == 4 && (v.projectType1 = "子分部工程");
+              v.projectType == 5 && (v.projectType1 = "分项工程");
+              v.projectType == 6 && (v.projectType1 = "子分项工程");
+            });
+          });
         });
       });
     },

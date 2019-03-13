@@ -38,12 +38,7 @@
                 </el-form-item>
 
                 <el-form-item label="图片选择" v-if="nowItem =='add'">
-                    <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="dialogVisible">
-                        <img width="100%" :src="dialogImageUrl" alt="">
-                    </el-dialog>
+                    <dropzone id="myVueDropzone" url="https://httpbin.org/post" @dropzone-removedFile="dropzoneR" @dropzone-success="dropzoneS" />
                 </el-form-item>
 
                 <!-- 查看 -->
@@ -217,8 +212,11 @@ import instruct from "@/api/instruct.js";
 import project from "@/api/project.js";
 import Organization from "@/api/Organization.js";
 import process from "@/api/process.js";
+import Dropzone from "@/components/Dropzone";
 export default {
   props: ["nowItem"],
+  name: "DropzoneDemo",
+  components: { Dropzone },
   data() {
     return {
       dialogImageUrl: "",
@@ -412,12 +410,13 @@ export default {
       });
     },
     // 上传图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    dropzoneS(file) {
+      console.log(file);
+      this.$message({ message: "Upload success", type: "success" });
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    dropzoneR(file) {
+      console.log(file);
+      this.$message({ message: "Delete success", type: "success" });
     }
   }
 };
