@@ -53,7 +53,7 @@
       </tree-table>
     </div>
     <!-- 新增弹框 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible">
+    <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
       <Xcadd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
     </el-dialog>
   </div>
@@ -75,7 +75,6 @@ export default {
       nowItem: "",
       dialogFormVisible: false,
       total: 0,
-      input: "",
       nopId: ""
     };
   },
@@ -126,6 +125,22 @@ export default {
               v.projectType == 4 && (v.projectType1 = "子分部工程");
               v.projectType == 5 && (v.projectType1 = "分项工程");
               v.projectType == 6 && (v.projectType1 = "子分项工程");
+              v.children.forEach(v => {
+                v.projectType == 1 && (v.projectType1 = "单位工程");
+                v.projectType == 2 && (v.projectType1 = "子单位工程");
+                v.projectType == 3 && (v.projectType1 = "分部工程");
+                v.projectType == 4 && (v.projectType1 = "子分部工程");
+                v.projectType == 5 && (v.projectType1 = "分项工程");
+                v.projectType == 6 && (v.projectType1 = "子分项工程");
+              });
+              v.children.forEach(v => {
+                v.projectType == 1 && (v.projectType1 = "单位工程");
+                v.projectType == 2 && (v.projectType1 = "子单位工程");
+                v.projectType == 3 && (v.projectType1 = "分部工程");
+                v.projectType == 4 && (v.projectType1 = "子分部工程");
+                v.projectType == 5 && (v.projectType1 = "分项工程");
+                v.projectType == 6 && (v.projectType1 = "子分项工程");
+              });
             });
           });
         });
