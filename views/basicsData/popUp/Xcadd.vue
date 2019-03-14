@@ -3,7 +3,7 @@
     <el-form :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth" prop="userGroupId">
-          <el-input v-model="name">
+          <el-input v-model="form.name">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
           <!-- <el-button type="primary" plain @click="innerVisible = true">点击输入</el-button> -->
@@ -74,7 +74,7 @@ export default {
     return {
       orgTree: [],
       projectList: [], // 分部分项树
-      name: "",
+
       // pId: "",
       defaultProps: {
         children: "children",
@@ -83,12 +83,14 @@ export default {
       // 工程分项树显示
       projectTree: {
         children: "children",
-        label: "name"
+        label: "projectItem"
       },
       form: {
         userGroupId: "",
         startStation: "",
         endStation: "",
+        name: "",
+        fuid: "",
         lgt: "",
         lat: "",
         pId: "",
@@ -153,18 +155,18 @@ export default {
       // 分部分项树
       api.projectList().then(res => {
         this.projectList = res.data.data;
-        console.log(res);
       });
     },
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.form.userGroupId = data.id;
-      this.name = data.name;
+      this.form.name = data.name;
       this.innerVisible = false;
     },
     // 分部分项选择后的数据
     projectChange(data, checked, indeterminate) {
-      this.form.pId = data.id;
+      this.form.fuid = data.id;
+      this.form.pId = data.projectItem;
       this.projectVisible = false;
     }
   }

@@ -9,7 +9,7 @@
       <tree-table :data="dataList" border height="60vh">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.name }}</span>
+            <span style="">{{ scope.row.projectItem }}</span>
           </template>
         </el-table-column>
 
@@ -21,7 +21,7 @@
 
         <el-table-column label="所属组织机构">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.departname }}</span>
+            <span style="">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
@@ -46,7 +46,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-            <el-button type="primary" icon="el-icon-plus" circle @click="action('add')"></el-button>
+            <el-button type="primary" icon="el-icon-plus" circle @click="actionSon(scope.row)"></el-button>
             <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
           </template>
         </el-table-column>
@@ -90,13 +90,24 @@ export default {
           userGroupId: val.userGroupId,
           startStation: val.startStation,
           endStation: val.endStation,
+          name: val.name,
           lgt: val.lgt,
           lat: val.lat,
-          name: val.name,
+          projectItem: val.projectItem,
           value: val.value,
           projectType: val.projectType,
           id: val.id,
           pId: val.pId
+        });
+      this.dialogFormVisible = true;
+    },
+    actionSon(val, nopId) {
+      this.nopId = nopId;
+      val == "add" && (this.nowItem = val);
+      val != "add" &&
+        (this.nowItem = {
+          // id: val.id,
+          pId: val.id
         });
       this.dialogFormVisible = true;
     },
@@ -140,6 +151,14 @@ export default {
                 v.projectType == 4 && (v.projectType1 = "子分部工程");
                 v.projectType == 5 && (v.projectType1 = "分项工程");
                 v.projectType == 6 && (v.projectType1 = "子分项工程");
+                v.children.forEach(v => {
+                  v.projectType == 1 && (v.projectType1 = "单位工程");
+                  v.projectType == 2 && (v.projectType1 = "子单位工程");
+                  v.projectType == 3 && (v.projectType1 = "分部工程");
+                  v.projectType == 4 && (v.projectType1 = "子分部工程");
+                  v.projectType == 5 && (v.projectType1 = "分项工程");
+                  v.projectType == 6 && (v.projectType1 = "子分项工程");
+                });
               });
             });
           });
