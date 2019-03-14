@@ -67,7 +67,7 @@
 
 <script>
 import api from "@/api/project.js";
-import api1 from "@/api/Organization.js";
+import Organization from "@/api/Organization.js";
 export default {
   props: ["nowItem", "nopId"],
   data() {
@@ -147,7 +147,7 @@ export default {
     },
     // 组织机构树
     _orgTree() {
-      api1.organizateTree().then(res => {
+      Organization.organizateTree().then(res => {
         this.orgTree = res.data.data;
       });
       // 分部分项树
