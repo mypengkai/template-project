@@ -61,16 +61,16 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+// import { isvalidUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+      if (value=='') {
+        callback(new Error('用户名不能为空'))
       } else {
-        callback()
+         callback();
       }
     }
     const validatePass = (rule, value, callback) => {
@@ -81,14 +81,15 @@ export default {
       }
     }
     return {
+      input: '',
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
-      },
+      }, 
       loading: false,
       pwdType: 'password',
       redirect: undefined
@@ -122,6 +123,7 @@ export default {
               this.$router.push({ path: this.redirect || "/" });
             })
             .catch(() => {
+              this.$message.error('请输入正确的用户名或密码');
               this.loading = false;
             });
         } else {

@@ -340,7 +340,6 @@ export default {
         this.tableData.splice(1,3)
         this.tableData.reverse()
         console.log(this.tableData[0])
-        
       })
     },
     // 点击树形节点展示右边详情列表
