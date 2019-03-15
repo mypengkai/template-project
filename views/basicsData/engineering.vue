@@ -96,7 +96,7 @@ export default {
             lat: "",
             projectItem: "",
             projectType: "",
-            pName: val.projectItem
+            pName: val.pname
           });
         !son &&
           (this.nowItem = {
@@ -108,8 +108,8 @@ export default {
             lat: val.lat,
             projectItem: val.projectItem,
             projectType: val.projectType,
-            pName: val.pId,
-            fuid: val.id,
+            pName: val.pname,
+            fuid: val.pId,
             id: val.id
           });
       }

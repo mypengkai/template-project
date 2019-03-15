@@ -34,7 +34,13 @@
           <el-input v-model="form.lat"></el-input>
         </el-form-item>
 
-        <el-form-item label="工程类型" :label-width="formLabelWidth">
+        <el-form-item v-if="nowItem=='add'" label="工程类型" :label-width="formLabelWidth">
+          <el-select v-model="form.projectType" placeholder="请选择">
+            <el-option label="单位工程" value=1></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item v-if="nowItem!=='add'" label="工程类型" :label-width="formLabelWidth">
           <el-select v-model="form.projectType" placeholder="请选择">
             <el-option label="单位工程" value=1></el-option>
             <el-option label="子单位工程" value=2></el-option>
