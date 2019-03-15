@@ -12,7 +12,7 @@
           <el-input v-model="form.projectItem"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem!=='add'" label="父ID" :label-width="formLabelWidth">
+        <el-form-item v-if="nowItem!=='add'" label="父工程分部分项" :label-width="formLabelWidth">
           <el-input v-model="form.pName">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
@@ -134,11 +134,19 @@ export default {
           this.nowItem == "add" &&
             api.projectAdd(this.form).then(res => {
               this.$emit("comfirm");
+              this.$message({
+                type: "success",
+                message: "新增成功!"
+              });
             });
           // 查看单个 修改
           this.nowItem != "add" &&
             api.projectAdd(this.form).then(res => {
               this.$emit("comfirm");
+              this.$message({
+                type: "success",
+                message: "已完成!"
+              });
             });
         } else {
           console.log("error submit!!");

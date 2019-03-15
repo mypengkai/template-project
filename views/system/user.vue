@@ -67,7 +67,6 @@
 <script>
 import userAdd from "./components/userAdd";
 import api from "@/api/user.js";
-import api2 from "@/api/user.js";
 import api1 from "@/api/Organization.js";
 export default {
   components: {
@@ -110,13 +109,14 @@ export default {
     // 查询单个请求
     async actionItem(val) {
       this.nowItem = val;
-      let { data } = await api2.sysuserCheck(val.id); //异步执行取id
+      let { data } = await api.sysuserCheck(val.id); //异步执行取id
       this.nowItem.mobilePhone = data.data.mobilePhone;
       this.dialogFormVisible = true;
     },
     _userList() {
       api.sysuserList(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
+        console.log(res.data.data.data)
         this.userList = res.data.data.data;
         let userList = this.userList;
         userList.forEach(v => {
@@ -134,7 +134,13 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => this._sysuserDelete(data));
+      }).then(() => {
+        this._sysuserDelete(data);
+        this.$message({
+          type: "success",
+          message: "删除成功!"
+        });
+      });
     },
     // 删除请求
     _sysuserDelete(data) {

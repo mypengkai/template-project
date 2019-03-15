@@ -108,7 +108,7 @@ export default {
             lat: val.lat,
             projectItem: val.projectItem,
             projectType: val.projectType,
-            pName: val.projectItem,
+            pName: val.pId,
             fuid: val.id,
             id: val.id
           });
@@ -171,11 +171,17 @@ export default {
     },
     // 删除按钮
     Delete(data) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("即将删除, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => this._projectDelete(data));
+      }).then(() => {
+        this._projectDelete(data);
+        this.$message({
+          type: "success",
+          message: "删除成功!"
+        });
+      });
     },
     // 删除请求
     _projectDelete(data) {

@@ -71,6 +71,20 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/traceManage',
+    component: Layout,
+    meta: { title: '痕迹管理', icon: 'example' },
+    children: [
+      {
+        path: 'traceManage',
+        name: 'traceManage',
+        component: () => import('@/views/traceManage/traceManage'),
+        meta: { title: '痕迹查看', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/basicsData',
     component: Layout,
     meta: { title: '基础数据', icon: 'example' },
