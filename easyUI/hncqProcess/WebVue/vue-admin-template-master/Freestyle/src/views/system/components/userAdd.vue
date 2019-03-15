@@ -39,16 +39,16 @@
           <el-input class="numInput" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="user.mobilePhone"></el-input>
         </el-form-item>
 
-        <el-form-item label="上传头像">
+        <el-form-item label="上传头像" v-if="nowItem=='add'">
           <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :show-file-list="true" :limit="1" :auto-upload="false" :before-upload="handleBeforeUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :data="user">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
 
-        <!-- <el-form-item label="用户头像" v-else>
-          <img :src="portrait" class="avatar">
-        </el-form-item> -->
+        <el-form-item label="头像查看" v-if="nowItem!=='add'">
+           <img :src="user.picture" alt="" class="avatar">
+        </el-form-item>
 
       </div>
     </el-form>
@@ -67,9 +67,9 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import api2 from "@/api/user.js";
+import user from "@/api/user.js";
 import api from "@/api/role.js";
-import api1 from "@/api/Organization.js";
+import Organization from "@/api/Organization.js";
 export default {
   props: ["nowItem"],
   data() {
@@ -100,8 +100,8 @@ export default {
         userKey: "",
         zhiwei: "",
         mobilePhone: "",
+        picture: "",
         departid: "",
-        // delivery: false,
         type: []
       },
       headers: {
@@ -132,7 +132,7 @@ export default {
     },
     initForm() {
       if (this.nowItem == "add") return;
-      this.user = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      this.user = this.$tool.ObCopy(this.nowItem); //复制
       this.name = this.user.name;
     },
     fileChange(file) {
@@ -146,12 +146,12 @@ export default {
 
       // // 新增
       // this.nowItem == "add" &&
-      //   api2.sysuserAdd(this.form).then(res => {
+      //   user.sysuserAdd(this.form).then(res => {
       //     this.$emit("comfirm");
       //   });
       // // 查看单个 修改
       // this.nowItem != "add" &&
-      //   api2.sysuserAdd(this.form).then(res => {
+      //   user.sysuserAdd(this.form).then(res => {
       //     this.$emit("comfirm");
       //   });
     },
@@ -182,12 +182,11 @@ export default {
     _roleList() {
       api.roleList().then(res => {
         this.roleList = res.data.data;
-        // console.log(this.roleList)
       });
     },
     // 组织机构树
     _orgTree() {
-      api1.organizateTree().then(res => {
+      Organization.organizateTree().then(res => {
         this.orgTree = res.data.data;
       });
     },

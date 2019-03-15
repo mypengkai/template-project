@@ -110,7 +110,9 @@ export default {
     async actionItem(val) {
       this.nowItem = val;
       let { data } = await api.sysuserCheck(val.id); //异步执行取id
+      console.log(data.data)
       this.nowItem.mobilePhone = data.data.mobilePhone;
+      this.nowItem.picture = data.data.picture;
       this.dialogFormVisible = true;
     },
     _userList() {
