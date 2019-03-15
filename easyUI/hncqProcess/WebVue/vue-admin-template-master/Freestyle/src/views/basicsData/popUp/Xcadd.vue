@@ -2,19 +2,18 @@
   <div>
     <el-form :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
-        <el-form-item label="所属机构" :label-width="formLabelWidth" prop="userGroupId">
+        <el-form-item label="所属机构" :label-width="formLabelWidth">
           <el-input v-model="form.name">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
-          <!-- <el-button type="primary" plain @click="innerVisible = true">点击输入</el-button> -->
         </el-form-item>
 
         <el-form-item label="工程分部分项" :label-width="formLabelWidth" prop="projectItem">
           <el-input v-model="form.projectItem"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="!nopId" label="父ID" :label-width="formLabelWidth">
-          <el-input v-model="form.pId">
+        <el-form-item v-if="nowItem!=='add'" label="父ID" :label-width="formLabelWidth">
+          <el-input v-model="form.pName">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
         </el-form-item>
@@ -69,13 +68,12 @@
 import api from "@/api/project.js";
 import Organization from "@/api/Organization.js";
 export default {
-  props: ["nowItem", "nopId"],
+  props: ["nowItem"],
   data() {
     return {
-      orgTree: [],
+      orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
-
-      // pId: "",
+      //组织机构树
       defaultProps: {
         children: "children",
         label: "name"
@@ -93,25 +91,27 @@ export default {
         fuid: "",
         lgt: "",
         lat: "",
-        pId: "",
         projectItem: "",
-        value: "",
         projectType: "",
-        delivery: false,
-        type: []
+        pName: ""
       },
-
       rules: {
-        userGroupId: [
-          { required: true, message: "请输入所属机构", trigger: "blur" }
-        ],
-        projectItem: [{ required: true, message: "请选择", trigger: "blur" }],
-        startStation: [
-          { required: true, message: "请输入起始桩号", trigger: "blur" }
-        ],
-        endStation: [
-          { required: true, message: "请输入终止桩号", trigger: "blur" }
-        ]
+        userGroupId: {
+          required: true,
+          message: "请输入所属机构",
+          trigger: "blur"
+        },
+        projectItem: { required: true, message: "请选择", trigger: "blur" },
+        startStation: {
+          required: true,
+          message: "请输入起始桩号",
+          trigger: "blur"
+        },
+        endStation: {
+          required: true,
+          message: "请输入终止桩号",
+          trigger: "blur"
+        }
       },
       formLabelWidth: "150px",
       dialogFormVisible: true,
@@ -125,8 +125,7 @@ export default {
   },
   methods: {
     initForm() {
-      if (this.nowItem == "add") return;
-      this.form = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      if (this.nowItem != "add") this.form = this.$tool.ObCopy(this.nowItem);
     },
     _comfirm(formName) {
       this.$refs[formName].validate(valid => {
@@ -166,7 +165,7 @@ export default {
     // 分部分项选择后的数据
     projectChange(data, checked, indeterminate) {
       this.form.fuid = data.id;
-      this.form.pId = data.projectItem;
+      this.form.pName = data.projectItem;
       this.projectVisible = false;
     }
   }
