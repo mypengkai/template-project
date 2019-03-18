@@ -11,8 +11,8 @@
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input>
       <div class="rl">
-        <el-button type="primary" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
-        <el-button type="primary" icon="el-icon-search" @click="_userList">搜索</el-button>
+        <el-button type="primary" class="pan-btn blue-btn" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">搜索</el-button>
       </div>
     </div>
     <!-- 列表 -->
@@ -110,7 +110,7 @@ export default {
     async actionItem(val) {
       this.nowItem = val;
       let { data } = await api.sysuserCheck(val.id); //异步执行取id
-      console.log(data.data)
+      console.log(data.data);
       this.nowItem.mobilePhone = data.data.mobilePhone;
       this.nowItem.picture = data.data.picture;
       this.dialogFormVisible = true;
@@ -118,7 +118,7 @@ export default {
     _userList() {
       api.sysuserList(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
-        console.log(res.data.data.data)
+        console.log(res.data.data.data);
         this.userList = res.data.data.data;
         let userList = this.userList;
         userList.forEach(v => {

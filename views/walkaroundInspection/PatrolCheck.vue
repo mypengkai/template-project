@@ -18,7 +18,7 @@
       </div>
 
       <div>
-        <el-button type="primary" icon="el-icon-search" @click="_chackList()">查询</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_chackList()">查询</el-button>
       </div>
     </div>
 

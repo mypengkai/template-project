@@ -17,8 +17,8 @@
       </el-date-picker>
 
       <div class="rl">
-        <el-button type="primary" icon="el-icon-search" @click="_searchList">搜索</el-button>
-        <el-button type="primary" icon="el-icon-plus" @click="action('add')">新增</el-button>
+        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">搜索</el-button>
+        <el-button type="primary" icon="el-icon-plus" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
       </div>
     </div>
     <!-- 查询列表 -->

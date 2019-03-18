@@ -2,7 +2,7 @@
   <div class="engineeringLayout">
     <!-- 选择区域 -->
     <div class="">
-      <el-button type="primary" @click="action('add')">新增</el-button>
+      <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
     <div class="">
@@ -94,7 +94,7 @@ export default {
             fuid: val.id,
             lgt: "",
             lat: "",
-            projectItem: "",
+            projectItem: val.projectItem,
             projectType: "",
             pName: val.pname
           });
