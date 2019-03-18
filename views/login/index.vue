@@ -30,31 +30,26 @@
         " @click.native.prevent="handleLogin">
           登 录
         </el-button>
+        <div class="jy">*建议使用谷歌浏览器阅览*</div>
       </el-form-item>
     </el-form>
     <!-- 二维码部分 -->
     <div class="ewm1">
-      <el-popover
-      popper-class="ert"
-        width="160"
-        placement="left"
-        trigger="hover">
-        <img src="../../../static/ewm1 (1).png" alt="">
-        <el-button type="success" slot="reference">苹果二维码</el-button>
-      </el-popover>
+      [Android]
+    </div>
+    <div class="ewmimg1">
+      <img src="../../../static/ewm1 (1).png" alt="">
     </div>
      <div class="ewm2">
-      <el-popover
-        placement="left"
-        width="160"
-        trigger="hover">
-        <img src="../../../static/ewm1 (2).png" alt="">
-        <el-button type="warning" slot="reference">安卓二维码</el-button>
-      </el-popover> 
+      [ios]
+    </div>
+    <div class="ewmimg2">
+      <img src="../../../static/ewm1 (2).png" alt="">
     </div>
     <!-- 表尾部分 -->
     <div class="bq">
       <a href="#"><p>版权所有：上海同望信息技术有限公司</p></a>
+      <!-- <p>建议使用谷歌浏览器阅览</p> -->
       <p class="phone">联系电话：123456789</p>
     </div>
   </div>
@@ -213,15 +208,32 @@ $light_gray:#eee;
     text-align: center;
     font-weight: bold;
   }
+  .jy{
+    text-align:center;
+    color: red;
+    font-size:0.8vw;
+  }
   .ewm1{
     position: absolute;
-    right: 0;
-    top: 500px;
+    right: 70px;
+    top: 400px;
+    color: #fff;
   }
   .ewm2{
     position: absolute;
-    right: 0;
+    right: 86px;
+    top: 630px;
+    color: #fff;
+  }
+  .ewmimg1{
+    position: absolute;
+    right: 40px;
     top: 250px;
+  }
+  .ewmimg2{
+    position: absolute;
+    right: 40px;
+    top: 480px;
   }
   .bq{
     text-align:center;
