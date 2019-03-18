@@ -19,6 +19,7 @@
       @node-click="onClickNode">
     </el-tree>
     <el-input
+      :readonly="true"
       slot="reference"
       ref="input"
       v-model="labelModel"
