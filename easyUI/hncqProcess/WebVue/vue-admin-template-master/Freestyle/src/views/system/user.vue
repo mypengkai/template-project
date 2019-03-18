@@ -33,10 +33,7 @@
         <el-table-column prop="zhiwei" label="职位">
         </el-table-column>
 
-        <el-table-column prop="createDate" label="创建时间">
-        </el-table-column>
-
-        <el-table-column prop="status1" label="状态">
+        <el-table-column prop="createTime" label="创建时间">
         </el-table-column>
 
         <el-table-column fixed="right" label="操作">
@@ -67,7 +64,7 @@
 <script>
 import userAdd from "./components/userAdd";
 import api from "@/api/user.js";
-import api1 from "@/api/Organization.js";
+import Organization from "@/api/Organization.js";
 export default {
   components: {
     userAdd
@@ -77,11 +74,10 @@ export default {
       userList: [], // 用户列表数组
       orgTree: [], //组织机构数组
       defaultProps: {
+        // 组织机构树
         children: "children",
         label: "name"
       },
-      input: "",
-      search: "",
       nowItem: "",
       SQLorgid: "",
       name: "",
@@ -110,17 +106,17 @@ export default {
     async actionItem(val) {
       this.nowItem = val;
       let { data } = await api.sysuserCheck(val.id); //异步执行取id
-      this.nowItem.mobilePhone = data.data.mobilePhone;
-      this.nowItem.picture = data.data.picture;
-      this.nowItem.userKey = data.data.userKey;
+      this.nowItem.mobilePhone = data.data.mobilePhone; // 拿手机
+      this.nowItem.picture = data.data.picture; // 拿图片
+      this.nowItem.userKey = data.data.userKey; // 拿角色
       this.dialogFormVisible = true;
     },
     _userList() {
+      // 获取查询列表
       api.sysuserList(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
         this.userList = res.data.data.data;
         let userList = this.userList;
-        console.log(userList)
         userList.forEach(v => {
           v.status == 0 && (v.status1 = "未激活");
           v.status == 1 && (v.status1 = "激活");
@@ -152,7 +148,7 @@ export default {
     },
     // 组织机构树
     _orgTree() {
-      api1.organizateTree().then(res => {
+      Organization.organizateTree().then(res => {
         this.orgTree = res.data.data;
       });
     },
