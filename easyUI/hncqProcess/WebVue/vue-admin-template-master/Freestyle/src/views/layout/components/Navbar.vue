@@ -23,7 +23,9 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div class="headline">现场管理系统</div>
+      <div class="component-item">
+         <mallki class-name="mallki-text" text="现场管理系统"/>
+      </div>
     </el-menu>
     <div>
       <breadcrumb />
@@ -75,11 +77,12 @@ import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 import request from "@/utils/request";
-
+import Mallki from "@/components/TextHoverEffect/Mallki";
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    Mallki
   },
   computed: {
     ...mapGetters(["sidebar", "avatar"])
@@ -87,10 +90,10 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
-      xiuFormVisible:false,
-      formPass:{
-        passWord:"",
-        xinpassWoed:""
+      xiuFormVisible: false,
+      formPass: {
+        passWord: "",
+        xinpassWoed: ""
       },
       form: {
         name: "",
@@ -101,12 +104,12 @@ export default {
       },
       ruleses: {
         passWord: [
-            { required: true, message: '请输入原密码', trigger: 'blur' },
-          ],
-        xinpassWoed: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 6, message: '请输入打入6位以上的密码', trigger: 'blur' }
+          { required: true, message: "请输入原密码", trigger: "blur" }
         ],
+        xinpassWoed: [
+          { required: true, message: "请输入新密码", trigger: "blur" },
+          { min: 6, message: "请输入打入6位以上的密码", trigger: "blur" }
+        ]
       }
     };
   },
@@ -120,67 +123,70 @@ export default {
     xiugai() {
       this.dialogFormVisible = true;
     },
-    xiuPass(){
+    xiuPass() {
       this.xiuFormVisible = true;
     },
-    quxiaoForm(){
-      this.formPass.passWord='';
-      this.formPass.xinpassWoed='';
-      this.xiuFormVisible=false;
+    quxiaoForm() {
+      this.formPass.passWord = "";
+      this.formPass.xinpassWoed = "";
+      this.xiuFormVisible = false;
     },
-    xiuForm(){
+    xiuForm() {
       this.$refs.wordForm.validate(valid => {
         if (valid) {
-          let pass = localStorage.getItem('pass');
-          console.log(pass)
-          if(this.formPass.passWord ==this.formPass.xinpassWoed){
-              this.$message({
+          let pass = localStorage.getItem("pass");
+          console.log(pass);
+          if (this.formPass.passWord == this.formPass.xinpassWoed) {
+            this.$message({
               showClose: true,
-              message: '请输入不一样的密码',
-              type: 'warning'
-            });
-            return false;
-          };
-          if(this.formPass.passWord !=pass){
-              this.$message({
-              showClose: true,
-              message: '请输入正确的原密码',
-              type: 'warning'
+              message: "请输入不一样的密码",
+              type: "warning"
             });
             return false;
           }
-          let passData={password:this.formPass.xinpassWoed,oldpassword:this.formPass.passWord};
-            return request.post("/rest/UsersController/resetPassword",passData).then(res=>{
-              if(res.status==200){
+          if (this.formPass.passWord != pass) {
+            this.$message({
+              showClose: true,
+              message: "请输入正确的原密码",
+              type: "warning"
+            });
+            return false;
+          }
+          let passData = {
+            password: this.formPass.xinpassWoed,
+            oldpassword: this.formPass.passWord
+          };
+          return request
+            .post("/rest/UsersController/resetPassword", passData)
+            .then(res => {
+              if (res.status == 200) {
                 this.$message({
                   showClose: true,
-                  message: '恭喜你，修改密码成功',
-                  type: 'success'
+                  message: "恭喜你，修改密码成功",
+                  type: "success"
                 });
-                localStorage.setItem('pass',this.formPass.xinpassWoed)
-                this.formPass.passWord='';
-                this.formPass.xinpassWoed='';
-                this.xiuFormVisible=false;
+                localStorage.setItem("pass", this.formPass.xinpassWoed);
+                this.formPass.passWord = "";
+                this.formPass.xinpassWoed = "";
+                this.xiuFormVisible = false;
               }
-          })
-        } else{
+            });
+        } else {
           console.log("error submit!!");
           return false;
         }
       });
-     
-      
     },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
-        localStorage.removeItem('pass')
+        localStorage.removeItem("pass");
         location.reload(); // 为了重新实例化vue-router对象 避免bug
       });
     },
     // 请求接口
     fn() {
       return request.get("/rest/user").then(res => {
-        if(res.status==200){
+        if (res.status == 200) {
           this.form.name = res.data[0].createBy;
           this.form.createName = res.data[0].createName;
           this.form.mobilePhone = res.data[0].mobilePhone;
@@ -244,6 +250,11 @@ export default {
       }
     }
   }
+}
+.component-item{
+  min-height: 100px;
+  padding-right: 150px;
+  text-align: center;
 }
 </style>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="p20">
     <!-- 新增 -->
-    <el-button type="primary" @click="action('add')">新增</el-button>
+    <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
     <!-- 列表 -->
     <div class="pt20">
       <div class="outer-container">
