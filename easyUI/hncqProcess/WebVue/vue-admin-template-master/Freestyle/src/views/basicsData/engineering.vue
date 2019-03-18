@@ -53,7 +53,7 @@
       </tree-table>
     </div>
     <!-- 新增弹框 -->
-    <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
+    <el-dialog :title="newTitle" :visible.sync="dialogFormVisible">
       <Xcadd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
     </el-dialog>
   </div>
@@ -72,6 +72,7 @@ export default {
   data() {
     return {
       dataList: [],
+      newTitle: "",
       nowItem: "",
       dialogFormVisible: false,
       total: 0,
@@ -94,9 +95,9 @@ export default {
             fuid: val.id,
             lgt: "",
             lat: "",
-            projectItem: val.projectItem,
+            projectItem: "",
             projectType: "",
-            pName: val.pname
+            pName: val.projectItem
           });
         !son &&
           (this.nowItem = {
@@ -114,6 +115,11 @@ export default {
           });
       }
       this.dialogFormVisible = true;
+      if (this.nowItem != "add" && !son) {
+        this.newTitle = "修改";
+      } else {
+        this.newTitle = "新增";
+      }
     },
     _projectList() {
       api.projectList().then(res => {

@@ -3,7 +3,7 @@
     <el-form :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth">
-          <el-input v-model="form.name">
+          <el-input v-model="form.name" :disabled="true">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
         </el-form-item>
@@ -13,7 +13,7 @@
         </el-form-item>
 
         <el-form-item v-if="nowItem!=='add'" label="父工程分部分项" :label-width="formLabelWidth">
-          <el-input v-model="form.pName">
+          <el-input v-model="form.pName" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
         </el-form-item>
@@ -144,7 +144,9 @@ export default {
                 type: "success",
                 message: "新增成功!"
               });
+              this.$emit("cancel");
             });
+
           // 查看单个 修改
           this.nowItem != "add" &&
             api.projectAdd(this.form).then(res => {
@@ -153,6 +155,7 @@ export default {
                 type: "success",
                 message: "已完成!"
               });
+              this.$emit("cancel");
             });
         } else {
           console.log("error submit!!");

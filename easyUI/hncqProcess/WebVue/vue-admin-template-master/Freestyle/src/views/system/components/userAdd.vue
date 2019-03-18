@@ -15,11 +15,11 @@
         </el-form-item>
 
         <el-form-item v-if="nowItem=='add'" label="密码" prop="password">
-          <el-input v-model="user.password"></el-input>
+          <el-input type="password" v-model="user.password"></el-input>
         </el-form-item>
 
         <el-form-item label="组织机构">
-          <el-input v-model="name">
+          <el-input v-model="user.departName" :disabled="true">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
           </el-input>
         </el-form-item>
@@ -35,7 +35,7 @@
           <el-input v-model="user.zhiwei"></el-input>
         </el-form-item>
 
-        <el-form-item label="手机号码" prop="mobile">
+        <el-form-item label="手机号码" prop="mobilePhone">
           <el-input class="numInput" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="user.mobilePhone"></el-input>
         </el-form-item>
 
@@ -47,7 +47,7 @@
         </el-form-item>
 
         <el-form-item label="头像查看" v-if="nowItem!=='add'">
-           <img :src="user.picture" alt="" class="avatar">
+          <img :src="user.picture" alt="" class="avatar">
         </el-form-item>
 
       </div>
@@ -99,6 +99,7 @@ export default {
         realName: "",
         userKey: "",
         zhiwei: "",
+        departName: "",
         mobilePhone: "",
         picture: "",
         departid: "",
@@ -133,6 +134,8 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //复制
+     
+      console.log(this.user)
       this.name = this.user.name;
     },
     fileChange(file) {
@@ -143,7 +146,11 @@ export default {
       if (this.$refs.userFrom.validate()) {
         this.$refs.upload.submit();
       }
-
+      this.$message({
+        type: "success",
+        message: "新增成功!"
+      });
+      this.$emit("cancel");
       // // 新增
       // this.nowItem == "add" &&
       //   user.sysuserAdd(this.form).then(res => {
@@ -158,8 +165,6 @@ export default {
     //查看
 
     handleBeforeUpload(file) {
-      //上传之前触发
-      // console.log("before");
       if (
         !(
           file.type === "image/png" ||
@@ -193,7 +198,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.user.departid = data.id;
-      this.name = data.name;
+      this.user.departName = data.name;
       this.innerVisible = false;
     }
   }
