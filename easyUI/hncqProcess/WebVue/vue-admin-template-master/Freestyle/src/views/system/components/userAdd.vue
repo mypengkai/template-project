@@ -146,11 +146,7 @@ export default {
       if (this.$refs.userFrom.validate()) {
         this.$refs.upload.submit();
       }
-      this.$message({
-        type: "success",
-        message: "新增成功!"
-      });
-      this.$emit("cancel");
+    
       // // 新增
       // this.nowItem == "add" &&
       //   user.sysuserAdd(this.form).then(res => {
