@@ -15,8 +15,14 @@
 
         <el-table-column label="类型">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.projectType1 }}</span>
+            <template v-if="scope.row.projectType==='1'">单位工程:</template>
+            <template v-else-if="scope.row.projectType==='2'">子单位工程:</template>
+            <template v-else-if="scope.row.projectType==='3'">分部工程:</template>
+            <template v-else-if="scope.row.projectType==='4'">子分部工程:</template>
+            <template v-else-if="scope.row.projectType==='5'">分项工程:</template>
+            <template v-else-if="scope.row.projectType==='6'">子分项工程:</template>
           </template>
+
         </el-table-column>
 
         <el-table-column label="所属组织机构">
@@ -125,54 +131,6 @@ export default {
       api.projectList().then(res => {
         this.dataList = res.data.data;
         let dataList = this.dataList;
-        dataList.forEach(v => {
-          v.projectType == 1 && (v.projectType1 = "单位工程");
-          v.projectType == 2 && (v.projectType1 = "子单位工程");
-          v.projectType == 3 && (v.projectType1 = "分部工程");
-          v.projectType == 4 && (v.projectType1 = "子分部工程");
-          v.projectType == 5 && (v.projectType1 = "分项工程");
-          v.projectType == 6 && (v.projectType1 = "子分项工程");
-          v.children.forEach(v => {
-            v.projectType == 1 && (v.projectType1 = "单位工程");
-            v.projectType == 2 && (v.projectType1 = "子单位工程");
-            v.projectType == 3 && (v.projectType1 = "分部工程");
-            v.projectType == 4 && (v.projectType1 = "子分部工程");
-            v.projectType == 5 && (v.projectType1 = "分项工程");
-            v.projectType == 6 && (v.projectType1 = "子分项工程");
-            v.children.forEach(v => {
-              v.projectType == 1 && (v.projectType1 = "单位工程");
-              v.projectType == 2 && (v.projectType1 = "子单位工程");
-              v.projectType == 3 && (v.projectType1 = "分部工程");
-              v.projectType == 4 && (v.projectType1 = "子分部工程");
-              v.projectType == 5 && (v.projectType1 = "分项工程");
-              v.projectType == 6 && (v.projectType1 = "子分项工程");
-              v.children.forEach(v => {
-                v.projectType == 1 && (v.projectType1 = "单位工程");
-                v.projectType == 2 && (v.projectType1 = "子单位工程");
-                v.projectType == 3 && (v.projectType1 = "分部工程");
-                v.projectType == 4 && (v.projectType1 = "子分部工程");
-                v.projectType == 5 && (v.projectType1 = "分项工程");
-                v.projectType == 6 && (v.projectType1 = "子分项工程");
-              });
-              v.children.forEach(v => {
-                v.projectType == 1 && (v.projectType1 = "单位工程");
-                v.projectType == 2 && (v.projectType1 = "子单位工程");
-                v.projectType == 3 && (v.projectType1 = "分部工程");
-                v.projectType == 4 && (v.projectType1 = "子分部工程");
-                v.projectType == 5 && (v.projectType1 = "分项工程");
-                v.projectType == 6 && (v.projectType1 = "子分项工程");
-                v.children.forEach(v => {
-                  v.projectType == 1 && (v.projectType1 = "单位工程");
-                  v.projectType == 2 && (v.projectType1 = "子单位工程");
-                  v.projectType == 3 && (v.projectType1 = "分部工程");
-                  v.projectType == 4 && (v.projectType1 = "子分部工程");
-                  v.projectType == 5 && (v.projectType1 = "分项工程");
-                  v.projectType == 6 && (v.projectType1 = "子分项工程");
-                });
-              });
-            });
-          });
-        });
       });
     },
     // 删除按钮
