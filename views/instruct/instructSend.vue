@@ -8,7 +8,7 @@
       </el-input>
 
       <span>工程选择:</span>
-      <el-input v-model="departname" clearable placeholder="请选择分部分项">
+      <el-input v-model="projectItem" clearable placeholder="请选择分部分项">
         <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
       </el-input>
 
@@ -23,7 +23,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table :data="getList" style="width: 100%">
+      <el-table :data="getList" style="width: 100%" height="68vh">
         <el-table-column prop="project" label="相关工程">
         </el-table-column>
 
@@ -88,7 +88,7 @@ export default {
       // 工程分项树显示
       projectTree: {
         children: "children",
-        label: "departname"
+        label: "projectItem"
       },
       orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
@@ -105,7 +105,7 @@ export default {
       nowItem: "",
       timeRange: "", // 时间日期范围
       name: "", // 组织机构回填显示
-      departname: "", // 分部分项回填显示
+      projectItem: "", // 分部分项回填显示
       dialogFormVisible: false, // 查看编辑弹框
       innerVisible: false, // 组织机构弹框
       projectVisible: false // 工程分项弹框
@@ -153,7 +153,7 @@ export default {
     // 分部分项选择后的数据
     projectChange(data, checked, indeterminate) {
       this.sendData.projectItemId = data.id;
-      this.departname = data.departname;
+      this.projectItem = data.projectItem;
       this.projectVisible = false;
     },
     // 给开始和结束时间赋值

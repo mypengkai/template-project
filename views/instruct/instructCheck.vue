@@ -22,7 +22,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table :data="getList" style="width: 100%">
+      <el-table :data="getList" style="width: 100%" height="68vh">
         <el-table-column prop="project" label="相关工程">
         </el-table-column>
 
@@ -87,7 +87,7 @@ export default {
       // 工程分项树显示
       projectTree: {
         children: "children",
-        label: "departname"
+        label: "projectItem"
       },
       orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
@@ -152,7 +152,7 @@ export default {
     // 分部分项选择后的数据
     projectChange(data, checked, indeterminate) {
       this.sendData.projectItemId = data.id;
-      this.departname = data.departname;
+      this.departname = data.projectItem;
       this.projectVisible = false;
     },
     // 给开始和结束时间赋值
