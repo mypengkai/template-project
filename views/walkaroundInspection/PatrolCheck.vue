@@ -11,7 +11,7 @@
         </el-select>
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-        <el-input v-model="departname" clearable placeholder="请选择分部分项">
+        <el-input v-model="projectItem" clearable placeholder="请选择分部分项">
           <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
         </el-input>
         <!-- 时间段 -->
@@ -25,7 +25,7 @@
     </div>
 
     <!-- 查询列表 -->
-    <el-table :data="everyDayLogPageList" style="width: 100%">
+    <el-table :data="everyDayLogPageList" style="width: 100%" height="68vh">
       <el-table-column prop="realname" label="巡视人姓名">
       </el-table-column>
 
@@ -46,7 +46,7 @@
 
       <el-table-column fixed="right" label="照片">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+          <el-button type="primary" icon="el-icon-picture" circle @click="action(scope.row)"></el-button>
           <!-- <el-button type="text" size="small" @click="action(scope.row)">查看</el-button> -->
         </template>
       </el-table-column>
@@ -86,7 +86,7 @@ export default {
       timeRange: "", // 时间日期范围
       sendData: {
         userId: "", // 用户名参数
-        projectItemId: "", // 分部分项id
+        projectCode: "", // 分部分项Code
         pageNo: 1, //当前页
         pageSize: 6, // 每页条数
         startTime: "", // 开始时间
@@ -95,9 +95,9 @@ export default {
       // 工程分项树显示
       projectTree: {
         children: "children",
-        label: "departname"
+        label: "projectItem"
       },
-      departname: "", // 分部分项回填显示
+      projectItem: "", // 分部分项回填显示
       projectList: [], // 分部分项树
       dialogFormVisible: false,
       projectVisible: false // 工程分项弹框
@@ -142,8 +142,8 @@ export default {
     },
     // 分部分项选择后的数据
     projectChange(data, checked, indeterminate) {
-      this.sendData.projectItemId = data.id;
-      this.departname = data.departname;
+      this.sendData.projectCode = data.projectCode;
+      this.projectItem = data.projectItem;
       this.projectVisible = false;
     },
     changeDataRange(val) {

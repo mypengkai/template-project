@@ -187,6 +187,7 @@ export default {
     _roleList() {
       api.roleList().then(res => {
         this.roleList = res.data.data;
+        console.log(this.roleList)
       });
     },
     // 组织机构树
