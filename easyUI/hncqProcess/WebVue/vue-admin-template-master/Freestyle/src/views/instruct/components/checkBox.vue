@@ -305,7 +305,7 @@ export default {
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
       name: "", // 组织机构回填显示
-      states: "", //指令内容状态 0 已处理 1未处理
+       states: "", //指令内容状态 0 已处理 1未处理
       username: "", // 接收人id回填
       departname: "", // 分部分项回填显示
       innerVisibleSon: false, // 内层照片详情弹框
@@ -327,7 +327,8 @@ export default {
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
-      this.commandUser = ObCopyData.data.commandUser[0]; //指令内容
+      this.commandUser = ObCopyData.data.commandUser; //指令内容
+      console.log(ObCopyData.data)
       this.picture = ObCopyData.data.picture; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
       this.states = this.commandUser.state; // 指令内容是否处理
