@@ -3,19 +3,19 @@
         <el-form :model="form" label-width="100px">
             <div style="width:47vw">
                 <!-- 新增 -->
-                <el-form-item label="组织机构id" v-if="nowItem =='add'">
+                <el-form-item label="组织机构" v-if="nowItem =='add'">
                     <el-input v-model="name">
                         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="分部分项id" v-if="nowItem =='add'">
-                    <el-input v-model="departname">
+                <el-form-item label="工程分部分项" v-if="nowItem =='add'">
+                    <el-input v-model="projectItem">
                         <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="接收人id" v-if="nowItem =='add'">
+                <el-form-item label="接收人" v-if="nowItem =='add'">
                     <el-input v-model="username">
                         <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
                     </el-input>
@@ -273,7 +273,7 @@ export default {
       // 工程分项树显示
       projectTree: {
         children: "children",
-        label: "departname"
+        label: "projectItem"
       },
       // 用户类型下拉选择
       MarkList: [
@@ -307,7 +307,7 @@ export default {
       name: "", // 组织机构回填显示
        states: "", //指令内容状态 0 已处理 1未处理
       username: "", // 接收人id回填
-      departname: "", // 分部分项回填显示
+      projectItem: "", // 分部分项回填显示
       innerVisibleSon: false, // 内层照片详情弹框
       innerVisible: false, // 组织机构弹框
       projectVisible: false, // 工程分项弹框
@@ -389,7 +389,7 @@ export default {
     // 分部分项选择后的数据
     projectChange(data, checked, indeterminate) {
       this.form.projectItemId = data.id;
-      this.departname = data.departname;
+      this.projectItem = data.projectItem;
       this.projectVisible = false;
     },
     // 计划时间
