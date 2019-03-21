@@ -5,8 +5,8 @@
       <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <div class="">
-      <tree-table :data="dataList" border height="60vh">
+    <div>
+      <tree-table :data="dataList" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
             <span style="">{{ scope.row.projectItem }}</span>
@@ -22,7 +22,6 @@
             <template v-else-if="scope.row.projectType==='5'">分项工程:</template>
             <template v-else-if="scope.row.projectType==='6'">子分项工程:</template>
           </template>
-
         </el-table-column>
 
         <el-table-column label="所属组织机构">
@@ -67,6 +66,7 @@
 
 <script>
 import treeTable from "@/components/TreeTable";
+import treeToArray from "./customEval.js";
 import Xcadd from "./popUp/Xcadd";
 import api from "@/api/project.js";
 export default {
@@ -77,12 +77,15 @@ export default {
   name: "TreeTable",
   data() {
     return {
+      func: treeToArray,
+      expandAll: false,
       dataList: [],
       newTitle: "",
       nowItem: "",
       dialogFormVisible: false,
       total: 0,
-      nopId: ""
+      nopId: "",
+      args: [null, null, "timeLine"]
     };
   },
   created() {

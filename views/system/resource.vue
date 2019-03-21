@@ -31,9 +31,6 @@
                   <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
                   <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
                   <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
-                  <!-- <el-button type="text" @click="action(scope.row)">编辑</el-button>
-                  <el-button type="text" @click="action(scope.row,true)">新增</el-button>
-                  <el-button type="text" @click="Delete(scope.row)">删除</el-button> -->
                 </template>
               </el-table-column>
             </tree-table>
@@ -154,7 +151,6 @@ export default {
 .inner-container {
   position: absolute;
   left: 0;
-  // overflow-x: hidden;
   overflow-y: scroll;
 }
 
