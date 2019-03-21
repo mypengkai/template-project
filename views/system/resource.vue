@@ -7,7 +7,7 @@
       <div class="outer-container">
         <div class="inner-container">
           <div class="content">
-            <tree-table :data="menuList" border height="60vh">
+            <tree-table :data="menuList" border>
               <el-table-column label="菜单名称">
                 <template slot-scope="scope">
                   <span style="">{{ scope.row.functionName }}</span>
