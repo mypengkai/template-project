@@ -7,7 +7,7 @@
       <div class="outer-container">
         <div class="inner-container">
           <div class="content">
-            <tree-table :data="menuList" border height="65vh">
+            <tree-table :data="menuList" border height="60vh">
               <el-table-column label="菜单名称">
                 <template slot-scope="scope">
                   <span style="">{{ scope.row.functionName }}</span>
@@ -28,9 +28,12 @@
 
               <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="action(scope.row)">编辑</el-button>
-                  <el-button type="text" @click="action('add',scope.row.id)">新增</el-button>
-                  <el-button type="text" @click="Delete(scope.row)">删除</el-button>
+                  <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+                  <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+                  <!-- <el-button type="text" @click="action(scope.row)">编辑</el-button>
+                  <el-button type="text" @click="action(scope.row,true)">新增</el-button>
+                  <el-button type="text" @click="Delete(scope.row)">删除</el-button> -->
                 </template>
               </el-table-column>
             </tree-table>
@@ -39,8 +42,8 @@
       </div>
     </div>
     <!-- 弹框 -->
-    <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
-      <resourceAdd :nowItem="nowItem" :pId="pId" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="resourceList"></resourceAdd>
+    <el-dialog :title="newTitle" :visible.sync="dialogFormVisible">
+      <resourceAdd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="resourceList"></resourceAdd>
     </el-dialog>
   </div>
 </template>
@@ -58,7 +61,9 @@ export default {
   data() {
     return {
       nowItem: "",
+      newTitle: "",
       pId: "",
+      nopId: "",
       dialogFormVisible: false,
       menuList: []
     };
@@ -67,20 +72,38 @@ export default {
     this.resourceList();
   },
   methods: {
-    action(val, pId) {
-      this.pId = pId;
-      val == "add" && (this.nowItem = val);
-      val != "add" &&
-        (this.nowItem = {
-          childcount: val.childcount,
-          functionLevel: val.functionLevel,
-          functionName: val.functionName,
-          functionOrder: val.functionOrder,
-          functionUrl: val.functionUrl,
-          id: val.id,
-          pId: val.pId
-        });
+    action(val, son) {
+      if (val == "add") this.nowItem = val;
+      if (val != "add") {
+        son &&
+          (this.nowItem = {
+            childcount: "",
+            functionLevel: "",
+            functionName: "",
+            functionOrder: "",
+            functionUrl: "",
+            pId: val.id,
+            pName: val.functionName
+          });
+        !son &&
+          (this.nowItem = {
+            childcount: val.childcount,
+            functionLevel: val.functionLevel,
+            functionName: val.functionName,
+            functionOrder: val.functionOrder,
+            functionUrl: val.functionUrl,
+            pName: val.pname,
+            id: val.id,
+            pId: val.pId
+          });
+      }
+
       this.dialogFormVisible = true;
+      if (this.nowItem != "add" && !son) {
+        this.newTitle = "修改";
+      } else {
+        this.newTitle = "新增";
+      }
     },
     // 树形列表
     resourceList() {
@@ -94,7 +117,13 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => this._menuDelete(data));
+      }).then(() => {
+        this._menuDelete(data);
+        this.$message({
+          type: "success",
+          message: "删除成功!"
+        });
+      });
     },
     // 删除请求
     _menuDelete(data) {

@@ -146,7 +146,7 @@ export default {
       if (this.$refs.userFrom.validate()) {
         this.$refs.upload.submit();
       }
-    
+      this.$emit("cancel");
       // // 新增
       // this.nowItem == "add" &&
       //   user.sysuserAdd(this.form).then(res => {
