@@ -113,7 +113,6 @@ export default {
             console.log(row)
             request.post('/rest/processCheck/getProcessDetail',{id:row.gongxuid}).then(res=>{
                 if(res.data.respCode=="0"){
-                    console.log(res)
                 this.chakanData.push(res.data.data)
                 this.zijian=this.chakanData.selfCheckDescribe;
                 this.yanshou=this.chakanData.checkDescribe;

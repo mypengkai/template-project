@@ -1,12 +1,14 @@
 import { login, getUser, logout } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
+import Cookies from 'js-cookie'
 
 const user = {
   state: {
     token: getToken(),
     userInfo: '',
     avatar: '',//废弃
-    roles: []
+    roles: [],
+    name:Cookies.get('names')
   },
 
   mutations: {
@@ -27,7 +29,6 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(res => {
           let token = res.data;
-          // console.log(token)
           setToken(token);
           commit('SET_TOKEN', token);//token
           resolve()
@@ -54,7 +55,7 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout(state.name).then((res) => {
           removeToken();
           location.reload();
           resolve()

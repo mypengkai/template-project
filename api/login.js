@@ -9,6 +9,6 @@ export function getUser(params) {
 }
 
 export function logout(data) {
-  return request.post('/rest/tokens', data)
+  return request.delete('/rest/tokens/'+data)
 }
 

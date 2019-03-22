@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
@@ -179,7 +180,7 @@ export default {
     },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
-        localStorage.removeItem("pass");
+        Cookies.remove('names')
         location.reload(); // 为了重新实例化vue-router对象 避免bug
       });
     },
