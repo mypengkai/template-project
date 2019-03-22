@@ -218,7 +218,7 @@ export default {
           this.fn();
           return false
         }
-        return request.post('/rest/role/chakan',{rolename:this.input}).then((res)=>{
+      request.post('/rest/role/chakan',{rolename:this.input}).then((res)=>{
         this.tableData=[]
         if(res.data.data!=undefined) {
           this.tableData.push(res.data.data)

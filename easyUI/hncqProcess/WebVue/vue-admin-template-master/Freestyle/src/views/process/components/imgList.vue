@@ -16,13 +16,13 @@
         <el-table :data="chakanData"  border>
             <el-table-column property="processName" label="工序名"></el-table-column>
             <el-table-column property="planSelfCheckTime" label="计划验收时间"></el-table-column>
-            <el-table-column property="planSelfCheckPerson" label="计划自检人"></el-table-column>
+            <el-table-column property="planSelfCheckPersonName" label="计划自检人"></el-table-column>
             <el-table-column property="realitySelfCheckTime" label="自检时间"></el-table-column>
-            <el-table-column property="realitySelfCheckPerson"  label="自检人"></el-table-column>
+            <el-table-column property="realitySelfCheckPersonName"  label="自检人"></el-table-column>
             <el-table-column property="planCheckTime" width="151" label="计划验收时间"></el-table-column>
-            <el-table-column property="planCheckPerson" label="计划验收人"></el-table-column>
+            <el-table-column property="planCheckPersonName" label="计划验收人"></el-table-column>
             <el-table-column property="realityCheckTime" label="验收时间"></el-table-column>
-            <el-table-column property="realityCheckPerson" label="验收人"></el-table-column>
+            <el-table-column property="realityCheckPersonName" label="验收人"></el-table-column>
             <el-table-column property="state2" label="状态"></el-table-column>
         </el-table>
         <el-row>
@@ -30,7 +30,7 @@
             <el-col :span="12"><div class="ysm">验收描述: <span>{{yanshou}}</span></div></el-col>
         </el-row>
         <el-row>
-            <el-col :span="12" v-if="imgData!=null">
+            <el-col :span="12" v-if="imgData&&imgData.length">
                 <el-carousel :interval="5000" arrow="always">
                 <el-carousel-item v-for="(item,index) in imgData" :key="index">
                     <img :src="item" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
@@ -40,7 +40,7 @@
                 <el-col :span="12" v-else>
                 <div class="zjimg">没有初验图片</div>
                 </el-col>
-                <el-col :span="12" v-if="imgData2!=null">
+                <el-col :span="12" v-if="imgData&&imgData2.length">
                 <el-carousel :interval="5000" arrow="always">
                 <el-carousel-item v-for="(item,index) in imgData2" :key="index">
                     <img :src="item" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">

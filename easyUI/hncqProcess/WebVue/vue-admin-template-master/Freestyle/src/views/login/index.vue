@@ -5,13 +5,13 @@
       湖 南 常 祁 高 速 公 路 现  场 管 理 系 统
     </div>
     <!-- 用户登录框部分 -->
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form"  label-position="left">
       <h3 class="title">用户登录</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" auto-complete="on" placeholder="username" />
+        <el-input v-model="loginForm.username" type="text" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -20,9 +20,7 @@
         <el-input
           :type="pwdType"
           v-model="loginForm.password"
-          name="password"
-          auto-complete="on"
-          placeholder="password"
+          placeholder="请输入密码"
           @keyup.enter.native="handleLogin" />
       </el-form-item>
       <el-form-item>
@@ -56,7 +54,7 @@
 </template>
 
 <script>
-// import { isvalidUsername } from '@/utils/validate'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'Login',
@@ -99,13 +97,6 @@ export default {
     }
   },
   methods: {
-    showPwd() {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
-      }
-    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -113,7 +104,8 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then(() => {
-              localStorage.setItem('pass',this.loginForm.password)
+              Cookies.set('names', this.loginForm.username)
+              // localStorage.setItem('pass',this.loginForm.password)
               this.loading = false;
               this.$router.push({ path: this.redirect || "/" });
             })

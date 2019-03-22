@@ -1,12 +1,6 @@
 <template>
   <div class="app-container">
       <div class="inquire" style="">
-        <!-- <div class="fl">
-          <span class="fl" style="padding-top: 1vh;">组织机构名称:</span>
-          <span class="fl" style="padding-left: 0.5vw;margin-bottom: 2vh">
-            <el-input v-model="input" placeholder="请输入内容"></el-input>
-          </span>
-        </div> -->
         <div class="rl" style="margin-bottom:10px">
           <!-- <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button> -->
           <el-button type="primary" icon="el-icon-circle-plus" @click="addtan()">新增</el-button>
@@ -60,7 +54,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="上级组织机构" label-width="120px">
-              <el-tree :data="shuData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+              <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree>
             </el-form-item>
             <el-form-item label="描述" label-width="120px">
                 <textarea style="height:100px;width:790px" v-model="formSet.miaoCode"></textarea>
@@ -105,10 +99,11 @@
 
 <script>
 import treeTable from '@/components/TreeTable'
+import SelectTree from '@/components/SelectTree/selectTree.vue';
 import request from '@/utils/request'
 export default {
   name: 'TreeTableDemo',
-  components: { treeTable },
+  components: { treeTable ,SelectTree},
   data() {
     return {
         input:'',
@@ -204,6 +199,13 @@ export default {
       addBian(data){
         let addForm={departid:this.departid,departname:this.formSet.roleCode,description:this.formSet.miaoCode,parentdepartid:this.parentdepartid,orgtype:this.leiXing}
         console.log(addForm)
+        if(data==0 && this.parentdepartid==''){
+            this.$message({
+            message: '请选中上级组织机构',
+            type: 'warning'
+          });
+          return false
+        }
         request.post('/rest/organizate/addDepart',addForm).then((res)=>{
           if(res.data.respCode=='0'){
               this.$message({
