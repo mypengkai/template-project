@@ -78,7 +78,7 @@ export const constantRouterMap = [
         name: 'traceManage',
         component: () => import('@/views/traceManage/traceManage'),
         meta: { title: '痕迹查看', icon: 'form' }
-      }
+      },
     ]
   },
 
@@ -162,6 +162,15 @@ export const constantRouterMap = [
         name: 'accepthj',
         component: () => import('@/views/process/accepthenji'),
         meta: { title: '验收痕迹查询', icon: 'acceptance' }
+      },
+      {
+        path: "traceManage",
+        name: "TraceManage",
+        component: () => import('@/views/process/traceManage/traceManage'),
+        meta: {
+          title: "痕迹管理",
+          icon: "acceptance"
+        }
       }
     ]
   },
