@@ -1,44 +1,56 @@
 <template>
     <div>
-        <el-form :model="form" label-width="100px">
+        <el-form ref="userFrom" :model="form" label-width="120px" :rules="rules">
             <div style="width:47vw">
                 <!-- 新增 -->
-                <el-form-item label="组织机构" v-if="nowItem =='add'">
-                    <el-input v-model="name">
+                <el-form-item label="组织机构" v-if="nowItem =='add'" prop="name">
+                    <el-input v-model="name" :disabled="true">
                         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="工程分部分项" v-if="nowItem =='add'">
-                    <el-input v-model="projectItem">
+                <el-form-item label="工程分部分项" v-if="nowItem =='add'" prop="projectItem">
+                    <el-input v-model="projectItem" :disabled="true">
                         <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="接收人" v-if="nowItem =='add'">
-                    <el-input v-model="username">
+                <el-form-item label="接收人" v-if="nowItem =='add'" prop="username">
+                    <el-input v-model="username" :disabled="true">
                         <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="计划检查时间" v-if="nowItem =='add'">
-                    <el-date-picker v-model="planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
-                    </el-date-picker>
-                </el-form-item>
+                <div class="TimeAndType" v-if="nowItem =='add'">
+                    <span class="fl">
+                        <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime">
+                            <el-date-picker v-model="planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+                            </el-date-picker>
+                        </el-form-item>
+                    </span>
 
-                <el-form-item label="指令类型" v-if="nowItem =='add'">
-                    <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
-                        <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                    <span class="rl mr">
+                        <el-form-item label="指令类型" v-if="nowItem =='add'" prop="label">
+                            <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
+                                <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </span>
+                </div>
 
-                <el-form-item label="指令内容" v-if="nowItem =='add'">
+                <el-form-item label="指令内容" v-if="nowItem =='add'" prop="remark">
                     <el-input v-model="form.remark"></el-input>
                 </el-form-item>
 
-                <el-form-item label="图片选择" v-if="nowItem =='add'">
-                    <dropzone id="myVueDropzone" url="https://httpbin.org/post" @dropzone-removedFile="dropzoneR" @dropzone-success="dropzoneS" />
+                <el-form-item label="图片选择" v-if="nowItem =='add'" prop="dialogImageUrl">
+                    <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="form">
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                    <el-dialog :visible.sync="dialogVisible">
+                        <img width="50%" :src="dialogImageUrl" alt="图片">
+                    </el-dialog>
+
                 </el-form-item>
 
                 <!-- 查看 -->
@@ -93,14 +105,14 @@
                             </div>
                         </div>
 
-                        <div class="rl">
+                        <!-- <div class="rl">
                             <el-button type="primary" round @click="innerTranspond = true">转发指令</el-button>
-                        </div>
+                        </div> -->
                     </div>
                 </el-form-item>
 
                 <el-form-item label="相关照片" v-if="nowItem !=='add'">
-                    <el-carousel :interval="3000" arrow="always" height="25vh">
+                    <el-carousel :interval="3000" arrow="always" height="22vh">
                         <el-carousel-item v-for="(item,index) in picture" :key="index">
                             <img :src="item" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
                         </el-carousel-item>
@@ -110,6 +122,7 @@
         </el-form>
         <div class="tar">
             <el-button @click="$emit('cancel')">取 消</el-button>
+            <el-button type="primary" v-if="nowItem !=='add'" @click="innerTranspond = true">转发指令</el-button>
             <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
         </div>
 
@@ -207,21 +220,23 @@
 </template>
 
 <script>
-import api from "@/api/instruct.js";
+import request from "../../../utils/request";
+import { getToken } from "@/utils/auth";
 import instruct from "@/api/instruct.js";
 import project from "@/api/project.js";
 import Organization from "@/api/Organization.js";
-import process from "@/api/process.js";
-import Dropzone from "@/components/Dropzone";
+import processInfo from "@/api/process.js";
 export default {
   props: ["nowItem"],
-  name: "DropzoneDemo",
-  components: { Dropzone },
   data() {
     return {
+      uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
       planTime: "",
+      headers: {
+        "X-AUTH-TOKEN": getToken()
+      },
       form: {
         id: "",
         infologid: "", // 工序id
@@ -238,8 +253,16 @@ export default {
         planCheckTime: "", // 计划检查时间
         commandType: "", // 指令类型
         projectItem: "", // 工程项目
-        files: "" // 图片
+        batchNo: ""
       },
+      rules: {
+        name: { required: true, message: "必填项", trigger: "blur" },
+        projectItem: { required: true, message: "必填项", trigger: "blur" },
+        remark: { required: true, message: "必填项", trigger: "blur" },
+        dialogImageUrl: { required: true, message: "必填项", trigger: "blur" },
+        planTime: { required: true, message: "必填项", trigger: "blur" },
+        label: { required: true, message: "必填项", trigger: "blur" }
+      }, //表单校验规则
       //   转发指令
       transpondForm: {
         commanduserId: "", // 指令用户表id
@@ -305,7 +328,7 @@ export default {
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
       name: "", // 组织机构回填显示
-       states: "", //指令内容状态 0 已处理 1未处理
+      states: "", //指令内容状态 0 已处理 1未处理
       username: "", // 接收人id回填
       projectItem: "", // 分部分项回填显示
       innerVisibleSon: false, // 内层照片详情弹框
@@ -320,6 +343,7 @@ export default {
     this.initForm();
     this.sendList();
     this._userList();
+    this.form.batchNo = this.createUUID();
   },
   methods: {
     initForm() {
@@ -328,7 +352,7 @@ export default {
       this.form = ObCopyData.data; // 第一层查看
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
-      console.log(ObCopyData.data)
+      console.log(ObCopyData.data);
       this.picture = ObCopyData.data.picture; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
       this.states = this.commandUser.state; // 指令内容是否处理
@@ -350,14 +374,14 @@ export default {
     },
     _userList() {
       //   接受人id
-      process.getCheckPerson(this.sendData).then(res => {
+      processInfo.getCheckPerson(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
         this.userList = res.data.data.data;
       });
     },
     // 工序id拿图片详情
     actionImg() {
-      process.getPictureDetail(this.sendDataSon).then(res => {
+      processInfo.getPictureDetail(this.sendDataSon).then(res => {
         this.formSon = res.data.data[0]; // 图片详情信息
         this.imgData = res.data.data; // 内层图片数组
       });
@@ -395,14 +419,13 @@ export default {
     // 计划时间
     planDataRange(val) {
       this.form.planCheckTime = val;
-      console.log(this.form);
     },
-    _comfirm() {
+    _comfirm(file) {
       // 新增
-      this.nowItem == "add" &&
-        api.addCommand(this.form).then(res => {
-          this.$emit("comfirm");
-        });
+      if (this.nowItem === "add") {
+        this.$refs.upload.submit();
+      }
+      this.$emit("cancel");
     },
     // 转发指令
     _delivery() {
@@ -410,14 +433,39 @@ export default {
         this.innerTranspond = false;
       });
     },
-    // 上传图片
-    dropzoneS(file) {
-      console.log(file);
-      this.$message({ message: "Upload success", type: "success" });
+    // 图片上传
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
     },
-    dropzoneR(file) {
-      console.log(file);
-      this.$message({ message: "Delete success", type: "success" });
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    beforeUpload: function(file) {
+      this.commandFormData.append("files", file);
+    },
+    createUUID: function() {
+      function S4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      }
+      return (
+        S4() +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        S4() +
+        S4()
+      );
+    },
+    handleExceed: function(files, fileList) {
+      console.log(files);
+      console.log(fileList);
     }
   }
 };
@@ -433,6 +481,12 @@ export default {
   img {
     width: 100%;
     height: 100%;
+  }
+}
+.TimeAndType {
+  height: 0vh;
+  span {
+    display: block;
   }
 }
 </style>

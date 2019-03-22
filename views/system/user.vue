@@ -50,7 +50,7 @@
     </el-pagination>
     <!-- 弹框 -->
     <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
-      <userAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_userList"></userAdd>
+      <userAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @execute="_userList" @comfirm="_userList"></userAdd>
     </el-dialog>
 
     <!-- 组织机构树形表单搜素 -->
@@ -124,7 +124,6 @@ export default {
       });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
     },
     // 删除按钮
     Delete(data) {

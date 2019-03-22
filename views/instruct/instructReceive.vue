@@ -51,7 +51,7 @@
       </el-pagination>
     </div>
     <!-- 编辑弹框 -->
-    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+    <el-dialog width="50%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
     <!-- 组织机构树形表单 -->
@@ -176,5 +176,8 @@ export default {
 }
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
+}
+.dialogBox {
+  margin-top: -7vh;
 }
 </style>

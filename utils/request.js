@@ -24,6 +24,7 @@ service.interceptors.request.use(config => {
   // config.method == 'post' && (config.headers["Content-Type"] = 'application/json');
   ismessage = config.ismessage;
   config.qs && (config.data = qs.stringify(config.data));
+  // config.headers["Content-Type"]="multipart/form-data";
   getToken() && (config.headers["X-AUTH-TOKEN"] = getToken());
 
   config.isloading && (loadinginstace = Loading.service({ text: '使劲加载中...', background: 'rgba(0, 0, 0, 0.5)' }));

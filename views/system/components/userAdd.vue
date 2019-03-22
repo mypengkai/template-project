@@ -26,7 +26,7 @@
 
         <el-form-item label="角色" prop="userKey">
           <el-select v-model="user.userKey" multiple placeholder="请选择角色">
-            <el-option v-for="item in roleList" :key="item.id" :label="item.rolename" :value="item.id">
+            <el-option v-for="(item,index) in roleList" :key="index.id" :label="item.rolename" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -40,10 +40,25 @@
         </el-form-item>
 
         <el-form-item label="上传头像" v-if="nowItem=='add'">
-          <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :show-file-list="true" :limit="1" :auto-upload="false" :before-upload="handleBeforeUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :data="user">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <el-upload
+            class="avatar-uploader"
+            ref="upload"
+            :action="uploadUrl"
+            :multiple="false"
+            name="files"
+            :headers="headers"
+            list-type="picture-card"
+            :limit="1"
+            :auto-upload="false"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :on-exceed="handleExceed"
+            :data="user">
+            <i class="el-icon-plus"></i>
           </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="50%" :src="dialogImageUrl" alt="图片">
+          </el-dialog>
         </el-form-item>
 
         <el-form-item label="头像查看" v-if="nowItem!=='add'">
@@ -54,7 +69,8 @@
     </el-form>
     <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
-      <el-button type="primary" @click="_comfirm">保 存</el-button>
+      <el-button type="primary" v-if="nowItem!=='add'" @click="_execute">修 改</el-button>
+      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">保 存</el-button>
     </div>
 
     <!-- 组织机构树形表单提交 -->
@@ -74,7 +90,7 @@ export default {
   props: ["nowItem"],
   data() {
     return {
-      uploadUrl: "/a1/rest/sysuser/add",
+      uploadUrl: process.env.BASE_API+"/rest/sysuser/add",
       orgTree: [],
       defaultProps: {
         children: "children",
@@ -117,8 +133,8 @@ export default {
       imageUrl: "",
       roleList: [],
       orgTree: [],
-      Check: [],
-      treeData: {}
+      dialogVisible: false,
+      dialogImageUrl: "",
     };
   },
   created() {
@@ -134,8 +150,7 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //复制
-     
-      console.log(this.user)
+      // console.log(this.user)
       this.name = this.user.name;
     },
     fileChange(file) {
@@ -159,31 +174,30 @@ export default {
       //   });
     },
     //查看
-
-    handleBeforeUpload(file) {
-      if (
-        !(
-          file.type === "image/png" ||
-          file.type === "image/gif" ||
-          file.type === "image/jpg" ||
-          file.type === "image/jpeg"
-        )
-      ) {
-        this.$notify.warning({
-          title: "警告",
-          message:
-            "请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片"
+    _execute(){
+         // 查看单个 修改
+      this.nowItem != "add" &&
+        user.sysusermodify(this.user).then(res => {
+          this.$emit("execute");
         });
-      }
     },
-    handlePictureCardPreview(file, fileList) {
-      this.imageUrl = file.url;
+   // 传图片
+    handleRemove(file, fileList) {
+      // console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleExceed:function(files, fileList){
+      // console.log(files)
+      // console.log(fileList)
     },
     // 角色请求列表
     _roleList() {
       api.roleList().then(res => {
         this.roleList = res.data.data;
-        console.log(this.roleList)
+        // console.log(this.roleList)
       });
     },
     // 组织机构树
