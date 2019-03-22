@@ -5,57 +5,58 @@
       <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <!-- <div class="Treebox"> </div> -->
-    <tree-table :data="dataList" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
-      <el-table-column label="工程分布分项">
-        <template slot-scope="scope">
-          <span style="">{{ scope.row.projectItem }}</span>
-        </template>
-      </el-table-column>
+    <el-scrollbar style="height: 68vh;overflow-x: none;">
+      <tree-table :data="dataList" ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
+        <el-table-column label="工程分布分项">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.projectItem }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="类型">
-        <template slot-scope="scope">
-          <template v-if="scope.row.projectType==='1'">单位工程:</template>
-          <template v-else-if="scope.row.projectType==='2'">子单位工程:</template>
-          <template v-else-if="scope.row.projectType==='3'">分部工程:</template>
-          <template v-else-if="scope.row.projectType==='4'">子分部工程:</template>
-          <template v-else-if="scope.row.projectType==='5'">分项工程:</template>
-          <template v-else-if="scope.row.projectType==='6'">子分项工程:</template>
-        </template>
-      </el-table-column>
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <template v-if="scope.row.projectType==='1'">单位工程:</template>
+            <template v-else-if="scope.row.projectType==='2'">子单位工程:</template>
+            <template v-else-if="scope.row.projectType==='3'">分部工程:</template>
+            <template v-else-if="scope.row.projectType==='4'">子分部工程:</template>
+            <template v-else-if="scope.row.projectType==='5'">分项工程:</template>
+            <template v-else-if="scope.row.projectType==='6'">子分项工程:</template>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="所属组织机构">
-        <template slot-scope="scope">
-          <span style="">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column label="所属组织机构">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="起始桩号">
-        <template slot-scope="scope">
-          <span style="">{{ scope.row.startStation }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column label="起始桩号">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.startStation }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="终止桩号">
-        <template slot-scope="scope">
-          <span style="">{{ scope.row.endStation }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column label="终止桩号">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.endStation }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="创建时间">
-        <template slot-scope="scope">
-          <span style="">{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">
+            <span style="">{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-          <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
-        </template>
-      </el-table-column>
-    </tree-table>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+            <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+          </template>
+        </el-table-column>
+      </tree-table>
+    </el-scrollbar>
 
     <!-- 新增弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible">
@@ -87,6 +88,9 @@ export default {
       nopId: "",
       args: [null, null, "timeLine"]
     };
+  },
+  mounted() {
+    this.$refs.projectItemTreeTable.$el.classList.add("el-table--scrollable-y");
   },
   created() {
     this._projectList();
@@ -167,7 +171,7 @@ export default {
 
 <style lang="scss" scoped>
 .Treebox {
-  height: 60vh;
+  // height: 60vh;
   overflow-x: hidden;
   overflow-y: scroll;
   line-height: 30px;
