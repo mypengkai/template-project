@@ -69,11 +69,21 @@ tool.getColor = (max, base) => {
   return arr;
 }
 
+tool.locGet = (item) => {
+  if (localStorage.getItem(item)) return JSON.parse(localStorage.getItem(item))
+  else return false;
+}
+
 tool.fullscreen = (callback) => {
   window.onresize = () => {
     let isfull = (document.body.scrollHeight == window.screen.height && document.body.scrollWidth == window.screen.width);
     callback(isfull)
   }
+}
+//跳转新窗口
+tool.openView = (url) => {
+  let { href } = router.resolve({ path: url });
+  window.open(href, '_blank');
 }
 Vue.prototype.$tool = tool
 export default tool;

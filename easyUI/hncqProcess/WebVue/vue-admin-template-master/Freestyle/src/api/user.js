@@ -5,6 +5,10 @@ export default {
     sysuserAdd(data) {
         return request.post('/rest/sysuser/add', data)
     },
+    // 修改
+    sysusermodify(data) {
+        return request.post('/rest/sysuser/modify', data)
+    },
     // 列表 
     sysuserList(data) {
         return request.post('/rest/sysuser/getList', data)
@@ -14,8 +18,8 @@ export default {
         return request.get(`/rest/sysuser/delete/${id}`)
     },
     // 查询
-    sysuserCheck(id) {
-        return request.post(`/rest/sysuser/chakan/${id}`)
+    sysuserCheck(data) {
+        return request.post('/rest/sysuser/chakan', data)
     },
     // 巡检查询
     getListByUser(data) {

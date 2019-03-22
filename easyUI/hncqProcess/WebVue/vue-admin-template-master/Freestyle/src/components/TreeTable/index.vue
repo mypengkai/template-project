@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs" height="68vh">
+  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs">
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
@@ -67,11 +67,14 @@ export default {
     }
   },
   methods: {
-    showRow(rows, index) {
-      let row = rows.row
-      let show = (row._parent ? (row._parent._expanded && row._parent._show) : true)
-      row._show = show
-      return show ? '' : 'display:none;'
+    showRow: function(row) {
+      const show = row.row.parent
+        ? row.row.parent._expanded && row.row.parent._show
+        : true;
+      row.row._show = show;
+      return show
+        ? "animation:treeTableShow 1s;-webkit-animation:treeTableShow 1s;"
+        : "display:none;";
     },
     // 切换下级是否展开
     toggleExpanded: function(trIndex) {

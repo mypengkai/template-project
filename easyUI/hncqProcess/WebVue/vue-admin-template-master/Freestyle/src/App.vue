@@ -5,14 +5,16 @@
 </template>
 
 <script>
-
 export default {
-  name: 'App'
-  
-}
+  name: "App"
+};
 </script>
 
 <style lang="scss" scoped>
-
+#app {
+}
+#app::-webkit-scrollbar {
+  display: none;
+}
 </style>
 
