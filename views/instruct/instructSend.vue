@@ -158,8 +158,8 @@ export default {
     },
     // 给开始和结束时间赋值
     changeDataRange(val) {
+       console.log(val);
       [this.sendData.starttime, this.sendData.endtime] = val;
-      console.log(this.sendData);
     }
   },
   watch: {

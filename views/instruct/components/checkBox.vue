@@ -72,7 +72,15 @@
 
                 <el-form-item label="指令内容" v-if="nowItem !=='add'">
                     <div class="topBar">
-                        <div class="fl">
+
+                        
+                        <el-timeline :reverse="reverse">
+                            <el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.timestamp">
+                                {{activity.content}}
+                            </el-timeline-item>
+                        </el-timeline>
+
+                        <!-- <div class="fl">
                             <div>
                                 <span>发起人:</span>
                                 <el-input v-model="commandUser.faqiren"></el-input>
@@ -92,9 +100,9 @@
                                 <span>结束时间:</span>
                                 <el-input v-model="commandUser.finishTime"></el-input>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="fl">
+                        <!-- <div class="fl">
                             <div>
                                 <span>状态:</span>
                                 <el-input v-model="states"></el-input>
@@ -103,11 +111,8 @@
                                 <span>相关描述:</span>
                                 <el-input v-model="commandUser.remark"></el-input>
                             </div>
-                        </div>
-
-                        <!-- <div class="rl">
-                            <el-button type="primary" round @click="innerTranspond = true">转发指令</el-button>
                         </div> -->
+
                     </div>
                 </el-form-item>
 
@@ -120,9 +125,10 @@
                 </el-form-item>
             </div>
         </el-form>
+        <!-- <div class="tar" v-if="$route.name=='instructReceive'"> -->
         <div class="tar">
             <el-button @click="$emit('cancel')">取 消</el-button>
-            <el-button type="primary" v-if="nowItem !=='add'" @click="innerTranspond = true">转发指令</el-button>
+            <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" @click="innerTranspond = true">转发指令</el-button>
             <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
         </div>
 
@@ -230,6 +236,22 @@ export default {
   props: ["nowItem"],
   data() {
     return {
+      reverse: true,
+      activities: [
+        {
+          content: "活动按期开始",
+          timestamp: "2018-04-15"
+        },
+        {
+          content: "通过审核",
+          timestamp: "2018-04-13"
+        },
+        {
+          content: "创建成功",
+          timestamp: "2018-04-11"
+        }
+      ],
+
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
@@ -418,6 +440,7 @@ export default {
     },
     // 计划时间
     planDataRange(val) {
+      console.log(val);
       this.form.planCheckTime = val;
     },
     _comfirm(file) {
