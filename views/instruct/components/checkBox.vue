@@ -1,228 +1,221 @@
 <template>
-    <div>
-        <el-form ref="userFrom" :model="form" label-width="120px" :rules="rules">
-            <div style="width:47vw">
-                <!-- 新增 -->
-                <el-form-item label="组织机构" v-if="nowItem =='add'" prop="name">
-                    <el-input v-model="name" :disabled="true">
-                        <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
-                    </el-input>
-                </el-form-item>
+  <div>
+    <el-form ref="userFrom" :model="form" :rules="rules">
+      <div>
+        <!-- 新增 -->
+        <el-form-item style="width:17vw" label="组织机构" v-if="nowItem =='add'" prop="name" label-width="120px">
+          <el-input v-model="name" :disabled="true">
+            <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
+          </el-input>
+        </el-form-item>
 
-                <el-form-item label="工程分部分项" v-if="nowItem =='add'" prop="projectItem">
-                    <el-input v-model="projectItem" :disabled="true">
-                        <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
-                    </el-input>
-                </el-form-item>
+        <el-form-item style="width:17vw" label="工程分部分项" v-if="nowItem =='add'" prop="projectItem" label-width="120px">
+          <el-input v-model="projectItem" :disabled="true">
+            <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
+          </el-input>
+        </el-form-item>
 
-                <el-form-item label="接收人" v-if="nowItem =='add'" prop="username">
-                    <el-input v-model="username" :disabled="true">
-                        <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
-                    </el-input>
-                </el-form-item>
+        <el-form-item style="width:17vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
+          <el-input v-model="username" :disabled="true">
+            <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
+          </el-input>
+        </el-form-item>
 
-                <div class="TimeAndType" v-if="nowItem =='add'">
-                    <span class="fl">
-                        <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime">
-                            <el-date-picker v-model="planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
-                            </el-date-picker>
-                        </el-form-item>
-                    </span>
+        <div class="TimeAndType" v-if="nowItem =='add'">
+          <span class="fl">
+            <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime" label-width="120px">
+              <el-date-picker v-model="planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+              </el-date-picker>
+            </el-form-item>
+          </span>
 
-                    <span class="rl mr">
-                        <el-form-item label="指令类型" v-if="nowItem =='add'" prop="label">
-                            <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
-                                <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </span>
-                </div>
-
-                <el-form-item label="指令内容" v-if="nowItem =='add'" prop="remark">
-                    <el-input v-model="form.remark"></el-input>
-                </el-form-item>
-
-                <el-form-item label="图片选择" v-if="nowItem =='add'" prop="dialogImageUrl">
-                    <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="form">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="dialogVisible">
-                        <img width="50%" :src="dialogImageUrl" alt="图片">
-                    </el-dialog>
-
-                </el-form-item>
-
-                <!-- 查看 -->
-                <el-form-item label="相关工程" v-if="nowItem !=='add'">
-                    <el-input v-model="form.projectItem"></el-input>
-                </el-form-item>
-
-                <el-form-item label="发起人" v-if="nowItem !=='add'">
-                    <el-input v-model="form.realname"></el-input>
-                </el-form-item>
-
-                <el-form-item label="发起时间" v-if="nowItem !=='add'">
-                    <el-input v-model="form.createTime"></el-input>
-                </el-form-item>
-
-                <el-form-item label="计划时间" v-if="nowItem !=='add'">
-                    <el-input v-model="form.planTime"></el-input>
-                </el-form-item>
-
-                <el-form-item label="指令内容" v-if="nowItem !=='add'">
-                    <div class="topBar">
-
-                        
-                        <el-timeline :reverse="reverse">
-                            <el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.timestamp">
-                                {{activity.content}}
-                            </el-timeline-item>
-                        </el-timeline>
-
-                        <!-- <div class="fl">
-                            <div>
-                                <span>发起人:</span>
-                                <el-input v-model="commandUser.faqiren"></el-input>
-                            </div>
-                            <div>
-                                <span>接收人:</span>
-                                <el-input v-model="commandUser.jieshouren"></el-input>
-                            </div>
-                        </div>
-
-                        <div class="fl">
-                            <div>
-                                <span>开始时间:</span>
-                                <el-input v-model="commandUser.createTime"></el-input>
-                            </div>
-                            <div>
-                                <span>结束时间:</span>
-                                <el-input v-model="commandUser.finishTime"></el-input>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="fl">
-                            <div>
-                                <span>状态:</span>
-                                <el-input v-model="states"></el-input>
-                            </div>
-                            <div>
-                                <span>相关描述:</span>
-                                <el-input v-model="commandUser.remark"></el-input>
-                            </div>
-                        </div> -->
-
-                    </div>
-                </el-form-item>
-
-                <el-form-item label="相关照片" v-if="nowItem !=='add'">
-                    <el-carousel :interval="3000" arrow="always" height="22vh">
-                        <el-carousel-item v-for="(item,index) in picture" :key="index">
-                            <img :src="item" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
-                        </el-carousel-item>
-                    </el-carousel>
-                </el-form-item>
-            </div>
-        </el-form>
-        <!-- <div class="tar" v-if="$route.name=='instructReceive'"> -->
-        <div class="tar">
-            <el-button @click="$emit('cancel')">取 消</el-button>
-            <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" @click="innerTranspond = true">转发指令</el-button>
-            <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
+          <span class="rl mr">
+            <el-form-item label="指令类型" v-if="nowItem =='add'" prop="label" label-width="120px">
+              <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
+                <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </span>
         </div>
 
-        <!-- 组织机构树形表单 -->
-        <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
-            <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
-            </el-tree>
-        </el-dialog>
-        <!-- 分部分项树形表单 -->
-        <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
-            <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
-            </el-tree>
-        </el-dialog>
-        <!-- 接受人id -->
-        <el-dialog width="40%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
-            <div>
-                <span>用户类型</span>
-                <el-select v-model="value" placeholder="请选择" @change="changeUserList">
-                    <el-option v-for="(item,index) in MarkList" :key="index" :label="item.label" :value="item.value">
-                    </el-option>
-                </el-select>
+        <el-form-item style="width:37vw" label="指令内容" v-if="nowItem =='add'" prop="remark" label-width="120px">
+          <el-input type="textarea" autosize v-model="form.remark"></el-input>
+        </el-form-item>
+
+        <el-form-item label="图片选择" v-if="nowItem =='add'" prop="dialogImageUrl" label-width="120px">
+          <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="form">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="50%" :src="dialogImageUrl" alt="图片">
+          </el-dialog>
+
+        </el-form-item>
+
+        <!-- 查看 -->
+        <el-form-item style="width:17vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
+          <el-input v-model="form.projectItem"></el-input>
+        </el-form-item>
+
+        <el-form-item style="width:17vw" label="发起人" v-if="nowItem !=='add'" label-width="120px">
+          <el-input v-model="form.realname"></el-input>
+        </el-form-item>
+
+        <el-form-item style="width:17vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
+          <el-input v-model="form.createTime"></el-input>
+        </el-form-item>
+
+        <!-- <el-form-item style="width:17vw" label="完成时间" v-if="nowItem !=='add'">
+                    <el-input v-model="form.planTime"></el-input>
+                </el-form-item> -->
+
+        <el-form-item label="指令内容" v-if="nowItem !=='add'" label-width="120px">
+          <div class="">
+            <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}">
+              <!-- <el-timeline :reverse="reverse" class="timelineBox"> -->
+              <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(index, 'icon')" :type="convertIcon(index, 'type')" :timestamp="activity.createTime">
+                {{activity.name}}
+              </el-timeline-item>
+            </el-timeline>
+
+            <div class="topBar">
+              <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
+              <el-input v-model="states"></el-input>
             </div>
-            <div>
-                <el-table :data="userList" style="width: 100%" @row-click="tableClick">
-                    <el-table-column prop="username" label="姓名">
-                    </el-table-column>
-                    <el-table-column prop="departname" label="职务">
-                    </el-table-column>
-                </el-table>
+
+            <div class="textareaBar">
+              <span>相关描述:</span>
+              <el-input type="textarea" autosize v-model="remark"></el-input>
             </div>
-            <div>
-                <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_userList()" :total="total">
-                </el-pagination>
-            </div>
-        </el-dialog>
-        <!-- 转发信息 -->
-        <el-dialog width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
-            <el-form :model="transpondForm" label-width="80px">
-                <el-form-item label="指定人">
-                    <el-input v-model="transpondName">
-                        <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
-                    </el-input>
-                </el-form-item>
+          </div>
+        </el-form-item>
 
-                <el-form-item label="备注">
-                    <el-input v-model="transpondForm.remark"></el-input>
-                </el-form-item>
+        <div v-if="nowItem !=='add'">
+          <!-- 导航切换 -->
+          <div class="navb" label-width="120px">
+            <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
+              <el-menu-item index="1" @click="nowType=0">信息中心</el-menu-item>
+              <el-menu-item index="2" @click="nowType=1">项目地图</el-menu-item>
+            </el-menu>
+          </div>
 
-            </el-form>
-            <div class="tar">
-                <el-button @click="innerTranspond = false">取 消</el-button>
-                <el-button type="primary" @click="_delivery">确 定</el-button>
-            </div>
-        </el-dialog>
-        <!-- 照片详情查看 -->
-        <el-dialog width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
-            <el-form :model="formSon" label-width="200px">
-                <div style="width:80%">
+          <!-- 轮播信息 -->
+          <div style="height:30vh" v-if="nowType==0">
+            <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
+              <el-carousel :interval="3000" arrow="always" height="22vh">
+                <el-carousel-item v-for="(item,index) in picture" :key="index">
+                  <img :src="picture.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                </el-carousel-item>
+              </el-carousel>
+            </el-form-item>
+          </div>
+          <!-- 地图 -->
+          <div style="height:30vh" v-if="nowType==1">
+            <instructMap :nowItem="nowItem"></instructMap>
+          </div>
 
-                    <el-form-item label="指令描述">
-                        <el-input v-model="formSon.describe"></el-input>
-                    </el-form-item>
+        </div>
 
-                    <el-form-item label="拍摄时间">
-                        <el-input v-model="formSon.createTime"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="经度">
-                        <el-input v-model="formSon.lat"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="纬度">
-                        <el-input v-model="formSon.lgt"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="照片描述">
-                        <el-input v-model="formSon.photoDescribe"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="拍摄地点">
-                        <el-input v-model="formSon.photoLocation"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="照片">
-                        <el-carousel :interval="3000" arrow="always" height="30vh">
-                            <el-carousel-item v-for="(item,index) in imgData" :key="index">
-                                <img :src="item.filePath" alt="">
-                            </el-carousel-item>
-                        </el-carousel>
-                    </el-form-item>
-                </div>
-            </el-form>
-        </el-dialog>
+      </div>
+    </el-form>
+    <!-- <div class="tar" v-if="$route.name=='instructReceive'"> -->
+    <div class="tar">
+      <el-button @click="$emit('cancel')">取 消</el-button>
+      <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" @click="innerTranspond = true">转发指令</el-button>
+      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
     </div>
+
+    <!-- 组织机构树形表单 -->
+    <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
+      <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
+      </el-tree>
+    </el-dialog>
+    <!-- 分部分项树形表单 -->
+    <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
+      <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
+      </el-tree>
+    </el-dialog>
+    <!-- 接受人id -->
+    <el-dialog width="40%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
+      <div>
+        <span>用户类型</span>
+        <el-select v-model="value" placeholder="请选择" @change="changeUserList">
+          <el-option v-for="(item,index) in MarkList" :key="index" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+      <div>
+        <el-table :data="userList" style="width: 100%" @row-click="tableClick">
+          <el-table-column prop="username" label="姓名">
+          </el-table-column>
+          <el-table-column prop="departname" label="职务">
+          </el-table-column>
+        </el-table>
+      </div>
+      <div>
+        <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_userList()" :total="total">
+        </el-pagination>
+      </div>
+    </el-dialog>
+    <!-- 转发信息 -->
+    <el-dialog width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
+      <el-form :model="transpondForm" label-width="80px">
+        <el-form-item label="指定人">
+          <el-input v-model="transpondName">
+            <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="备注">
+          <el-input v-model="transpondForm.remark"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="tar">
+        <el-button @click="innerTranspond = false">取 消</el-button>
+        <el-button type="primary" @click="_delivery">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 照片详情查看 -->
+    <el-dialog width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
+      <el-form :model="formSon" label-width="200px">
+        <div style="width:80%">
+
+          <el-form-item label="指令描述">
+            <el-input v-model="formSon.describe"></el-input>
+          </el-form-item>
+
+          <el-form-item label="拍摄时间">
+            <el-input v-model="formSon.createTime"></el-input>
+          </el-form-item>
+
+          <el-form-item label="经度">
+            <el-input v-model="formSon.lat"></el-input>
+          </el-form-item>
+
+          <el-form-item label="纬度">
+            <el-input v-model="formSon.lgt"></el-input>
+          </el-form-item>
+
+          <el-form-item label="照片描述">
+            <el-input v-model="formSon.photoDescribe"></el-input>
+          </el-form-item>
+
+          <el-form-item label="拍摄地点">
+            <el-input v-model="formSon.photoLocation"></el-input>
+          </el-form-item>
+
+          <el-form-item label="照片">
+            <el-carousel :interval="3000" arrow="always" height="30vh">
+              <el-carousel-item v-for="(item,index) in imgData" :key="index">
+                <img :src="item.filePath" alt="">
+              </el-carousel-item>
+            </el-carousel>
+          </el-form-item>
+        </div>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -232,26 +225,42 @@ import instruct from "@/api/instruct.js";
 import project from "@/api/project.js";
 import Organization from "@/api/Organization.js";
 import processInfo from "@/api/process.js";
+import instructMap from "./instructMap";
 export default {
+  components: {
+    instructMap
+  },
   props: ["nowItem"],
   data() {
     return {
       reverse: true,
       activities: [
         {
-          content: "活动按期开始",
-          timestamp: "2018-04-15"
-        },
-        {
-          content: "通过审核",
-          timestamp: "2018-04-13"
-        },
-        {
-          content: "创建成功",
-          timestamp: "2018-04-11"
+          name: "",
+          createTime: ""
         }
       ],
-
+      activitiesIcon: [
+        // 接受人
+        {
+          type: "primary",
+          icon: "el-icon-star-off"
+        },
+        // 转发人
+        {
+          type: "info",
+          icon: "el-icon-refresh"
+        },
+        // 发起人
+        {
+          type: "primary",
+          icon: "el-icon-star-on"
+        }
+      ],
+      answer: "", // 转发响应变量
+      nowType: 0,
+      activeIndex: "1",
+      activeIndex2: "1",
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
@@ -279,10 +288,11 @@ export default {
       },
       rules: {
         name: { required: true, message: "必填项", trigger: "blur" },
+        username: { required: true, message: "必填项", trigger: "blur" },
         projectItem: { required: true, message: "必填项", trigger: "blur" },
         remark: { required: true, message: "必填项", trigger: "blur" },
         dialogImageUrl: { required: true, message: "必填项", trigger: "blur" },
-        planTime: { required: true, message: "必填项", trigger: "blur" },
+        // planTime: { required: true, message: "必填项", trigger: "blur" },
         label: { required: true, message: "必填项", trigger: "blur" }
       }, //表单校验规则
       //   转发指令
@@ -351,6 +361,7 @@ export default {
       userList: [], // 接收人列表
       name: "", // 组织机构回填显示
       states: "", //指令内容状态 0 已处理 1未处理
+      remark: "", // 最后一个人的备注
       username: "", // 接收人id回填
       projectItem: "", // 分部分项回填显示
       innerVisibleSon: false, // 内层照片详情弹框
@@ -372,11 +383,13 @@ export default {
       if (this.nowItem == "add") return;
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
+      console.log(ObCopyData.data)
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
-      console.log(ObCopyData.data);
-      this.picture = ObCopyData.data.picture; // 图片数组
+      this.activities = ObCopyData.data.commandUser;
+      this.picture = ObCopyData.data.pictureOfCommand; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
+      this.remark = this.commandUser[this.commandUser.length - 1].remark;
       this.states = this.commandUser.state; // 指令内容是否处理
       if (this.states == 0) {
         this.states = "已处理";
@@ -384,6 +397,8 @@ export default {
         this.states = "未处理";
       }
     },
+    // 切换
+    handleSelect(key, keyPath) {},
     sendList() {
       // 组织机构树
       Organization.organizateTree().then(res => {
@@ -404,7 +419,10 @@ export default {
     // 工序id拿图片详情
     actionImg() {
       processInfo.getPictureDetail(this.sendDataSon).then(res => {
-        this.formSon = res.data.data[0]; // 图片详情信息
+        this.formSon = res.data.data[1]; // 图片详情信息
+        if (this.formSon.photoLocation == null) {
+          this.formSon.photoLocation = "湖南常祁";
+        }
         this.imgData = res.data.data; // 内层图片数组
       });
       this.innerVisibleSon = true;
@@ -426,6 +444,33 @@ export default {
       this.transpondName = item.username; // 转发指定人姓名回填
       this.acceptUser = false;
     },
+    convertIcon(index, type) {
+      if (index === 0) {
+        if (type === "icon") {
+          return this.activitiesIcon[0].icon;
+        } else if (type === "type") {
+          return this.activitiesIcon[0].type;
+        }
+      } else if (this.activities.length === index) {
+        if (type === "icon") {
+          return this.activitiesIcon[2].icon;
+        } else if (type === "type") {
+          return this.activitiesIcon[2].type;
+        }
+      } else if (this.activities.length == 2) {
+        if (type === "icon") {
+          return this.activitiesIcon[1].icon;
+        } else if (type === "type") {
+          return this.activitiesIcon[1].type;
+        }
+      } else {
+        if (type === "icon") {
+          return this.activitiesIcon[1].icon;
+        } else if (type === "type") {
+          return this.activitiesIcon[1].type;
+        }
+      }
+    },
     // 组织机构选择后的数据
     handleCheckChange(data, checked, indeterminate) {
       this.form.userGroupId = data.id;
@@ -440,7 +485,6 @@ export default {
     },
     // 计划时间
     planDataRange(val) {
-      console.log(val);
       this.form.planCheckTime = val;
     },
     _comfirm(file) {
@@ -448,17 +492,31 @@ export default {
       if (this.nowItem === "add") {
         this.$refs.upload.submit();
       }
+      this.$message({
+        type: "success",
+        message: "成功"
+      });
       this.$emit("cancel");
     },
     // 转发指令
     _delivery() {
       instruct.InstructionCommand(this.transpondForm).then(res => {
-        this.innerTranspond = false;
+        let _message = res.data.message;
+        if (_message == "成功") {
+          this.answer = "success";
+        } else {
+          this.answer = "error";
+        }
+        this.$message({
+          type: this.answer,
+          message: _message
+        });
+        this.$emit("cancel");
       });
     },
     // 图片上传
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -487,8 +545,8 @@ export default {
       );
     },
     handleExceed: function(files, fileList) {
-      console.log(files);
-      console.log(fileList);
+      // console.log(files);
+      // console.log(fileList);
     }
   }
 };
@@ -507,9 +565,25 @@ export default {
   }
 }
 .TimeAndType {
-  height: 0vh;
+  height: 7vh;
   span {
     display: block;
+  }
+}
+.timelineBox {
+  height: 9vh;
+  .el-timeline-item {
+    float: left;
+  }
+}
+.navb {
+  width: 30%;
+  height: 7%;
+  margin-left: 30px;
+}
+.intervalBox {
+  element.style {
+    margin-left: transparent;
   }
 }
 </style>

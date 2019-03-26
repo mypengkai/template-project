@@ -39,9 +39,12 @@
         <el-table-column prop="remark" label="指令内容">
         </el-table-column>
 
+        <el-table-column prop="status1" label="状态">
+        </el-table-column>
+
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="actionItem(scope.row.id)">查看</el-button>
+            <el-button type="primary" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -132,6 +135,11 @@ export default {
       api.getList(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
         this.getList = res.data.data.data;
+        let getList = this.getList;
+        getList.forEach(v => {
+          v.status == 0 && (v.status1 = "未处理");
+          v.status == 1 && (v.status1 = "已处理");
+        });
       });
     },
     instructList() {
@@ -158,7 +166,9 @@ export default {
     },
     // 给开始和结束时间赋值
     changeDataRange(val) {
-       console.log(val);
+      if (!val) {
+        return ([this.sendData.starttime, this.sendData.endtime] = []);
+      }
       [this.sendData.starttime, this.sendData.endtime] = val;
     }
   },

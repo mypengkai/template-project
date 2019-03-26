@@ -38,9 +38,16 @@
         <el-table-column prop="remark" label="指令内容">
         </el-table-column>
 
+        <el-table-column prop="issolve1" label="能否处理">
+        </el-table-column>
+
+        <el-table-column prop="status1" label="状态">
+        </el-table-column>
+
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="actionItem(scope.row.id)">查看</el-button>
+            <el-button type="primary" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
+            <!-- <el-button type="info" icon="el-icon-message" circle @click="innerTranspond = true"></el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -64,6 +71,10 @@
       <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
       </el-tree>
     </el-dialog>
+    <!-- 指令转发弹框 -->
+    <!-- <el-dialog width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
+      <messageBox :nowItem="nowItem" @cancel="innerTranspond=false"></messageBox>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -72,9 +83,11 @@ import checkBox from "./components/checkBox";
 import api from "@/api/instruct.js";
 import Organization from "@/api/Organization.js";
 import project from "@/api/project.js";
+import messageBox from "./components/messageBox";
 export default {
   components: {
-    checkBox
+    checkBox,
+    messageBox
   },
   data() {
     return {
@@ -107,7 +120,8 @@ export default {
       projectItem: "", // 分部分项回填显示
       dialogFormVisible: false, // 查看编辑弹框
       innerVisible: false, // 组织机构弹框
-      projectVisible: false // 工程分项弹框
+      projectVisible: false, // 工程分项弹框
+      innerTranspond: false // 转发指令弹框
     };
   },
   created() {
@@ -131,6 +145,13 @@ export default {
       api.getList(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
         this.getList = res.data.data.data;
+        let getList = this.getList;
+        getList.forEach(v => {
+          v.status == 0 && (v.status1 = "未处理");
+          v.status == 1 && (v.status1 = "已处理");
+          v.issolve == 0 && (v.issolve1 = "能");
+          v.issolve == 1 && (v.issolve1 = "否");
+        });
       });
     },
 
@@ -158,8 +179,10 @@ export default {
     },
     // 给开始和结束时间赋值
     changeDataRange(val) {
+      if (!val) {
+        return ([this.sendData.starttime, this.sendData.endtime] = []);
+      }
       [this.sendData.starttime, this.sendData.endtime] = val;
-      console.log(this.sendData);
     }
   },
   watch: {

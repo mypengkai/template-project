@@ -81,7 +81,8 @@ export default {
       func: treeToArray,
       expandAll: false,
       dataList: [],
-      newTitle: "",
+      newTitle: "", // 弹框标题变量
+      answer: "",  // 删除的响应变量
       nowItem: "",
       dialogFormVisible: false,
       total: 0,
@@ -148,16 +149,22 @@ export default {
         type: "warning"
       }).then(() => {
         this._projectDelete(data);
-        this.$message({
-          type: "success",
-          message: "删除成功!"
-        });
       });
     },
     // 删除请求
     _projectDelete(data) {
       api.projectDelete(data.id).then(res => {
+        let _message = res.data.message;
+        if (_message == "成功") {
+          this.answer = "success";
+        } else {
+          this.answer = "error";
+        }
         this._projectList();
+        this.$message({
+          type: this.answer,
+          message: _message
+        });
       });
     }
   },

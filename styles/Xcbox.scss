@@ -69,6 +69,19 @@
     //     margin-bottom: 10px;
     //   }
   }
+  .textareaBar{
+    .el-input{
+        width: 500px;
+        margin-right:10px;
+        margin-bottom: 10px;
+    }
+    .el-input__inner{
+      line-height: 39px;
+    }
+    .el-textarea {
+        width: 70%;
+    }
+}
   .dialogBox{
     .el-dialog{
         width: 60%;
