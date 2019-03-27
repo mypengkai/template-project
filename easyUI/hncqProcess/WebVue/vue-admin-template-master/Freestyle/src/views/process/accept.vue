@@ -78,9 +78,6 @@
               </el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="工序验收序号" label-width="120px">
-          <el-input v-model="form.xuhao" autocomplete="off"></el-input>
-        </el-form-item> -->
         <el-form-item label="工序验收次数" label-width="120px" prop="cishu">
           <el-input v-model="form.cishu" autocomplete="off"></el-input>
         </el-form-item>
@@ -210,26 +207,42 @@ export default {
       }
     }
     return {
+      // 组织机构树
       options: [],
+      // 新增工序类型下拉框
       options1:[],
+      // 新增工序下拉框
       options2:[],
+      // 查看框初验图片
       imgData:null,
+      // 查看框验收图片
       imgData2:null,
+      // 点击图片详情的图片
       imgData3:null,
+      // 分部分项树
       data:[],
+      // 操作列表table值
       tableData: null,
+      // 查看弹框列表值
       chakanData:[],
-      processName:'',
+      // processName:'',
+      // 验收人table值
       ysrData:[], 
       treeFrom:{
+        // 工程名称
         projectItem:'',
+        // 桩号
         zhuanghao:'',
+        // 代码
         projectCode:'',
+        // 工程类型
         projectType:'',
-        zhuangtai:'',
+        // 上面状态值
         state1:'',
+        // 下面状态值
         state2:''
       },
+      // 图片详情弹框数据
       imgForm:{
         describe:"",
         createTime:"",
@@ -240,9 +253,9 @@ export default {
         state:""
       },
       form: {
-          name: '',
+          // 添加工序次数
           cishu: '',
-          xuhao: '',
+          // 添加工序备注
           beizhu: ''
         },
       // 新增校验
@@ -258,11 +271,17 @@ export default {
       sgysrTime: [{ required: true, validator: validatesgTime, trigger: "blur" }],
       },
       bjFrom:{
+        // 监理验收人
         name:'',
+        // 监理验收人ID
         nameId:'',
+        // 监理验收时间
         time:'',
+        // 施工验收人时间
         names:'',
+        // 施工验收人ID
         namesId:'',
+        // 施工验收时间
         times:'',
         // 工序Id
         processId:''
@@ -283,41 +302,62 @@ export default {
         // 结束时间
         endTime:'',
       },
+      // 组织机构树参数展示
       defaultProps: {
         children: "children",
         label: "projectItem"
       },
+      // 分部分项树参数展示
       defaultProp:{
         children: "children",
         label: "name"
       },
+      // 添加工序弹框
       dialogFormVisible:false,
+      // 编辑指定验收弹框
       bjDialogFormVisible:false,
+      // 验收人弹框
       innerVisible:false,
-      // imginnerVisible:false,
+      // 查看弹框
       dialogTableVisible:false,
+      // 当前组织机构名字
       value: "",
+      // 新增工序类型名
       value1:"",
+      // 新增工序名
       value2:"",
+      // 验收人姓名查询
       ysrVul:"",
+      // 验收人职务查询
       ysrZhiwu:"",
+      // 获取组织机构ID
       valId:"",
+      // 分部分项ID
       treeId:"",
-      fatherId:"",
+      // 工序ID
       gongxuId:"",
+      // 分部分项最子节点ID
       childrenId:"",
+      // 工序类型第一个name
       gongxuMrz:"",
+      // 组织机构ID
       userGroupId:"",
+      // 新增工序类型ID
       processMDictId:"",
-      projectItemId:"",
+      // 新增工序ID
       processDictId:"",
+      // 编辑回填自检人ID
       xgzdjlId:"",
+      // 编辑回填施工人ID
       xgzdsgId:"",
-      ysrName:"",
+      // 单选框选中
       even:null,
+      // 查看弹框自检描述
       zijian:'',
+      // 查看弹框验收描述
       yanshou:'',
       imgId:'',
+      // 默认当前分页
       currentPage4:1
     };
   },
@@ -328,9 +368,7 @@ export default {
     // 初始化合同段input框数据
     fn(){
       request.get('/rest/organizate/depart').then((res)=>{
-        console.log(res)
         this.options=res.data.data;
-        console.log(this.options)
       })
     },
     // 初始化新增工序类型input框数据
@@ -346,18 +384,18 @@ export default {
     // 初始化新增工序input框数据
     fnGong(id){
       request.post('/rest/process/getList',{processTypeId:id}).then((res)=>{
-        // console.log(res)
-        this.options2=res.data.data.data
+        
+        this.options2=res.data.data.data;
+        this.options2.unshift({process:'全部'})
+        console.log(this.options2)
       })
     },
     // 根据input ID获取树形结构
     noDe(data){
       this.value=data.description
-      // console.log(data)
       this.valId=data.id;
-      this.fatherId=data.parentdepartid;
       this.userGroupId=data.id;
-      this.processName='';
+      // this.processName='';
       this.treeFrom.projectItem='';
       request.post('/rest/projectItemInfo/getList',{orgId:this.valId}).then((res)=>{
         console.log(res)
@@ -379,8 +417,6 @@ export default {
             i.planCheckTime=''
           }
           i.state2==0?i.state2="指定工序":i.state2==1?i.state2="已指定验收计划":i.state2==2?i.state2="自检完成":i.state2="验收完成"
-          //  i.state2=="0"?i.state2="指定工序":i.state2="已指定验收计划"
-          // console.log(i)
         })
         this.treeFrom.state1=res.data.data.projects.state1!=null?'已指定验收':'未指定验收';
         this.tableData.reverse()
@@ -410,7 +446,8 @@ export default {
       this.value1=data.processType;
       this.gongxuId=data.id
       request.post('/rest/process/getList',{processTypeId:this.gongxuId}).then((res)=>{
-        this.options2=res.data.data.data
+        this.options2=res.data.data.data;
+        this.options2.unshift({process:'全部'})
       })
     },
     // 监听工序窗口
@@ -424,7 +461,8 @@ export default {
       if (valid) {
           let fromData={
             userGroupId:this.userGroupId,
-            processMDictId:this.processMDictId,processDictId:this.processDictId,
+            processMDictId:this.processMDictId,
+            processDictId:this.processDictId,
             projectItemId:this.treeId,
             remark:this.form.beizhu,
             checkNum:this.form.cishu
@@ -501,11 +539,9 @@ export default {
     },
     // 监听总页数
     handleCurrentChange(val) {
-      // if(this.pa)
       console.log(val)
-     
       this.pageForm.pageNo=val;
-       console.log(this.pageForm.pageNo)
+      console.log(this.pageForm.pageNo)
       this.fnYsr()
     },
     // 监听验收人单选框
@@ -578,6 +614,7 @@ export default {
       this.dialogTableVisible=true;
       request.post('/rest/processCheck/getProcessDetail',{id:row.id}).then(res=>{
         if(res.data.respCode=="0"){
+          console.log(res)
           if(res.data.data==null&&!res.data.data.length) return false
           this.chakanData.push(res.data.data)
           this.chakanData.forEach(i=>{
