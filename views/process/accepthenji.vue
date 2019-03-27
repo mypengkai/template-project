@@ -67,9 +67,11 @@
             </el-table-column>
             <el-table-column prop="processType" label="工序过程">
             </el-table-column>
-            <el-table-column prop="realityCheckTime" label="验收时间">
+            <el-table-column prop="planCheckTime" label="验收时间">
             </el-table-column>
-            <el-table-column prop="realityCheckPerson" label="验收人员">
+            <!-- <el-table-column prop="planCheckTime" label="验收时间1">
+            </el-table-column> -->
+            <el-table-column prop="shijiyanshouren" label="验收人员">
             </el-table-column>
             <el-table-column prop="state" label="状态">
             </el-table-column>
@@ -220,7 +222,7 @@ export default {
             // console.log(formData)
             request.post('/rest/processCheck/searchHenJi',formData).then((res)=>{
                 if(res.data.respCode=='0'){
-                    // console.log(res)
+                    console.log(res)
                     this.total=res.data.data.totalCount;
                     this.tableData=res.data.data.data;
                     this.tableData.forEach(i=>{
