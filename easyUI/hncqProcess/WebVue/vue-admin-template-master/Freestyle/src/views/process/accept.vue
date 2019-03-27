@@ -52,12 +52,12 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2=='已指定工序'">指定验收</el-button>
+              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2=='指定工序'">指定验收</el-button>
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2=='已指定验收计划'">修改指定验收</el-button>
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" style="display: none" v-else></el-button>
-              <el-button @click="handleClick(scope.row)" type="primary" size="small" style="margin-left:33px" v-if="scope.row.state2=='已指定工序'">查看</el-button>
-              <el-button @click="handleClick(scope.row)" type="primary" size="small" v-else>查看</el-button>
-              <el-button type="danger" @click="dlet(scope)" size="small" v-if="scope.row.state2=='已指定工序'">删除</el-button>
+              <!-- <el-button @click="handleClick(scope.row)" type="primary" size="small" style="margin-left:33px" v-if="scope.row.state2=='自检完成'">查看</el-button> -->
+              <el-button @click="handleClick(scope.row)" type="primary" size="small" >查看</el-button>
+              <el-button type="danger" @click="dlet(scope)" size="small" v-if="scope.row.state2=='指定工序'">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -130,12 +130,12 @@
         </div>
       </el-dialog>
       
-      <el-form :model="bjFrom">
-        <el-form-item label="监理验收人" label-width="125px">
+      <el-form :model="bjFrom" :rules="accept" ref='deleAccept'>
+        <el-form-item label="监理验收人" label-width="125px" prop="jlysr">
           <el-input v-model="bjFrom.name" :readonly="true" autocomplete="off" style="width:50%"></el-input>
           &nbsp;&nbsp;&nbsp;<span class="ysr" @click="jlYsr('3')">[选择验收人]</span>
         </el-form-item>
-        <el-form-item label="监理验收时间" label-width="125px">
+        <el-form-item label="监理验收时间" label-width="125px" prop="jlysrTime">
           <el-date-picker
           :editable="false"
             v-model="bjFrom.time"
@@ -144,11 +144,11 @@
             style="width:253px">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="施工单位验收人" label-width="125px">
+        <el-form-item label="施工验收人" label-width="125px" prop="sgysr">
           <el-input v-model="bjFrom.names" :readonly="true" autocomplete="off" style="width:50%"></el-input>
           &nbsp;&nbsp;&nbsp;<span class="ysr" @click="jlYsr('4')">[选择验收人]</span>
         </el-form-item>
-        <el-form-item label="施工单位验收时间" label-width="125px">
+        <el-form-item label="施工验收时间" label-width="125px" prop="sgysrTime">
          <el-date-picker
             :editable="false"
             v-model="bjFrom.times" 
@@ -180,6 +180,35 @@ export default {
     imgList
   },
   data() {  
+    const validatejlysr = (rule, value, callback) => {
+      if (this.bjFrom.name=='') {
+        console.log(this.bjFrom.name)
+        callback(new Error('请选择验收人'))
+      } else {
+         callback();
+      }
+    }
+    const validatejlTime= (rule, value, callback) => {
+      if (this.bjFrom.time=='') {
+        callback(new Error('请选择时间'))
+      } else {
+         callback();
+      }
+    }
+    const validatesgysr = (rule, value, callback) => {
+      if (this.bjFrom.names=='') {
+        callback(new Error('请选择验收人'))
+      } else {
+         callback();
+      }
+    }
+    const validatesgTime = (rule, value, callback) => {
+      if (this.bjFrom.times=='') {
+        callback(new Error('请选择时间'))
+      } else {
+         callback();
+      }
+    }
     return {
       options: [],
       options1:[],
@@ -216,9 +245,17 @@ export default {
           xuhao: '',
           beizhu: ''
         },
+      // 新增校验
       acceptRule: {
       cishu: [{ required: true, message: "请输入工序次数", trigger: "blur" }],
       beizhu: [{ required: true, message: "请输入内容", trigger: "blur" }]
+      },
+      // 指定验收校验
+      accept: {
+      jlysr: [{ required: true, trigger: "change",validator: validatejlysr }],
+      jlysrTime: [{ required: true, validator: validatejlTime, trigger: "blur" }],
+      sgysr: [{ required: true, validator: validatesgysr, trigger: "change" }],
+      sgysrTime: [{ required: true, validator: validatesgTime, trigger: "blur" }],
       },
       bjFrom:{
         name:'',
@@ -281,10 +318,7 @@ export default {
       zijian:'',
       yanshou:'',
       imgId:'',
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4
+      currentPage4:1
     };
   },
   mounted(){
@@ -296,7 +330,7 @@ export default {
       request.get('/rest/organizate/depart').then((res)=>{
         console.log(res)
         this.options=res.data.data;
-        // console.log(this.options)
+        console.log(this.options)
       })
     },
     // 初始化新增工序类型input框数据
@@ -334,7 +368,6 @@ export default {
     ztrrFrom(){
        request.post('/rest/processCheck/getProject_Process',{projectItemId:this.treeId}).then((res)=>{
         let type=res.data.data.projects.projectType;
-        console.log(res)
         this.treeFrom.projectItem=res.data.data.projects.projectItem;
         this.treeFrom.projectType=type=="1"?"单位工程":type=="2"?"子单位工程":type=="3"?"分部工程":type=="4"?"子分部工程":type=="5"?"分部项程":type=="6"?"子分项工程":'';
         this.treeFrom.projectCode=res.data.data.projects.projectCode;
@@ -345,7 +378,9 @@ export default {
           if(i.planCheckTime=="null"){
             i.planCheckTime=''
           }
-           i.state2=="0"?i.state2="已指定工序":i.state2="已指定验收计划"
+          i.state2==0?i.state2="指定工序":i.state2==1?i.state2="已指定验收计划":i.state2==2?i.state2="自检完成":i.state2="验收完成"
+          //  i.state2=="0"?i.state2="指定工序":i.state2="已指定验收计划"
+          // console.log(i)
         })
         this.treeFrom.state1=res.data.data.projects.state1!=null?'已指定验收':'未指定验收';
         this.tableData.reverse()
@@ -387,7 +422,13 @@ export default {
     addXzgx(formName){
       this.$refs[formName].validate(valid => {
       if (valid) {
-          let fromData={userGroupId:this.userGroupId,processMDictId:this.processMDictId,processDictId:this.processDictId,projectItemId:this.treeId,remark:this.form.beizhu,checkNum:this.form.cishu}
+          let fromData={
+            userGroupId:this.userGroupId,
+            processMDictId:this.processMDictId,processDictId:this.processDictId,
+            projectItemId:this.treeId,
+            remark:this.form.beizhu,
+            checkNum:this.form.cishu
+          }
           console.log(fromData)
           request.post('/rest/processCheck/addProcess',fromData).then((res)=>{
             if(res.data.respCode==0){
@@ -409,7 +450,6 @@ export default {
     },
     // 编辑指定验收弹框
     tjgx(data){
-      console.log(data)
       this.bjFrom.name='';
       this.bjFrom.names='';
       this.bjFrom.time='';
@@ -419,13 +459,13 @@ export default {
       this.bjFrom.processId=data.row.id;
       if(data.row.state2=='已指定验收计划'){
         request.post('/rest/processCheck/searchProcessCheckPersons',{processId:this.bjFrom.processId}).then((res)=>{
+          // console.log(res)
           this.bjFrom.name=res.data.data.planSelfCheckPerson;
           this.bjFrom.time=res.data.data.planSelfCheckTime;
           this.bjFrom.names=res.data.data.planCheckPerson;
           this.bjFrom.times=res.data.data.planCheckTime;
-          this.xgzdjlId=res.data.data.planCheckPersonId;
           this.xgzdsgId=res.data.data.planSelfCheckPersonId;
-          console.log(res)
+          this.xgzdjlId=res.data.data.planCheckPersonId;
         }) 
       }
     },
@@ -441,6 +481,8 @@ export default {
     },
     // 验收人弹框数据
     jlYsr(data){
+      console.log(this.pageForm.pageNo)
+      this.pageForm.pageNo=1;
       this.ysrVul='';
       this.ysrZhiwu='';
       this.pageForm.Mark=data;
@@ -448,6 +490,8 @@ export default {
     },
     // 验收人查询接口
     chaxun(){
+      console.log(this.pageForm.pageNo)
+      this.pageForm.pageNo=1;
       this.fnYsr()
     },
     // 监听总条数
@@ -457,7 +501,11 @@ export default {
     },
     // 监听总页数
     handleCurrentChange(val) {
+      // if(this.pa)
+      console.log(val)
+     
       this.pageForm.pageNo=val;
+       console.log(this.pageForm.pageNo)
       this.fnYsr()
     },
     // 监听验收人单选框
@@ -477,53 +525,34 @@ export default {
       let timeDate = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds(); 
       let times=new Date(this.bjFrom.times)
       let timesDate = times.getFullYear() + '-' + (times.getMonth() + 1) + '-' + times.getDate() + ' ' + times.getHours() + ':' + times.getMinutes() + ':' + times.getSeconds(); 
-      // 已测试代码（OK）
-      // if(this.treeFrom.state2=='已指定工序'){
-      //     let bjysForm={processId:this.bjFrom.processId,planSelfCheckTime:timeDate,planSelfCheckPerson:this.bjFrom.nameId,planCheckTime:timesDate,planCheckPerson:this.bjFrom.namesId}
-      //     console.log(bjysForm)
-      //     request.post('/rest/processCheck/appointProcessCheckPersons',bjysForm).then((res)=>{
-      //     if(res.data.respCode==0){
-      //         this.$message({
-      //         message: '恭喜你，指定验收成功',
-      //         type: 'success'
-      //       });
-      //       console.log(bjysForm)
-      //       this.ztrrFrom()
-      //       this.bjDialogFormVisible=false;
-      //     }
-      //   })
-      // }else{
-      //   let xgbjysForm={processId:this.bjFrom.processId,planSelfCheckTime:timeDate,planSelfCheckPerson:this.bjFrom.nameId!=''?this.bjFrom.nameId:this.xgzdjlId,planCheckTime:timesDate,planCheckPerson:this.bjFrom.namesId!=''?this.bjFrom.namesId:this.xgzdsgId}
-      //   request.post('/rest/processCheck/appointProcessCheckPersons',xgbjysForm).then((res)=>{
-      //     if(res.data.respCode==0){
-      //         this.$message({
-      //         message: '恭喜你，指定验收成功',
-      //         type: 'success'
-      //       });
-      //       console.log(xgbjysForm)
-      //       this.bjDialogFormVisible=false;
-      //     }
-      //   })
-      // }
-          // 未测试代码
-           let bjysForm={
-            processId:this.bjFrom.processId,
-            planSelfCheckTime:timeDate,
-            planSelfCheckPerson:this.treeFrom.state2=='已指定工序'?this.bjFrom.nameId:this.bjFrom.nameId!=''?this.bjFrom.nameId:this.xgzdjlId,
-            planCheckTime:timesDate,
-            planCheckPerson:this.treeFrom.state2=='已指定工序'?this.bjFrom.namesId:this.bjFrom.namesId!=''?this.bjFrom.nameId:this.xgzdsgId
-           }
-           console.log(bjysForm)
-          request.post('/rest/processCheck/appointProcessCheckPersons',bjysForm).then((res)=>{
-          if(res.data.respCode==0){
-              this.$message({
-              message: this.treeFrom.state2=='已指定工序'?'恭喜你，指定验收成功':'恭喜你，修改指定验收成功',
-              type: 'success'
-            });
-            if(this.treeFrom.state2=='已指定验收计划') return this.ztrrFrom()
-            this.bjDialogFormVisible=false;
-          }
-        })
+      let bjysForm={
+      processId:this.bjFrom.processId,
+      planSelfCheckTime:timeDate,
+      planSelfCheckPerson:this.treeFrom.state2=='指定工序'?this.bjFrom.nameId:this.bjFrom.nameId!=''?this.bjFrom.nameId:this.xgzdsgId,
+      planCheckTime:timesDate,            
+      planCheckPerson:this.treeFrom.state2=='指定工序'?this.bjFrom.namesId:this.bjFrom.namesId!=''?this.bjFrom.namesId:this.xgzdjlId
+      }    
+      this.$refs.deleAccept.validate(valid => {
+        if (valid) {
+            request.post('/rest/processCheck/appointProcessCheckPersons',bjysForm).then((res)=>{
+              if(res.data.respCode==0){
+                  this.$message({
+                  message: this.treeFrom.state2=='指定工序'?'恭喜你，指定验收成功':'恭喜你，修改指定验收成功',
+                  type: 'success'
+                });
+                if(this.treeFrom.state2=='指定工序'){
+                  this.ztrrFrom() ;
+                  this.bjDialogFormVisible=false;
+                  return false;
+                }
+                this.bjDialogFormVisible=false;
+              }
+            })
+          }else {
+            console.log("error submit!!");
+            return false;
+        }
+      })
     },
     // 删除接口
     dlet(data){
@@ -550,36 +579,36 @@ export default {
       request.post('/rest/processCheck/getProcessDetail',{id:row.id}).then(res=>{
         if(res.data.respCode=="0"){
           if(res.data.data==null&&!res.data.data.length) return false
-          let type=res.data.data
           this.chakanData.push(res.data.data)
           this.chakanData.forEach(i=>{
-              i.projectType=type=="1"?"单位工程":type=="2"?"子单位工程":type=="3"?"分部工程":type=="4"?"子分部工程":type=="5"?"分部项程":type=="6"?"子分项工程":'';
-              i.state1=type.state1==1?'已指定验收':'未指定验收';
-              i.state2=="0"?i.state2="已指定工序":i.state2==1?i.state2="已指定验收计划":i.state2=="已完成验收计划"
+              i.projectType=i.projectType=="1"?"单位工程":i.projectType=="2"?"子单位工程":i.projectType=="3"?"分部工程":i.projectType=="4"?"子分部工程":i.projectType=="5"?"分部项程":i.projectType=="6"?"子分项工程":'';
+              i.state1=i.state1==1?'已指定验收':'未指定验收';
+              i.state2==0?i.state2="指定工序":i.state2==1?i.state2="已指定验收计划":i.state2==2?i.state2="自检完成":i.state2="验收完成"
             })
+            console.log(this.chakanData)
           this.zijian=this.chakanData.selfCheckDescribe;
           this.yanshou=this.chakanData.checkDescribe;
-          this.imgData=res.data.data.pictures.selfFilePath;
-          this.imgData2=res.data.data.pictures.filePath;
+          this.imgData=res.data.data.selfFilePath;
+          this.imgData2=res.data.data.filePath;
           this.imgId=this.chakanData[0].processLogId;
         }
       })
     },
     // 点击图片展示图片详情接口
     imgLeft(data,imgTan){
-      imgTan;
-      request.post('/rest/processCheck/getPictureDetail',{processLogId:this.imgId,Mark:data}).then((res)=>{
-        console.log(res)
-        this.imgForm.describe=res.data.data[0].describe;
-        this.imgForm.createTime=res.data.data[0].createTime;
-        this.imgForm.lat=res.data.data[0].lat;
-        this.imgForm.lgt=res.data.data[0].lgt;
-        this.imgForm.photoDescribe=res.data.data[0].photoDescribe;
-        this.imgForm.photoLocation=res.data.data[0].photoLocation;
-        this.imgForm.state=res.data.data[1].state=='0'?'自检':'验收';
-        res.data.data.shift();
-        this.imgData3=res.data.data;
-      })
+      // imgTan;
+      // request.post('/rest/processCheck/getPictureDetail',{processLogId:this.imgId,Mark:data}).then((res)=>{
+      //   console.log(res)
+      //   this.imgForm.describe=res.data.data[0].describe;
+      //   this.imgForm.createTime=res.data.data[0].createTime;
+      //   this.imgForm.lat=res.data.data[0].lat;
+      //   this.imgForm.lgt=res.data.data[0].lgt;
+      //   this.imgForm.photoDescribe=res.data.data[0].photoDescribe;
+      //   this.imgForm.photoLocation=res.data.data[0].photoLocation;
+      //   this.imgForm.state=res.data.data[1].state=='0'?'自检':'验收';
+      //   res.data.data.shift();
+      //   this.imgData3=res.data.data;
+      // })
     }
   }
 };
