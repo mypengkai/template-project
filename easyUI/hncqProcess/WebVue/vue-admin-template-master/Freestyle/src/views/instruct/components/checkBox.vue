@@ -9,7 +9,7 @@
           </el-input>
         </el-form-item>
 
-        <el-form-item style="width:17vw" label="工程分部分项" v-if="nowItem =='add'" prop="projectItem" label-width="120px">
+        <el-form-item style="width:17vw" label="分部分项" v-if="nowItem =='add'" prop="projectItem" label-width="120px">
           <el-input v-model="projectItem" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
@@ -50,73 +50,65 @@
           <el-dialog :visible.sync="dialogVisible">
             <img width="50%" :src="dialogImageUrl" alt="图片">
           </el-dialog>
-
         </el-form-item>
 
         <!-- 查看 -->
-        <el-form-item style="width:17vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
-          <el-input v-model="form.projectItem"></el-input>
-        </el-form-item>
+        <div :class="{reverseBox:nowItem!=='add'}">
+          <el-form-item style="width:17vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
+            <el-input v-model="form.projectItem"></el-input>
+          </el-form-item>
 
-        <el-form-item style="width:17vw" label="发起人" v-if="nowItem !=='add'" label-width="120px">
-          <el-input v-model="form.realname"></el-input>
-        </el-form-item>
+          <el-form-item style="width:17vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
+            <el-input v-model="form.createTime"></el-input>
+          </el-form-item>
 
-        <el-form-item style="width:17vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
-          <el-input v-model="form.createTime"></el-input>
-        </el-form-item>
+          <el-form-item label="指令内容" v-if="nowItem !=='add'" label-width="120px">
+            <div class="">
 
-        <!-- <el-form-item style="width:17vw" label="完成时间" v-if="nowItem !=='add'">
-                    <el-input v-model="form.planTime"></el-input>
-                </el-form-item> -->
+              <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}">
+                <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(index, 'icon')" :type="convertIcon(index, 'type')" :timestamp="activity.createTime">
+                  {{activity.name}}
+                </el-timeline-item>
+              </el-timeline>
 
-        <el-form-item label="指令内容" v-if="nowItem !=='add'" label-width="120px">
-          <div class="">
-            <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}">
-              <!-- <el-timeline :reverse="reverse" class="timelineBox"> -->
-              <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(index, 'icon')" :type="convertIcon(index, 'type')" :timestamp="activity.createTime">
-                {{activity.name}}
-              </el-timeline-item>
-            </el-timeline>
+              <div class="topBar">
+                <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
+                <el-input v-model="states"></el-input>
+              </div>
 
-            <div class="topBar">
-              <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
-              <el-input v-model="states"></el-input>
+              <div class="textareaBar">
+                <span>相关描述:</span>
+                <el-input type="textarea" autosize v-model="remark"></el-input>
+              </div>
+            </div>
+          </el-form-item>
+
+          <div v-if="nowItem !=='add'">
+            <!-- 导航切换 -->
+            <div class="navb" label-width="120px">
+              <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
+                <el-menu-item index="1" @click="nowType=0">图片详情</el-menu-item>
+                <el-menu-item index="2" @click="nowType=1">拍照地点</el-menu-item>
+              </el-menu>
             </div>
 
-            <div class="textareaBar">
-              <span>相关描述:</span>
-              <el-input type="textarea" autosize v-model="remark"></el-input>
+            <!-- 轮播信息 -->
+            <div style="height:25vh" v-if="nowType==0">
+              <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
+                <el-carousel :interval="3000" arrow="always" height="25vh">
+                  <el-carousel-item v-for="(item,index) in picture" :key="index">
+                    <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                  </el-carousel-item>
+                </el-carousel>
+              </el-form-item>
             </div>
-          </div>
-        </el-form-item>
+            <!-- 地图 -->
+            <div style="height:25vh" v-if="nowType==1">
+              <instructMap :nowItem="nowItem"></instructMap>
+            </div>
 
-        <div v-if="nowItem !=='add'">
-          <!-- 导航切换 -->
-          <div class="navb" label-width="120px">
-            <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
-              <el-menu-item index="1" @click="nowType=0">信息中心</el-menu-item>
-              <el-menu-item index="2" @click="nowType=1">项目地图</el-menu-item>
-            </el-menu>
           </div>
-
-          <!-- 轮播信息 -->
-          <div style="height:30vh" v-if="nowType==0">
-            <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-              <el-carousel :interval="3000" arrow="always" height="22vh">
-                <el-carousel-item v-for="(item,index) in picture" :key="index">
-                  <img :src="picture.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
-                </el-carousel-item>
-              </el-carousel>
-            </el-form-item>
-          </div>
-          <!-- 地图 -->
-          <div style="height:30vh" v-if="nowType==1">
-            <instructMap :nowItem="nowItem"></instructMap>
-          </div>
-
         </div>
-
       </div>
     </el-form>
     <!-- <div class="tar" v-if="$route.name=='instructReceive'"> -->
@@ -206,7 +198,7 @@
           </el-form-item>
 
           <el-form-item label="照片">
-            <el-carousel :interval="3000" arrow="always" height="30vh">
+            <el-carousel :interval="3000" arrow="always" height="20vh">
               <el-carousel-item v-for="(item,index) in imgData" :key="index">
                 <img :src="item.filePath" alt="">
               </el-carousel-item>
@@ -227,6 +219,7 @@ import Organization from "@/api/Organization.js";
 import processInfo from "@/api/process.js";
 import instructMap from "./instructMap";
 export default {
+  inject: ["reload"],
   components: {
     instructMap
   },
@@ -383,7 +376,7 @@ export default {
       if (this.nowItem == "add") return;
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
-      console.log(ObCopyData.data)
+      // console.log(ObCopyData.data);
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
@@ -445,6 +438,7 @@ export default {
       this.acceptUser = false;
     },
     convertIcon(index, type) {
+      
       if (index === 0) {
         if (type === "icon") {
           return this.activitiesIcon[0].icon;
@@ -492,11 +486,12 @@ export default {
       if (this.nowItem === "add") {
         this.$refs.upload.submit();
       }
-      this.$message({
-        type: "success",
-        message: "成功"
-      });
+      // this.$message({
+      //   type: "success",
+      //   message: "成功"
+      // });
       this.$emit("cancel");
+      this.reload();
     },
     // 转发指令
     _delivery() {
@@ -512,6 +507,7 @@ export default {
           message: _message
         });
         this.$emit("cancel");
+        this.reload();
       });
     },
     // 图片上传
@@ -585,5 +581,9 @@ export default {
   element.style {
     margin-left: transparent;
   }
+}
+.reverseBox {
+  height: 75vh;
+  overflow: scroll;
 }
 </style>

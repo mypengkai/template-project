@@ -2,15 +2,25 @@
   <div class="p20">
     <!-- 选项栏 -->
     <div class="topBar">
-      <span>组织机构:</span>
-      <el-input v-model="name" clearable placeholder="请选择单位">
-        <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
-      </el-input>
+      <el-row class="rowBox">
+        <el-col>
+          <el-form inline>
+            <el-form-item label="所属单位">
+              <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
 
-      <span>工程选择:</span>
-      <el-input v-model="projectItem" clearable placeholder="请选择分部分项">
-        <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
-      </el-input>
+      <el-row class="rowBox">
+        <el-col>
+          <el-form inline>
+            <el-form-item label="工程选择">
+              <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
 
       <span>时间:</span>
       <el-date-picker v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -23,7 +33,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table :data="getList" style="width: 100%" height="68vh">
+      <el-table :data="getList" style="width: 100%" height="66vh">
         <el-table-column prop="project" label="相关工程">
         </el-table-column>
 
@@ -36,7 +46,10 @@
         <el-table-column prop="planTime" label="计划时间">
         </el-table-column>
 
-        <el-table-column prop="remark" label="指令内容">
+        <el-table-column prop="commandType1" label="指令类型">
+        </el-table-column>
+
+        <el-table-column prop="issolve1" label="能否处理">
         </el-table-column>
 
         <el-table-column prop="status1" label="状态">
@@ -75,13 +88,17 @@
 import checkBox from "./components/checkBox";
 import api from "@/api/instruct.js";
 import Organization from "@/api/Organization.js";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 import project from "@/api/project.js";
 export default {
   components: {
+    SelectTree,
     checkBox
   },
   data() {
     return {
+      value: "",
+      value1: "",
       getList: [], // 当前列表
       // 组织机构树显示
       defaultProps: {
@@ -102,9 +119,11 @@ export default {
         starttime: "", // 开始时间
         endtime: "", // 结束时间
         pageNo: 1, // 当前页
+        orgId: "",
         pageSize: 8, // 每页条数
         Mark: 1 //  标记：1：发送、2：接收
       },
+
       nowItem: "",
       timeRange: "", // 时间日期范围
       name: "", // 组织机构回填显示
@@ -139,6 +158,11 @@ export default {
         getList.forEach(v => {
           v.status == 0 && (v.status1 = "未处理");
           v.status == 1 && (v.status1 = "已处理");
+          v.issolve == 0 && (v.issolve1 = "是");
+          v.issolve == 1 && (v.issolve1 = "否");
+          v.commandType == 1 && (v.commandType1 = "安全指令");
+          v.commandType == 2 && (v.commandType1 = "口头指令");
+          v.commandType == 3 && (v.commandType1 = "纸质指令");
         });
       });
     },
@@ -146,24 +170,52 @@ export default {
       // 组织机构树
       Organization.organizateTree().then(res => {
         this.orgTree = res.data.data;
+        this.sendData.departId = this.orgTree[0].id;
+        //默认请求
+        api.getList(this.sendData).then(res => {
+          this.total = res.data.data.totalCount;
+          this.getList = res.data.data.data;
+          let getList = this.getList;
+          getList.forEach(v => {
+            v.status == 0 && (v.status1 = "未处理");
+            v.status == 1 && (v.status1 = "已处理");
+            v.issolve == 0 && (v.issolve1 = "是");
+            v.issolve == 1 && (v.issolve1 = "否");
+            v.commandType == 1 && (v.commandType1 = "安全指令");
+            v.commandType == 2 && (v.commandType1 = "口头指令");
+            v.commandType == 3 && (v.commandType1 = "纸质指令");
+          });
+        });
       });
-      // 分部分项树
-      project.projectList().then(res => {
+    },
+    // 组织机构下拉树
+    handleCheckChange(data) {
+      this.projectList = [];
+      this.sendData.orgId = data.id;
+      this.sendData.departId = data.id;
+      project.projectList(this.sendData).then(res => {
+        if (res.data.data == null) {
+          res.data.data = [];
+        }
         this.projectList = res.data.data;
       });
     },
-    // 组织机构选择后的数据
-    handleCheckChange(data, checked, indeterminate) {
-      this.sendData.departId = data.id;
-      this.name = data.name;
-      this.innerVisible = false;
-    },
-    // 分部分项选择后的数据
-    projectChange(data, checked, indeterminate) {
+    // 工程分部分项树
+    projectChange(data) {
       this.sendData.projectItemId = data.id;
-      this.projectItem = data.projectItem;
-      this.projectVisible = false;
     },
+    // 组织机构选择后的数据
+    // handleCheckChange(data, checked, indeterminate) {
+    //   this.sendData.departId = data.id;
+    //   this.name = data.name;
+    //   this.innerVisible = false;
+    // },
+    // 分部分项选择后的数据
+    // projectChange(data, checked, indeterminate) {
+    //   this.sendData.projectItemId = data.id;
+    //   this.projectItem = data.projectItem;
+    //   this.projectVisible = false;
+    // },
     // 给开始和结束时间赋值
     changeDataRange(val) {
       if (!val) {
@@ -189,5 +241,8 @@ export default {
 }
 .dialogBox {
   margin-top: -7vh;
+}
+.rowBox {
+  float: left;
 }
 </style>

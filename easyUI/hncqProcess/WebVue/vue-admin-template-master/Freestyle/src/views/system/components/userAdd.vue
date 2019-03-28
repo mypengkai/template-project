@@ -15,7 +15,7 @@
         </el-form-item>
 
         <el-form-item v-if="nowItem=='add'" label="密码" prop="password">
-          <el-input type="password" v-model="user.password"></el-input>
+          <el-input show-password v-model="user.password"></el-input>
         </el-form-item>
 
         <el-form-item label="组织机构">
@@ -40,20 +40,7 @@
         </el-form-item>
 
         <el-form-item label="上传头像" v-if="nowItem=='add'">
-          <el-upload
-            class="avatar-uploader"
-            ref="upload"
-            :action="uploadUrl"
-            :multiple="false"
-            name="files"
-            :headers="headers"
-            list-type="picture-card"
-            :limit="1"
-            :auto-upload="false"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :on-exceed="handleExceed"
-            :data="user">
+          <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" :multiple="false" name="files" :headers="headers" list-type="picture-card" :limit="1" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="user">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -87,10 +74,11 @@ import user from "@/api/user.js";
 import api from "@/api/role.js";
 import Organization from "@/api/Organization.js";
 export default {
+  inject: ["reload"],
   props: ["nowItem"],
   data() {
     return {
-      uploadUrl: process.env.BASE_API+"/rest/sysuser/add",
+      uploadUrl: process.env.BASE_API + "/rest/sysuser/add",
       orgTree: [],
       defaultProps: {
         children: "children",
@@ -134,7 +122,7 @@ export default {
       roleList: [],
       orgTree: [],
       dialogVisible: false,
-      dialogImageUrl: "",
+      dialogImageUrl: ""
     };
   },
   created() {
@@ -150,7 +138,6 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //复制
-      // console.log(this.user)
       this.name = this.user.name;
     },
     fileChange(file) {
@@ -162,6 +149,7 @@ export default {
         this.$refs.upload.submit();
       }
       this.$emit("cancel");
+      this.reload();
       // // 新增
       // this.nowItem == "add" &&
       //   user.sysuserAdd(this.form).then(res => {
@@ -174,14 +162,14 @@ export default {
       //   });
     },
     //查看
-    _execute(){
-         // 查看单个 修改
+    _execute() {
+      // 查看单个 修改
       this.nowItem != "add" &&
         user.sysusermodify(this.user).then(res => {
           this.$emit("execute");
         });
     },
-   // 传图片
+    // 传图片
     handleRemove(file, fileList) {
       // console.log(file, fileList);
     },
@@ -189,7 +177,7 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    handleExceed:function(files, fileList){
+    handleExceed: function(files, fileList) {
       // console.log(files)
       // console.log(fileList)
     },

@@ -1,60 +1,60 @@
 <template>
   <div>
     <!-- 照片详情信息查看 -->
-      <el-form :model="form" label-width="100px">
-        <div>
-          <el-form-item label="工程分部分项">
-            <el-input v-model="form.projectItem"></el-input>
-          </el-form-item>
+    <el-form :model="form" label-width="100px">
+      <div>
+        <el-form-item label="工程分部分项">
+          <el-input v-model="form.projectItem"></el-input>
+        </el-form-item>
 
-           <el-form-item label="巡视人姓名">
-            <el-input v-model="form.createName"></el-input>
-          </el-form-item>
+        <el-form-item label="巡视人姓名">
+          <el-input v-model="form.createName"></el-input>
+        </el-form-item>
 
-          <el-form-item label="时间">
-            <el-input v-model="form.createTime"></el-input>
-          </el-form-item>
+        <el-form-item label="时间">
+          <el-input v-model="form.createTime"></el-input>
+        </el-form-item>
 
-          <el-form-item label="桩号">
-            <el-input v-model="form.zhuanghao"></el-input>
-          </el-form-item>
+        <el-form-item label="桩号">
+          <el-input v-model="form.zhuanghao"></el-input>
+        </el-form-item>
 
-          <el-form-item label="拍照地点">
-            <el-input v-model="form.photoLocation"></el-input>
-          </el-form-item>
+        <el-form-item label="拍照地点">
+          <el-input v-model="form.photoLocation"></el-input>
+        </el-form-item>
 
-          <el-form-item label="描述">
-            <el-input v-model="form.describe"></el-input>
-          </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="form.describe"></el-input>
+        </el-form-item>
 
-          <el-form-item label="照片表述">
-            <el-input v-model="form.photoDescribe"></el-input>
-          </el-form-item>
-        </div>
+        <el-form-item label="照片表述">
+          <el-input v-model="form.photoDescribe"></el-input>
+        </el-form-item>
+      </div>
 
-        <!-- 导航切换 -->
-        <div class="navb">
-          <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
-            <el-menu-item index="1" @click="nowType=0">信息中心</el-menu-item>
-            <el-menu-item index="2" @click="nowType=1">项目地图</el-menu-item>
-          </el-menu>
-        </div>
+      <!-- 导航切换 -->
+      <div class="navb">
+        <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
+          <el-menu-item index="1" @click="nowType=0">信息中心</el-menu-item>
+          <el-menu-item index="2" @click="nowType=1">项目地图</el-menu-item>
+        </el-menu>
+      </div>
 
-        <!-- 轮播信息 -->
-        <div style="height:30vh" v-if="nowType==0">
-          <el-form-item label="">
-            <el-carousel :interval="3000" arrow="always" height="30vh">
-              <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
-                <img :src="item.filePath" alt="">
-              </el-carousel-item>
-            </el-carousel>
-          </el-form-item>
-        </div>
-        <!-- 地图 -->
-        <div style="height:30vh" v-if="nowType==1">
-          <Map></Map>
-        </div>
-      </el-form>
+      <!-- 轮播信息 -->
+      <div style="height:30vh" v-if="nowType==0">
+        <el-form-item label="">
+          <el-carousel :interval="3000" arrow="always" height="30vh">
+            <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
+              <img :src="item.picture" alt="">
+            </el-carousel-item>
+          </el-carousel>
+        </el-form-item>
+      </div>
+      <!-- 地图 -->
+      <div style="height:30vh" v-if="nowType==1">
+        <Map :nowItem="nowItem"></Map>
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -96,9 +96,10 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); // 复制
-      this.filePathImg = this.form.picture; // 照片详情数组
+      this.filePathImg = this.form.pictureOfCommand; // 照片详情数组
+      console.log(this.form.pictureOfCommand);
     },
-  
+
     // 切换
     handleSelect(key, keyPath) {},
     _comfirm() {
