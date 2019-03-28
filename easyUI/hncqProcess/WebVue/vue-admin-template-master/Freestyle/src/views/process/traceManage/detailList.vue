@@ -93,41 +93,35 @@
     </div>
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleCommied" width="80%">
-      <checkBox :commandList="commandList"></checkBox>
+    <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%">
+      <!-- <commandCheck :commandList="commandList"></commandCheck> -->
+      <checkBox :commandList="commandList"></checkBox> 
     </el-dialog>
     <!-- 巡视查看 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisiblePolling" width="80%">
-      <CheckPicture :pollingList="pollingList"></CheckPicture>
+    <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%">
+      <pollingCheck :pollingList="pollingList" ></pollingCheck>
     </el-dialog>
-    <!-- 验收查看 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleRealcheck" width="60%">
-      <realcheck :realList="realList"></realcheck>
+    <!-- 自检查看   验收查看-->
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%">
+      <selfcheck :selfcheckList="selfcheckList" :realList="realList"></selfcheck>
     </el-dialog>
-    <!-- 自检查看 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="60%">
-      <selfcheck :selfcheckList="selfcheckList"></selfcheck>
-    </el-dialog>
-      <!-- 日志查看 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisiblelogcheck" width="60%">
+    <!-- 日志查看 -->
+    <el-dialog title="日志详情" :visible.sync="dialogTableVisiblelogcheck" width="60%">
       <logCheck :logList="logList"></logCheck>
     </el-dialog>
-
-
   </div>
-    
-
-
 </template>
 
 <script>
 import request from "@/utils/request";
-// import detailShow from "../components/detailShow";
-import checkBox from "@/views/instruct/components/checkBox";
-import CheckPicture from "@/views/walkaroundInspection/components/CheckPicture";
-import realcheck from "@/views/process/components/realcheck";
+// import realcheck from "@/views/process/components/realcheck";
 import selfcheck from "@/views/process/components/selfcheck";
 import logCheck from "@/views/process/components/logCheck";
+// import commandCheck from "@/views/process/components/commandCheck";
+import pollingCheck from "@/views/process/components/pollingCheck";
+import checkBox from '@/views/instruct/components/checkBox'
+import checkPicture from "@/views/walkaroundInspection/components/CheckPicture"
+
 export default {
   name: "DetailList",
   props: {
@@ -135,126 +129,106 @@ export default {
       type: Number,
       default: 1
     },
-    conentOptions: {},
-    userOptions: {}
+    conentOptions: {},              //工程数据
+    userOptions: {}                 //人员数据
   },
   components: {
-    // detailShow,
-    checkBox,
-    CheckPicture,
-    realcheck,
+    // commandCheck,
     selfcheck,
-    logCheck
+    logCheck,
+    pollingCheck,
+    checkBox,
+    checkPicture
   },
   data() {
     return {
-      dialogTableVisible: false,
-      dialogTableVisibleCommied: false,
-      dialogTableVisiblePolling: false,
-      dialogTableVisibleRealcheck: false,
-      dialogTableVisibleSelfcheck: false,
-      dialogTableVisiblelogcheck:false,
+      dialogTableVisibleCommied: false, //指令
+      dialogTableVisiblePolling: false, //巡视
+      dialogTableVisibleSelfcheck: false, // 自检
+      dialogTableVisiblelogcheck: false, //日志
       realList: [], //验收
-      commendList: {},
-      pollingList: [],    //巡视
+      pollingList: [], //巡视
       selfcheckList: [], // 自检
-      commandList:[] ,        // 指令
-      logList:[]             //日志
+      commandList: [], // 指令
+      logList: [] ,//日志
+     
     };
   },
+ 
   created() {},
   computed: {
     title() {
       return this.traceType === 1 ? "工程痕迹管理" : "人员痕迹管理";
     }
   },
-  watch: {
-    traceType() {
-      console.log(traceType, "traceType");
-    }
-  },
 
   methods: {
     //查看图片详细
     pictureLook(item) {
-      // console.log(item, "item");
       //指令
       if (item.type == "command") {
         this.dialogTableVisibleCommied = true;
-         request
-          .post("/rest/processCheck/getPictureDetail", {
-            processLogId: item.id,
+        request
+          .post("/rest/mark/getPictureDetail", {
+            processLogId: item.id
           })
           .then(res => {
             this.commandList = res.data.data;
-            console.log(this.commandList,'this.commandList')
+            
           });
-        
-
       }
-
-      //日志查看(跳转到日志页面)
-      // item.type == "log" &&
-      //   this.$router.push({
-      //     name: "Trees",
-      //     query: { logId: item.id, time: item.createTime, name: item.realname }
-      //   });
-      if(item.type == "log"){
-          this.dialogTableVisiblelogcheck = true
-          request
-          .post("/rest/processCheck/getPictureDetail", {
-            processLogId: item.id,
+      //日志
+      if (item.type == "log") {
+        this.dialogTableVisiblelogcheck = true;
+        request
+          .post("/rest/mark/getPictureDetail", {
+            processLogId: item.id
           })
           .then(res => {
             this.logList = res.data.data;
-            console.log(this.logList,'this.logList')
           });
-
       }
-
-
 
       //巡视查看
       if (item.type == "polling") {
         this.dialogTableVisiblePolling = true;
         request
-          .post("/rest/processCheck/getPictureDetail", {
-            processLogId: item.id,
+          .post("/rest/mark/getPictureDetail", {
+            processLogId: item.id
           })
           .then(res => {
             this.pollingList = res.data.data;
-            console.log(this.pollingList,'this.pollingList')
+              console.log(this.pollingList,'this.pollingList')
           });
-
       }
       //验收
       if (item.type == "realcheck") {
-        this.dialogTableVisibleRealcheck = true;
+        this.dialogTableVisibleSelfcheck = true;
         request
-          .post("/rest/processCheck/getPictureDetail", {
+          .post("/rest/mark/getPictureDetail", {
             processLogId: item.id,
-            Mark: 1
           })
           .then(res => {
             this.realList = res.data.data;
-            // console.log(this.conentList,'this.conentList')
+            
           });
       }
       //自检
-      if (item.type == "selfcheck"){
+      if (item.type == "selfcheck") {
         this.dialogTableVisibleSelfcheck = true;
         request
-          .post("/rest/processCheck/getPictureDetail", {
+          .post("/rest/mark/getPictureDetail", {
             processLogId: item.id,
-            Mark: 0
           })
           .then(res => {
             this.selfcheckList = res.data.data;
-            // console.log(this.selfcheckList,'this.selfcheckList')
+            
           });
       }
-    }
-  }
+    },
+  
+  },
+  
 };
 </script>
 
@@ -262,12 +236,15 @@ export default {
 .p20 {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  // overflow: hidden;
+  max-height: 470px;
+  overflow-x: hidden;
   .conent {
     overflow: hidden;
     float: left;
-    margin: 10px 0.8%;
+    margin: 10px 0.82%;
     box-sizing: border-box;
+    border: 1px solid transparent; //透明边框占位
     .pictureBox {
       width: 100%;
       background: url("./images/bkg007.png") no-repeat;
@@ -288,7 +265,7 @@ export default {
       h3 {
         font-size: 12px;
         margin: 20px 0;
-        min-height:30px;
+        min-height: 30px;
       }
       p {
         font-size: 14px;
@@ -300,18 +277,17 @@ export default {
       .spanOne {
         float: left;
         font-size: 14px;
-        background: #8080ff;
+        color: red;
       }
       .spanTwo {
         float: right;
         font-size: 20px;
-        background: #8080ff;
+        // color: red;
       }
     }
   }
-  // .conent:hover{
-  //      border:1px solid red;
-  //      -webkit-box-sizing: border-box;
-  // }
+  .conent:hover {
+    border: 1px solid red;
+  }
 }
 </style>

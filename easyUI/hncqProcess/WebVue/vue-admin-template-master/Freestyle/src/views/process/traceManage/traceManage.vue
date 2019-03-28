@@ -6,24 +6,69 @@
           <div class="grid-content">
             <span>组织机构：</span>
             <el-select
-              v-model="from.projectName"
+              ref="select"
               filterable
+              class="progectBox"
               placeholder="请选择"
-              @focus="innerVisible=true"
+              clearable
+              v-model="from.projectName"
+              @focus="showProper"
             ></el-select>
+            <el-popover
+              transition="fade-in-linear"
+              v-model="flag"
+              width="300"
+              trigger="click"
+              ref="refProject"
+              class="checkPoper"
+            >
+              <el-tree
+                :data="projectTree"
+                :highlight-current="true"
+                :render-after-expand="false"
+                node-key="id"
+                @node-click="handleCheckChange"
+                :props="defaultProps"
+              ></el-tree>
+            </el-popover>
           </div>
         </el-col>
         <el-col :span="10" v-if="tabPosition == 'first'">
           <div class="grid-content">
             <span>单位分部分项：</span>
-            <el-select v-model="from.unitsName" filterable placeholder="请选择" @focus="innerVisible1=true"></el-select>
+            <el-select
+              class="progectBox"
+              clearable
+              filterable
+              v-model="from.unitsName"
+              placeholder="请选择"
+              ref="refUnits"
+              @focus="unitsInit"
+            ></el-select>
+            <el-popover
+              transition="fade-in-linear"
+              v-model="flagtwo"
+              width="300"
+              trigger="click"
+              class="checkUnit"
+            >
+              <el-tree
+                :data="unitsTree"
+                :highlight-current="true"
+                :render-after-expand="false"
+                node-key="id"
+                @node-click="handleCheckChangeUnit"
+                :props="defaultPropsProject"
+              ></el-tree>
+            </el-popover>
           </div>
         </el-col>
         <!-- ========================================== -->
+        <!-- 人员查询 -->
         <el-col :span="20" v-if="tabPosition == 'second'">
           <div class="grid-content">
             <span>姓名：</span>
-            <input type="text" v-model="username" placeholder="输入姓名">
+            <input type="text" v-model="username" placeholder="输入姓名" class="inputName">
           </div>
         </el-col>
         <!-- ===================================== -->
@@ -83,35 +128,12 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="人员痕迹管理" name="second">
-          <div style="height: 200px;">
+          <div style="min-height:200px;">
             <list :trace-type="2" :userOptions="userOptions"/>
           </div>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <!-- 工程列表弹框 -->
-    <el-dialog width="30%" title="组织机构" :visible.sync="innerVisible" append-to-body>
-      <el-tree
-        :data="projectTree"
-        :highlight-current="true"
-        :render-after-expand="false"
-        node-key="id"
-        @node-click="handleCheckChange"
-        :props="defaultProps"
-      ></el-tree>
-    </el-dialog>
-
-    <!-- danweigongcheng单位工程 -->
-    <el-dialog width="30%" title="工程分部分项" :visible.sync="innerVisible1" append-to-body>
-      <el-tree
-        :data="unitsTree"
-        :highlight-current="true"
-        :render-after-expand="false"
-        node-key="id"
-        @node-click="handleCheckChange1"
-        :props="defaultProps1"
-      ></el-tree>
-    </el-dialog>
   </div>
 </template>
 
@@ -144,14 +166,14 @@ export default {
         children: "children",
         label: "name"
       },
-      defaultProps1: {
+      defaultPropsProject: {
         //单位分部分项
         children: "children",
         label: "projectItem"
       },
       serckCheck: ["时间", "人员", "类型"],
-      innerVisible: false,
-      innerVisible1: false,
+      flag: false,
+      flagtwo: false,
       from: {
         projectName: "", //单位
         projectId: "", //单位id
@@ -160,50 +182,55 @@ export default {
       },
       headers: {
         "X-AUTH-TOKEN": getToken()
-      }
+      },
     };
   },
+  watch: {},
   created() {
     this.projectInit();
+  
   },
-  watch: {
-    tabPosition() {
-      console.log(this.tabPosition, "this.tabPosition");
-    }
+  mounted() {
+    this.hideFn(); // 监听
+    this.hideFc();
   },
   methods: {
     //  单位查询
     projectInit() {
       request.get("/rest/organizate/depart").then(res => {
         this.projectTree = res.data.data;
+        console.log(this.projectTree, "this.projectTree");
       });
     },
+
     //选中的数据(tree)
     handleCheckChange(data, checked, indeterminate) {
       this.from.projectName = data.name;
-      this.innerVisible = false;
-      this.innerVisible1 = true;
-       //单位工程查询
+      this.from.projectId = data.id;
+      this.flag = false;
+    },
+    handleCheckChangeUnit(data) {
+      this.from.unitsName = data.projectItem;
+      this.from.unitsId = data.id;
+      this.flagtwo = false;
+    },
+    unitsInit() {
+      this.$refs.refUnits.blur(); // 清楚select 下拉默认样式
+      this.flagtwo = true;
+      //单位工程查询
+      // console.log(this.from.projectId,'this.from.projectId')
       request
         .post("/rest/projectItemInfo/getList", {
-          orgId: data.id,
+          orgId: this.from.projectId,
           "X-AUTH-TOKEN": token
         })
         .then(res => {
           this.unitsTree = res.data.data;
         });
-      
     },
-    handleCheckChange1(data) {
-      this.from.unitsName = data.projectItem;
-      this.from.unitsId = data.id;
-      this.innerVisible1 = false;
-    },
-   
-  
     // 整体查询(工程痕迹)
     querySelected() {
-      if (this.tabPosition == "first") {        
+      if (this.tabPosition == "first") {
         request
           .post("/rest/mark/chakan", {
             "X-AUTH-TOKEN": token,
@@ -216,10 +243,12 @@ export default {
             type: this.searchType
           })
           .then(res => {
-            this.conentOptions = res.data.data.data;
+            // this.conentOptions = res.data.data.data;
+            console.log(this.conentOptions);
           });
-      }else if(this.tabPosition == "second"){              //人员痕迹查询
-             request
+      } else if (this.tabPosition == "second") {
+        //人员痕迹查询
+        request
           .post("/rest/mark/chakan", {
             "X-AUTH-TOKEN": token,
             pageNo: 1,
@@ -236,22 +265,83 @@ export default {
           });
       }
     },
-
+    showProper() {
+      // 聚焦
+      this.$refs.select.blur(); // 清楚select下拉默认样式
+      this.flag = true;
+    },
+    hideFn() {
+      document.addEventListener("click", evevt => {
+        let sp = document.querySelector(".checkPoper");
+        if (!sp.contains(event.target)) {
+          //这句是说如果我们点击到了checkPoper以外的区域
+          this.flag = false;
+        }
+      });
+    },
+    hideFc() {
+      document.addEventListener("click", evevt => {
+        // 点击区域外关闭弹出层
+        let ps = document.querySelector(".checkUnit");
+        if (!ps.contains(evevt.target)) {
+          this.flagtwo = false;
+        }
+      });
+    },
+    hideProper() {
+      this.flag = false;
+      this.flagtwo = false;
+    },
     checkActive(index) {
+      // 筛选
       this.active = index;
       this.querySelected();
     }
+  },
+  destroyed() {
+    // 移除监听事件
+    document.removeEventListener(this.hideFn());
+    document.removeEventListener(this.hideFc());
   }
 };
 </script>
 
 <style lang="scss" scoped>
-el-select {
-  width: 80%;
+.p20 {
+  height: 100%;
 }
-input[type="text"] {
+.progectBox {
+  width: 50%;
+  position: relative;
+}
+.checkPoper,
+.checkUnit {
+  position: absolute;
+  min-width: 300px;
+  min-height: 100px;
+  left: 80px;
+  top: 50px;
+  z-index: 100;
+}
+.checkUnit {
+  left: 820px;
+}
+.institutionalBox {
+  width: 240px;
+  border: 1px solid #ccc;
+  background: white;
+  min-height: 60px;
+  position: absolute;
+  left: 80px;
+  top: 50px;
+  z-index: 10000;
+}
+.inputName {
   width: 20%;
   height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-indent: 10px;
 }
 .grid-content {
   height: 40px;
@@ -270,13 +360,14 @@ input[type="text"] {
       float: left;
       padding: 10px 40px;
       text-align: center;
-
       font-size: 20px;
       border: 1px solid #ccc;
     }
   }
 }
 .color {
+
   background: skyblue;
 }
+
 </style>
