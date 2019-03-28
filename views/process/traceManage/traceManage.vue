@@ -243,7 +243,7 @@ export default {
             type: this.searchType
           })
           .then(res => {
-            // this.conentOptions = res.data.data.data;
+            this.conentOptions = res.data.data.data;
             console.log(this.conentOptions);
           });
       } else if (this.tabPosition == "second") {
