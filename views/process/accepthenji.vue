@@ -189,6 +189,7 @@ export default {
         },
         // 点击组织机构节点展示分部分项
         noDe(data){
+            console.log(data,"daata")
              this.options1=[];
             this.orgId=data.id
             request.post('/rest/projectItemInfo/getList',{orgId:this.orgId}).then((res)=>{                  
@@ -205,6 +206,7 @@ export default {
         chaxun(){
             this.tableData.length=0;
             let time=new Date(this.form.starttime)
+            
             let timeDate = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds(); 
             let times=new Date(this.form.endtime)
             let timesDate = times.getFullYear() + '-' + (times.getMonth() + 1) + '-' + times.getDate() + ' ' + times.getHours() + ':' + times.getMinutes() + ':' + times.getSeconds(); 
@@ -212,8 +214,8 @@ export default {
                 orgId:this.orgId,
                 pageNo:this.form.pageNo,
                 pageSize:this.form.pageSize,
-                starttime:'',
-                endtime:'',
+                starttime:timeDate,
+                endtime:timesDate,
                 projectId:this.fbfxId,
                 personid:this.form.userName,
                 checkType:this.value,
