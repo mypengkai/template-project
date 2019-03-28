@@ -22,6 +22,9 @@
 .mr{
     margin-right: 12vw;
 }
+.w50{
+    width: 48%;
+}
 .tar{
     text-align: right;
   }
@@ -29,6 +32,9 @@
     overflow-y: auto;
     padding-right: 10px;
     overflow-x: auto;
+  }
+  .dialogBox {
+    margin-top: -7vh;
   }
 .treeTop{
     position: relative;

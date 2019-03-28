@@ -66,8 +66,8 @@
             <div class="">
 
               <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}">
-                <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(index, 'icon')" :type="convertIcon(index, 'type')" :timestamp="activity.createTime">
-                  {{activity.name}}
+                <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(activity, 'icon')" :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')" :timestamp="activity.createTime">
+                  {{activity.commandStagePeople1}}: {{activity.name}}
                 </el-timeline-item>
               </el-timeline>
 
@@ -94,13 +94,41 @@
 
             <!-- 轮播信息 -->
             <div style="height:25vh" v-if="nowType==0">
-              <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                <el-carousel :interval="3000" arrow="always" height="25vh">
-                  <el-carousel-item v-for="(item,index) in picture" :key="index">
-                    <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
-                  </el-carousel-item>
-                </el-carousel>
-              </el-form-item>
+              <div class="p20" v-if="states == '已处理'">
+                <div class="fl w50">
+                  <span class="accomplish">发起</span>
+                  <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
+                    <el-carousel :interval="3000" arrow="always" height="25vh">
+                      <el-carousel-item v-for="(item,index) in pictures" :key="index">
+                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                      </el-carousel-item>
+                    </el-carousel>
+                  </el-form-item>
+                </div>
+
+                <div class="rl w50">
+                  <span class="accomplish">完成</span>
+                  <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
+                    <el-carousel :interval="3000" arrow="always" height="25vh">
+                      <el-carousel-item v-for="(item,index) in picture" :key="index">
+                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                      </el-carousel-item>
+                    </el-carousel>
+                  </el-form-item>
+                </div>
+
+              </div>
+
+              <div v-if="states == '未处理'">
+                <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
+                  <el-carousel :interval="3000" arrow="always" height="25vh">
+                    <el-carousel-item v-for="(item,index) in picture" :key="index">
+                      <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                    </el-carousel-item>
+                  </el-carousel>
+                </el-form-item>
+              </div>
+
             </div>
             <!-- 地图 -->
             <div style="height:25vh" v-if="nowType==1">
@@ -234,20 +262,29 @@ export default {
         }
       ],
       activitiesIcon: [
-        // 接受人
+        // 完成指令的人
         {
+          size: "large",
+          type: "success",
+          icon: "el-icon-check"
+        },
+        // 正在处理中
+        {
+          size: "large",
           type: "primary",
-          icon: "el-icon-star-off"
+          icon: "el-icon-loading"
         },
         // 转发人
         {
+          size: "large",
           type: "info",
           icon: "el-icon-refresh"
         },
-        // 发起人
+        // 发出指令的人
         {
+          size: "large",
           type: "primary",
-          icon: "el-icon-star-on"
+          icon: "el-icon-location-outline"
         }
       ],
       answer: "", // 转发响应变量
@@ -348,12 +385,13 @@ export default {
       transpondName: "", // 转发用户名回填中文
       total: 0,
       picture: [], // 图片数组,
+      pictures: [], // 完成时图片数组
       imgData: [], // 下一层图片数组
       orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
       userList: [], // 接收人列表
       name: "", // 组织机构回填显示
-      states: "", //指令内容状态 0 已处理 1未处理
+      states: [], //指令内容状态 0 已处理 1未处理
       remark: "", // 最后一个人的备注
       username: "", // 接收人id回填
       projectItem: "", // 分部分项回填显示
@@ -376,18 +414,25 @@ export default {
       if (this.nowItem == "add") return;
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
-      // console.log(ObCopyData.data);
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
+      this.activities.forEach(v => {
+        v.commandStagePeople == 1 && (v.commandStagePeople1 = "发出指令的人");
+        v.commandStagePeople == 2 && (v.commandStagePeople1 = "转发指令的人");
+        v.commandStagePeople == 3 && (v.commandStagePeople1 = "正在处理指令");
+        v.commandStagePeople == 4 && (v.commandStagePeople1 = "完成指令的人");
+      });
       this.picture = ObCopyData.data.pictureOfCommand; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
+      console.log(ObCopyData.data.finishPictureOfCommand);
+      this.pictures = ObCopyData.data.finishPictureOfCommand;
       this.remark = this.commandUser[this.commandUser.length - 1].remark;
-      this.states = this.commandUser.state; // 指令内容是否处理
-      if (this.states == 0) {
-        this.states = "已处理";
-      } else {
+      this.states = this.form.finishPictureOfCommand; // 指令内容是否处理
+      if (this.states.length == 0) {
         this.states = "未处理";
+      } else {
+        this.states = "已处理";
       }
     },
     // 切换
@@ -437,31 +482,34 @@ export default {
       this.transpondName = item.username; // 转发指定人姓名回填
       this.acceptUser = false;
     },
-    convertIcon(index, type) {
-      
-      if (index === 0) {
+    convertIcon(activity, type) {
+      // 发出指令的人
+      if (activity.commandStagePeople == 1) {
         if (type === "icon") {
-          return this.activitiesIcon[0].icon;
+          return this.activitiesIcon[3].icon;
         } else if (type === "type") {
-          return this.activitiesIcon[0].type;
+          return this.activitiesIcon[3].type;
         }
-      } else if (this.activities.length === index) {
+      } else if (activity.commandStagePeople == 2) {
+        //转发指令的人
         if (type === "icon") {
           return this.activitiesIcon[2].icon;
         } else if (type === "type") {
           return this.activitiesIcon[2].type;
         }
-      } else if (this.activities.length == 2) {
+      } else if (activity.commandStagePeople == 3) {
+        // 正在处理指令
         if (type === "icon") {
           return this.activitiesIcon[1].icon;
         } else if (type === "type") {
           return this.activitiesIcon[1].type;
         }
-      } else {
+      } else if (activity.commandStagePeople == 4) {
+        //完成指令的人
         if (type === "icon") {
-          return this.activitiesIcon[1].icon;
+          return this.activitiesIcon[0].icon;
         } else if (type === "type") {
-          return this.activitiesIcon[1].type;
+          return this.activitiesIcon[0].type;
         }
       }
     },
@@ -585,5 +633,10 @@ export default {
 .reverseBox {
   height: 75vh;
   overflow: scroll;
+}
+.accomplish{
+  display: block;
+  text-align: center;
+  font-size: 1vw;
 }
 </style>
