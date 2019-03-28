@@ -552,6 +552,10 @@ export default {
     },
     // 选择验收人显示表框中
     qdysr(data){
+      if(this.even==null){
+        this.innerVisible=false;
+        return false;
+      }
       this.even.target.checked=false;
       this.innerVisible=false;
     },
