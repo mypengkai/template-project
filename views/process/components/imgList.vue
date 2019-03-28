@@ -30,20 +30,20 @@
             <el-col :span="12"><div class="ysm">验收描述: <span>{{yanshou}}</span></div></el-col>
         </el-row>
         <el-row>
-            <el-col :span="12" v-if="imgData&&imgData.length">
+            <el-col :span="12" v-if="imgData!=null">
                 <el-carousel :interval="5000" arrow="always">
                 <el-carousel-item v-for="(item,index) in imgData" :key="index">
-                    <img :src="item.filePath" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+                    <img :src="item" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
                 </el-carousel-item>
                 </el-carousel>
                 </el-col>
                 <el-col :span="12" v-else>
                 <div class="zjimg">没有初验图片</div>
                 </el-col>
-                <el-col :span="12" v-if="imgData2&&imgData2.length">
+                <el-col :span="12" v-if="imgData2!=null">
                 <el-carousel :interval="5000" arrow="always">
                 <el-carousel-item v-for="(item,index) in imgData2" :key="index">
-                    <img :src="item.filePath" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+                    <img :src="item" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
                 </el-carousel-item>
                 </el-carousel>
             </el-col>
@@ -52,7 +52,7 @@
                 </el-col>
         </el-row>
         <!-- 照片详情信息查看 -->
-        <!-- <el-dialog width="60%" top="5vh" :title="imgForm.state" :visible.sync="imginnerVisible" append-to-body>
+        <el-dialog width="60%" top="5vh" :title="imgForm.state" :visible.sync="imginnerVisible" append-to-body>
         <el-form :model="imgForm" label-width="200px">
             <div style="width:50%">
             <el-form-item label="验收描述:">
@@ -85,7 +85,7 @@
             </el-carousel>
             </el-form-item>
         </el-form>
-        </el-dialog> -->
+        </el-dialog>
     </div>
 </template>
 
