@@ -55,11 +55,18 @@
           </el-table-column>
           <el-table-column
           label="记录时间"
-          width="880">
+          width="280">
           <template slot-scope="scope">
             <span>{{ scope.row.createTime }}</span>
           </template>
           </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="success"
+                @click="handleEdit(scope.row)">查看详情</el-button>
+            </template>
+    </el-table-column>
       </el-table>
       </div>
       <!-- 分页 -->
@@ -74,11 +81,21 @@
         :total="total">
         </el-pagination>
       </div>
+
+      <!-- 日志查看弹框 -->
+      <el-dialog :title="'日志详情'" :visible.sync="dialogFormVisible" class="dialogBox">
+        <!-- 照片详情信息查看 -->
+      <chaKanList :formList="formList"></chaKanList>
+    </el-dialog>
     </div>
 </template>
 <script>
+import chaKanList from "./components/chakanList";
 import request from '@/utils/request'
 export default {
+  components: {
+    chaKanList
+  },
   data(){
     return{
       form:{
@@ -93,10 +110,28 @@ export default {
         // 结束时间
         endTime:'',
       },
+      formList:{
+        // 时间
+        createTime:'',
+        // 描述
+        describe:'',
+        // 名字
+        realname:'',
+        // 图片
+        pictures:[],
+        // 经度
+        lat:'',
+        // 纬度
+        lgt:'',
+        // 地址
+        photoLocation:''
+      },
+      dialogFormVisible:false,
       total:0,
       bookType:'',
       tableData:null,
       currentPage4:15,
+      noType:''
     }
   },
   methods:{
@@ -112,11 +147,27 @@ export default {
       let objFrom={pageNo:this.form.pageNo,pageSize:this.form.pageSize,userName:this.form.userName,startTime:this.form.startTime,endTime:this.form.endTime}
       return request.post('/rest/processInfoLog/everyDayLogPageList',objFrom).then(res=>{
         if(res.status==200){
+          console.log(res)
           var data=res.data.data.data;
           this.total=res.data.data.totalCount;
           this.tableData=data;
         }
       })
+    },
+    handleEdit(data){
+      this.formList.pictures.length=0;
+      request.post(`/rest/processInfoLog/findLog/${data.id}`).then(res=>{
+        console.log(res)
+        this.formList.realname=res.data.data.realname;
+        this.formList.createTime=res.data.data.createTime;
+        this.formList.describe=res.data.data.describe;
+        this.formList.lat=res.data.data.lat;
+        this.formList.lgt=res.data.data.lgt;
+        this.formList.photoLocation=res.data.data.photoLocation;
+        this.formList.pictures.push(res.data.data.pictures)
+        console.log(this.formList.pictures)
+      })
+      this.dialogFormVisible=true;
     },
     chaxun(){
       this.fn()
