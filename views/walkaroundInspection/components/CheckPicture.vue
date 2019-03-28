@@ -20,7 +20,7 @@
         </el-form-item>
 
         <el-form-item label="拍照地点">
-          <el-input v-model="form.photoLocation"></el-input>
+          <el-input v-model="photoLocation"></el-input>
         </el-form-item>
 
         <el-form-item label="描述">
@@ -41,9 +41,9 @@
       </div>
 
       <!-- 轮播信息 -->
-      <div style="height:30vh" v-if="nowType==0">
+      <div style="height:25vh" v-if="nowType==0">
         <el-form-item label="">
-          <el-carousel :interval="3000" arrow="always" height="30vh">
+          <el-carousel :interval="3000" arrow="always" height="25vh">
             <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
               <img :src="item.picture" alt="">
             </el-carousel-item>
@@ -51,7 +51,7 @@
         </el-form-item>
       </div>
       <!-- 地图 -->
-      <div style="height:30vh" v-if="nowType==1">
+      <div style="height:25vh" v-if="nowType==1">
         <Map :nowItem="nowItem"></Map>
       </div>
     </el-form>
@@ -84,6 +84,7 @@ export default {
       },
       filePathImg: [],
       nowType: 0,
+      photoLocation:"",
       activeIndex: "1",
       activeIndex2: "1",
       innerVisible: false
@@ -97,7 +98,8 @@ export default {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); // 复制
       this.filePathImg = this.form.pictureOfCommand; // 照片详情数组
-      console.log(this.form.pictureOfCommand);
+      // console.log(this.form.pictureOfCommand[0].photoLocation);
+      this.photoLocation = this.form.pictureOfCommand[0].photoLocation
     },
 
     // 切换
