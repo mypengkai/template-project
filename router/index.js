@@ -135,7 +135,7 @@ export const constantRouterMap = [
         path: 'instructSend',
         name: 'instructSend',
         component: () => import('@/views/instruct/instructSend'),
-        meta: { title: '指令发送', icon: 'instructSend' }
+        meta: { title: '指令发送', icon: 'instructSend', show: true }
       },
     ]
   },
