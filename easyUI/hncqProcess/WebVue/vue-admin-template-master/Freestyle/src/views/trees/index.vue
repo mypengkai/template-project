@@ -90,7 +90,7 @@
     </div>
 </template>
 <script>
-// import chaKanList from "./components/chakanList";
+import chaKanList from "./components/chakanList";
 import request from '@/utils/request'
 export default {
   components: {
