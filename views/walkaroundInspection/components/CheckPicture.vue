@@ -1,39 +1,35 @@
 <template>
   <div>
     <!-- 照片详情信息查看 -->
-    <el-form :model="form" label-width="100px">
+    <el-form :model="form">
       <div>
-        <el-form-item label="工程分部分项">
+        <el-form-item label="工程分部分项" label-width="100px">
           <el-input v-model="form.projectItem"></el-input>
         </el-form-item>
 
-        <el-form-item label="巡视人姓名">
+        <el-form-item label="巡视人姓名" label-width="100px">
           <el-input v-model="form.createName"></el-input>
         </el-form-item>
 
-        <el-form-item label="时间">
+        <el-form-item label="时间" label-width="100px">
           <el-input v-model="form.createTime"></el-input>
         </el-form-item>
 
-        <el-form-item label="桩号">
+        <el-form-item label="桩号" label-width="100px">
           <el-input v-model="form.zhuanghao"></el-input>
         </el-form-item>
 
-        <el-form-item label="拍照地点">
+        <el-form-item label="拍照地点" label-width="100px">
           <el-input v-model="photoLocation"></el-input>
         </el-form-item>
 
-        <el-form-item label="描述">
+        <el-form-item label="描述" label-width="100px">
           <el-input v-model="form.describe"></el-input>
-        </el-form-item>
-
-        <el-form-item label="照片表述">
-          <el-input v-model="form.photoDescribe"></el-input>
         </el-form-item>
       </div>
 
       <!-- 导航切换 -->
-      <div class="navb">
+      <div class="navb" label-width="100px">
         <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
           <el-menu-item index="1" @click="nowType=0">信息中心</el-menu-item>
           <el-menu-item index="2" @click="nowType=1">项目地图</el-menu-item>
@@ -41,9 +37,9 @@
       </div>
 
       <!-- 轮播信息 -->
-      <div style="height:25vh" v-if="nowType==0">
-        <el-form-item label="">
-          <el-carousel :interval="3000" arrow="always" height="25vh">
+      <div style="height:32vh" v-if="nowType==0">
+        <el-form-item class="slideBox">
+          <el-carousel :interval="3000" arrow="always" height="32vh">
             <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
               <img :src="item.picture" alt="">
             </el-carousel-item>
@@ -51,7 +47,7 @@
         </el-form-item>
       </div>
       <!-- 地图 -->
-      <div style="height:25vh" v-if="nowType==1">
+      <div style="height:32vh" v-if="nowType==1">
         <Map :nowItem="nowItem"></Map>
       </div>
     </el-form>
@@ -84,7 +80,7 @@ export default {
       },
       filePathImg: [],
       nowType: 0,
-      photoLocation:"",
+      photoLocation: "",
       activeIndex: "1",
       activeIndex2: "1",
       innerVisible: false
@@ -99,7 +95,7 @@ export default {
       this.form = this.$tool.ObCopy(this.nowItem); // 复制
       this.filePathImg = this.form.pictureOfCommand; // 照片详情数组
       // console.log(this.form.pictureOfCommand[0].photoLocation);
-      this.photoLocation = this.form.pictureOfCommand[0].photoLocation
+      this.photoLocation = this.form.pictureOfCommand[0].photoLocation;
     },
 
     // 切换

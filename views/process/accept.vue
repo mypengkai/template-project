@@ -179,7 +179,7 @@ export default {
   data() {  
     const validatejlysr = (rule, value, callback) => {
       if (this.bjFrom.name=='') {
-        console.log(this.bjFrom.name)
+     
         callback(new Error('请选择验收人'))
       } else {
          callback();
@@ -375,7 +375,7 @@ export default {
     fnLei(){
       request.post('/rest/processType/getList').then((res)=>{
         this.options1=res.data.data.data;
-        console.log(this.options1)
+  
         this.fnGong(this.options1[0].id);
         this.processMDictId=this.options1[0].id;
         this.gongxuMrz=this.options1[0].processType
@@ -387,7 +387,7 @@ export default {
         
         this.options2=res.data.data.data;
         this.options2.unshift({process:'全部'})
-        console.log(this.options2)
+     
       })
     },
     // 根据input ID获取树形结构
@@ -398,7 +398,7 @@ export default {
       // this.processName='';
       this.treeFrom.projectItem='';
       request.post('/rest/projectItemInfo/getList',{orgId:this.valId}).then((res)=>{
-        console.log(res)
+        
         this.data=res.data.data;
       })
     },
@@ -411,7 +411,7 @@ export default {
         this.treeFrom.projectCode=res.data.data.projects.projectCode;
         this.treeFrom.zhuanghao=res.data.data.projects.zhuanghao;
         this.tableData=res.data.data.detail;
-        console.log(res)
+       
         this.tableData.forEach(i=>{
           if(i.planCheckTime=="null"){
             i.planCheckTime=''
@@ -442,7 +442,7 @@ export default {
     // 点击新增工序类型获取工序框数据
     tree1(data){
       this.processMDictId=data.id;
-      console.log(this.processMDictId)
+  
       this.value1=data.processType;
       this.gongxuId=data.id
       request.post('/rest/process/getList',{processTypeId:this.gongxuId}).then((res)=>{
@@ -467,7 +467,7 @@ export default {
             remark:this.form.beizhu,
             checkNum:this.form.cishu
           }
-          console.log(fromData)
+       
           request.post('/rest/processCheck/addProcess',fromData).then((res)=>{
             if(res.data.respCode==0){
                 this.$message({
@@ -481,7 +481,7 @@ export default {
             }
           })
         }else {
-          console.log("error submit!!");
+       
           return false;
         }
       });
@@ -511,7 +511,7 @@ export default {
     fnYsr(){
       let ysr ={pageNo:this.pageForm.pageNo,pageSize:this.pageForm.pageSize,Mark:this.pageForm.Mark,name:this.ysrVul,work:this.ysrZhiwu,orgId:this.valId};
       request.post('/rest/processCheck/getCheckPerson',ysr).then((res)=>{
-        console.log(res)
+   
         this.ysrData=res.data.data.data;
         this.pageForm.total=res.data.data.totalCount;
         this.innerVisible=true;
@@ -519,7 +519,7 @@ export default {
     },
     // 验收人弹框数据
     jlYsr(data){
-      console.log(this.pageForm.pageNo)
+   
       this.pageForm.pageNo=1;
       this.ysrVul='';
       this.ysrZhiwu='';
@@ -528,7 +528,7 @@ export default {
     },
     // 验收人查询接口
     chaxun(){
-      console.log(this.pageForm.pageNo)
+   
       this.pageForm.pageNo=1;
       this.fnYsr()
     },
@@ -539,9 +539,9 @@ export default {
     },
     // 监听总页数
     handleCurrentChange(val) {
-      console.log(val)
+  
       this.pageForm.pageNo=val;
-      console.log(this.pageForm.pageNo)
+    
       this.fnYsr()
     },
     // 监听验收人单选框
@@ -589,7 +589,7 @@ export default {
               }
             })
           }else {
-            console.log("error submit!!");
+         
             return false;
         }
       })
@@ -618,15 +618,15 @@ export default {
       this.dialogTableVisible=true;
       request.post('/rest/processCheck/getProcessDetail',{id:row.id}).then(res=>{
         if(res.data.respCode=="0"){
-          console.log(res)
           if(res.data.data==null&&!res.data.data.length) return false
           this.chakanData.push(res.data.data)
           this.chakanData.forEach(i=>{
               i.projectType=i.projectType=="1"?"单位工程":i.projectType=="2"?"子单位工程":i.projectType=="3"?"分部工程":i.projectType=="4"?"子分部工程":i.projectType=="5"?"分部项程":i.projectType=="6"?"子分项工程":'';
               i.state1=i.state1==1?'已指定验收':'未指定验收';
+            
               i.state2==0?i.state2="指定工序":i.state2==1?i.state2="已指定验收计划":i.state2==2?i.state2="自检完成":i.state2="验收完成"
+              
             })
-            console.log(this.chakanData)
           this.zijian=this.chakanData.selfCheckDescribe;
           this.yanshou=this.chakanData.checkDescribe;
           this.imgData=res.data.data.selfFilePath;
@@ -664,7 +664,7 @@ export default {
   margin-left: 198px;
   font-weight: 900 
 }
-/deep/ .el-select{
+.el-select{
     width: 260px;
 }
 .acceptLayout {

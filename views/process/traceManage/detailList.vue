@@ -2,13 +2,7 @@
   <div class="p20">
     <!-- 工程痕迹 -->
     <div class="projectConent" v-if="this.traceType === 1">
-      <div
-        class="conent"
-        style="width:15%;"
-        v-for="(item,index) in conentOptions"
-        :key="index"
-        @click="pictureLook(item)"
-      >
+      <div class="conent" style="width:15%;" v-for="(item,index) in conentOptions" :key="index" @click="pictureLook(item)">
         <div class="pictureBox">
           <img :src="item.filePath" alt>
         </div>
@@ -94,12 +88,12 @@
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
     <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%">
-      <!-- <commandCheck :commandList="commandList"></commandCheck> -->
-      <checkBox :commandList="commandList"></checkBox> 
+      <inspectionBox :nowItem="nowItem" v-if="nowItem"></inspectionBox>
+      <!-- <checkBox :commandList="commandList"></checkBox>  -->
     </el-dialog>
     <!-- 巡视查看 -->
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%">
-      <pollingCheck :pollingList="pollingList" ></pollingCheck>
+      <pollingCheck :pollingList="pollingList"></pollingCheck>
     </el-dialog>
     <!-- 自检查看   验收查看-->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%">
@@ -119,8 +113,9 @@ import selfcheck from "@/views/process/components/selfcheck";
 import logCheck from "@/views/process/components/logCheck";
 // import commandCheck from "@/views/process/components/commandCheck";
 import pollingCheck from "@/views/process/components/pollingCheck";
-import checkBox from '@/views/instruct/components/checkBox'
-import checkPicture from "@/views/walkaroundInspection/components/CheckPicture"
+import checkBox from "@/views/instruct/components/checkBox";
+import inspectionBox from "../components/inspectionBox";
+import checkPicture from "@/views/walkaroundInspection/components/CheckPicture";
 
 export default {
   name: "DetailList",
@@ -129,8 +124,8 @@ export default {
       type: Number,
       default: 1
     },
-    conentOptions: {},              //工程数据
-    userOptions: {}                 //人员数据
+    conentOptions: {}, //工程数据
+    userOptions: {} //人员数据
   },
   components: {
     // commandCheck,
@@ -138,10 +133,12 @@ export default {
     logCheck,
     pollingCheck,
     checkBox,
+    inspectionBox,
     checkPicture
   },
   data() {
     return {
+      nowItem: "",
       dialogTableVisibleCommied: false, //指令
       dialogTableVisiblePolling: false, //巡视
       dialogTableVisibleSelfcheck: false, // 自检
@@ -150,11 +147,10 @@ export default {
       pollingList: [], //巡视
       selfcheckList: [], // 自检
       commandList: [], // 指令
-      logList: [] ,//日志
-     
+      logList: [] //日志
     };
   },
- 
+
   created() {},
   computed: {
     title() {
@@ -174,6 +170,7 @@ export default {
           })
           .then(res => {
             this.commandList = res.data.data;
+            this.nowItem = this.commandList;
             
           });
       }
@@ -198,7 +195,7 @@ export default {
           })
           .then(res => {
             this.pollingList = res.data.data;
-              console.log(this.pollingList,'this.pollingList')
+            console.log(this.pollingList, "this.pollingList");
           });
       }
       //验收
@@ -206,11 +203,10 @@ export default {
         this.dialogTableVisibleSelfcheck = true;
         request
           .post("/rest/mark/getPictureDetail", {
-            processLogId: item.id,
+            processLogId: item.id
           })
           .then(res => {
             this.realList = res.data.data;
-            
           });
       }
       //自检
@@ -218,17 +214,19 @@ export default {
         this.dialogTableVisibleSelfcheck = true;
         request
           .post("/rest/mark/getPictureDetail", {
-            processLogId: item.id,
+            processLogId: item.id
           })
           .then(res => {
             this.selfcheckList = res.data.data;
-            
           });
       }
-    },
-  
+    }
   },
-  
+   watch: {
+    dialogTableVisibleCommied(val) {
+      !val && (this.nowItem = ""); // 监听弹窗是否关闭 清空数据 防止回填
+    }
+  }
 };
 </script>
 
