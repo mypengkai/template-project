@@ -6,7 +6,7 @@
           <el-input v-model="processAll.projectItem" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="工序名称:">
-          <el-input v-model="processAll.projectItem" :disabled="true"></el-input>
+          <el-input v-model="processAll.processName" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="桩号:">
           <el-input v-model="processAll.startStation" :disabled="true"></el-input>
@@ -17,7 +17,7 @@
       </div>
     </el-form>
 
-    <div class="allBox">
+      <div class="allBox">
       <div class="selfBox">
         <h3>自检</h3>
         <el-form :inline="true" :model="FormList" class="demo-form-inline">
@@ -96,249 +96,240 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 export default {
-  props: ["selfcheckList", "realList"],
+  props: ["targetID"],
   data() {
     return {
+      selfList: [], // 自检数据
+      realList: [], // 验收数据
       processAll: {
         projectItem: "", // 工程
         startStation: "", // 桩号
-        // stateOfprocess: "", //状态
         state: "", //状态
-        stateProcess: ""
+        stateProcess: "",
+        processName: "" // 工序名
       },
       FormList: {
         planSelfCheckPerson: "", //计划自检人
         planSelfCheckTime: "", // 计划自检时间
         realitySelfCheckPerson: "", // shiji自检人
         realitySelfCheckTime: "", //shiji自检时间
-        photoLocation: "" //    具体位置
+        photoLocation: "" //    自检具体位置
       },
       InitList: {
         planCheckTime: "", //jihua验收时间
         planCheckPerson: "", // jihua 验收人
         realityCheckPerson: "", // shiji验收人
         realityCheckTime: "", // 实际验收时间
-        photoLocation: "" // 具体位置
+        photoLocation: "" // 验收具体位置
       },
       objlist: [], //图片专用(自检)
       imgRealList: [], //验收
       tabPosition: "first",
-      tabShow: "three",
-      lat: "",
-      lgt: ""
+      tabShow: "three"
     };
   },
-  watch: {
-    realList() {
-      //验收
-      console.log(this.realList, "this.realList");
-      let conents = this.realList;
-      // console.log(conents,'conents')
-      this.processAll.projectItem = conents.projectItem;
-      this.processAll.startStation = conents.startStation;
-      this.processAll.state = conents.state;
-      this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
-      this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
-      this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
-      this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
-
-      this.InitList.planCheckTime = conents.planCheckTime;
-      this.InitList.planCheckPerson = conents.planCheckPerson;
-      this.InitList.realityCheckPerson = conents.realityCheckPerson;
-      this.InitList.realityCheckTime = conents.realityCheckTime;
-      if (this.processAll.state == "0") {
-        this.processAll.stateProcess = "指定";
-      }
-      if (this.processAll.state == "1") {
-        this.processAll.stateProcess = "已指定";
-      }
-      if (this.processAll.state == "2") {
-        this.processAll.stateProcess = "未完成";
-      }
-      // 图片
-      let array = conents.picMessage;
-      // console.log(array,'array')
-      array.forEach(e => {
-        //  状态(图片)
-        if (e.state == "0") {
-          this.objlist = conents.picMessage;
-          this.FormList.photoLocation = conents.photoLocation;
-        } else if (e.state == "1") {
-          this.imgRealList = conents.picMessage;
-          this.InitList.photoLocation = conents.photoLocation;
-        }
-      });
-    },
-    selfcheckList() {
-      //自检
-      console.log(this.selfcheckList, "this.selfcheckList");
-      let conents = this.selfcheckList;
-      this.processAll.projectItem = conents.projectItem;
-      this.processAll.startStation = conents.startStation;
-      this.processAll.state = conents.state;
-      this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
-      this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
-      this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
-      this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
-      this.FormList.photoLocation = conents.photoLocation;
-      this.InitList.planCheckTime = conents.planCheckTime;
-      this.InitList.planCheckPerson = conents.planCheckPerson;
-      this.InitList.realityCheckPerson = conents.realityCheckPerson;
-      this.InitList.realityCheckTime = conents.realityCheckTime;
-
-      if (this.processAll.state == "0") {
-        this.processAll.stateProcess = "指定";
-      }
-      if (this.processAll.state == "1") {
-        this.processAll.stateProcess = "已指定";
-      }
-      if (this.processAll.state == "2") {
-        this.processAll.stateProcess = "未完成";
-      }
-      let array = conents.picMessage;
-      array.forEach(e => {
-        //  状态(图片)
-        if (e.state == "0") {
-          this.objlist = conents.picMessage;
-          console.log(this.objlist, "this.objlist");
-          this.FormList.photoLocation = conents.photoLocation;
-        } else if (e.state == "1") {
-          this.imgRealList = conents.picMessage;
-          this.InitList.photoLocation = conents.photoLocation;
-        }
-      });
-    }
+  created() {
+   
+            this.realInit();  
+ 
+   
+            this.selfInit();
+    
+    
   },
-  mounted() {
-    this.realInit(); //初始化地图
-    this.selfInit();
-  },
+  mounted() {},
   methods: {
+    // 验收
     realInit() {
-      // 验收地图
-      var map = new BMap.Map("realMap"); //在百度地图容器中创建一个地图
-      var point = new BMap.Point(120.382029, 30.312903);
-      map.centerAndZoom(point, 9);
-      var marker = new BMap.Marker(point);
-      var mapPoints = [
-        {
-          x: 30.312903,
-          y: 120.382029,
-          title: "A",
-          con: "我是A",
-          branch: "老大"
-        },
-        {
-          x: 30.215855,
-          y: 120.024568,
-          title: "B",
-          con: "我是B",
-          branch: "老二"
-        },
-        {
-          x: 30.18015,
-          y: 120.174968,
-          title: "C",
-          con: "我是C",
-          branch: "老三"
-        },
-        {
-          x: 30.324994,
-          y: 120.164399,
-          title: "D",
-          con: "我是D",
-          branch: "老四"
-        },
-        { x: 30.24884, y: 120.305074, title: "E", con: "我是E", branch: "老五" }
-      ];
+      request
+        .post("/rest/mark/getPictureDetail", {
+          processLogId: this.targetID,
+          Mark: 1
+        })
+        .then(res => {
+          if (res.data.respCode == "0") {
+            this.realList = res.data.data;
+            console.log(this.realList, "this.realList");
+          }
+          let conents = this.realList;
+          this.processAll.projectItem = conents.projectItem;
+          this.processAll.processName = conents.processName;
+          this.processAll.startStation = conents.startStation;
+          this.processAll.state = conents.state;
+          this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
+          this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
+          this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
+          this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
 
-      map.addOverlay(marker);
-      map.enableScrollWheelZoom(true);
-      // 函数 创建多个标注
-      function markerFun(points, label, infoWindows) {
-        var markers = new BMap.Marker(points);
-        map.addOverlay(markers);
-        markers.setLabel(label);
-        markers.addEventListener("mouseover", function(event) {
-          map.openInfoWindow(infoWindows, points); //参数：窗口、点  根据点击的点出现对应的窗口
+          this.InitList.planCheckTime = conents.planCheckTime;
+          this.InitList.planCheckPerson = conents.planCheckPerson;
+          this.InitList.realityCheckPerson = conents.realityCheckPerson;
+          this.InitList.realityCheckTime = conents.realityCheckTime;
+          if (this.processAll.state == "0") {
+            this.processAll.stateProcess = "指定";
+          }
+          if (this.processAll.state == "1") {
+            this.processAll.stateProcess = "已指定";
+          }
+          if (this.processAll.state == "2") {
+            this.processAll.stateProcess = "未完成";
+          }
+          // 图片
+          let array = conents.picMessage;
+          array.forEach(e => {
+            //  状态(图片)
+            if (e.state == "0") {
+              this.objlist.push(e);
+              this.FormList.photoLocation = e.photoLocation;
+            }
+            if (e.state == "1") {
+              this.imgRealList.push(e);
+              this.InitList.photoLocation = e.photoLocation;
+            }
+          });
+            //  ===============     地图 +++++===========
+          let lgt;
+          let lat;
+          if (this.imgRealList.length > 0 ) {
+            lgt = this.imgRealList[0].lgt;
+            lat = this.imgRealList[0].lat;
+          }
+          if (this.imgRealList.length == 0) {
+            lgt = 112.59; // 长沙经纬度
+            lat = 28.12;
+          }
+          console.log(lgt, "lgt", lat, "lat");
+          var map = new BMap.Map("realMap");
+          var point = new BMap.Point(lgt, lat); // 默认第一个坐标为中心点
+          map.centerAndZoom(point, 9);
+          var marker = new BMap.Marker(point);
+          let mapPoints = this.imgRealList;
+          // console.log(mapPoints,'mapPoints')
+          map.addOverlay(marker);
+          map.enableScrollWheelZoom(true);
+          // 函数 创建多个标注
+          function markerFun(points, label, infoWindows) {
+            var markers = new BMap.Marker(points);
+            map.addOverlay(markers);
+            markers.setLabel(label);
+            markers.addEventListener("mouseover", function(event) {
+              map.openInfoWindow(infoWindows, points); //参数：窗口、点  根据点击的点出现对应的窗口
+            });
+          }
+          for (var i = 0; i < mapPoints.length; i++) {
+            var points = new BMap.Point(mapPoints[i].lgt, mapPoints[i].lat); //创建坐标点
+            var opts = {
+              width: 180,
+              height: 50,
+              title: mapPoints[i].title
+            };
+            var label = new BMap.Label(mapPoints[i].photoLocation, {
+              offset: new BMap.Size(25, 5)
+            });
+            var infoWindows = new BMap.InfoWindow(
+              mapPoints[i].photoLocation,
+              opts
+            );
+            markerFun(points, label, infoWindows);
+          }
         });
-      }
-      for (var i = 0; i < mapPoints.length; i++) {
-        var points = new BMap.Point(mapPoints[i].y, mapPoints[i].x); //创建坐标点
-        var opts = {
-          width: 250,
-          height: 100,
-          title: mapPoints[i].title
-        };
-        var label = new BMap.Label(mapPoints[i].branch, {
-          offset: new BMap.Size(25, 5)
-        });
-        var infoWindows = new BMap.InfoWindow(mapPoints[i].con, opts);
-        markerFun(points, label, infoWindows);
-      }
     },
+    // 自检
     selfInit() {
-      var map = new BMap.Map("selfMap"); //在百度地图容器中创建一个地图
-      var point = new BMap.Point(120.382029, 30.312903);
-      map.centerAndZoom(point, 9);
-      var marker = new BMap.Marker(point);
-      var mapPoints = [
-        {
-          x: 30.312903,
-          y: 120.382029,
-          title: "A",
-          con: "我是A",
-          branch: "老大"
-        },
-        {
-          x: 30.215855,
-          y: 120.024568,
-          title: "B",
-          con: "我是B",
-          branch: "老二"
-        },
-        {
-          x: 30.18015,
-          y: 120.174968,
-          title: "C",
-          con: "我是C",
-          branch: "老三"
-        },
-        {
-          x: 30.324994,
-          y: 120.164399,
-          title: "D",
-          con: "我是D",
-          branch: "老四"
-        },
-        { x: 30.24884, y: 120.305074, title: "E", con: "我是E", branch: "老五" }
-      ];
+      request
+        .post("/rest/mark/getPictureDetail", {
+          processLogId: this.targetID,
+          Mark: 0
+        })
+        .then(res => {
+          if (res.data.respCode == "0") {
+            this.selfList = res.data.data;
+          }
+            console.log(this.selfList,"this.selfList")
+          // 自检信息
+          let conents = this.selfList;
+          this.processAll.projectItem = conents.projectItem;
+          this.processAll.processName = conents.processName;
+          this.processAll.startStation = conents.startStation;
+          this.processAll.state = conents.state;
+          this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
+          this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
+          this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
+          this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
 
-      map.addOverlay(marker);
-      map.enableScrollWheelZoom(true);
-      // 函数 创建多个标注
-      function markerFun(points, label, infoWindows) {
-        var markers = new BMap.Marker(points);
-        map.addOverlay(markers);
-        markers.setLabel(label);
-        markers.addEventListener("mouseover", function(event) {
-          map.openInfoWindow(infoWindows, points); //参数：窗口、点  根据点击的点出现对应的窗口
+          this.InitList.planCheckTime = conents.planCheckTime;
+          this.InitList.planCheckPerson = conents.planCheckPerson;
+          this.InitList.realityCheckPerson = conents.realityCheckPerson;
+          this.InitList.realityCheckTime = conents.realityCheckTime;
+          if (this.processAll.state == "0") {
+            this.processAll.stateProcess = "指定";
+          }
+          if (this.processAll.state == "1") {
+            this.processAll.stateProcess = "已指定";
+          }
+          if (this.processAll.state == "2") {
+            this.processAll.stateProcess = "未完成";
+          }
+          // 图片
+          let arr = conents.picMessage;
+          arr.forEach(event => {
+            //  状态(图片)
+            if (event.state == "0") {
+              this.objlist.push(event);
+              this.FormList.photoLocation = event.photoLocation;
+            }
+            if (event.state == "1") {
+              this.imgRealList.push(event);
+              this.InitList.photoLocation = event.photoLocation;
+            }
+          });
+          //    ===============     地图 +++++===========
+          let lgt;
+          let lat;
+          if (this.objlist.length > 0) {
+            lgt = this.objlist[0].lgt;
+            lat = this.objlist[0].lat;
+          }
+          if (this.objlist.length ==  0) {
+            lgt = 112.59; // 长沙经纬度
+            lat = 28.12;
+          }
+          var map = new BMap.Map("selfMap");
+          var point = new BMap.Point(lgt, lat); // 默认第一个坐标为中心点
+          map.centerAndZoom(point, 9);
+          var marker = new BMap.Marker(point);
+          let mapPoints = this.imgRealList;
+          // console.log(mapPoints,'mapPoints')
+          map.addOverlay(marker);
+          map.enableScrollWheelZoom(true);
+          // 函数 创建多个标注
+          function markerFun(points, label, infoWindows) {
+            var markers = new BMap.Marker(points);
+            map.addOverlay(markers);
+            markers.setLabel(label);
+            markers.addEventListener("mouseover", function(event) {
+              map.openInfoWindow(infoWindows, points); //参数：窗口、点  根据点击的点出现对应的窗口
+            });
+          }
+          for (var i = 0; i < mapPoints.length; i++) {
+            var points = new BMap.Point(mapPoints[i].lgt, mapPoints[i].lat); //创建坐标点
+            var opts = {
+              width: 250,
+              height: 100,
+              title: mapPoints[i].title
+            };
+            var label = new BMap.Label(mapPoints[i].photoLocation, {
+              offset: new BMap.Size(25, 5)
+            });
+            var infoWindows = new BMap.InfoWindow(
+              mapPoints[i].photoLocation,
+              opts
+            );
+            markerFun(points, label, infoWindows);
+          }
         });
-      }
-      for (var i = 0; i < mapPoints.length; i++) {
-        var points = new BMap.Point(mapPoints[i].y, mapPoints[i].x); //创建坐标点
-        var opts = {
-          width: 250,
-          height: 100,
-          title: mapPoints[i].title
-        };
-        var label = new BMap.Label(mapPoints[i].branch, {
-          offset: new BMap.Size(25, 5)
-        });
-        var infoWindows = new BMap.InfoWindow(mapPoints[i].con, opts);
-        markerFun(points, label, infoWindows);
-      }
     }
   }
 };
