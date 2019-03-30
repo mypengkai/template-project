@@ -99,8 +99,8 @@
                   <span class="accomplish">发起</span>
                   <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
                     <el-carousel :interval="3000" arrow="always" height="25vh">
-                      <el-carousel-item v-for="(item,index) in pictures" :key="index">
-                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                      <el-carousel-item v-for="(item,index) in picture" :key="index">
+                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('0')">
                       </el-carousel-item>
                     </el-carousel>
                   </el-form-item>
@@ -110,8 +110,8 @@
                   <span class="accomplish">完成</span>
                   <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
                     <el-carousel :interval="3000" arrow="always" height="25vh">
-                      <el-carousel-item v-for="(item,index) in picture" :key="index">
-                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
+                      <el-carousel-item v-for="(item,index) in pictures" :key="index">
+                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('1')">
                       </el-carousel-item>
                     </el-carousel>
                   </el-form-item>
@@ -142,7 +142,7 @@
     <!-- <div class="tar" v-if="$route.name=='instructReceive'"> -->
     <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
-      <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" @click="innerTranspond = true">转发指令</el-button>
+      <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive' && states == '未处理'" @click="innerTranspond = true">转发指令</el-button>
       <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
     </div>
 
@@ -380,7 +380,8 @@ export default {
       },
       //发送工序id
       sendDataSon: {
-        processLogId: "" // 工序id
+        processLogId: "", // 工序id
+        Mark: "" // 0发送 1完成
       },
       transpondName: "", // 转发用户名回填中文
       total: 0,
@@ -414,6 +415,7 @@ export default {
       if (this.nowItem == "add") return;
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
+      console.log(this.form)
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
@@ -425,7 +427,6 @@ export default {
       });
       this.picture = ObCopyData.data.pictureOfCommand; // 图片数组
       this.sendDataSon = this.form.processLogId; // 发送工序id
-      console.log(ObCopyData.data.finishPictureOfCommand);
       this.pictures = ObCopyData.data.finishPictureOfCommand;
       this.remark = this.commandUser[this.commandUser.length - 1].remark;
       this.states = this.form.finishPictureOfCommand; // 指令内容是否处理
@@ -455,13 +456,18 @@ export default {
       });
     },
     // 工序id拿图片详情
-    actionImg() {
+    actionImg(txtState) {
+      this.sendDataSon.Mark = txtState;
       processInfo.getPictureDetail(this.sendDataSon).then(res => {
         this.formSon = res.data.data[1]; // 图片详情信息
         if (this.formSon.photoLocation == null) {
           this.formSon.photoLocation = "湖南常祁";
         }
+        //  let arrItem =res.data.data.slice(0,1)
+        //  delete arrItem[0].createTime
+        //  console.log(arrItem)
         this.imgData = res.data.data; // 内层图片数组
+        console.log(this.imgData.shift())
       });
       this.innerVisibleSon = true;
     },
@@ -619,6 +625,12 @@ export default {
   .el-timeline-item {
     float: left;
   }
+  /deep/.el-timeline-item__tail {
+    position: absolute;
+    left: 15px;
+    width: 8vw;
+    border-top: 2px solid #e4e7ed !important;
+  }
 }
 .navb {
   width: 30%;
@@ -632,9 +644,9 @@ export default {
 }
 .reverseBox {
   height: 75vh;
-  overflow: scroll;
+  overflow-y: scroll;
 }
-.accomplish{
+.accomplish {
   display: block;
   text-align: center;
   font-size: 1vw;

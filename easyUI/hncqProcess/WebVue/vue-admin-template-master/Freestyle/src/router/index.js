@@ -68,8 +68,6 @@ export const constantRouterMap = [
     ]
   },
 
-  
-
   {
     path: '/basicsData',
     component: Layout,

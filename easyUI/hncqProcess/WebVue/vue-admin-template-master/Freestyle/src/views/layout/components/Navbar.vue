@@ -23,8 +23,9 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div class="component-item">
-         <mallki class-name="mallki-text" text="现场管理系统"/>
+      <div class="headline">
+        湖南常祁高速现场管理
+         <!-- <mallki class-name="mallki-text" text="现场管理系统"/> -->
       </div>
     </el-menu>
     <div>

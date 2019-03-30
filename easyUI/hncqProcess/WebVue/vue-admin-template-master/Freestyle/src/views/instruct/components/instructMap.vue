@@ -33,7 +33,7 @@ export default {
         locationData.photoLocation = "湖南常祁";
       }
       var map = new BMap.Map("allmap"); //创建地图实例
-      var point = new BMap.Point(formData.lat, formData.lgt); //经纬度坐标
+      var point = new BMap.Point(formData.lgt,formData.lat); //经纬度坐标
       map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
       map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
       map.addControl(new BMap.ScaleControl()); // 比例尺
