@@ -6,7 +6,7 @@
             <el-col :span="5"><el-table-column property="projectItem" label="工程名称"></el-table-column></el-col>
             <el-col :span="4"><el-table-column property="projectType" label="工程类型"></el-table-column></el-col>
             <el-col :span="5"><el-table-column property="zhuanghao" label="桩号"></el-table-column></el-col>
-            
+            <el-col :span="5"><el-table-column property="state1" label="状态"></el-table-column></el-col>
             </el-row>
         </el-table>
         <el-row>
@@ -33,7 +33,7 @@
             <el-col :span="12" v-if="imgData!=null">
                 <el-carousel :interval="5000" arrow="always">
                 <el-carousel-item v-for="(item,index) in imgData" :key="index">
-                    <img :src="item.filePath" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+                    <img :src="item" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
                 </el-carousel-item>
                 </el-carousel>
                 </el-col>
@@ -43,7 +43,7 @@
                 <el-col :span="12" v-if="imgData2!=null">
                 <el-carousel :interval="5000" arrow="always">
                 <el-carousel-item v-for="(item,index) in imgData2" :key="index">
-                    <img :src="item.filePath" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+                    <img :src="item" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
                 </el-carousel-item>
                 </el-carousel>
             </el-col>

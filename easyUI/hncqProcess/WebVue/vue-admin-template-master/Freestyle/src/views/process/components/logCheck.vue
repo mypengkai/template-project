@@ -16,9 +16,9 @@
         <el-form-item label="具体位置">
           <el-input v-model="form.photoLocation" :disabled="true" style="width:200%"></el-input>
         </el-form-item>
-        <el-form-item label="照片描述">
+        <!-- <el-form-item label="照片描述">
           <el-input v-model="form.photoDescribe" :disabled="true" style="width:200%"></el-input>
-        </el-form-item>
+        </el-form-item>-->
       </div>
     </el-form>
 
@@ -40,8 +40,9 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 export default {
-  props: ["logList"],
+  props: ["targetID"],
   data() {
     return {
       imgList: [], //图片
@@ -52,86 +53,69 @@ export default {
         photoDescribe: "", //图片描述
         describe: "" //日志描述
       },
-      tabPosition: "first"
+      tabPosition: "first",
+      logList: []
     };
   },
-  watch: {
-    logList() {
-      // 监测父组件数据
-      console.log(this.logList, "this.logList");
-      this.form.createname = this.logList.createname;
-      this.form.createTime = this.logList.createTime;
-      this.form.photoLocation = this.logList.photoLocation;
-      this.form.photoDescribe = this.logList.photoDescribe;
-      this.form.describe = this.logList.describe;
-      this.imgList = this.logList.picMessage;
-    }
-  },
+  created() {},
   mounted() {
-    this.initMap();
+    this.logInit();
   },
   methods: {
-    ininMap() {
-      var map = new BMap.Map("logmap");
-      var point = new BMap.Point(120.382029, 30.312903);
-      map.centerAndZoom(point, 9);
-      var marker = new BMap.Marker(point);
-      var mapPoints = [
-        {
-          x: 30.312903,
-          y: 120.382029,
-          title: "A",
-          con: "我是A",
-          branch: "老大"
-        },
-        {
-          x: 30.215855,
-          y: 120.024568,
-          title: "B",
-          con: "我是B",
-          branch: "老二"
-        },
-        {
-          x: 30.18015,
-          y: 120.174968,
-          title: "C",
-          con: "我是C",
-          branch: "老三"
-        },
-        {
-          x: 30.324994,
-          y: 120.164399,
-          title: "D",
-          con: "我是D",
-          branch: "老四"
-        },
-        { x: 30.24884, y: 120.305074, title: "E", con: "我是E", branch: "老五" }
-      ];
-
-      map.addOverlay(marker);
-      map.enableScrollWheelZoom(true);
-      // 函数 创建多个标注
-      function markerFun(points, label, infoWindows) {
-        var markers = new BMap.Marker(points);
-        map.addOverlay(markers);
-        markers.setLabel(label);
-        markers.addEventListener("mouseover", function(event) {
-          map.openInfoWindow(infoWindows, points); //参数：窗口、点  根据点击的点出现对应的窗口
+    // 日志初始化数据
+    logInit() {
+      request
+        .post("/rest/mark/getPictureDetail", {
+          processLogId: this.targetID
+        })
+        .then(res => {
+          if (res.data.respCode == "0") {
+            this.logList = res.data.data;
+          }
+          console.log(this.logList, "this.logList");
+          this.form.createname = this.logList.createname;
+          this.form.createTime = this.logList.createTime;
+          this.form.photoLocation = this.logList.picMessage[0].photoLocation; // 默认第一次拍照的位置
+          this.form.photoDescribe = this.logList.photoDescribe;
+          this.form.describe = this.logList.describe;
+          this.imgList = this.logList.picMessage;
+          // ========================  地图    ============================
+          let formData = this.logList.picMessage[0];
+          console.log(formData.lgt, formData.lat);
+          if (formData.lgt == null) {
+            formData.lgt = 112.376609;
+          }
+          if (formData.lat == null) {
+            formData.lat = 26.405528;
+          }
+          if (formData.photoLocation == null) {
+            formData.photoLocation = "湖南常祁";
+          }
+          var map = new BMap.Map("logmap"); //创建地图实例
+          var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
+          map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
+          map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+          map.addControl(new BMap.ScaleControl()); // 比例尺
+          map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+          map.addControl(new BMap.MapTypeControl()); //地图类型
+          map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+          map.enableDoubleClickZoom(true);
+          var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
+          map.addTileLayer(traffic); // 将图层添加到地图上
+          var marker = new BMap.Marker(point); //创建标注
+          map.addOverlay(marker);
+          map.centerAndZoom(point, 15);
+          var stCtrl = new BMap.PanoramaControl();
+          stCtrl.setOffset(new BMap.Size(0, 40));
+          map.addControl(stCtrl);
+          var opts = {
+            width: 180, // 信息窗口宽度
+            height: 50, // 信息窗口高度
+            title: formData.photoLocation // 信息窗口标题
+          };
+          var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
+          map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
         });
-      }
-      for (var i = 0; i < mapPoints.length; i++) {
-        var points = new BMap.Point(mapPoints[i].y, mapPoints[i].x); //创建坐标点
-        var opts = {
-          width: 250,
-          height: 100,
-          title: mapPoints[i].title
-        };
-        var label = new BMap.Label(mapPoints[i].branch, {
-          offset: new BMap.Size(25, 5)
-        });
-        var infoWindows = new BMap.InfoWindow(mapPoints[i].con, opts);
-        markerFun(points, label, infoWindows);
-      }
     }
   }
 };

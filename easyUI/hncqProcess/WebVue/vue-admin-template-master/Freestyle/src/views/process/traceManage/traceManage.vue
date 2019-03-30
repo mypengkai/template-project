@@ -88,7 +88,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <div class="grid-content">
+        <div class="grid-content" id="gridAdd">
           <span>类型：</span>
           <el-radio-group v-model="searchType">
             <el-radio label>全部</el-radio>
@@ -198,7 +198,10 @@ export default {
     //  单位查询
     projectInit() {
       request.get("/rest/organizate/depart").then(res => {
-        this.projectTree = res.data.data;
+        if(res.data){
+             this.projectTree = res.data.data;
+        }
+       
         console.log(this.projectTree, "this.projectTree");
       });
     },
@@ -346,6 +349,7 @@ export default {
 .grid-content {
   height: 40px;
   line-height: 40px;
+  width:100%;
 }
 .content {
   margin-top: 10px;

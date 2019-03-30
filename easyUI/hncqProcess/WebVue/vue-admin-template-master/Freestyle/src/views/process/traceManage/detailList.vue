@@ -2,7 +2,13 @@
   <div class="p20">
     <!-- 工程痕迹 -->
     <div class="projectConent" v-if="this.traceType === 1">
-      <div class="conent" style="width:15%;" v-for="(item,index) in conentOptions" :key="index" @click="pictureLook(item)">
+      <div
+        class="conent"
+        style="width:15%;"
+        v-for="(item,index) in conentOptions"
+        :key="index"
+        @click="pictureLook(item)"
+      >
         <div class="pictureBox">
           <img :src="item.filePath" alt>
         </div>
@@ -11,16 +17,13 @@
             <el-col :span="16">
               <div class="grid-content bg-purple" style="color:#8080ff">{{item.createTime}}</div>
             </el-col>
-            <el-col :span="6" style="color:#8080ff ; margin-top:9px;">
+            <el-col :span="8" style="color:#8080ff ; margin-top:9px;">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
               <template v-else-if="item.type== 'realcheck'">验收</template>
               <template v-else-if="item.type == 'polling'">巡视</template>
               <template v-else-if="item.type == 'command'">指令</template>
-            </el-col>
-            <el-col :span="2">
-              <div class="grid-content bg-purple" style="color:#8080ff">{{item.fileinfos}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -58,14 +61,14 @@
               <div class="grid-content bg-purple" style="color:#8080ff">{{item.createTime}}</div>
             </el-col>
             <el-col :span="6">
-              <div class="grid-content bg-purple-light" style="color:#8080ff">{{item.type1}}</div>
+              <div class="grid-content bg-purple-light" style="color:#8080ff">{{item.type}}</div>
             </el-col>
             <el-col :span="2">
               <div class="grid-content bg-purple" style="color:#8080ff">1</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
-          <p style="color:#8080ff">{{item.zhuanghao}}</p>
+          <p style="color:#8080ff; height:20px; line-height:20px;">{{item.zhuanghao}}</p>
           <el-row>
             <el-col :span="10">
               <div class="grid-content bg-purple">{{item.realname}}</div>
@@ -88,34 +91,34 @@
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
     <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%">
-      <inspectionBox :nowItem="nowItem" v-if="nowItem"></inspectionBox>
-      <!-- <checkBox :commandList="commandList"></checkBox>  -->
+      <!-- <checkBox :targetID="targetID"></checkBox>  -->
+      <!-- <commandCheck :commandID="commandID" ></commandCheck> -->
+      <comm :commandID="commandID"></comm>
     </el-dialog>
     <!-- 巡视查看 -->
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%">
-      <pollingCheck :pollingList="pollingList"></pollingCheck>
+      <pollingCheck :targetID="targetID"></pollingCheck>
     </el-dialog>
     <!-- 自检查看   验收查看-->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%">
-      <selfcheck :selfcheckList="selfcheckList" :realList="realList"></selfcheck>
+      <selfcheck :targetID="targetID" ></selfcheck>
     </el-dialog>
     <!-- 日志查看 -->
     <el-dialog title="日志详情" :visible.sync="dialogTableVisiblelogcheck" width="60%">
-      <logCheck :logList="logList"></logCheck>
+      <logCheck :targetID="targetID"></logCheck>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import request from "@/utils/request";
-// import realcheck from "@/views/process/components/realcheck";
+import comm from "@/views/process/components/comm";
 import selfcheck from "@/views/process/components/selfcheck";
 import logCheck from "@/views/process/components/logCheck";
-// import commandCheck from "@/views/process/components/commandCheck";
+import commandCheck from "@/views/process/components/commandCheck";
 import pollingCheck from "@/views/process/components/pollingCheck";
 import checkBox from "@/views/instruct/components/checkBox";
-import inspectionBox from "../components/inspectionBox";
-import checkPicture from "@/views/walkaroundInspection/components/CheckPicture";
+// import checkPicture from "@/views/walkaroundInspection/components/CheckPicture";
 
 export default {
   name: "DetailList",
@@ -128,26 +131,23 @@ export default {
     userOptions: {} //人员数据
   },
   components: {
-    // commandCheck,
+    commandCheck,
     selfcheck,
     logCheck,
     pollingCheck,
     checkBox,
-    inspectionBox,
-    checkPicture
+    // checkPicture,
+    comm
   },
   data() {
     return {
-      nowItem: "",
       dialogTableVisibleCommied: false, //指令
       dialogTableVisiblePolling: false, //巡视
       dialogTableVisibleSelfcheck: false, // 自检
       dialogTableVisiblelogcheck: false, //日志
-      realList: [], //验收
-      pollingList: [], //巡视
-      selfcheckList: [], // 自检
-      commandList: [], // 指令
-      logList: [] //日志
+      targetID: "" ,// 点击每一项的ID
+      targetValue:'',  // 点击的所有数据
+      commandID:'',    // 指令查询ID
     };
   },
 
@@ -161,70 +161,26 @@ export default {
   methods: {
     //查看图片详细
     pictureLook(item) {
+      this.targetID = item.id;
+      // console.log(this.targetID, "this.targetID");
       //指令
       if (item.type == "command") {
+        this.commandID = item.commandId
+        console.log( this.commandID,' this.commandID')
         this.dialogTableVisibleCommied = true;
-        request
-          .post("/rest/mark/getPictureDetail", {
-            processLogId: item.id
-          })
-          .then(res => {
-            this.commandList = res.data.data;
-            this.nowItem = this.commandList;
-            
-          });
       }
       //日志
       if (item.type == "log") {
         this.dialogTableVisiblelogcheck = true;
-        request
-          .post("/rest/mark/getPictureDetail", {
-            processLogId: item.id
-          })
-          .then(res => {
-            this.logList = res.data.data;
-          });
       }
-
       //巡视查看
-      if (item.type == "polling") {
+      if (item.type == 'polling') {
         this.dialogTableVisiblePolling = true;
-        request
-          .post("/rest/mark/getPictureDetail", {
-            processLogId: item.id
-          })
-          .then(res => {
-            this.pollingList = res.data.data;
-            console.log(this.pollingList, "this.pollingList");
-          });
       }
-      //验收
-      if (item.type == "realcheck") {
+      //验收     自检
+      if (item.type == "realcheck" || item.type == "selfcheck") {
         this.dialogTableVisibleSelfcheck = true;
-        request
-          .post("/rest/mark/getPictureDetail", {
-            processLogId: item.id
-          })
-          .then(res => {
-            this.realList = res.data.data;
-          });
       }
-      //自检
-      if (item.type == "selfcheck") {
-        this.dialogTableVisibleSelfcheck = true;
-        request
-          .post("/rest/mark/getPictureDetail", {
-            processLogId: item.id
-          })
-          .then(res => {
-            this.selfcheckList = res.data.data;
-          });
-      }
-    }
-  },
-   watch: {
-    dialogTableVisibleCommied(val) {
-      !val && (this.nowItem = ""); // 监听弹窗是否关闭 清空数据 防止回填
     }
   }
 };
@@ -234,7 +190,6 @@ export default {
 .p20 {
   margin: 0;
   padding: 0;
-  // overflow: hidden;
   max-height: 470px;
   overflow-x: hidden;
   .conent {
@@ -263,14 +218,22 @@ export default {
       h3 {
         font-size: 12px;
         margin: 20px 0;
-        min-height: 30px;
+        height: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
       p {
         font-size: 14px;
+        height: 20px;
+        line-height: 20px;
       }
       .grid-content {
         font-size: 14px;
         margin: 10px 0;
+
       }
       .spanOne {
         float: left;
@@ -280,7 +243,6 @@ export default {
       .spanTwo {
         float: right;
         font-size: 20px;
-        // color: red;
       }
     }
   }
