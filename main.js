@@ -14,6 +14,8 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import echarts from 'echarts'
+
 import VideoPlayer from 'vue-video-player' //视频
 
 require('video.js/dist/video-js.css')
