@@ -3,16 +3,18 @@
     <el-form ref="userFrom" :model="form" :rules="rules">
       <div>
         <!-- 新增 -->
-        <el-form-item style="width:17vw" label="组织机构" v-if="nowItem =='add'" prop="name" label-width="120px">
-          <el-input v-model="name" :disabled="true">
+        <el-form-item style="width:17vw" label="组织机构" v-if="nowItem =='add'" prop="" label-width="120px">
+            <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
+          <!-- <el-input v-model="name" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
-          </el-input>
+          </el-input> -->
         </el-form-item>
 
-        <el-form-item style="width:17vw" label="分部分项" v-if="nowItem =='add'" prop="projectItem" label-width="120px">
-          <el-input v-model="projectItem" :disabled="true">
+        <el-form-item style="width:17vw" label="分部分项" v-if="nowItem =='add'" prop="" label-width="120px">
+           <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
+          <!-- <el-input v-model="projectItem" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
-          </el-input>
+          </el-input> -->
         </el-form-item>
 
         <el-form-item style="width:17vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
@@ -98,7 +100,7 @@
                 <div class="fl w50">
                   <span class="accomplish">发起</span>
                   <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                    <el-carousel :interval="3000" arrow="always" height="25vh">
+                    <el-carousel :interval="3000" arrow="always" height="31vh">
                       <el-carousel-item v-for="(item,index) in picture" :key="index">
                         <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('0')">
                       </el-carousel-item>
@@ -109,7 +111,7 @@
                 <div class="rl w50">
                   <span class="accomplish">完成</span>
                   <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                    <el-carousel :interval="3000" arrow="always" height="25vh">
+                    <el-carousel :interval="3000" arrow="always" height="31vh">
                       <el-carousel-item v-for="(item,index) in pictures" :key="index">
                         <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('1')">
                       </el-carousel-item>
@@ -121,7 +123,7 @@
 
               <div v-if="states == '未处理'">
                 <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                  <el-carousel :interval="3000" arrow="always" height="25vh">
+                  <el-carousel :interval="3000" arrow="always" height="31vh">
                     <el-carousel-item v-for="(item,index) in picture" :key="index">
                       <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
                     </el-carousel-item>
@@ -131,7 +133,7 @@
 
             </div>
             <!-- 地图 -->
-            <div style="height:25vh" v-if="nowType==1">
+            <div style="height:33vh" v-if="nowType==1">
               <instructMap :nowItem="nowItem"></instructMap>
             </div>
 
@@ -147,15 +149,15 @@
     </div>
 
     <!-- 组织机构树形表单 -->
-    <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
+    <!-- <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
       <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
       </el-tree>
-    </el-dialog>
+    </el-dialog> -->
     <!-- 分部分项树形表单 -->
-    <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
+    <!-- <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
       <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
       </el-tree>
-    </el-dialog>
+    </el-dialog> -->
     <!-- 接受人id -->
     <el-dialog width="40%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
       <div>
@@ -246,9 +248,11 @@ import project from "@/api/project.js";
 import Organization from "@/api/Organization.js";
 import processInfo from "@/api/process.js";
 import instructMap from "./instructMap";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   inject: ["reload"],
   components: {
+    SelectTree,
     instructMap
   },
   props: ["nowItem"],
@@ -294,6 +298,7 @@ export default {
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
+       value1: "",
       planTime: "",
       headers: {
         "X-AUTH-TOKEN": getToken()
@@ -376,6 +381,7 @@ export default {
       sendData: {
         pageNo: 1, // 当前页
         pageSize: 8, // 每页条数
+         orgId: "",
         Mark: "" // 标记， 1项目，2业主，3监理，4标段
       },
       //发送工序id
@@ -415,7 +421,6 @@ export default {
       if (this.nowItem == "add") return;
       let ObCopyData = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值 处理复杂类型
       this.form = ObCopyData.data; // 第一层查看
-      console.log(this.form)
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
@@ -444,9 +449,9 @@ export default {
         this.orgTree = res.data.data;
       });
       // 分部分项树
-      project.projectList().then(res => {
-        this.projectList = res.data.data;
-      });
+      // project.projectList().then(res => {
+      //   this.projectList = res.data.data;
+      // });
     },
     _userList() {
       //   接受人id
@@ -467,7 +472,7 @@ export default {
         //  delete arrItem[0].createTime
         //  console.log(arrItem)
         this.imgData = res.data.data; // 内层图片数组
-        console.log(this.imgData.shift())
+        // console.log(this.imgData.shift())
       });
       this.innerVisibleSon = true;
     },
@@ -520,16 +525,20 @@ export default {
       }
     },
     // 组织机构选择后的数据
-    handleCheckChange(data, checked, indeterminate) {
+    handleCheckChange(data) {
+        this.projectList = [];
       this.form.userGroupId = data.id;
-      this.name = data.name;
-      this.innerVisible = false;
+    this.sendData.orgId = data.id;
+      project.projectList(this.sendData).then(res => {
+        if (res.data.data == null) {
+          res.data.data = [];
+        }
+        this.projectList = res.data.data;
+      });
     },
     // 分部分项选择后的数据
-    projectChange(data, checked, indeterminate) {
+    projectChange(data) {
       this.form.projectItemId = data.id;
-      this.projectItem = data.projectItem;
-      this.projectVisible = false;
     },
     // 计划时间
     planDataRange(val) {

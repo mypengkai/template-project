@@ -1,32 +1,64 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name:{{ name }}</div>
-    <div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>
+  <div class="homeLayout p20">
+      <div class="a">
+         <broken></broken>
+      </div>
+      <div class="b">
+        <photograph></photograph>
+      </div>
+      <div class="c">
+         <cookie></cookie>
+      </div>
+
+    <!-- 折线图 -->
+    <!-- <div style="width: 70%;">
+         <broken></broken>
+    </div> -->
+    <!-- 饼图统计 -->
+    <!-- <div style="width: 30%;">
+      <cookie></cookie>
+    </div> -->
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
+import { mapGetters } from "vuex";
+import broken from "./components/broken";
+import cookie from "./components/cookie";
+import photograph from "./components/photograph";
 export default {
-  // name: '首页',
-  computed: {
-    ...mapGetters([
-      'name',
-      'roles'
-    ])
+  components: {
+    broken,
+    cookie,
+    photograph
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
+.homeLayout {
+  height: 82vh;
+  position: relative;
+  .a{
+    position: absolute;
+    width: 70%;
+    height: 50%;
+    left: 0;
+    top: 0;
   }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
+  .b{
+     position: absolute;
+    width: 70%;
+    height: 50%;
+    left: 0;
+    bottom: 0;
+  }
+  .c{
+     position: absolute;
+    width: 30%;
+    height: 100%;
+    right: 0;
+    top: 0;
   }
 }
 </style>

@@ -11,9 +11,12 @@
         </el-select>
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-        <el-input v-model="projectItem" clearable placeholder="请选择分部分项">
+        
+              <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value" />
+          
+        <!-- <el-input v-model="projectItem" clearable placeholder="请选择分部分项">
           <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
-        </el-input>
+        </el-input> -->
         <!-- 时间段 -->
         <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
         </el-date-picker>
@@ -61,25 +64,28 @@
     </el-dialog>
 
     <!-- 分部分项树形表单 -->
-    <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
+    <!-- <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
       <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
       </el-tree>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
 import CheckPicture from "./components/CheckPicture";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 import api from "@/api/Patrol.js";
 import user from "@/api/user";
 import project from "@/api/project.js";
 export default {
   components: {
+    SelectTree,
     CheckPicture
   },
   data() {
     return {
       nowItem: "",
+      value:"",
       getListByUser: [], // 用户列表
       everyDayLogPageList: [], // 当前列表
       total: 0,
@@ -141,14 +147,15 @@ export default {
       });
     },
     // 分部分项选择后的数据
-    projectChange(data, checked, indeterminate) {
+    projectChange(data) {
+    
       this.sendData.projectCode = data.projectCode;
       this.projectItem = data.projectItem;
-      this.projectVisible = false;
+      // this.projectVisible = false;
     },
     changeDataRange(val) {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
-      console.log(this.sendData);
+      // console.log(this.sendData);
     }
   },
   watch: {
@@ -164,5 +171,4 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
 </style>

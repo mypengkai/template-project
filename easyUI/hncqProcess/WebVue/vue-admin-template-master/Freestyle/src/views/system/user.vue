@@ -7,9 +7,10 @@
       <span>用户名称:</span>
       <el-input size="small" v-model="sendData.SQLrealname" clearable placeholder="请输入名称"></el-input>
       <span>选择部门:</span>
-      <el-input size="small" v-model="name" clearable placeholder="请输入部门">
+       <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
+      <!-- <el-input size="small" v-model="name" clearable placeholder="请输入部门">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
-      </el-input>
+      </el-input> -->
       <div class="rl">
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">搜索</el-button>
         <el-button type="primary" class="pan-btn blue-btn" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
@@ -65,12 +66,15 @@
 import userAdd from "./components/userAdd";
 import api from "@/api/user.js";
 import Organization from "@/api/Organization.js";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   components: {
+    SelectTree,
     userAdd
   },
   data() {
     return {
+      value:"",
       userList: [], // 用户列表数组
       orgTree: [], //组织机构数组
       defaultProps: {
@@ -152,7 +156,7 @@ export default {
       });
     },
     // 组织机构选择后的数据
-    handleCheckChange(data, checked, indeterminate) {
+    handleCheckChange(data) {
       this.sendData.SQLorgid = data.id;
       this.name = data.name;
       this.innerVisible = false;
