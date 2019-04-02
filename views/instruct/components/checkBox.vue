@@ -472,7 +472,7 @@ export default {
         //  delete arrItem[0].createTime
         //  console.log(arrItem)
         this.imgData = res.data.data; // 内层图片数组
-        // console.log(this.imgData.shift())
+        console.log(this.imgData.shift(0,1))
       });
       this.innerVisibleSon = true;
     },
