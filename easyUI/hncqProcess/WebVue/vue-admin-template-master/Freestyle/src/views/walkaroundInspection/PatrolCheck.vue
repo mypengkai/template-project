@@ -11,13 +11,7 @@
         </el-select>
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-
-        <!-- <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value" /> -->
-
         <el-cascader clearable :options="projectList" :props="projectTree" change-on-select @change="projectChange"></el-cascader>
-        <!-- <el-input v-model="projectItem" clearable placeholder="请选择分部分项">
-          <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
-        </el-input> -->
         <!-- 时间段 -->
         <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
         </el-date-picker>
@@ -64,11 +58,6 @@
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
 
-    <!-- 分部分项树形表单 -->
-    <!-- <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
-      <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
-      </el-tree>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -124,10 +113,6 @@ export default {
       });
     },
 
-    // action(val) {
-    //   this.nowItem = val;
-    //   this.dialogFormVisible = true;
-    // },
     // 查询单个请求
     async action(val) {
       let { data } = await api.chakanList(val.id); //异步执行取id
@@ -154,7 +139,6 @@ export default {
     },
     changeDataRange(val) {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
-      // console.log(this.sendData);
     }
   },
   watch: {
