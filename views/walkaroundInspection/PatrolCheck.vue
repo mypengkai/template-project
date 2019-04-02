@@ -11,9 +11,10 @@
         </el-select>
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-        
-              <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value" />
-          
+
+        <!-- <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value" /> -->
+
+        <el-cascader clearable :options="projectList" :props="projectTree" change-on-select @change="projectChange"></el-cascader>
         <!-- <el-input v-model="projectItem" clearable placeholder="请选择分部分项">
           <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
         </el-input> -->
@@ -85,7 +86,7 @@ export default {
   data() {
     return {
       nowItem: "",
-      value:"",
+      value: "",
       getListByUser: [], // 用户列表
       everyDayLogPageList: [], // 当前列表
       total: 0,
@@ -100,8 +101,9 @@ export default {
       },
       // 工程分项树显示
       projectTree: {
-        children: "children",
-        label: "projectItem"
+        label: "projectItem",
+        value: "projectCode",
+        children: "children"
       },
       projectItem: "", // 分部分项回填显示
       projectList: [], // 分部分项树
@@ -148,10 +150,7 @@ export default {
     },
     // 分部分项选择后的数据
     projectChange(data) {
-    
-      this.sendData.projectCode = data.projectCode;
-      this.projectItem = data.projectItem;
-      // this.projectVisible = false;
+      this.sendData.projectCode = data[data.length - 1];
     },
     changeDataRange(val) {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
