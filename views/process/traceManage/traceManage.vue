@@ -4,63 +4,20 @@
       <el-row>
         <el-col :span="10" v-if="tabPosition == 'first'">
           <div class="grid-content">
-            <span>组织机构：</span>
-            <el-select
-              ref="select"
-              filterable
-              class="progectBox"
-              placeholder="请选择"
-              clearable
-              v-model="from.projectName"
-              @focus="showProper"
-            ></el-select>
-            <el-popover
-              transition="fade-in-linear"
-              v-model="flag"
-              width="300"
-              trigger="click"
-              ref="refProject"
-              class="checkPoper"
-            >
-              <el-tree
-                :data="projectTree"
-                :highlight-current="true"
-                :render-after-expand="false"
-                node-key="id"
-                @node-click="handleCheckChange"
-                :props="defaultProps"
-              ></el-tree>
-            </el-popover>
+            <el-form inline>
+              <el-form-item label="组织机构：">
+                <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
+              </el-form-item>
+            </el-form>
           </div>
         </el-col>
         <el-col :span="10" v-if="tabPosition == 'first'">
           <div class="grid-content">
-            <span>单位分部分项：</span>
-            <el-select
-              class="progectBox"
-              clearable
-              filterable
-              v-model="from.unitsName"
-              placeholder="请选择"
-              ref="refUnits"
-              @focus="unitsInit"
-            ></el-select>
-            <el-popover
-              transition="fade-in-linear"
-              v-model="flagtwo"
-              width="300"
-              trigger="click"
-              class="checkUnit"
-            >
-              <el-tree
-                :data="unitsTree"
-                :highlight-current="true"
-                :render-after-expand="false"
-                node-key="id"
-                @node-click="handleCheckChangeUnit"
-                :props="defaultPropsProject"
-              ></el-tree>
-            </el-popover>
+             <el-form inline>
+              <el-form-item label="单位分部分项：">
+                <select-tree :options="unitsTree"  v-on:noDe="handleCheckChangeUnit" :props="defaultPropsProject"/>
+              </el-form-item>
+            </el-form>
           </div>
         </el-col>
         <!-- ========================================== -->
@@ -141,12 +98,14 @@
 import list from "./detailList";
 import { getToken } from "@/utils/auth";
 import request from "@/utils/request";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 let token = localStorage.getItem("myToken");
 
 export default {
   name: "TraceManage",
   components: {
-    list
+    list,
+    SelectTree,
   },
   data() {
     return {
@@ -157,12 +116,12 @@ export default {
       dateFrom: "", //日期
       dateTo: "",
       active: "",
-      projectTree: [], //工程列表
-      unitsTree: [],
+      options: [], //工程列表
+      unitsTree: [],  // 工程分项
       username: "", //用户名
       conentOptions: [], // 展示数据
       userOptions: [], // 人员数据
-      defaultProps: {
+      defaultProp: {
         children: "children",
         label: "name"
       },
@@ -171,9 +130,9 @@ export default {
         children: "children",
         label: "projectItem"
       },
+      value:'',
+      value1:'',
       serckCheck: ["时间", "人员", "类型"],
-      flag: false,
-      flagtwo: false,
       from: {
         projectName: "", //单位
         projectId: "", //单位id
@@ -182,47 +141,32 @@ export default {
       },
       headers: {
         "X-AUTH-TOKEN": getToken()
-      },
+      }
     };
   },
   watch: {},
   created() {
     this.projectInit();
-  
   },
   mounted() {
-    this.hideFn(); // 监听
-    this.hideFc();
+   
   },
   methods: {
     //  单位查询
     projectInit() {
       request.get("/rest/organizate/depart").then(res => {
-        if(res.data){
-             this.projectTree = res.data.data;
+        if (res.data) {
+          this.options = res.data.data;
         }
-       
-        console.log(this.projectTree, "this.projectTree");
       });
     },
 
     //选中的数据(tree)
-    handleCheckChange(data, checked, indeterminate) {
+    noDe(data, checked, indeterminate) {
       this.from.projectName = data.name;
       this.from.projectId = data.id;
-      this.flag = false;
-    },
-    handleCheckChangeUnit(data) {
-      this.from.unitsName = data.projectItem;
-      this.from.unitsId = data.id;
-      this.flagtwo = false;
-    },
-    unitsInit() {
-      this.$refs.refUnits.blur(); // 清楚select 下拉默认样式
-      this.flagtwo = true;
-      //单位工程查询
-      // console.log(this.from.projectId,'this.from.projectId')
-      request
+      // this.flag = false;
+       request
         .post("/rest/projectItemInfo/getList", {
           orgId: this.from.projectId,
           "X-AUTH-TOKEN": token
@@ -230,6 +174,11 @@ export default {
         .then(res => {
           this.unitsTree = res.data.data;
         });
+    },
+    handleCheckChangeUnit(data) {
+      this.from.unitsName = data.projectItem;
+      this.from.unitsId = data.id;
+      
     },
     // 整体查询(工程痕迹)
     querySelected() {
@@ -268,44 +217,12 @@ export default {
           });
       }
     },
-    showProper() {
-      // 聚焦
-      this.$refs.select.blur(); // 清楚select下拉默认样式
-      this.flag = true;
-    },
-    hideFn() {
-      document.addEventListener("click", evevt => {
-        let sp = document.querySelector(".checkPoper");
-        if (!sp.contains(event.target)) {
-          //这句是说如果我们点击到了checkPoper以外的区域
-          this.flag = false;
-        }
-      });
-    },
-    hideFc() {
-      document.addEventListener("click", evevt => {
-        // 点击区域外关闭弹出层
-        let ps = document.querySelector(".checkUnit");
-        if (!ps.contains(evevt.target)) {
-          this.flagtwo = false;
-        }
-      });
-    },
-    hideProper() {
-      this.flag = false;
-      this.flagtwo = false;
-    },
     checkActive(index) {
       // 筛选
       this.active = index;
       this.querySelected();
     }
   },
-  destroyed() {
-    // 移除监听事件
-    document.removeEventListener(this.hideFn());
-    document.removeEventListener(this.hideFc());
-  }
 };
 </script>
 
@@ -349,7 +266,7 @@ export default {
 .grid-content {
   height: 40px;
   line-height: 40px;
-  width:100%;
+  width: 100%;
 }
 .content {
   margin-top: 10px;
@@ -370,8 +287,6 @@ export default {
   }
 }
 .color {
-
   background: skyblue;
 }
-
 </style>

@@ -91,8 +91,6 @@
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
     <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%">
-      <!-- <checkBox :targetID="targetID"></checkBox>  -->
-      <!-- <commandCheck :commandID="commandID" ></commandCheck> -->
       <comm :commandID="commandID"></comm>
     </el-dialog>
     <!-- 巡视查看 -->
@@ -101,7 +99,7 @@
     </el-dialog>
     <!-- 自检查看   验收查看-->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%">
-      <selfcheck :targetID="targetID" ></selfcheck>
+      <selfcheck :processList="processList"></selfcheck>
     </el-dialog>
     <!-- 日志查看 -->
     <el-dialog title="日志详情" :visible.sync="dialogTableVisiblelogcheck" width="60%">
@@ -115,10 +113,7 @@ import request from "@/utils/request";
 import comm from "@/views/process/components/comm";
 import selfcheck from "@/views/process/components/selfcheck";
 import logCheck from "@/views/process/components/logCheck";
-import commandCheck from "@/views/process/components/commandCheck";
 import pollingCheck from "@/views/process/components/pollingCheck";
-import checkBox from "@/views/instruct/components/checkBox";
-// import checkPicture from "@/views/walkaroundInspection/components/CheckPicture";
 
 export default {
   name: "DetailList",
@@ -131,12 +126,9 @@ export default {
     userOptions: {} //人员数据
   },
   components: {
-    commandCheck,
     selfcheck,
     logCheck,
     pollingCheck,
-    checkBox,
-    // checkPicture,
     comm
   },
   data() {
@@ -145,13 +137,17 @@ export default {
       dialogTableVisiblePolling: false, //巡视
       dialogTableVisibleSelfcheck: false, // 自检
       dialogTableVisiblelogcheck: false, //日志
-      targetID: "" ,// 点击每一项的ID
-      targetValue:'',  // 点击的所有数据
-      commandID:'',    // 指令查询ID
+      targetID: "", // 点击每一项的ID
+      commandID: "", // 指令查询ID
+      processInfoID: "", // 验收 自检id
+      processId: "", // 工序ID
+      type: "", // 自检 或 验收状态,
+      processList: [] //自检验收信息
     };
   },
 
   created() {},
+  mounted() {},
   computed: {
     title() {
       return this.traceType === 1 ? "工程痕迹管理" : "人员痕迹管理";
@@ -162,23 +158,26 @@ export default {
     //查看图片详细
     pictureLook(item) {
       this.targetID = item.id;
-      // console.log(this.targetID, "this.targetID");
       //指令
       if (item.type == "command") {
-        this.commandID = item.commandId
-        console.log( this.commandID,' this.commandID')
         this.dialogTableVisibleCommied = true;
+        this.commandID = item.commandId;
+        console.log(this.commandID, " this.commandID");
       }
       //日志
       if (item.type == "log") {
         this.dialogTableVisiblelogcheck = true;
       }
       //巡视查看
-      if (item.type == 'polling') {
+      if (item.type == "polling") {
         this.dialogTableVisiblePolling = true;
       }
       //验收     自检
       if (item.type == "realcheck" || item.type == "selfcheck") {
+        this.type = item.type;
+        // this.processInfoID = item.processInfoID;
+        this.processId = item.processId;
+        this.processList = item;
         this.dialogTableVisibleSelfcheck = true;
       }
     }
@@ -233,7 +232,6 @@ export default {
       .grid-content {
         font-size: 14px;
         margin: 10px 0;
-
       }
       .spanOne {
         float: left;

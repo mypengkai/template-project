@@ -9,7 +9,7 @@
           <el-input v-model="processAll.processName" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="桩号:">
-          <el-input v-model="processAll.startStation" :disabled="true"></el-input>
+          <el-input v-model="processAll.zhuanghao" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="状态:">
           <el-input v-model="processAll.stateProcess" :disabled="true"></el-input>
@@ -17,7 +17,7 @@
       </div>
     </el-form>
 
-      <div class="allBox">
+    <div class="allBox">
       <div class="selfBox">
         <h3>自检</h3>
         <el-form :inline="true" :model="FormList" class="demo-form-inline">
@@ -98,14 +98,18 @@
 <script>
 import request from "@/utils/request";
 export default {
-  props: ["targetID"],
+  inject: ["reload"],
+  // props: ["processInfoID", "type"],
+  props: {
+    processList: {}
+  },
   data() {
     return {
       selfList: [], // 自检数据
       realList: [], // 验收数据
       processAll: {
         projectItem: "", // 工程
-        startStation: "", // 桩号
+        zhuanghao: "", // 桩号
         state: "", //状态
         stateProcess: "",
         processName: "" // 工序名
@@ -127,37 +131,46 @@ export default {
       objlist: [], //图片专用(自检)
       imgRealList: [], //验收
       tabPosition: "first",
-      tabShow: "three"
+      tabShow: "three",
+      getID: ""
     };
   },
   created() {
-   
-            this.realInit();  
- 
-   
-            this.selfInit();
-    
-    
+    if (this.processList.type == "realcheck") {
+      this.realInit();
+    }
+    if (this.processList.type == "selfcheck") {
+      this.selfInit();
+    }
+  },
+  watch: {
+    processList(val) {
+      if (this.processList.type == "realcheck") {
+        this.realInit();
+      }
+      if (this.processList.type == "selfcheck") {
+        this.selfInit();
+      }
+    }
   },
   mounted() {},
   methods: {
     // 验收
     realInit() {
       request
-        .post("/rest/mark/getPictureDetail", {
-          processLogId: this.targetID,
-          Mark: 1
+        .post("/rest/processCheck/getProcessDetail", {
+          id: this.processList.processId
         })
         .then(res => {
           if (res.data.respCode == "0") {
+            if (res.data.data == null && !res.data.data.length) return false;
             this.realList = res.data.data;
-            console.log(this.realList, "this.realList");
           }
           let conents = this.realList;
           this.processAll.projectItem = conents.projectItem;
           this.processAll.processName = conents.processName;
-          this.processAll.startStation = conents.startStation;
-          this.processAll.state = conents.state;
+          this.processAll.zhuanghao = conents.zhuanghao;
+          this.processAll.state = conents.state2;
           this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
           this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
           this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
@@ -167,93 +180,114 @@ export default {
           this.InitList.planCheckPerson = conents.planCheckPerson;
           this.InitList.realityCheckPerson = conents.realityCheckPerson;
           this.InitList.realityCheckTime = conents.realityCheckTime;
+          this.objlist = conents.selfFilePath; // 自检位置
+          this.imgRealList = conents.filePath; // 验收位置
           if (this.processAll.state == "0") {
-            this.processAll.stateProcess = "指定";
+            this.processAll.stateProcess = "指定工序";
           }
           if (this.processAll.state == "1") {
-            this.processAll.stateProcess = "已指定";
+            this.processAll.stateProcess = "已指定验收工序";
           }
           if (this.processAll.state == "2") {
-            this.processAll.stateProcess = "未完成";
+            this.processAll.stateProcess = "自检完成";
           }
-          // 图片
-          let array = conents.picMessage;
-          array.forEach(e => {
-            //  状态(图片)
-            if (e.state == "0") {
-              this.objlist.push(e);
-              this.FormList.photoLocation = e.photoLocation;
+          if (this.processAll.state == "3") {
+            this.processAll.stateProcess = "验收完成";
+          }
+          if (this.imgRealList.length > 0) {
+            let formData = conents.filePath[0];
+            this.InitList.photoLocation = conents.filePath[0].photoLocation;
+            if (formData.lgt == null) {
+              formData.lgt = 112.376609;
             }
-            if (e.state == "1") {
-              this.imgRealList.push(e);
-              this.InitList.photoLocation = e.photoLocation;
+            if (formData.lat == null) {
+              formData.lat = 26.405528;
             }
-          });
-            //  ===============     地图 +++++===========
-          let lgt;
-          let lat;
-          if (this.imgRealList.length > 0 ) {
-            lgt = this.imgRealList[0].lgt;
-            lat = this.imgRealList[0].lat;
-          }
-          if (this.imgRealList.length == 0) {
-            lgt = 112.59; // 长沙经纬度
-            lat = 28.12;
-          }
-          console.log(lgt, "lgt", lat, "lat");
-          var map = new BMap.Map("realMap");
-          var point = new BMap.Point(lgt, lat); // 默认第一个坐标为中心点
-          map.centerAndZoom(point, 9);
-          var marker = new BMap.Marker(point);
-          let mapPoints = this.imgRealList;
-          // console.log(mapPoints,'mapPoints')
-          map.addOverlay(marker);
-          map.enableScrollWheelZoom(true);
-          // 函数 创建多个标注
-          function markerFun(points, label, infoWindows) {
-            var markers = new BMap.Marker(points);
-            map.addOverlay(markers);
-            markers.setLabel(label);
-            markers.addEventListener("mouseover", function(event) {
-              map.openInfoWindow(infoWindows, points); //参数：窗口、点  根据点击的点出现对应的窗口
-            });
-          }
-          for (var i = 0; i < mapPoints.length; i++) {
-            var points = new BMap.Point(mapPoints[i].lgt, mapPoints[i].lat); //创建坐标点
+            if (formData.photoLocation == null) {
+              formData.photoLocation = "湖南常祁";
+            }
+            var map = new BMap.Map("realMap"); //创建地图实例
+            var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
+            map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
+            map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+            map.addControl(new BMap.ScaleControl()); // 比例尺
+            map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+            map.addControl(new BMap.MapTypeControl()); //地图类型
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+            map.enableDoubleClickZoom(true);
+            var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
+            map.addTileLayer(traffic); // 将图层添加到地图上
+            var marker = new BMap.Marker(point); //创建标注
+            map.addOverlay(marker);
+            map.centerAndZoom(point, 15);
+            var stCtrl = new BMap.PanoramaControl();
+            stCtrl.setOffset(new BMap.Size(0, 40));
+            map.addControl(stCtrl);
             var opts = {
-              width: 180,
-              height: 50,
-              title: mapPoints[i].title
+              width: 180, // 信息窗口宽度
+              height: 50, // 信息窗口高度
+              title: formData.photoLocation // 信息窗口标题
             };
-            var label = new BMap.Label(mapPoints[i].photoLocation, {
-              offset: new BMap.Size(25, 5)
-            });
-            var infoWindows = new BMap.InfoWindow(
-              mapPoints[i].photoLocation,
-              opts
-            );
-            markerFun(points, label, infoWindows);
+            var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
+            map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
+          }
+          //   自检地图
+          if (this.objlist.length > 0) {
+            this.FormList.photoLocation = conents.selfFilePath[0].photoLocation;
+            let selfData = conents.selfFilePath[0];
+            if (selfData.lgt == null) {
+              selfData.lgt = 112.376609;
+            }
+            if (selfData.lat == null) {
+              selfData.lat = 26.405528;
+            }
+            if (selfData.photoLocation == null) {
+              selfData.photoLocation = "湖南常祁";
+            }
+            var map1 = new BMap.Map("selfMap"); //创建地图实例
+            var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
+            map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
+            map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+            map1.addControl(new BMap.ScaleControl()); // 比例尺
+            map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+            map1.addControl(new BMap.MapTypeControl()); //地图类型
+            map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+            map1.enableDoubleClickZoom(true);
+            var traffic1 = new BMap.TrafficLayer(); // 创建交通流量图层实例
+            map1.addTileLayer(traffic1); // 将图层添加到地图上
+            var marker1 = new BMap.Marker(point1); //创建标注
+            map1.addOverlay(marker1);
+            map1.centerAndZoom(point1, 15);
+            var stCtrl1 = new BMap.PanoramaControl();
+            stCtrl1.setOffset(new BMap.Size(0, 40));
+            map1.addControl(stCtrl1);
+            var opts1 = {
+              width: 180, // 信息窗口宽度
+              height: 50, // 信息窗口高度
+              title: selfData.photoLocation // 信息窗口标题
+            };
+            var infoWindow1 = new BMap.InfoWindow("", opts1); // 创建信息窗口对象
+            map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
           }
         });
     },
     // 自检
     selfInit() {
+      
       request
-        .post("/rest/mark/getPictureDetail", {
-          processLogId: this.targetID,
-          Mark: 0
+        .post("/rest/processCheck/getProcessDetail", {
+          id: this.processList.processId
         })
         .then(res => {
           if (res.data.respCode == "0") {
             this.selfList = res.data.data;
           }
-            console.log(this.selfList,"this.selfList")
           // 自检信息
           let conents = this.selfList;
           this.processAll.projectItem = conents.projectItem;
           this.processAll.processName = conents.processName;
-          this.processAll.startStation = conents.startStation;
-          this.processAll.state = conents.state;
+          this.processAll.zhuanghao = conents.zhuanghao;
+          this.processAll.state = conents.state2;
           this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
           this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
           this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
@@ -263,74 +297,61 @@ export default {
           this.InitList.planCheckPerson = conents.planCheckPerson;
           this.InitList.realityCheckPerson = conents.realityCheckPerson;
           this.InitList.realityCheckTime = conents.realityCheckTime;
+
+          this.objlist.length = 0;
+          this.objlist = conents.selfFilePath;
+
           if (this.processAll.state == "0") {
-            this.processAll.stateProcess = "指定";
+            this.processAll.stateProcess = "指定工序";
           }
           if (this.processAll.state == "1") {
-            this.processAll.stateProcess = "已指定";
+            this.processAll.stateProcess = "自检完成";
           }
           if (this.processAll.state == "2") {
-            this.processAll.stateProcess = "未完成";
+            this.processAll.stateProcess = "验收完成";
           }
-          // 图片
-          let arr = conents.picMessage;
-          arr.forEach(event => {
-            //  状态(图片)
-            if (event.state == "0") {
-              this.objlist.push(event);
-              this.FormList.photoLocation = event.photoLocation;
-            }
-            if (event.state == "1") {
-              this.imgRealList.push(event);
-              this.InitList.photoLocation = event.photoLocation;
-            }
-          });
-          //    ===============     地图 +++++===========
-          let lgt;
-          let lat;
           if (this.objlist.length > 0) {
-            lgt = this.objlist[0].lgt;
-            lat = this.objlist[0].lat;
-          }
-          if (this.objlist.length ==  0) {
-            lgt = 112.59; // 长沙经纬度
-            lat = 28.12;
-          }
-          var map = new BMap.Map("selfMap");
-          var point = new BMap.Point(lgt, lat); // 默认第一个坐标为中心点
-          map.centerAndZoom(point, 9);
-          var marker = new BMap.Marker(point);
-          let mapPoints = this.imgRealList;
-          // console.log(mapPoints,'mapPoints')
-          map.addOverlay(marker);
-          map.enableScrollWheelZoom(true);
-          // 函数 创建多个标注
-          function markerFun(points, label, infoWindows) {
-            var markers = new BMap.Marker(points);
-            map.addOverlay(markers);
-            markers.setLabel(label);
-            markers.addEventListener("mouseover", function(event) {
-              map.openInfoWindow(infoWindows, points); //参数：窗口、点  根据点击的点出现对应的窗口
-            });
-          }
-          for (var i = 0; i < mapPoints.length; i++) {
-            var points = new BMap.Point(mapPoints[i].lgt, mapPoints[i].lat); //创建坐标点
-            var opts = {
-              width: 250,
-              height: 100,
-              title: mapPoints[i].title
+            this.FormList.photoLocation = conents.selfFilePath[0].photoLocation;
+            let selfData = conents.selfFilePath[0];
+            if (selfData.lgt == null) {
+              selfData.lgt = 112.376609;
+            }
+            if (selfData.lat == null) {
+              selfData.lat = 26.405528;
+            }
+            if (selfData.photoLocation == null) {
+              selfData.photoLocation = "湖南常祁";
+            }
+            var map1 = new BMap.Map("selfMap"); //创建地图实例
+            var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
+            map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
+            map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+            map1.addControl(new BMap.ScaleControl()); // 比例尺
+            map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+            map1.addControl(new BMap.MapTypeControl()); //地图类型
+            map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+            map1.enableDoubleClickZoom(true);
+            var traffic1 = new BMap.TrafficLayer(); // 创建交通流量图层实例
+            map1.addTileLayer(traffic1); // 将图层添加到地图上
+            var marker1 = new BMap.Marker(point1); //创建标注
+            map1.addOverlay(marker1);
+            map1.centerAndZoom(point1, 15);
+            var stCtrl1 = new BMap.PanoramaControl();
+            stCtrl1.setOffset(new BMap.Size(0, 40));
+            map1.addControl(stCtrl1);
+            var opts1 = {
+              width: 180, // 信息窗口宽度
+              height: 50, // 信息窗口高度
+              title: selfData.photoLocation // 信息窗口标题
             };
-            var label = new BMap.Label(mapPoints[i].photoLocation, {
-              offset: new BMap.Size(25, 5)
-            });
-            var infoWindows = new BMap.InfoWindow(
-              mapPoints[i].photoLocation,
-              opts
-            );
-            markerFun(points, label, infoWindows);
+            var infoWindow1 = new BMap.InfoWindow("", opts1); // 创建信息窗口对象
+            map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
           }
         });
     }
+  },
+  destoryed() {
+    this.reload();
   }
 };
 </script>

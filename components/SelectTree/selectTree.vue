@@ -120,6 +120,8 @@ export default {
       this.valueModel = node[this.props.value];
       this.onCloseTree();
     },
+   
+
     // 偏平数组转化为树状层级结构
     switchTree() {
       return this.cleanChildren(this.buildTree(this.options, '0'));
