@@ -7,6 +7,9 @@ export default {
     getPicMessage(params) {
         return request.get('/rest/homePage/getPicMessage', { params })
     },
+    getOrgNumber(params) {
+        return request.get('/rest/homePage/getOrgNumber', { params })
+    },
 }
 
 

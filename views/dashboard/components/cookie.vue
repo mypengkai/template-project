@@ -1,20 +1,34 @@
 <template>
-    <div id="cookie"></div>
+  <div id="cookie"></div>
 </template>
 
 <script>
 import echarts from "echarts";
+import homePage from "@/api/homePage.js";
 export default {
   mounted() {
     this.record();
   },
   methods: {
     record() {
+      homePage.getOrgNumber().then(res => {
+        let cookieData = res.data.data;
+        let cookieDataName = [];
+        cookieData.forEach(v => {
+          v.name == "gongxu" && (v.name1 = "工序");
+          v.name == "zhiling" && (v.name1 = "指令");
+          v.name == "xunshi" && (v.name1 = "巡视");
+          v.name == "log" && (v.name1 = "日志");
+          cookieDataName.push(v.name1);
+        });
+        this.lol(cookieData, cookieDataName);
+      });
+    },
+    lol(cookieData, cookieDataName) {
       let cookie = echarts.init(document.getElementById("cookie"));
       let option = {
         title: {
-          text: "某站点用户访问来源",
-          subtext: "纯属虚构",
+          text: "查询组织机构轨迹数量",
           x: "center"
         },
         tooltip: {
@@ -24,20 +38,19 @@ export default {
         legend: {
           orient: "vertical",
           left: "right",
-          data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+          data: cookieDataName
         },
         series: [
           {
             name: "访问来源",
             type: "pie",
             radius: "55%",
-            center: ["50%", "65%"],
+            center: ["50%", "60%"],
             data: [
-              { value: 335, name: "直接访问" },
-              { value: 310, name: "邮件营销" },
-              { value: 234, name: "联盟广告" },
-              { value: 135, name: "视频广告" },
-              { value: 1548, name: "搜索引擎" }
+              { value: cookieData[0].number, name: cookieData[0].name1 },
+              { value: cookieData[1].number, name: cookieData[1].name1 },
+              { value: cookieData[2].number, name: cookieData[2].name1 },
+              { value: cookieData[3].number, name: cookieData[3].name1 }
             ],
             itemStyle: {
               emphasis: {
@@ -50,6 +63,7 @@ export default {
         ]
       };
       cookie.setOption(option);
+      window.onresize = cookie.resize;
     }
   }
 };

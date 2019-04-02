@@ -18,7 +18,6 @@ export default {
     shoot() {
       homePage.getPicMessage().then(res => {
         let dataArr = res.data.data;
-        console.log(dataArr);
         let dataArrX = [];
         let dataArrY = [];
         let dataArrZ = [];
