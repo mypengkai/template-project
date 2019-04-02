@@ -135,14 +135,7 @@ export default {
       getID: ""
     };
   },
-  created() {
-    if (this.processList.type == "realcheck") {
-      this.realInit();
-    }
-    if (this.processList.type == "selfcheck") {
-      this.selfInit();
-    }
-  },
+  created() {},
   watch: {
     processList(val) {
       if (this.processList.type == "realcheck") {
@@ -153,128 +146,139 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    if (this.processList.type == "realcheck") {
+      this.realInit();
+    }
+    if (this.processList.type == "selfcheck") {
+      this.selfInit();
+    }
+  },
   methods: {
     // 验收
     realInit() {
-      request
-        .post("/rest/processCheck/getProcessDetail", {
-          id: this.processList.processId
-        })
-        .then(res => {
-          if (res.data.respCode == "0") {
-            if (res.data.data == null && !res.data.data.length) return false;
-            this.realList = res.data.data;
-          }
-          let conents = this.realList;
-          this.processAll.projectItem = conents.projectItem;
-          this.processAll.processName = conents.processName;
-          this.processAll.zhuanghao = conents.zhuanghao;
-          this.processAll.state = conents.state2;
-          this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
-          this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
-          this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
-          this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
+      if (this.processList.type == "realcheck") {
+        request
+          .post("/rest/processCheck/getProcessDetail", {
+            id: this.processList.processId
+          })
+          .then(res => {
+            if (res.data.respCode == "0") {
+              if (res.data.data == null && !res.data.data.length) return false;
+              this.realList = res.data.data;
+            }
+            let conents = this.realList;
+            this.processAll.projectItem = conents.projectItem;
+            this.processAll.processName = conents.processName;
+            this.processAll.zhuanghao = conents.zhuanghao;
+            this.processAll.state = conents.state2;
+            this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
+            this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
+            this.FormList.realitySelfCheckPerson =
+              conents.realitySelfCheckPerson;
+            this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
 
-          this.InitList.planCheckTime = conents.planCheckTime;
-          this.InitList.planCheckPerson = conents.planCheckPerson;
-          this.InitList.realityCheckPerson = conents.realityCheckPerson;
-          this.InitList.realityCheckTime = conents.realityCheckTime;
-          this.objlist = conents.selfFilePath; // 自检位置
-          this.imgRealList = conents.filePath; // 验收位置
-          if (this.processAll.state == "0") {
-            this.processAll.stateProcess = "指定工序";
-          }
-          if (this.processAll.state == "1") {
-            this.processAll.stateProcess = "已指定验收工序";
-          }
-          if (this.processAll.state == "2") {
-            this.processAll.stateProcess = "自检完成";
-          }
-          if (this.processAll.state == "3") {
-            this.processAll.stateProcess = "验收完成";
-          }
-          if (this.imgRealList.length > 0) {
-            let formData = conents.filePath[0];
-            this.InitList.photoLocation = conents.filePath[0].photoLocation;
-            if (formData.lgt == null) {
-              formData.lgt = 112.376609;
+            this.InitList.planCheckTime = conents.planCheckTime;
+            this.InitList.planCheckPerson = conents.planCheckPerson;
+            this.InitList.realityCheckPerson = conents.realityCheckPerson;
+            this.InitList.realityCheckTime = conents.realityCheckTime;
+            this.objlist = conents.selfFilePath; // 自检位置
+            this.imgRealList = conents.filePath; // 验收位置
+            if (this.processAll.state == "0") {
+              this.processAll.stateProcess = "指定工序";
             }
-            if (formData.lat == null) {
-              formData.lat = 26.405528;
+            if (this.processAll.state == "1") {
+              this.processAll.stateProcess = "已指定验收工序";
             }
-            if (formData.photoLocation == null) {
-              formData.photoLocation = "湖南常祁";
+            if (this.processAll.state == "2") {
+              this.processAll.stateProcess = "自检完成";
             }
-            var map = new BMap.Map("realMap"); //创建地图实例
-            var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
-            map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
-            map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
-            map.addControl(new BMap.ScaleControl()); // 比例尺
-            map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
-            map.addControl(new BMap.MapTypeControl()); //地图类型
-            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
-            map.enableDoubleClickZoom(true);
-            var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
-            map.addTileLayer(traffic); // 将图层添加到地图上
-            var marker = new BMap.Marker(point); //创建标注
-            map.addOverlay(marker);
-            map.centerAndZoom(point, 15);
-            var stCtrl = new BMap.PanoramaControl();
-            stCtrl.setOffset(new BMap.Size(0, 40));
-            map.addControl(stCtrl);
-            var opts = {
-              width: 180, // 信息窗口宽度
-              height: 50, // 信息窗口高度
-              title: formData.photoLocation // 信息窗口标题
-            };
-            var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
-            map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
-          }
-          //   自检地图
-          if (this.objlist.length > 0) {
-            this.FormList.photoLocation = conents.selfFilePath[0].photoLocation;
-            let selfData = conents.selfFilePath[0];
-            if (selfData.lgt == null) {
-              selfData.lgt = 112.376609;
+            if (this.processAll.state == "3") {
+              this.processAll.stateProcess = "验收完成";
             }
-            if (selfData.lat == null) {
-              selfData.lat = 26.405528;
+            if (this.imgRealList.length > 0) {
+              let formData = conents.filePath[0];
+              this.InitList.photoLocation = conents.filePath[0].photoLocation;
+              if (formData.lgt == null) {
+                formData.lgt = 112.376609;
+              }
+              if (formData.lat == null) {
+                formData.lat = 26.405528;
+              }
+              if (formData.photoLocation == null) {
+                formData.photoLocation = "湖南常祁";
+              }
+              var map = new BMap.Map("realMap"); //创建地图实例
+              var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
+              map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
+              map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+              map.addControl(new BMap.ScaleControl()); // 比例尺
+              map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+              map.addControl(new BMap.MapTypeControl()); //地图类型
+              map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+              map.enableDoubleClickZoom(true);
+              var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
+              map.addTileLayer(traffic); // 将图层添加到地图上
+              var marker = new BMap.Marker(point); //创建标注
+              map.addOverlay(marker);
+              map.centerAndZoom(point, 15);
+              var stCtrl = new BMap.PanoramaControl();
+              stCtrl.setOffset(new BMap.Size(0, 40));
+              map.addControl(stCtrl);
+              var opts = {
+                width: 180, // 信息窗口宽度
+                height: 50, // 信息窗口高度
+                title: formData.photoLocation // 信息窗口标题
+              };
+              var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
+              map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
             }
-            if (selfData.photoLocation == null) {
-              selfData.photoLocation = "湖南常祁";
+            //   自检地图
+            if (this.objlist.length > 0) {
+              this.FormList.photoLocation =
+                conents.selfFilePath[0].photoLocation;
+              let selfData = conents.selfFilePath[0];
+              if (selfData.lgt == null) {
+                selfData.lgt = 112.376609;
+              }
+              if (selfData.lat == null) {
+                selfData.lat = 26.405528;
+              }
+              if (selfData.photoLocation == null) {
+                selfData.photoLocation = "湖南常祁";
+              }
+              var map1 = new BMap.Map("selfMap"); //创建地图实例
+              var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
+              map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
+              map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+              map1.addControl(new BMap.ScaleControl()); // 比例尺
+              map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+              map1.addControl(new BMap.MapTypeControl()); //地图类型
+              map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+              map1.enableDoubleClickZoom(true);
+              var traffic1 = new BMap.TrafficLayer(); // 创建交通流量图层实例
+              map1.addTileLayer(traffic1); // 将图层添加到地图上
+              var marker1 = new BMap.Marker(point1); //创建标注
+              map1.addOverlay(marker1);
+              map1.centerAndZoom(point1, 15);
+              var stCtrl1 = new BMap.PanoramaControl();
+              stCtrl1.setOffset(new BMap.Size(0, 40));
+              map1.addControl(stCtrl1);
+              var opts1 = {
+                width: 180, // 信息窗口宽度
+                height: 50, // 信息窗口高度
+                title: selfData.photoLocation // 信息窗口标题
+              };
+              var infoWindow1 = new BMap.InfoWindow("", opts1); // 创建信息窗口对象
+              map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
             }
-            var map1 = new BMap.Map("selfMap"); //创建地图实例
-            var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
-            map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
-            map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
-            map1.addControl(new BMap.ScaleControl()); // 比例尺
-            map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
-            map1.addControl(new BMap.MapTypeControl()); //地图类型
-            map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
-            map1.enableDoubleClickZoom(true);
-            var traffic1 = new BMap.TrafficLayer(); // 创建交通流量图层实例
-            map1.addTileLayer(traffic1); // 将图层添加到地图上
-            var marker1 = new BMap.Marker(point1); //创建标注
-            map1.addOverlay(marker1);
-            map1.centerAndZoom(point1, 15);
-            var stCtrl1 = new BMap.PanoramaControl();
-            stCtrl1.setOffset(new BMap.Size(0, 40));
-            map1.addControl(stCtrl1);
-            var opts1 = {
-              width: 180, // 信息窗口宽度
-              height: 50, // 信息窗口高度
-              title: selfData.photoLocation // 信息窗口标题
-            };
-            var infoWindow1 = new BMap.InfoWindow("", opts1); // 创建信息窗口对象
-            map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
-          }
-        });
+          });
+      }
     },
     // 自检
     selfInit() {
-      
-      request
+      if (this.processList.type == "selfcheck") {
+         request
         .post("/rest/processCheck/getProcessDetail", {
           id: this.processList.processId
         })
@@ -348,6 +352,8 @@ export default {
             map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
           }
         });
+      }
+     
     }
   },
   destoryed() {
