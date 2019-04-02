@@ -81,10 +81,6 @@
       <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
       </el-tree>
     </el-dialog>
-    <!-- 指令转发弹框 -->
-    <!-- <el-dialog width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
-      <messageBox :nowItem="nowItem" @cancel="innerTranspond=false"></messageBox>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -94,12 +90,12 @@ import api from "@/api/instruct.js";
 import Organization from "@/api/Organization.js";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 import project from "@/api/project.js";
-import messageBox from "./components/messageBox";
+
 export default {
   components: {
     checkBox,
     SelectTree,
-    messageBox
+    
   },
   data() {
     return {
