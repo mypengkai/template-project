@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="addForm">
+    <el-form class="reverseBox" :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth">
           <el-input v-model="form.name" :disabled="true">
@@ -189,5 +189,15 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.reverseBox {
+  height: 60vh;
+  overflow-y: scroll;
+  /deep/.el-form-item__label {
+    font-size: 0.6vw;
+  }
+  /deep/.el-input {
+    font-size: 0.7vw;
+  }
+}
 </style>

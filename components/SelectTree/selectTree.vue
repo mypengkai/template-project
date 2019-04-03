@@ -1,40 +1,16 @@
 <!-- 树状选择器 -->
 <template>
-  <el-popover
-    ref="popover"
-    placement="bottom-start"
-    trigger="click"
-    class="select-tree scrollbar"
-    @show="onShowPopover"
-    @hide="onHidePopover">
-    <el-tree
-      ref="tree"
-      highlight-current
-      :style="`min-width: ${treeWidth}`"
-      :data="data"
-      :props="props"
-      :expand-on-click-node="false"
-      :filter-node-method="filterNode"
-      :default-expand-all="false"
-      @node-click="onClickNode">
+  <el-popover ref="popover" placement="bottom-start" trigger="click" class="select-tree scrollbar" @show="onShowPopover" @hide="onHidePopover">
+    <el-tree ref="tree" highlight-current :style="`min-width: ${treeWidth}`" :data="data" :props="props" :expand-on-click-node="false" :filter-node-method="filterNode" :default-expand-all="false" @node-click="onClickNode">
     </el-tree>
-    <el-input
-      :readonly="true"
-      slot="reference"
-      ref="input"
-      v-model="labelModel"
-      clearable
-      :style="`width: ${width}px`"
-      :class="{ 'rotate': showStatus }"
-      suffix-icon="el-icon-arrow-down"
-      :placeholder="placeholder">
+    <el-input :readonly="true" slot="reference" ref="input" v-model="labelModel" clearable :style="`width: ${width}px`" :class="{ 'rotate': showStatus }" suffix-icon="el-icon-arrow-down" :placeholder="placeholder">
     </el-input>
   </el-popover>
 </template>
 
 <script>
 export default {
-  name: 'Pagination',
+  name: "Pagination",
   props: {
     // 接收绑定参数
     value: String,
@@ -43,30 +19,30 @@ export default {
     // 选项数据
     options: {
       type: Array,
-      required: true,
+      required: true
     },
     // 输入框占位符
     placeholder: {
       type: String,
       required: false,
-      default: '请选择',
+      default: "请选择"
     },
     // 树节点配置选项
     props: {
       type: Object,
       required: false,
       default: () => ({
-        parent: 'parentId',
-        value: 'rowGuid',
-        label: 'areaName',
-        children: 'children',
-      }),
-    },
+        parent: "parentId",
+        value: "rowGuid",
+        label: "areaName",
+        children: "children"
+      })
+    }
   },
   // 设置绑定参数
   model: {
-    prop: 'value',
-    event: 'selected',
+    prop: "value",
+    event: "selected"
   },
   computed: {
     // 是否为树状结构数据
@@ -77,29 +53,29 @@ export default {
     // 若非树状结构，则转化为树状结构数据
     data() {
       return this.dataType ? this.options : this.switchTree();
-    },
+    }
   },
   watch: {
     labelModel(val) {
       if (!val) {
-        this.valueModel = '';
+        this.valueModel = "";
       }
       this.$refs.tree.filter(val);
     },
     value(val) {
       this.labelModel = this.queryTree(this.data, val);
-    },
+    }
   },
   data() {
     return {
       // 树状菜单显示状态
       showStatus: false,
       // 菜单宽度
-      treeWidth: 'auto',
+      treeWidth: "auto",
       // 输入框显示值
-      labelModel: '',
+      labelModel: "",
       // 实际请求传值
-      valueModel: '0',
+      valueModel: "0"
     };
   },
   created() {
@@ -109,22 +85,22 @@ export default {
     }
     // 获取输入框宽度同步至树状菜单宽度
     this.$nextTick(() => {
-      this.treeWidth = `${(this.width || this.$refs.input.$refs.input.clientWidth) - 24}px`;
+      this.treeWidth = `${(this.width ||
+        this.$refs.input.$refs.input.clientWidth) - 24}px`;
     });
   },
   methods: {
     // 单击节点
     onClickNode(node) {
-      this.$emit('noDe',node)
+      this.$emit("noDe", node);
       this.labelModel = node[this.props.label];
       this.valueModel = node[this.props.value];
       this.onCloseTree();
     },
-   
 
     // 偏平数组转化为树状层级结构
     switchTree() {
-      return this.cleanChildren(this.buildTree(this.options, '0'));
+      return this.cleanChildren(this.buildTree(this.options, "0"));
     },
     // 隐藏树状菜单
     onCloseTree() {
@@ -138,7 +114,7 @@ export default {
     // 隐藏时触发
     onHidePopover() {
       this.showStatus = false;
-      this.$emit('selected', this.valueModel);
+      this.$emit("selected", this.valueModel);
     },
     // 树节点过滤方法
     filterNode(query, data) {
@@ -158,11 +134,11 @@ export default {
           return temp[this.props.label];
         }
       }
-      return '';
+      return "";
     },
     // 将一维的扁平数组转换为多层级对象
-    buildTree(data, id = '0') {
-      const fa = (parentId) => {
+    buildTree(data, id = "0") {
+      const fa = parentId => {
         const temp = [];
         for (let i = 0; i < data.length; i++) {
           const n = data[i];
@@ -177,8 +153,8 @@ export default {
     },
     // 清除空 children项
     cleanChildren(data) {
-      const fa = (list) => {
-        list.map((e) => {
+      const fa = list => {
+        list.map(e => {
           if (e.children.length) {
             fa(e.children);
           } else {
@@ -189,43 +165,46 @@ export default {
         return list;
       };
       return fa(data);
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-  .scrollbar {
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      z-index: 11;
-      width: 6px;
-    }
-    &::-webkit-scrollbar-track,
-    &::-webkit-scrollbar-corner {
-      background: #fff;
-    }
-    &::-webkit-scrollbar-thumb {
-      // border-radius: 5px;
-      width: 6px;
-      background-color: #eee;
-      &:hover {
-        background-color: #ccc;
-      }
-    }
-    &::-webkit-scrollbar-track-piece {
-      background: #fff;
-      width: 6px;
+.scrollbar {
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    z-index: 11;
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-corner {
+    background: #fff;
+  }
+  &::-webkit-scrollbar-thumb {
+    // border-radius: 5px;
+    width: 6px;
+    background-color: #eee;
+    &:hover {
+      background-color: #ccc;
     }
   }
-  .select-tree .el-tree {
-    max-height: 350px;
-    // .scrollbar;
+  &::-webkit-scrollbar-track-piece {
+    background: #fff;
+    width: 6px;
   }
-  .select-tree .el-input.el-input--suffix {
-    cursor: pointer;
-  }
-  .select-tree .el-input.el-input--suffix.rotate .el-input__suffix {
-    transform: rotate(180deg);
-  }
+}
+.select-tree .el-tree {
+  max-height: 350px;
+  // .scrollbar;
+}
+.select-tree .el-input.el-input--suffix {
+  cursor: pointer;
+}
+.select-tree .el-input.el-input--suffix.rotate .el-input__suffix {
+  transform: rotate(180deg);
+}
+.el-input--suffix .el-input__inner {
+  padding-right: 0;
+}
 </style>

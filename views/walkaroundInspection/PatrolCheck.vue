@@ -1,4 +1,5 @@
 <template>
+
   <div class="p20">
     <!-- 头部选择栏 -->
     <div class="navBar topBar">
@@ -23,7 +24,7 @@
     </div>
 
     <!-- 查询列表 -->
-    <el-table :data="everyDayLogPageList" style="width: 100%" height="68vh">
+    <el-table class="textList" :data="everyDayLogPageList" style="width: 100%" height="66vh">
       <el-table-column prop="realname" label="巡视人姓名">
       </el-table-column>
 
@@ -45,20 +46,19 @@
       <el-table-column fixed="right" label="照片">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-picture" circle @click="action(scope.row)"></el-button>
-          <!-- <el-button type="text" size="small" @click="action(scope.row)">查看</el-button> -->
         </template>
       </el-table-column>
     </el-table>
-    <!-- 分页条 -->
-    <el-pagination class="" background :page-sizes="[6]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
-    </el-pagination>
 
+    <!-- 分页条 -->
+    <el-pagination class="pageList pt20" background :page-sizes="[6]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
+    </el-pagination>
     <!-- 查看照片弹框 -->
     <el-dialog :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
-
   </div>
+
 </template>
 
 <script>

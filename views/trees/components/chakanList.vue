@@ -15,8 +15,8 @@
         <!-- 导航切换 -->
         <div class="navb">
           <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
-            <el-menu-item index="1" >信息中心</el-menu-item>
-            <el-menu-item index="2" >影像资料</el-menu-item>
+            <el-menu-item index="1" >影像资料</el-menu-item>
+            <el-menu-item index="2" >所在位置</el-menu-item>
           </el-menu>
         </div>
         
