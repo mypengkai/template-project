@@ -2,28 +2,14 @@
   <div class="p20">
     <!-- 选项栏 -->
     <div class="topBar">
-      <el-row class="rowBox">
-        <el-col>
-          <el-form inline>
-            <el-form-item label="所属单位">
-              <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
+      <span>所属单位</span>
+      <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
 
-      <el-row class="rowBox">
-        <el-col>
-          <el-form inline>
-            <el-form-item label="工程选择">
-              <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
+      <span>工程选择</span>
+      <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
 
       <span>时间:</span>
-      <el-date-picker v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+      <el-date-picker class="mybox" v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
       </el-date-picker>
 
       <div class="rl">
@@ -33,7 +19,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table :data="getList" style="width: 100%" height="66vh">
+      <el-table class="textList" :data="getList" style="width: 100%" height="66vh">
         <el-table-column prop="project" label="相关工程">
         </el-table-column>
 
@@ -63,24 +49,23 @@
       </el-table>
     </div>
     <!-- 分页条 -->
-    <div>
-      <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
-      </el-pagination>
-    </div>
+    <el-pagination class="pageList pt20" background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
+    </el-pagination>
+
     <!-- 编辑弹框 -->
-    <el-dialog width="50%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
     <!-- 组织机构树形表单 -->
-    <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
+    <!-- <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
       <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
       </el-tree>
-    </el-dialog>
+    </el-dialog> -->
     <!-- 分部分项树形表单 -->
-    <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
+    <!-- <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
       <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
       </el-tree>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -242,7 +227,13 @@ export default {
 .dialogBox {
   margin-top: -7vh;
 }
-.rowBox {
-  float: left;
+
+.mybox {
+   /deep/.el-range-editor.el-input__inner {
+    padding: 3px 0px;
+  }
+  /deep/.el-date-editor {
+    width: 148px;
+  }
 }
 </style>

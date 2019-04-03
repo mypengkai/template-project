@@ -4,39 +4,36 @@
     <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
     <!-- 列表 -->
     <div class="pt20">
-      <div class="outer-container">
-        <div class="inner-container">
-          <div class="content">
-            <tree-table :data="menuList" border>
-              <el-table-column label="菜单名称">
-                <template slot-scope="scope">
-                  <span style="">{{ scope.row.functionName }}</span>
-                </template>
-              </el-table-column>
+      <el-scrollbar style="height: 68vh;overflow-x: none;">
+        <tree-table class="textList" :data="menuList" border>
+          <el-table-column label="菜单名称">
+            <template slot-scope="scope">
+              <span style="">{{ scope.row.functionName }}</span>
+            </template>
+          </el-table-column>
 
-              <el-table-column label="菜单排序">
-                <template slot-scope="scope">
-                  <span style="">{{ scope.row.functionOrder }}</span>
-                </template>
-              </el-table-column>
+          <el-table-column label="菜单排序">
+            <template slot-scope="scope">
+              <span style="">{{ scope.row.functionOrder }}</span>
+            </template>
+          </el-table-column>
 
-              <el-table-column label="菜单地址">
-                <template slot-scope="scope">
-                  <span style="">{{ scope.row.functionUrl }}</span>
-                </template>
-              </el-table-column>
+          <el-table-column label="菜单地址">
+            <template slot-scope="scope">
+              <span style="">{{ scope.row.functionUrl }}</span>
+            </template>
+          </el-table-column>
 
-              <el-table-column label="操作" width="200">
-                <template slot-scope="scope">
-                  <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-                  <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
-                </template>
-              </el-table-column>
-            </tree-table>
-          </div>
-        </div>
-      </div>
+          <el-table-column label="操作" width="180">
+            <template slot-scope="scope">
+              <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+              <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+            </template>
+          </el-table-column>
+        </tree-table>
+      </el-scrollbar>
+
     </div>
     <!-- 弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible">

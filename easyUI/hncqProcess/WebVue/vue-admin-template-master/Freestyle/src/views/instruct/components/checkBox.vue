@@ -3,64 +3,66 @@
     <el-form ref="userFrom" :model="form" :rules="rules">
       <div>
         <!-- 新增 -->
-        <el-form-item style="width:17vw" label="组织机构" v-if="nowItem =='add'" prop="" label-width="120px">
+        <div :class="{reverseAddBox:nowItem=='add'}">
+          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="" label-width="120px">
             <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
-          <!-- <el-input v-model="name" :disabled="true">
+            <!-- <el-input v-model="name" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
           </el-input> -->
-        </el-form-item>
+          </el-form-item>
 
-        <el-form-item style="width:17vw" label="分部分项" v-if="nowItem =='add'" prop="" label-width="120px">
-           <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
-          <!-- <el-input v-model="projectItem" :disabled="true">
+          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="" label-width="120px">
+            <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
+            <!-- <el-input v-model="projectItem" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input> -->
-        </el-form-item>
+          </el-form-item>
 
-        <el-form-item style="width:17vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
-          <el-input v-model="username" :disabled="true">
-            <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
-          </el-input>
-        </el-form-item>
+          <el-form-item style="width:20vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
+            <el-input v-model="username" :disabled="true">
+              <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
+            </el-input>
+          </el-form-item>
 
-        <div class="TimeAndType" v-if="nowItem =='add'">
-          <span class="fl">
-            <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime" label-width="120px">
-              <el-date-picker v-model="planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
-              </el-date-picker>
-            </el-form-item>
-          </span>
+          <div class="TimeAndType" v-if="nowItem =='add'">
+            <span class="fl">
+              <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime" label-width="120px">
+                <el-date-picker v-model="planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+                </el-date-picker>
+              </el-form-item>
+            </span>
 
-          <span class="rl mr">
-            <el-form-item label="指令类型" v-if="nowItem =='add'" prop="label" label-width="120px">
-              <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
-                <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </span>
+            <span class="rl mr">
+              <el-form-item label="指令类型" v-if="nowItem =='add'" prop="label" label-width="120px">
+                <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
+                  <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </span>
+          </div>
+
+          <el-form-item style="width:37vw" label="指令内容" v-if="nowItem =='add'" prop="remark" label-width="120px">
+            <el-input type="textarea" autosize v-model="form.remark"></el-input>
+          </el-form-item>
+
+          <el-form-item label="图片选择" v-if="nowItem =='add'" prop="dialogImageUrl" label-width="120px">
+            <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="form">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="50%" :src="dialogImageUrl" alt="图片">
+            </el-dialog>
+          </el-form-item>
         </div>
-
-        <el-form-item style="width:37vw" label="指令内容" v-if="nowItem =='add'" prop="remark" label-width="120px">
-          <el-input type="textarea" autosize v-model="form.remark"></el-input>
-        </el-form-item>
-
-        <el-form-item label="图片选择" v-if="nowItem =='add'" prop="dialogImageUrl" label-width="120px">
-          <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="form">
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="50%" :src="dialogImageUrl" alt="图片">
-          </el-dialog>
-        </el-form-item>
 
         <!-- 查看 -->
         <div :class="{reverseBox:nowItem!=='add'}">
-          <el-form-item style="width:17vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
+          <el-form-item style="width:22vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
             <el-input v-model="form.projectItem"></el-input>
           </el-form-item>
 
-          <el-form-item style="width:17vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
+          <el-form-item style="width:22vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
             <el-input v-model="form.createTime"></el-input>
           </el-form-item>
 
@@ -73,7 +75,7 @@
                 </el-timeline-item>
               </el-timeline>
 
-              <div class="topBar">
+              <div class="temporary">
                 <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
                 <el-input v-model="states"></el-input>
               </div>
@@ -298,7 +300,7 @@ export default {
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
-       value1: "",
+      value1: "",
       planTime: "",
       headers: {
         "X-AUTH-TOKEN": getToken()
@@ -381,7 +383,7 @@ export default {
       sendData: {
         pageNo: 1, // 当前页
         pageSize: 8, // 每页条数
-         orgId: "",
+        orgId: "",
         Mark: "" // 标记， 1项目，2业主，3监理，4标段
       },
       //发送工序id
@@ -472,7 +474,7 @@ export default {
         //  delete arrItem[0].createTime
         //  console.log(arrItem)
         this.imgData = res.data.data; // 内层图片数组
-        console.log(this.imgData.shift(0,1))
+        console.log(this.imgData.shift(0, 1));
       });
       this.innerVisibleSon = true;
     },
@@ -526,9 +528,9 @@ export default {
     },
     // 组织机构选择后的数据
     handleCheckChange(data) {
-        this.projectList = [];
+      this.projectList = [];
       this.form.userGroupId = data.id;
-    this.sendData.orgId = data.id;
+      this.sendData.orgId = data.id;
       project.projectList(this.sendData).then(res => {
         if (res.data.data == null) {
           res.data.data = [];
@@ -652,12 +654,29 @@ export default {
   }
 }
 .reverseBox {
-  height: 75vh;
+  height: 68vh;
   overflow-y: scroll;
+  /deep/.el-form-item__label {
+    font-size: 0.7vw;
+  }
+  /deep/.el-input {
+    font-size: 0.7vw;
+  }
 }
 .accomplish {
   display: block;
   text-align: center;
   font-size: 1vw;
+}
+.reverseAddBox {
+  width: 90%;
+   height: 65vh;
+  overflow-y: scroll;
+  /deep/.el-form-item__label {
+    font-size: 0.7vw;
+  }
+  /deep/.el-input {
+    font-size: 0.7vw;
+  }
 }
 </style>

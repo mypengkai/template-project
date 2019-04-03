@@ -113,6 +113,8 @@ export default {
 
 <style lang="scss" scoped>
 .imgez{
+    height: 60vh;
+  overflow-y: scroll;
     .zj,.ys{
     text-align: center;
     font-weight: 800;

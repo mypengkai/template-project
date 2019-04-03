@@ -1,10 +1,14 @@
 <template>
-  <div>
+  <div class="overflowY">
     <!-- 照片详情信息查看 -->
-    <el-form :model="form">
-      <div>
+    <el-form class="reverseBox" :model="form">
+      <div style="width:50%"> 
         <el-form-item label="工程分部分项" label-width="100px">
           <el-input v-model="form.projectItem"></el-input>
+        </el-form-item>
+
+        <el-form-item label="桩号" label-width="100px">
+          <el-input v-model="form.zhuanghao"></el-input>
         </el-form-item>
 
         <el-form-item label="巡视人姓名" label-width="100px">
@@ -13,10 +17,6 @@
 
         <el-form-item label="时间" label-width="100px">
           <el-input v-model="form.createTime"></el-input>
-        </el-form-item>
-
-        <el-form-item label="桩号" label-width="100px">
-          <el-input v-model="form.zhuanghao"></el-input>
         </el-form-item>
 
         <el-form-item label="拍照地点" label-width="100px">
@@ -31,15 +31,15 @@
       <!-- 导航切换 -->
       <div class="navb" label-width="100px">
         <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
-          <el-menu-item index="1" @click="nowType=0">信息中心</el-menu-item>
-          <el-menu-item index="2" @click="nowType=1">项目地图</el-menu-item>
+          <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
+          <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
         </el-menu>
       </div>
 
       <!-- 轮播信息 -->
-      <div style="height:32vh" v-if="nowType==0">
-        <el-form-item class="slideBox">
-          <el-carousel :interval="3000" arrow="always" height="32vh">
+      <div class="condition" v-if="nowType==0">
+        <el-form-item class="">
+          <el-carousel :interval="3000" arrow="always" height="35vh">
             <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
               <img :src="item.picture" alt="">
             </el-carousel-item>
@@ -117,6 +117,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.reverseBox {
+  height: 72vh;
+  overflow-y: scroll;
+  /deep/.el-form-item__label {
+    font-size: 0.7vw;
+  }
+  /deep/.el-input {
+    font-size: 0.7vw;
+  }
+}
 .avatar {
   width: 178px;
   height: 178px;
@@ -132,5 +142,8 @@ export default {
   width: 30%;
   height: 7%;
   margin-left: 30px;
+}
+.condition{
+  margin-top: 50px;
 }
 </style>

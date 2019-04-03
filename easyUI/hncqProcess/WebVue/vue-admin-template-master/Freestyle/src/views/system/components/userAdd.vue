@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="userFrom" :model="user" label-width="120px" :rules="rules">
+    <el-form class="reverseBox" ref="userFrom" :model="user" label-width="120px" :rules="rules">
       <div style="width:50%">
         <el-form-item label="用户账号" v-if="nowItem=='add'" prop="userName">
           <el-input v-model="user.userName"></el-input>
@@ -205,6 +205,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.reverseBox {
+  height: 60vh;
+  overflow-y: scroll;
+  /deep/.el-form-item__label {
+    font-size: 0.7vw;
+  }
+  /deep/.el-input {
+    font-size: 0.7vw;
+  }
+}
 .numInput {
   .el-input__inner {
     input::-webkit-outer-spin-button,

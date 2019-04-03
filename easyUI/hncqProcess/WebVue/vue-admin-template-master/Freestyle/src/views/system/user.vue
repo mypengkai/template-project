@@ -1,65 +1,65 @@
 <template>
-  <div class="p20">
-    <!-- 查询 -->
-    <div class="topBar">
-      <span>用户账号:</span>
-      <el-input size="small" v-model="sendData.SQLusername" clearable placeholder="请输入账号"></el-input>
-      <span>用户名称:</span>
-      <el-input size="small" v-model="sendData.SQLrealname" clearable placeholder="请输入名称"></el-input>
-      <span>选择部门:</span>
-       <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
-      <!-- <el-input size="small" v-model="name" clearable placeholder="请输入部门">
+ <div class="p20">
+      <!-- 查询 -->
+      <div class="topBar">
+        <span>用户账号:</span>
+        <el-input size="small" v-model="sendData.SQLusername" clearable placeholder="请输入账号"></el-input>
+        <span>用户名称:</span>
+        <el-input size="small" v-model="sendData.SQLrealname" clearable placeholder="请输入名称"></el-input>
+        <span>选择部门:</span>
+        <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
+        <!-- <el-input size="small" v-model="name" clearable placeholder="请输入部门">
         <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
       </el-input> -->
-      <div class="rl">
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">搜索</el-button>
-        <el-button type="primary" class="pan-btn blue-btn" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
+        <div class="rl">
+          <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">搜索</el-button>
+          <el-button type="primary" class="pan-btn blue-btn" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
+        </div>
       </div>
+      <!-- 列表 -->
+      <div>
+        <el-table class="textList" :data="userList" style="width: 100%" height="66vh">
+          <el-table-column prop="userName" label="用户账号">
+          </el-table-column>
+
+          <el-table-column prop="realName" label="名称">
+          </el-table-column>
+
+          <el-table-column prop="departName" label="组织机构">
+          </el-table-column>
+
+          <el-table-column prop="userKey" label="角色">
+          </el-table-column>
+
+          <el-table-column prop="zhiwei" label="职位">
+          </el-table-column>
+
+          <el-table-column prop="createTime" label="创建时间">
+          </el-table-column>
+
+          <el-table-column fixed="right" label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+            </template>
+          </el-table-column>
+
+        </el-table>
+      </div>
+      <!-- 分页 -->
+      <el-pagination class="pageList pt20" background :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_userList()">
+      </el-pagination>
+      <!-- 弹框 -->
+      <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
+        <userAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @execute="_userList" @comfirm="_userList"></userAdd>
+      </el-dialog>
+
+      <!-- 组织机构树形表单搜素 -->
+      <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
+        <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
+        </el-tree>
+      </el-dialog>
     </div>
-    <!-- 列表 -->
-    <div class="userList">
-      <el-table :data="userList" style="width: 100%" height="68vh">
-        <el-table-column prop="userName" label="用户账号">
-        </el-table-column>
-
-        <el-table-column prop="realName" label="名称">
-        </el-table-column>
-
-        <el-table-column prop="departName" label="组织机构">
-        </el-table-column>
-
-        <el-table-column prop="userKey" label="角色">
-        </el-table-column>
-
-        <el-table-column prop="zhiwei" label="职位">
-        </el-table-column>
-
-        <el-table-column prop="createTime" label="创建时间">
-        </el-table-column>
-
-        <el-table-column fixed="right" label="操作">
-          <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
-          </template>
-        </el-table-column>
-
-      </el-table>
-    </div>
-    <!-- 分页 -->
-    <el-pagination class="" background :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_userList()">
-    </el-pagination>
-    <!-- 弹框 -->
-    <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
-      <userAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @execute="_userList" @comfirm="_userList"></userAdd>
-    </el-dialog>
-
-    <!-- 组织机构树形表单搜素 -->
-    <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
-      <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
-      </el-tree>
-    </el-dialog>
-  </div>
 </template>
 
 <script>
@@ -74,7 +74,7 @@ export default {
   },
   data() {
     return {
-      value:"",
+      value: "",
       userList: [], // 用户列表数组
       orgTree: [], //组织机构数组
       defaultProps: {
@@ -127,8 +127,7 @@ export default {
         });
       });
     },
-    handleSizeChange(val) {
-    },
+    handleSizeChange(val) {},
     // 删除按钮
     Delete(data) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -171,14 +170,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.checkBox {
-  height: 6vh;
-  div {
-    width: 25%;
-    span {
-      font-size: 0.8vw;
-      display: block;
-    }
-  }
-}
+
 </style>

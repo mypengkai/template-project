@@ -6,7 +6,7 @@
     </div>
     <!-- 操作列表 -->
     <el-scrollbar style="height: 68vh;overflow-x: none;">
-      <tree-table :data="dataList" ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
+      <tree-table class="textList" :data="dataList" ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
             <span style="">{{ scope.row.projectItem }}</span>
@@ -48,7 +48,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
             <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
