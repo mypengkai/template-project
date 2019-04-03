@@ -32,17 +32,18 @@
       </el-form-item>
     </el-form>
     <!-- 二维码部分 -->
-    <div class="ewm1">
-      [Android]
-    </div>
     <div class="ewmimg1">
       <img src="../../../static/ewm1 (1).png" alt="">
+        <div class="ewm1">
+      [Android]
     </div>
-     <div class="ewm2">
-      [ios]
     </div>
+     
     <div class="ewmimg2">
       <img src="../../../static/ewm1 (2).png" alt="">
+      <div class="ewm2">
+      [ios]
+    </div>
     </div>
     <!-- 表尾部分 -->
     <div class="bq">
@@ -105,7 +106,7 @@ export default {
             .dispatch("Login", this.loginForm)
             .then(() => {
               Cookies.set('names', this.loginForm.username)
-              // localStorage.setItem('pass',this.loginForm.password)
+              localStorage.setItem('pass',this.loginForm.password)
               this.loading = false;
               this.$router.push({ path: this.redirect || "/" });
             })
@@ -205,50 +206,30 @@ $light_gray:#eee;
     color: red;
     font-size:0.8vw;
   }
-  .ewm1{
-    position: absolute;
-    right: 70px;
-    top: 400px;
-    color: #fff;
-  }
-  .ewm2{
-    position: absolute;
-    right: 86px;
-    top: 630px;
+  .ewm1,.ewm2{
+    text-align:center;
     color: #fff;
   }
   .ewmimg1{
     position: absolute;
     right: 40px;
-    top: 250px;
+    top: 20%;
   }
   .ewmimg2{
     position: absolute;
     right: 40px;
-    top: 480px;
+    bottom: 20%;
   }
   .bq{
-    text-align:center;
     color: 	#ccc;
     font-size: 0.8vw;
-    // padding: 0 auto;
-    margin-top:12vw;
-    p{
-      margin-top:20px
-    }
+    position: fixed;
+    bottom:5%;
+    left:50%;
+    transform: translateX(-50%);
     .phone{
       font-size:0.7vw;
     }
   }
-
-  // .show-pwd {
-  //   position: absolute;
-  //   right: 10px;
-  //   top: 7px;
-  //   font-size: 16px;
-  //   color: $dark_gray;
-  //   cursor: pointer;
-  //   user-select: none;
-  // }
 }
 </style>

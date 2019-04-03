@@ -85,13 +85,13 @@ export default {
           if (this.logList.picMessage.length > 0) {
             let formData = this.logList.picMessage[0];
             console.log(formData.lgt, formData.lat);
-            if (formData.lgt == null) {
+            if (formData.lgt == "" || formData.lgt == null) {
               formData.lgt = 112.376609;
             }
-            if (formData.lat == null) {
+            if (formData.lat == "" || formData.lat == null) {
               formData.lat = 26.405528;
             }
-            if (formData.photoLocation == null) {
+            if (formData.photoLocation == "" || formData.photoLocation == null) {
               formData.photoLocation = "湖南常祁";
             }
             var map = new BMap.Map("logmap"); //创建地图实例

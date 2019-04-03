@@ -4,7 +4,6 @@
     <div class="projectConent" v-if="this.traceType === 1">
       <div
         class="conent"
-        style="width:15%;"
         v-for="(item,index) in conentOptions"
         :key="index"
         @click="pictureLook(item)"
@@ -14,10 +13,10 @@
         </div>
         <div class="p20-contation">
           <el-row>
-            <el-col :span="16">
-              <div class="grid-content bg-purple" style="color:#8080ff">{{item.createTime}}</div>
+            <el-col :span="18">
+              <div class="grid-content bg-purple timeOut" style="color:#8080ff">{{item.createTime}}</div>
             </el-col>
-            <el-col :span="8" style="color:#8080ff ; margin-top:9px;">
+            <el-col :span="6" style="color:#8080ff ; margin-top:9px;">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
@@ -29,13 +28,13 @@
           <h3>{{item.projectItem}}</h3>
           <p style="color:#8080ff">{{item.zhuanghao}}</p>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="10">
               <div class="grid-content bg-purple-light">{{item.departname}}</div>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="8">
               <div class="grid-content bg-purple">{{item.zhiwei}}</div>
             </el-col>
           </el-row>
@@ -51,29 +50,37 @@
     <!-- ========================================================================================= -->
     <!-- 人员痕迹 -->
     <div class="projectConent" v-if="this.traceType === 2">
-      <div class="conent" style="width:15%;" v-for="(item,index) in this.userOptions" :key="index">
+      <div
+        class="conent"
+        style="width:15%;"
+        v-for="(item,index) in this.userOptions"
+        :key="index"
+        @click="pictureLook(item)"
+      >
         <div class="pictureBox">
           <img :src="item.filePath" alt>
         </div>
         <div class="p20-contation">
           <el-row>
-            <el-col :span="16">
-              <div class="grid-content bg-purple" style="color:#8080ff">{{item.createTime}}</div>
+            <el-col :span="20">
+              <div class="grid-content bg-purple timeOut" style="color:#8080ff">{{item.createTime}}</div>
             </el-col>
-            <el-col :span="6">
-              <div class="grid-content bg-purple-light" style="color:#8080ff">{{item.type}}</div>
-            </el-col>
-            <el-col :span="2">
-              <div class="grid-content bg-purple" style="color:#8080ff">1</div>
+            <el-col :span="4" style="color:#8080ff ; margin-top:9px;">
+              <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
+              <template v-if="item.type == 'log'">日志</template>
+              <template v-else-if="item.type == 'selfcheck'">自检</template>
+              <template v-else-if="item.type== 'realcheck'">验收</template>
+              <template v-else-if="item.type == 'polling'">巡视</template>
+              <template v-else-if="item.type == 'command'">指令</template>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
           <p style="color:#8080ff; height:20px; line-height:20px;">{{item.zhuanghao}}</p>
           <el-row>
-            <el-col :span="10">
+            <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <div class="grid-content bg-purple-light">{{item.departname}}</div>
             </el-col>
             <el-col :span="6">
@@ -139,10 +146,7 @@ export default {
       dialogTableVisiblelogcheck: false, //日志
       targetID: "", // 点击每一项的ID
       commandID: "", // 指令查询ID
-      processInfoID: "", // 验收 自检id
-      processId: "", // 工序ID
-      type: "", // 自检 或 验收状态,
-      processList: [] //自检验收信息
+      processList: {} //自检验收信息
     };
   },
 
@@ -174,10 +178,7 @@ export default {
       }
       //验收     自检
       if (item.type == "realcheck" || item.type == "selfcheck") {
-        this.type = item.type;
-        // this.processInfoID = item.processInfoID;
-        this.processId = item.processId;
-        this.processList = item;
+        this.processList = item; // 验收 自检 信息
         this.dialogTableVisibleSelfcheck = true;
       }
     }
@@ -193,8 +194,9 @@ export default {
   overflow-x: hidden;
   .conent {
     overflow: hidden;
+    width: 18%;
     float: left;
-    margin: 10px 0.82%;
+    margin: 10px 1%;
     box-sizing: border-box;
     border: 1px solid transparent; //透明边框占位
     .pictureBox {
@@ -223,15 +225,31 @@ export default {
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        font-weight: normal;
       }
       p {
         font-size: 14px;
-        height: 20px;
+        height: 18px;
         line-height: 20px;
       }
+      .timeOut {
+        overflow: hidden;
+        height:18px;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
       .grid-content {
-        font-size: 14px;
+        font-size: 12px;
+        height:18px;
+        overflow: hidden;
+         text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
         margin: 10px 0;
+        font-weight: normal;
       }
       .spanOne {
         float: left;

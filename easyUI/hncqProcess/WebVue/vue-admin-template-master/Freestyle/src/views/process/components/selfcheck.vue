@@ -49,7 +49,7 @@
                 </el-carousel-item>
               </el-carousel>
             </el-tab-pane>
-            <el-tab-pane label="所在位置" name="second">
+            <el-tab-pane label="所在位置" name="second" style="height:300px;">
               <div id="selfMap"></div>
             </el-tab-pane>
           </el-tabs>
@@ -73,7 +73,7 @@
         </el-form>
         <el-form :model="FormList" label-width="160px" class="elInput">
           <el-form-item label="具体位置:">
-            <el-input v-model="InitList.photoLocation" :disabled="true"></el-input>
+            <el-input v-model="InitList.photoLocation" :disabled="true" v-if="flag"></el-input>
           </el-form-item>
         </el-form>
         <div class="content">
@@ -81,12 +81,12 @@
             <el-tab-pane label="影像资料" name="three">
               <el-carousel :interval="3000" arrow="always" height="300px">
                 <el-carousel-item v-for="(item,index) in imgRealList" :key="index">
-                  <img :src="item.filePath" alt style="width:100%;height:100%">
+                  <img :src="item.filePath" alt style="width:100%;height:100%" v-if="flag">
                 </el-carousel-item>
               </el-carousel>
             </el-tab-pane>
-            <el-tab-pane label="所在位置" name="four">
-              <div id="realMap"></div>
+            <el-tab-pane label="所在位置" name="four" style="height:300px;">
+              <div id="realMap" v-if="flag"></div>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -98,8 +98,6 @@
 <script>
 import request from "@/utils/request";
 export default {
-  inject: ["reload"],
-  // props: ["processInfoID", "type"],
   props: {
     processList: {}
   },
@@ -117,8 +115,8 @@ export default {
       FormList: {
         planSelfCheckPerson: "", //计划自检人
         planSelfCheckTime: "", // 计划自检时间
-        realitySelfCheckPerson: "", // shiji自检人
-        realitySelfCheckTime: "", //shiji自检时间
+        realitySelfCheckPerson: "", // 实际自检人
+        realitySelfCheckTime: "", //实际自检时间
         photoLocation: "" //    自检具体位置
       },
       InitList: {
@@ -132,7 +130,7 @@ export default {
       imgRealList: [], //验收
       tabPosition: "first",
       tabShow: "three",
-      getID: ""
+      flag:true,
     };
   },
   created() {},
@@ -158,6 +156,7 @@ export default {
     // 验收
     realInit() {
       if (this.processList.type == "realcheck") {
+        this.flag = true
         request
           .post("/rest/processCheck/getProcessDetail", {
             id: this.processList.processId
@@ -199,13 +198,13 @@ export default {
             if (this.imgRealList.length > 0) {
               let formData = conents.filePath[0];
               this.InitList.photoLocation = conents.filePath[0].photoLocation;
-              if (formData.lgt == null) {
+              if (formData.lgt == "" || formData.lgt == null) {
                 formData.lgt = 112.376609;
               }
-              if (formData.lat == null) {
+              if (formData.lat == "" || formData.lat == null) {
                 formData.lat = 26.405528;
               }
-              if (formData.photoLocation == null) {
+              if (formData.photoLocation == "" || formData.photoLocation == null) {
                 formData.photoLocation = "湖南常祁";
               }
               var map = new BMap.Map("realMap"); //创建地图实例
@@ -238,13 +237,13 @@ export default {
               this.FormList.photoLocation =
                 conents.selfFilePath[0].photoLocation;
               let selfData = conents.selfFilePath[0];
-              if (selfData.lgt == null) {
+              if (selfData.lgt == "" || selfData.lgt == null) {
                 selfData.lgt = 112.376609;
               }
-              if (selfData.lat == null) {
+              if (selfData.lat == "" || selfData.lat == null) {
                 selfData.lat = 26.405528;
               }
-              if (selfData.photoLocation == null) {
+              if (selfData.photoLocation == "" || selfData.photoLocation == null) {
                 selfData.photoLocation = "湖南常祁";
               }
               var map1 = new BMap.Map("selfMap"); //创建地图实例
@@ -278,6 +277,7 @@ export default {
     // 自检
     selfInit() {
       if (this.processList.type == "selfcheck") {
+          this.flag = false
          request
         .post("/rest/processCheck/getProcessDetail", {
           id: this.processList.processId
@@ -317,13 +317,13 @@ export default {
           if (this.objlist.length > 0) {
             this.FormList.photoLocation = conents.selfFilePath[0].photoLocation;
             let selfData = conents.selfFilePath[0];
-            if (selfData.lgt == null) {
+            if (selfData.lgt == "" || selfData.lgt == null) {
               selfData.lgt = 112.376609;
             }
-            if (selfData.lat == null) {
+            if (selfData.lat == "" || selfData.lat == null) {
               selfData.lat = 26.405528;
             }
-            if (selfData.photoLocation == null) {
+            if (selfData.photoLocation == "" || selfData.photoLocation == null) {
               selfData.photoLocation = "湖南常祁";
             }
             var map1 = new BMap.Map("selfMap"); //创建地图实例
@@ -356,9 +356,6 @@ export default {
      
     }
   },
-  destoryed() {
-    this.reload();
-  }
 };
 </script>
 
@@ -380,7 +377,6 @@ export default {
 }
 .allBox {
   overflow: hidden;
-
   .selfBox {
     width: 50%;
     float: left;

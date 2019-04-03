@@ -75,19 +75,14 @@ export default {
       imgName: "", // 图片名称
       imgType: "", // 图片格式
       pollingList: [],
-      lgt: "",
-      lat: "",
-      getID:'',
     };
   },
   watch:{
       targetID(val){
-          // this.getID = val
           this.pollInit();
       }
   },
   created() {
-    // this.pollInit();
   },
   mounted() {
     this.pollInit();
@@ -114,13 +109,13 @@ export default {
           if (this.pollingList.picMessage.length > 0) {
             let formData = this.pollingList.picMessage[0];
             console.log(formData.lgt, formData.lat);
-            if (formData.lgt == null) {
+            if (formData.lgt == "" || formData.lgt == null) {
               formData.lgt = 112.376609;
             }
-            if (formData.lat == null) {
+            if (formData.lat == "" || formData.lat == null) {
               formData.lat = 26.405528;
             }
-            if (formData.photoLocation == null) {
+            if (formData.photoLocation == "" || formData.photoLocation == null) {
               formData.photoLocation = "湖南常祁";
             }
             var map = new BMap.Map("pollmap"); //创建地图实例

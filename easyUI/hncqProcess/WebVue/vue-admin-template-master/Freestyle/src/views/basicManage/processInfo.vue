@@ -14,7 +14,7 @@
 
     <!--列表-->
     <div class="processtable">
-      <el-table :data="tableData" stripe border highlight-current-row>
+      <el-table :data="tableData" height="50vh" stripe border highlight-current-row>
         <el-table-column prop="process" label="工序名"/>
         <el-table-column min-width="70px" prop="seq" label="序号"/>
         <el-table-column min-width="100px" prop="createName" label="创建人"/>
@@ -30,8 +30,9 @@
     </div>
 
     <!--分页-->
-    <div class="page">
+  
       <el-pagination
+      class="pageList pt20"
         :current-page="currentPage"
         :page-sizes="[10, 20, 30]"
         :page-size="pageSize"
@@ -41,7 +42,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-    </div>
+   
 
     <!--新增、编辑弹框-->
     <el-dialog :visible.sync="dialogVisible" title="新增工序" width="30%">
