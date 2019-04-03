@@ -1,11 +1,15 @@
 <template>
   <div>
     <el-menu class="navbar" mode="horizontal">
-      <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
+      <hamburger
+        :toggle-click="toggleSideBar"
+        :is-active="sidebar.opened"
+        class="hamburger-container"
+      />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="../../../../static/timg.jpg" alt="" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <img src="../../../../static/timg.jpg" alt class="user-avatar">
+          <i class="el-icon-caret-bottom"/>
         </div>
 
         <!-- 修改个人信息功能 -->
@@ -25,26 +29,23 @@
       </el-dropdown>
       <div class="headline">
         湖南常祁高速现场管理
-         <!-- <mallki class-name="mallki-text" text="现场管理系统"/> -->
+        <!-- <mallki class-name="mallki-text" text="现场管理系统"/> -->
       </div>
     </el-menu>
     <div>
-      <breadcrumb />
+      <!-- <breadcrumb /> -->
     </div>
     <!-- 修改信息弹出框 -->
     <el-dialog title="修改个人信息" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="用户账户" label-width="120px">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.name" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="姓名" label-width="120px">
-          <el-input v-model="form.createName"></el-input>
+          <el-input v-model="form.createName" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="手机号码" label-width="120px">
           <el-input v-model="form.mobilePhone"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号" label-width="120px">
-          <el-input v-model="form.officePhone"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" label-width="120px">
           <el-input v-model="form.email"></el-input>
@@ -74,15 +75,15 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
+// import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 import request from "@/utils/request";
 import Mallki from "@/components/TextHoverEffect/Mallki";
 export default {
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     Hamburger,
     Mallki
   },
@@ -112,7 +113,8 @@ export default {
           { required: true, message: "请输入新密码", trigger: "blur" },
           { min: 6, message: "请输入打入6位以上的密码", trigger: "blur" }
         ]
-      }
+      },
+      uesrList: [] // 登陆用户信息
     };
   },
   mounted() {
@@ -159,7 +161,7 @@ export default {
             oldpassword: this.formPass.passWord
           };
           return request
-            .post("/rest/UsersController/resetPassword", passData)
+            .post("/rest/sysuser/resetPassword", passData)
             .then(res => {
               if (res.status == 200) {
                 this.$message({
@@ -171,7 +173,11 @@ export default {
                 this.formPass.passWord = "";
                 this.formPass.xinpassWoed = "";
                 this.xiuFormVisible = false;
+                
               }
+            }).then(()=>{
+                 // 密码修改成功跳转到登陆页
+                  this.logout()
             });
         } else {
           console.log("error submit!!");
@@ -181,20 +187,21 @@ export default {
     },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
-        Cookies.remove('names')
+        Cookies.remove("names");
         location.reload(); // 为了重新实例化vue-router对象 避免bug
       });
     },
     // 请求接口
     fn() {
-      return request.get("/rest/user").then(res => {
-        if (res.status == 200) {
-          this.form.name = res.data[0].createBy;
-          this.form.createName = res.data[0].createName;
-          this.form.mobilePhone = res.data[0].mobilePhone;
-          this.form.officePhone = res.data[0].officePhone;
-          this.form.email = res.data[0].email;
+      return request.post("/rest/sysuser/chakan").then(res => {
+        if (res.data.respCode == 0) {
+          this.uesrList = res.data.data;
+          console.log(this.uesrList, "this.uesrList");
         }
+        this.form.name = this.uesrList.username;
+        this.form.createName = this.uesrList.realname;
+        this.form.mobilePhone = this.uesrList.mobilePhone;
+        this.form.email = this.uesrList.email;
       });
     }
   }
@@ -253,7 +260,7 @@ export default {
     }
   }
 }
-.component-item{
+.component-item {
   min-height: 100px;
   padding-right: 150px;
   text-align: center;

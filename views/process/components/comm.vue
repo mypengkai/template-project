@@ -1,17 +1,17 @@
 <template>
   <div class="diaMAP">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item style="width:17vw" label="相关工程" label-width="120px">
+      <el-form-item style="width:30vw" label="相关工程" label-width="120px">
         <el-input v-model="form.projectItem" :disabled="true"></el-input>
       </el-form-item>
 
-      <el-form-item style="width:17vw" label="创建时间" label-width="120px">
+      <el-form-item style="width:30vw" label="创建时间" label-width="120px">
         <el-input v-model="form.createTime" :disabled="true"></el-input>
       </el-form-item>
 
       <el-form-item label="指令内容" label-width="120px">
         <div>
-          <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}">
+          <el-timeline :reverse="reverse" :class="{'timelineBox':activities.length < 5}">
             <el-timeline-item
               v-for="(activity, index) in activities"
               :key="index"
@@ -21,17 +21,14 @@
               :timestamp="activity.createTime"
             >{{activity.commandStagePeople1}}: {{activity.name}}</el-timeline-item>
           </el-timeline>
-
-          <div class="topBar">
-            <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 态:</span>
-            <el-input v-model="state" :disabled="true"></el-input>
-          </div>
-
-          <div class="textareaBar">
-            <span>相关描述:</span>
-            <el-input type="textarea" v-model="remark" :disabled="true"></el-input>
-          </div>
         </div>
+      </el-form-item>
+      <el-form-item style="width:30vw" label="状态：" label-width="120px">
+        <el-input v-model="state" :disabled="true"></el-input>
+      </el-form-item>
+
+       <el-form-item style="width:30vw" label="相关描述:" label-width="120px">
+        <el-input v-model="remark" :disabled="true"></el-input>
       </el-form-item>
     </el-form>
     <div class="allBox">
@@ -75,16 +72,12 @@
 
 <script>
 import request from "@/utils/request";
-// import instructMap from "@/views/instruct/components/instructMap";
 export default {
   props: ["commandID"],
-  components: {
-    // instructMap
-  },
   data() {
     return {
       reverse: true,
-      activities: [
+      activities: [            // 时间线
         {
           name: "",
           createTime: ""
@@ -116,23 +109,21 @@ export default {
           icon: "el-icon-location-outline"
         }
       ],
-      commList: [],
-      tabPosition: "first",
+      commList: [],         // 接口返回数据
+      tabPosition: "first",  // 切换
       tabShow: "three",
-      imgRealList: [],
-      objlist: [],
-      getID: "", // 传入ID
+      imgRealList: [],        // 指令完成图片详细信息
+      objlist: [],            // 发送指令信息
       form: {
-        projectItem: "",
-        createTime: ""
+        projectItem: "",      // 工程名
+        createTime: ""        // 时间
       },
-      state: "",
-      remark: ""
+      state: "",             // 状态
+      remark: ""             // 描述
     };
   },
   watch: {
     commandID(val) {
-      // this.getID = val;
       this.commInit();
     }
   },
@@ -152,6 +143,7 @@ export default {
           if (res.data.respCode == "0") {
             this.commList = res.data.data;
           }
+          console.log(this.commList,'this.commList')
           this.form.projectItem = this.commList.projectItem;
           this.form.createTime = this.commList.createTime;
           this.remark = this.commList.remark;
@@ -169,13 +161,13 @@ export default {
           //    发起人定位
           if (this.objlist.length > 0) {
             let formData = this.objlist[0];
-            if (formData.lat == null) {
-              formData.lat = 112.376609;
+            if (formData.lgt == ""|| formData.lgt ==null ) {
+              formData.lgt = 112.376609;
             }
-            if (formData.lgt == null) {
+            if (formData.lat == "" || formData.lat ==null) {
               formData.lat = 26.405528;
             }
-            if (formData.photoLocation == null) {
+            if (formData.photoLocation == "" || formData.photoLocation == null) {
               formData.photoLocation = "湖南常祁";
             }
             var map = new BMap.Map("selfMap"); //创建地图实例
@@ -207,13 +199,13 @@ export default {
           //   接收人定位
           if (this.imgRealList.length > 0) {
             let contentData = this.imgRealList[0];
-            if (contentData.lat == null) {
-              contentData.lat = 112.376609;
+            if (contentData.lgt == "" || contentData.lgt == null ) {
+              contentData.lgt = 112.376609;
             }
-            if (contentData.lgt == null) {
+            if (contentData.lat == "" || contentData.lat == null) {
               formData.lat = 26.405528;
             }
-            if (contentData.photoLocation == null) {
+            if (contentData.photoLocation == "" || contentData.photoLocation == null) {
               contentData.photoLocation = "湖南常祁";
             }
             var map1 = new BMap.Map("realMap"); //创建地图实例

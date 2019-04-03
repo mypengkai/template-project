@@ -24,6 +24,11 @@
         <!-- 人员查询 -->
         <el-col :span="20" v-if="tabPosition == 'second'">
           <div class="grid-content">
+            <!-- <el-form inline>
+              <el-form-item label="姓名：">
+                <select-tree :options="unitsTree"  v-on:noDe="handleCheckChangeUnit" :props="defaultPropsProject"/>
+              </el-form-item>
+            </el-form> -->
             <span>姓名：</span>
             <input type="text" v-model="username" placeholder="输入姓名" class="inputName">
           </div>
@@ -115,13 +120,14 @@ export default {
       tabPosition: "first",
       dateFrom: "", //日期
       dateTo: "",
-      active: "",
+      active: "",   // 自定义属性
       options: [], //工程列表
       unitsTree: [],  // 工程分项
       username: "", //用户名
       conentOptions: [], // 展示数据
       userOptions: [], // 人员数据
       defaultProp: {
+        // 组织机构
         children: "children",
         label: "name"
       },
@@ -130,14 +136,12 @@ export default {
         children: "children",
         label: "projectItem"
       },
-      value:'',
-      value1:'',
       serckCheck: ["时间", "人员", "类型"],
       from: {
         projectName: "", //单位
         projectId: "", //单位id
         unitsName: "", //单位工程
-        unitsId: "" //gongchengID
+        unitsId: "" //工程ID
       },
       headers: {
         "X-AUTH-TOKEN": getToken()
@@ -147,6 +151,7 @@ export default {
   watch: {},
   created() {
     this.projectInit();
+    this.querySelected()
   },
   mounted() {
    
@@ -165,7 +170,7 @@ export default {
     noDe(data, checked, indeterminate) {
       this.from.projectName = data.name;
       this.from.projectId = data.id;
-      // this.flag = false;
+       // 工程查询
        request
         .post("/rest/projectItemInfo/getList", {
           orgId: this.from.projectId,
@@ -188,15 +193,15 @@ export default {
             "X-AUTH-TOKEN": token,
             pageNo: 1,
             pageSize: 15,
-            startTime: this.dateFrom,
-            endTime: this.dateTo,
+            startTime: this.dateFrom,       // 起始时间
+            endTime: this.dateTo,          // 结束时间
             projectid: this.from.unitsId, //工程ID
-            orderby: this.active + 1,
-            type: this.searchType
+            orderby: this.active + 1,     // 筛选(时间，类型，人员)
+            type: this.searchType         // 工程   人员
           })
           .then(res => {
             this.conentOptions = res.data.data.data;
-            console.log(this.conentOptions);
+            // console.log(this.conentOptions);
           });
       } else if (this.tabPosition == "second") {
         //人员痕迹查询
@@ -213,7 +218,7 @@ export default {
           })
           .then(res => {
             this.userOptions = res.data.data.data;
-            console.log(this.userOptions, "this.userOptions");
+            // console.log(this.userOptions, "this.userOptions");
           });
       }
     },
@@ -252,6 +257,7 @@ export default {
   background: white;
   min-height: 60px;
   position: absolute;
+ 
   left: 80px;
   top: 50px;
   z-index: 10000;
