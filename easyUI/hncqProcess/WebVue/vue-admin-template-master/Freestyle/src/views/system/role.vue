@@ -23,9 +23,15 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" @click="bianTan(scope.row)" v-if="tableData.length!=0"></el-button>
-            <el-button type="danger" icon="el-icon-delete" @click="open2(scope.row.id)" v-if="tableData.length!=0"></el-button>
-              <el-button type="success" @click="sxlb(scope.row.id)" v-if="tableData.length!=0">查看列表</el-button>
+               <el-tooltip content="编译" placement="top">
+                    <el-button type="primary" icon="el-icon-edit" @click="bianTan(scope.row)" v-if="tableData.length!=0"></el-button>
+              </el-tooltip>
+              <el-tooltip content="删除" placement="top">
+                     <el-button type="danger" icon="el-icon-delete" @click="open2(scope.row.id)" v-if="tableData.length!=0"></el-button>
+              </el-tooltip>
+              <el-tooltip content="查询" placement="top">
+                     <el-button type="success" icon="el-icon-search" @click="sxlb(scope.row.id)" v-if="tableData.length!=0"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>

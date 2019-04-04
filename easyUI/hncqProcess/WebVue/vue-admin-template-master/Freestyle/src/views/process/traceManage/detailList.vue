@@ -52,7 +52,7 @@
     <div class="projectConent" v-if="this.traceType === 2">
       <div
         class="conent"
-        style="width:15%;"
+        style="width:18%;"
         v-for="(item,index) in this.userOptions"
         :key="index"
         @click="pictureLook(item)"

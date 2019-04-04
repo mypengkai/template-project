@@ -39,8 +39,14 @@
 
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+                <el-tooltip content="修改" placement="top">
+                    <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>
+              </el-tooltip>
+               <el-tooltip content="删除" placement="top">
+                   <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+              </el-tooltip>
+              <!-- <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button> -->
             </template>
           </el-table-column>
 
