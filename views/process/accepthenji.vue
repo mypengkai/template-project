@@ -1,59 +1,90 @@
 <template>
   <div class="acceptzh">
-    <el-row>
+
+    <div class="topBar">
+      <span>组织机构</span>
+      <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe" />
+
+      <span>分部分项</span>
+      <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes" />
+
+      <span>姓名</span>
+      <el-input v-model="form.userName" placeholder="请输入内容"></el-input>
+
+      <span>验收类型</span>
+      <el-select v-model="value" placeholder="请选择">
+        <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      </el-select>
+    </div>
+
+    <div class="topBar">
+      <span>工序状态</span>
+      <el-select v-model="value1" placeholder="请选择">
+        <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      </el-select>
+
+      <span>日期</span>
+      <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
+      <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+
+     
+        <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
+      
+    </div>
+
+    <!-- <el-row>
+
       <el-col :span="6">
         <el-form :inline="true">
           <el-form-item label="组织机构">
-            <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe"/>
+            <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe" />
           </el-form-item>
         </el-form>
       </el-col>
+
       <el-col :span="6">
         <el-form :inline="true">
           <el-form-item label="分部分项">
-            <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes"/>
+            <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes" />
           </el-form-item>
         </el-form>
       </el-col>
+
       <el-col :span="6">
         姓名
         <el-input v-model="form.userName" placeholder="请输入内容" style="width:70%"></el-input>
       </el-col>
+
       <el-col :span="6">
         验收类型
         <el-select v-model="value" placeholder="请选择">
-          <el-option
-            v-for="item in options2"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
+
     </el-row>
+
     <el-row>
       <el-col :span="6">
         工序状态
         <el-select v-model="value1" placeholder="请选择">
-          <el-option
-            v-for="item in options3"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
+
       <el-col :span="12">
         日期
         <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
         <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
       </el-col>
+
       <el-col :span="2">
         <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
       </el-col>
-    </el-row>
 
-    <el-table class="textList" :data="tableData" border style="width: 100%; margin-top:20px" height="60vh">
+    </el-row> -->
+
+    <el-table class="textList" :data="tableData" border style="width: 100%;" height="55vh">
       <el-table-column prop="name1" label="单位工程分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
       <el-table-column prop="processName" label="工序名"></el-table-column>
@@ -63,42 +94,18 @@
       <el-table-column prop="state" label="状态"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
-          <el-button
-            @click="handleClick(scope.row)"
-            type="primary"
-            size="small"
-            v-if="tableData.length!=0"
-          >查看</el-button>
+          <el-button @click="handleClick(scope.row)" type="primary" size="small" v-if="tableData.length!=0">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 分页 -->
 
-    <el-pagination
-      class="pageList pt20"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[15,30,60,100]"
-      :page-size="15"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    ></el-pagination>
+    <el-pagination class="pageList mt1" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,60,100]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
 
     <!-- 查看弹框 -->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%" top="5vh">
-      <imgList
-        :chakanData="chakanData"
-        :imgData="imgData"
-        :imgData2="imgData2"
-        :imgId="imgId"
-        :zijian="zijian"
-        :yanshou="yanshou"
-        :imgForm="imgForm"
-        :imgData3="imgData3"
-        @imgLeft="imgLeft"
-      ></imgList>
+      <imgList :chakanData="chakanData" :imgData="imgData" :imgData2="imgData2" :imgId="imgId" :zijian="zijian" :yanshou="yanshou" :imgForm="imgForm" :imgData3="imgData3" @imgLeft="imgLeft"></imgList>
     </el-dialog>
   </div>
 </template>
@@ -182,12 +189,12 @@ export default {
       orgId: "",
       zijian: "",
       yanshou: "",
-      currentPage4: 1,         // 当前页数 默认1
+      currentPage4: 1, // 当前页数 默认1
       total: 0
     };
   },
-  created(){
-      this.chaxun()
+  created() {
+    this.chaxun();
   },
   mounted() {
     this.fn();
@@ -260,8 +267,8 @@ export default {
       // console.log(formData)
       request.post("/rest/processCheck/searchHenJi", formData).then(res => {
         if (res.data.respCode == "0") {
-          console.log(res,'res');
-        
+          console.log(res, "res");
+
           this.total = res.data.data.totalCount;
           this.tableData = res.data.data.data;
           // this.formData.pageNo = res.data.data.nextPage
@@ -303,24 +310,22 @@ export default {
                 i.projectType == "1"
                   ? "单位工程"
                   : i.projectType == "2"
-                  ? "子单位工程"
-                  : i.projectType == "3"
-                  ? "分部工程"
-                  : i.projectType == "4"
-                  ? "子分部工程"
-                  : i.projectType == "5"
-                  ? "分部项程"
-                  : i.projectType == "6"
-                  ? "子分项工程"
-                  : "";
+                    ? "子单位工程"
+                    : i.projectType == "3"
+                      ? "分部工程"
+                      : i.projectType == "4"
+                        ? "子分部工程"
+                        : i.projectType == "5"
+                          ? "分部项程"
+                          : i.projectType == "6" ? "子分项工程" : "";
               i.state1 = i.state1 == 1 ? "已指定验收" : "未指定验收";
               i.state2 == 0
                 ? (i.state2 = "指定工序")
                 : i.state2 == 1
-                ? (i.state2 = "已指定验收计划")
-                : i.state2 == 2
-                ? (i.state2 = "自检完成")
-                : (i.state2 = "验收完成");
+                  ? (i.state2 = "已指定验收计划")
+                  : i.state2 == 2
+                    ? (i.state2 = "自检完成")
+                    : (i.state2 = "验收完成");
             });
             this.zijian = this.chakanData.selfCheckDescribe;
             this.yanshou = this.chakanData.checkDescribe;
