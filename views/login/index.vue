@@ -232,7 +232,6 @@ $light_gray: #eee;
     font-size: 0.8vw;
     bottom: 1vw;
     left: 42vw;
-  
     position: absolute;
     .phone {
       font-size: 0.7vw;
