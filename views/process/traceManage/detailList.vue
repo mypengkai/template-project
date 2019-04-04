@@ -190,7 +190,7 @@ export default {
 .p20 {
   margin: 0;
   padding: 0;
-  max-height: 470px;
+  max-height: 19vw;
   overflow-x: hidden;
   .conent {
     overflow: hidden;
