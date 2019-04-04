@@ -230,9 +230,9 @@ $light_gray: #eee;
   .bq {
     color: #ccc;
     font-size: 0.8vw;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 1vw;
+    left: 42vw;
+  
     position: absolute;
     .phone {
       font-size: 0.7vw;
