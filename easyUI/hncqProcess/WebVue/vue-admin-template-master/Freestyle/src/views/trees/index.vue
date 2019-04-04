@@ -52,16 +52,19 @@
     <!-- 日志查看弹框 -->
     <el-dialog :title="'日志详情'" :visible.sync="dialogFormVisible" class="dialogBox">
       <!-- 照片详情信息查看 -->
-      <chaKanList :formList="formList"></chaKanList>
+      <!-- <chaKanList :formList="formList"></chaKanList> -->
+         <logCheck :targetID="targetID"></logCheck>
     </el-dialog>
   </div>
 </template>
 <script>
 import chaKanList from "./components/chakanList";
 import request from "@/utils/request";
+import logCheck from "@/views/process/components/logCheck";
 export default {
   components: {
-    chaKanList
+    chaKanList,
+    logCheck
   },
   data() {
     return {
@@ -98,7 +101,8 @@ export default {
       bookType: "",
       tableData: null,
       currentPage4: 15,
-      noType: ""
+      noType: "",
+        targetID:'',   // 查看项id
     };
   },
   methods: {
@@ -133,6 +137,7 @@ export default {
       this.formList.pictures.length = 0;
       request.post(`/rest/processInfoLog/findLog/${data.id}`).then(res => {
         console.log(res);
+           this.targetID = data.id
         this.formList.realname = res.data.data.realname;
         this.formList.createTime = res.data.data.createTime;
         this.formList.describe = res.data.data.describe;
