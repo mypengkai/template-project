@@ -58,6 +58,15 @@
 
         <!-- 查看 -->
         <div :class="{reverseBox:nowItem!=='add'}">
+          <!-- 参考图标 -->
+          <div class="reference">
+            <el-timeline>
+              <el-timeline-item v-for="(activity, index) in activities2" :key="index" :icon="activity.icon" :type="activity.type" :color="activity.color" :size="activity.size" :timestamp="activity.timestamp">
+                {{activity.content}}
+              </el-timeline-item>
+            </el-timeline>
+
+          </div>
           <el-form-item style="width:22vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
             <el-input v-model="form.projectItem"></el-input>
           </el-form-item>
@@ -91,8 +100,8 @@
             <!-- 导航切换 -->
             <div class="navb" label-width="120px">
               <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
-                <el-menu-item index="1" @click="nowType=0">图片详情</el-menu-item>
-                <el-menu-item index="2" @click="nowType=1">拍照地点</el-menu-item>
+                <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
+                <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
               </el-menu>
             </div>
 
@@ -291,6 +300,33 @@ export default {
           size: "large",
           type: "primary",
           icon: "el-icon-location-outline"
+        }
+      ],
+      // 参考图标
+      activities2: [
+        {
+          content: "发出指令的人",
+          timestamp: "",
+          type: "primary",
+          icon: "el-icon-location-outline"
+        },
+        {
+          content: "转发指令的人",
+          timestamp: "",
+          type: "info",
+          icon: "el-icon-refresh"
+        },
+        {
+          content: "正在处理指令",
+          timestamp: "",
+          type: "primary",
+          icon: "el-icon-loading"
+        },
+        {
+          content: "完成指令的人",
+          timestamp: "",
+          type: "success",
+          icon: "el-icon-check"
         }
       ],
       answer: "", // 转发响应变量
@@ -656,6 +692,15 @@ export default {
 .reverseBox {
   height: 66vh;
   overflow-y: scroll;
+  position: relative;
+  .reference {
+    position: absolute;
+    width: 200px;
+    height: 300px;
+    // border: 1px solid #000000;
+    left: 55vw;
+    top: 1vw;
+  }
   /deep/.el-form-item__label {
     font-size: 0.7vw;
   }
@@ -670,7 +715,7 @@ export default {
 }
 .reverseAddBox {
   width: 90%;
-   height: 65vh;
+  height: 65vh;
   overflow-y: scroll;
   /deep/.el-form-item__label {
     font-size: 0.7vw;
