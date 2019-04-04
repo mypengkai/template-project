@@ -26,8 +26,8 @@ export default {
 .hamburger {
   display: inline-block;
   cursor: pointer;
-  width: 28px;
-  height: 67px;
+  width: 1.5vw;
+  height: 8vh;
   /* background-color: #ffffff; */
 }
 .hamburger.is-active {

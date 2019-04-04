@@ -24,7 +24,7 @@
     </div>
 
     <!-- 查询列表 -->
-    <el-table class="textList" :data="everyDayLogPageList" style="width: 100%" height="66vh">
+    <el-table class="textList" :data="everyDayLogPageList" style="width: 100%" height="59vh">
       <el-table-column prop="realname" label="巡视人姓名">
       </el-table-column>
 
@@ -51,7 +51,7 @@
     </el-table>
 
     <!-- 分页条 -->
-    <el-pagination class="pageList pt20" background :page-sizes="[6]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
+    <el-pagination class="pageList mt1" background :page-sizes="[6]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
     </el-pagination>
     <!-- 查看照片弹框 -->
     <el-dialog :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">

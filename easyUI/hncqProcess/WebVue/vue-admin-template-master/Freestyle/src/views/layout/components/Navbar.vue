@@ -210,7 +210,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 80px;
+  height: 8.5vh;
   line-height: 80px;
   border-radius: 0px !important;
   background-color: rgb(48, 65, 86);
@@ -225,8 +225,8 @@ export default {
     letter-spacing: 10px;
   }
   .hamburger-container {
-    line-height: 58px;
-    height: 50px;
+    line-height: 3vh;
+    height: 5vh;
     float: left;
     padding: 0 10px;
   }
@@ -237,24 +237,24 @@ export default {
     color: red;
   }
   .avatar-container {
-    height: 50px;
+   
     display: inline-block;
     position: absolute;
     right: 35px;
     .avatar-wrapper {
       cursor: pointer;
-      margin-top: 14px;
+      margin-top: 1.8vh;
       position: relative;
       line-height: initial;
       .user-avatar {
-        width: 40px;
-        height: 40px;
+        width: 2.3vw;
+        height: 2.3vw;
         border-radius: 10px;
       }
       .el-icon-caret-bottom {
         position: absolute;
         right: -20px;
-        top: 25px;
+        top: 1.5vw;
         font-size: 12px;
       }
     }

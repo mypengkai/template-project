@@ -136,7 +136,7 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped type="text/scss">
   .tags-view-container {
-    height: 34px;
+    height: 4vh;
     width: 100%;
     background: #fff;
     border-bottom: 1px solid #d8dce5;
@@ -146,13 +146,13 @@
     display: inline-block;
     position: relative;
     cursor: pointer;
-    height: 26px;
-    line-height: 26px;
+    height: 3vh;
+    line-height: 3vh;
     border: 1px solid #d8dce5;
     color: #495060;
     background: #fff;
     padding: 0 8px;
-    font-size: 12px;
+    font-size: 0.5vw;
     margin-left: 5px;
     margin-top: 4px;
   &:first-of-type {

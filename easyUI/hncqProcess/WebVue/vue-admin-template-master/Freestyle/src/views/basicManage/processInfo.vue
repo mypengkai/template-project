@@ -32,7 +32,7 @@
     <!--分页-->
   
       <el-pagination
-      class="pageList pt20"
+      class="pageList mt1"
         :current-page="currentPage"
         :page-sizes="[10, 20, 30]"
         :page-size="pageSize"

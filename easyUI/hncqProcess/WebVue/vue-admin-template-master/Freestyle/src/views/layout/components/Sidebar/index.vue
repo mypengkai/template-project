@@ -28,7 +28,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .a1 {
-  height: 79px;
+  height: 8.5vh;
   // background-color: #fff;
   img {
     width: 100%;
