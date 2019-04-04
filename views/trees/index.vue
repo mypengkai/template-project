@@ -1,5 +1,5 @@
 <template>
-  <div class="p20">
+  <div class="p20 layoutBox">
     <div class="topBar">
       <!-- 帅选 -->
       <span>姓名</span>
@@ -17,7 +17,7 @@
     </div>
     <!-- 表单 -->
     <div class="">
-      <el-table class="textList" :data="tableData" height="66vh" style="width: 100%;padding-left:15px">
+      <el-table class="textList" :data="tableData" height="65vh" style="width: 100%;padding-left:15px">
         <el-table-column label="图片">
           <template slot-scope="scope">
             <img :src="scope.row.filePath" alt="" style="height:150px">
@@ -46,7 +46,7 @@
       </el-table>
     </div>
     <!-- 分页 -->
-    <el-pagination class="pageList pt20" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
+    <el-pagination class="pageList mt1" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
 
     <!-- 日志查看弹框 -->
@@ -158,6 +158,9 @@ export default {
 <style lang="scss" scoped>
 .cx {
   margin-top: 15px;
+}
+.layoutBox{
+  height: 100%;
 }
 </style>
 
