@@ -1,5 +1,5 @@
 <template>
-  <div class="overflowY">
+  <div class="">
     <!-- 照片详情信息查看 -->
     <el-form class="reverseBox" :model="form">
       <div style="width:50%"> 

@@ -21,11 +21,11 @@
         </div>
         
         <!-- 轮播信息 -->
-        <div style="height:30vh" v-if="nowType==1">
+        <div style="height:20vh" v-if="nowType==1">
           <el-form-item label="">
-            <el-carousel :interval="3000" arrow="always" height="30vh">
+            <el-carousel :interval="3000" arrow="always" height="20vh">
               <el-carousel-item v-for="(item,index) in formList.pictures[0]" :key="index">
-                <img :src="item.filePath" alt=""  style="width:100%;height:100%">
+                <img :src="item.filePath" alt="">
               </el-carousel-item>
             </el-carousel>
           </el-form-item>
@@ -103,7 +103,7 @@ export default {
   .chakan{
     #allmap{
       width: 100%;
-      height: 30vh;
+      height: 20vh;
     }
     .navb {
       width: 30%;

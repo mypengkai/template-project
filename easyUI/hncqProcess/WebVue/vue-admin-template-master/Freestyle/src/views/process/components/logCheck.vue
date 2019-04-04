@@ -22,7 +22,7 @@
     <div class="content">
       <el-tabs type="border-card" v-model="tabPosition">
         <el-tab-pane label="影像资料" name="first">
-          <el-carousel :interval="3000" arrow="always" height="300px">
+          <el-carousel :interval="3000" arrow="always" height="30vh">
             <el-carousel-item v-for="(item,index) in imgList" :key="index">
               <img :src="item.filePath" alt style="width:100%;height:100%">
             </el-carousel-item>
@@ -126,12 +126,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.logCheck{
+  height: 70vh;
+  overflow-y: scroll;
+}
 .imgBox {
   width: 100%;
 }
 #logmap {
   width: 100%;
-  height: 300px;
+  height: 30vh;
 }
 .content {
   margin-left: 110px;
