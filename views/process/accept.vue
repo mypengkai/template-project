@@ -51,7 +51,7 @@
           </el-table-column>
           <el-table-column prop="state2" label="状态">
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="200">
+          <el-table-column fixed="right" label="操作" width="250">
             <template slot-scope="scope">
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2=='指定工序'">指定验收</el-button>
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2=='已指定验收计划'">修改指定验收</el-button>
