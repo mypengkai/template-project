@@ -654,7 +654,7 @@ export default {
   }
 }
 .reverseBox {
-  height: 68vh;
+  height: 66vh;
   overflow-y: scroll;
   /deep/.el-form-item__label {
     font-size: 0.7vw;

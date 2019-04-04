@@ -15,7 +15,7 @@
       </div>
       <!--列表-->
       <div class="processtable">
-        <el-table :data="tableData" height="66vh" :row-style="{height: '0'}" stripe highlight-current-row border @selection-change="selectChange(selection)">
+        <el-table :data="tableData" height="62vh" :row-style="{height: '0'}" stripe highlight-current-row border @selection-change="selectChange(selection)">
           <el-table-column min-width="180px" prop="processType" fixed label="工序类型" />
           <el-table-column min-width="120px" prop="seq" label="序号" sortable width="120px" />
           <el-table-column prop="createName" min-width="120px" label="创建人" />
@@ -39,7 +39,7 @@
       </div>
       <!--分页-->
     
-        <el-pagination  class="pageList pt20" :current-page="currentPage" :page-sizes="[15, 30, 60]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        <el-pagination  class="pageList mt1" :current-page="currentPage" :page-sizes="[15, 30, 60]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     
 
       <!--新增、修改弹框-->

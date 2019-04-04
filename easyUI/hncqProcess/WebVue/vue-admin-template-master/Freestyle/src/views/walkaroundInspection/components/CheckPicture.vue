@@ -118,7 +118,7 @@ export default {
 
 <style lang="scss" scoped>
 .reverseBox {
-  height: 72vh;
+  height: 70vh;
   overflow-y: scroll;
   /deep/.el-form-item__label {
     font-size: 0.7vw;

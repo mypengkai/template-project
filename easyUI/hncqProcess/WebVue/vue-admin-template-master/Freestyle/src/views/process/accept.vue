@@ -37,7 +37,8 @@
           <el-input v-model="treeFrom.state1" readonly="true" v-if="childrenId!=undefined&&childrenId!=''"></el-input>
         </div>
         <div style="right: 1vw;bottom: 1vh">
-          <el-button type="primary" icon="el-icon-circle-plus" plain @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button>
+          <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button>
+          <!-- <el-button type="primary" icon="el-icon-circle-plus" plain @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button> -->
         </div>
       </div>
       <!-- 操作列表 -->
@@ -50,7 +51,7 @@
           </el-table-column>
           <el-table-column prop="state2" label="状态">
           </el-table-column>
-          <el-table-column fixed="right" label="操作">
+          <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2=='指定工序'">指定验收</el-button>
               <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2=='已指定验收计划'">修改指定验收</el-button>
@@ -93,35 +94,33 @@
     <!-- 编辑指定验收弹框 -->
     <el-dialog title="指定验收" :visible.sync="bjDialogFormVisible" width="35%">
       <!-- 内嵌验收人弹框 -->
-      <el-dialog title="选中验收人" :visible.sync="innerVisible" append-to-body>
-        <el-form>
-          <el-row>
-            <el-col :span="11">
-              <span>姓名：</span>
-              <el-input v-model="ysrVul" placeholder="请输入内容" style="width:65%"></el-input>
-            </el-col>
-            <el-col :span="11">
-              <span>职务：</span>
-              <el-input v-model="ysrZhiwu" placeholder="请输入内容" style="width:65%"></el-input>
-            </el-col>
-            <el-col :span="2">
-              <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
-            </el-col>
-          </el-row>
-          <el-table :data="ysrData" height="40vh">
-            <el-table-column fixed="left" label="选中验收人" width="300">
-              <template slot-scope="scope">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="Fruit" @click="xzk(scope,$event)">
-              </template>
-            </el-table-column>
-            <el-table-column property="username" label="姓名" width="300"></el-table-column>
-            <el-table-column property="zhiwei" label="职务"></el-table-column>
-            <el-table-column property="mobilePhone" label="电话"></el-table-column>
-          </el-table>
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,45,60]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="pageForm.total">
-          </el-pagination>
-        </el-form>
+      <el-dialog width="50%" title="选中验收人" :visible.sync="innerVisible" append-to-body>
+        <div class="navBar topBar">
+          <span>姓名：</span>
+          <el-input v-model="ysrVul" placeholder="请输入内容" style="width:65%"></el-input>
+
+          <span>职务：</span>
+          <el-input v-model="ysrZhiwu" placeholder="请输入内容" style="width:65%"></el-input>
+
+          <div class="rl">
+            <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
+          </div>
+        </div>
+
+        <el-table :data="ysrData" height="40vh">
+          <el-table-column fixed="left" label="选中验收人" width="300">
+            <template slot-scope="scope">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <input type="radio" name="Fruit" @click="xzk(scope,$event)">
+            </template>
+          </el-table-column>
+          <el-table-column property="username" label="姓名" width="300"></el-table-column>
+          <el-table-column property="zhiwei" label="职务"></el-table-column>
+          <el-table-column property="mobilePhone" label="电话"></el-table-column>
+        </el-table>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,45,60]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="pageForm.total">
+        </el-pagination>
+
         <div slot="footer" class="dialog-footer">
           <el-button @click="innerVisible = false">取 消</el-button>
           <el-button type="primary" @click="qdysr()">确 定</el-button>
@@ -798,5 +797,9 @@ export default {
       }
     }
   }
+}
+.navBar {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

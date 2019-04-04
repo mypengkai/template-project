@@ -19,7 +19,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table class="textList" :data="getList" style="width: 100%" height="66vh">
+      <el-table class="textList" :data="getList" style="width: 100%" height="62.5vh">
         <el-table-column prop="project" label="相关工程">
         </el-table-column>
 
@@ -50,7 +50,7 @@
       </el-table>
     </div>
     <!-- 分页条 -->
-      <el-pagination class="pageList pt20" background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
+      <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
       </el-pagination>
     
     <!-- 编辑弹框 -->

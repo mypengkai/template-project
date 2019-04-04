@@ -18,7 +18,7 @@
       </div>
       <!-- 列表 -->
       <div>
-        <el-table class="textList" :data="userList" style="width: 100%" height="66vh">
+        <el-table class="textList" :data="userList" style="width: 100%" height="65vh">
           <el-table-column prop="userName" label="用户账号">
           </el-table-column>
 
