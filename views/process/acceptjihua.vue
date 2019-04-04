@@ -2,25 +2,25 @@
     <div class="acceptzh">
         <el-row>
             <el-col :span="6">
-                <el-form inline>
-                    <el-form-item label="组织机构：">
+                <el-form :inline="true">
+                    <el-form-item label="组织机构">
                         <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe" />
                     </el-form-item>
                 </el-form>
             </el-col>
             <el-col :span="6">
-                <el-form inline>
-                    <el-form-item label="分部分项：">
+                <el-form :inline="true">
+                    <el-form-item label="分部分项">
                         <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes" />
                     </el-form-item>
                 </el-form>
             </el-col>
             <el-col :span="6">
-                姓名：
-                <el-input v-model="form.userName" placeholder="请输入内容" style="width:50%"></el-input>
+                姓名
+                <el-input v-model="form.userName" placeholder="请输入内容" style="width:70%"></el-input>
             </el-col>
             <el-col :span="6">
-                验收类型：
+                验收类型
                 <el-select v-model="value" placeholder="请选择">
                     <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
@@ -29,14 +29,14 @@
         </el-row>
         <el-row>
             <el-col :span="6">
-                工序状态：
+                工序状态
                 <el-select v-model="value1" placeholder="请选择">
                     <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                 </el-select>
             </el-col>
             <el-col :span="12">
-                日期:
+                日期
                 <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间">
                 </el-date-picker> -
                 <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间">
@@ -47,7 +47,7 @@
             </el-col>
         </el-row>
 
-        <el-table class="textList" :data="tableData" border style="width: 100%;" height="60vh" v-if="tableData.length!=0">
+        <el-table class="textList" :data="tableData" border style="width: 100%; margin-top:20px" height="60vh" v-if="tableData.length!=0">
             <el-table-column prop="name1" label="单位工程1">
             </el-table-column>
             <el-table-column prop="processName" label="工序名">
@@ -154,9 +154,12 @@ export default {
       fbfxId: "",
       zijian: "",
       yanshou: "",
-      currentPage4: 15,
+      currentPage4: 1,
       total: 0
     };
+  },
+  created(){
+     this.chaxun()
   },
   mounted() {
     this.fn();
@@ -324,6 +327,6 @@ export default {
   // }
   // /deep/ .el-popper{
   //     width: 200px;
-  // }
+  //  }
 }
 </style>
