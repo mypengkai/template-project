@@ -16,6 +16,12 @@
 .pt20{
     padding-top: 20px;
 }
+.pth{
+    padding-top: 2vh;
+}
+.pta{
+    padding-top: 4vh;
+}
 .pb15{
     padding-bottom: 15px;
 }
@@ -48,6 +54,9 @@
   }
  .textList{
      font-size: 0.7vw;
+     th{
+        background-color:  rgba(190, 195, 195,0.5)!important;
+       }
   }
   .pageList{
    /deep/ .el-pager li {
@@ -91,7 +100,18 @@
       }
       .el-input__inner{
         line-height: 30px;
+        height: 4vh;
       }
+      .el-input__icon {
+        line-height: 1vh;
+    }
+    .el-date-editor .el-range-separator {
+        width: 6vw;
+        line-height: 3vh;
+    }
+    .el-date-editor .el-range-input, .el-date-editor .el-range-separator {
+        font-size: 0.6vw;
+    }
   }
 
   .brotherBar{
@@ -111,7 +131,7 @@
 }
 
 .temporary{
-    margin-right: 38vw;
+    margin-right: 0vw;
     span{
         font-size: 0.8vw;
     }
@@ -127,7 +147,7 @@
 
   .textareaBar{
     .el-input{
-        width: 500px;
+        width: 18vw;
         margin-right:10px;
         margin-bottom: 10px;
     }
@@ -135,7 +155,7 @@
       line-height: 39px;
     }
     .el-textarea {
-        width: 70%;
+        width: 40%;
     }
 }
   .dialogBox{

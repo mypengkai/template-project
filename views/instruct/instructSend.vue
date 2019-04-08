@@ -26,10 +26,13 @@
         <el-table-column prop="initiator" label="发起人">
         </el-table-column>
 
-        <el-table-column prop="createTime" label="发起时间">
+        <el-table-column prop="commandUserNow" label="完成人">
         </el-table-column>
 
-        <el-table-column prop="planTime" label="计划时间">
+        <!-- <el-table-column prop="createTime" label="发起时间">
+        </el-table-column> -->
+
+        <el-table-column prop="planTime" label="计划检查时间">
         </el-table-column>
 
         <el-table-column prop="commandType1" label="指令类型">
@@ -229,7 +232,7 @@ export default {
 }
 
 .mybox {
-   /deep/.el-range-editor.el-input__inner {
+  /deep/.el-range-editor.el-input__inner {
     padding: 3px 0px;
   }
   /deep/.el-date-editor {

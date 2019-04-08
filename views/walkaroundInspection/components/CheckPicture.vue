@@ -2,7 +2,7 @@
   <div class="">
     <!-- 照片详情信息查看 -->
     <el-form class="reverseBox" :model="form">
-      <div style="width:50%"> 
+      <div class="fl pth" style="width:42.6%">
         <el-form-item label="工程分部分项" label-width="100px">
           <el-input v-model="form.projectItem"></el-input>
         </el-form-item>
@@ -11,11 +11,11 @@
           <el-input v-model="form.zhuanghao"></el-input>
         </el-form-item>
 
-        <el-form-item label="巡视人姓名" label-width="100px">
+        <el-form-item label="巡视人" label-width="100px">
           <el-input v-model="form.createName"></el-input>
         </el-form-item>
 
-        <el-form-item label="时间" label-width="100px">
+        <el-form-item label="创建时间" label-width="100px">
           <el-input v-model="form.createTime"></el-input>
         </el-form-item>
 
@@ -28,28 +28,31 @@
         </el-form-item>
       </div>
 
-      <!-- 导航切换 -->
-      <div class="navb" label-width="100px">
-        <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
-          <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
-          <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
-        </el-menu>
-      </div>
+      <div class="rl" style="width:50%">
+        <div class="navb" label-width="100px">
+          <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
+            <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
+            <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
+          </el-menu>
+        </div>
 
-      <!-- 轮播信息 -->
-      <div class="condition" v-if="nowType==0">
-        <el-form-item class="">
-          <el-carousel :interval="3000" arrow="always" height="35vh">
-            <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
-              <img :src="item.picture" alt="">
-            </el-carousel-item>
-          </el-carousel>
-        </el-form-item>
+        <!-- 轮播信息 -->
+        <div class="condition" v-if="nowType==0">
+          <el-form-item class="">
+            <el-carousel :interval="3000" arrow="always" height="45vh">
+              <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
+                <img :src="item.picture" alt="">
+              </el-carousel-item>
+            </el-carousel>
+          </el-form-item>
+        </div>
+        <!-- 地图 -->
+        <div style="height:52vh" v-if="nowType==1">
+          <Map :nowItem="nowItem"></Map>
+        </div>
       </div>
-      <!-- 地图 -->
-      <div style="height:32vh" v-if="nowType==1">
-        <Map :nowItem="nowItem"></Map>
-      </div>
+      <!-- 导航切换 -->
+
     </el-form>
   </div>
 </template>
@@ -118,8 +121,14 @@ export default {
 
 <style lang="scss" scoped>
 .reverseBox {
-  height: 70vh;
+  height: 68vh;
   overflow-y: scroll;
+  /deep/.el-input__inner {
+    padding: 0 0.5vw;
+}
+  .el-form-item {
+    margin-bottom: 4vh;
+  }
   /deep/.el-form-item__label {
     font-size: 0.7vw;
   }
@@ -139,11 +148,11 @@ export default {
   }
 }
 .navb {
-  width: 30%;
+  width: 70%;
   height: 7%;
   margin-left: 30px;
 }
-.condition{
+.condition {
   margin-top: 50px;
 }
 </style>

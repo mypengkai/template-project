@@ -15,6 +15,7 @@
 
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">搜索</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
     <!-- 查询列表 -->
@@ -26,10 +27,13 @@
         <el-table-column prop="initiator" label="发起人">
         </el-table-column>
 
-        <el-table-column prop="createTime" label="发起时间">
+        <el-table-column prop="commandUserNow" label="完成人">
         </el-table-column>
 
-        <el-table-column prop="planTime" label="计划时间">
+        <!-- <el-table-column prop="createTime" label="发起时间">
+        </el-table-column> -->
+
+        <el-table-column prop="planTime" label="计划检查时间">
         </el-table-column>
 
         <el-table-column prop="commandType1" label="指令类型">
@@ -50,9 +54,9 @@
       </el-table>
     </div>
     <!-- 分页条 -->
-      <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
-      </el-pagination>
-    
+    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
+    </el-pagination>
+
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
@@ -76,8 +80,8 @@ import api from "@/api/instruct.js";
 import Organization from "@/api/Organization.js";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 import project from "@/api/project.js";
-
 export default {
+  inject: ["reload"],
   components: {
     checkBox,
     SelectTree
@@ -200,6 +204,10 @@ export default {
         return ([this.sendData.starttime, this.sendData.endtime] = []);
       }
       [this.sendData.starttime, this.sendData.endtime] = val;
+    },
+    // 重置按钮
+    reset() {
+      this.reload();
     }
   },
   watch: {

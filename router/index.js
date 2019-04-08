@@ -69,38 +69,6 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/basicsData',
-    component: Layout,
-    meta: { title: '基础数据', icon: 'example' },
-    children: [
-      {
-        path: 'engineering',
-        name: 'basicsData',
-        component: () => import('@/views/basicsData/engineering'),
-        meta: { title: '工程管理', icon: 'engineering' }
-      },
-      {
-        path: 'processing',
-        name: 'processing',
-        component: () => import('@/views/basicManage/processManage'),
-        meta: { title: '工序管理', icon: 'acceptance' }
-      },
-      {
-        path: 'recharge',
-        name: 'recharge',
-        component: () => import('@/views/basicsData/recharge'),
-        meta: { title: '短信记录', icon: 'acceptance' }
-      },
-      {
-        path: 'record',
-        name: 'record',
-        component: () => import('@/views/basicsData/record'),
-        meta: { title: '短信充值', icon: 'acceptance' }
-      }
-    ]
-  },
-
-  {
     path: '/instruct',
     component: Layout,
     meta: { title: '指令管理', icon: 'instruct' },
@@ -160,6 +128,39 @@ export const constantRouterMap = [
       }
     ]
   },
+
+  {
+    path: '/basicsData',
+    component: Layout,
+    meta: { title: '基础数据', icon: 'example' },
+    children: [
+      {
+        path: 'engineering',
+        name: 'basicsData',
+        component: () => import('@/views/basicsData/engineering'),
+        meta: { title: '工程管理', icon: 'engineering' }
+      },
+      {
+        path: 'processing',
+        name: 'processing',
+        component: () => import('@/views/basicManage/processManage'),
+        meta: { title: '工序管理', icon: 'acceptance' }
+      },
+      {
+        path: 'recharge',
+        name: 'recharge',
+        component: () => import('@/views/basicsData/recharge'),
+        meta: { title: '短信记录', icon: 'acceptance' }
+      },
+      {
+        path: 'record',
+        name: 'record',
+        component: () => import('@/views/basicsData/record'),
+        meta: { title: '短信充值', icon: 'acceptance' }
+      }
+    ]
+  },
+
 
   {
     path: '/system',
