@@ -21,6 +21,7 @@
     <el-input
       :readonly="true"
       slot="reference"
+      size="small"
       ref="input"
       v-model="labelModel"
       clearable

@@ -1,6 +1,6 @@
 <template>
   <div class="selfcheck">
-    <el-form :model="processAll" label-width="200px">
+    <el-form :model="processAll" label-width="150px">
       <div style="width:50%">
         <el-form-item label="工程分部分项:">
           <el-input v-model="processAll.projectItem" :disabled="true"></el-input>
@@ -20,7 +20,7 @@
     <div class="allBox">
       <div class="selfBox">
         <h3>自检</h3>
-        <el-form :inline="true" :model="FormList" class="demo-form-inline">
+        <el-form :inline="true" :model="FormList" class="demo-form-inline" label-width="150px">
           <el-form-item label="计划自检人：">
             <el-input v-model="FormList.planSelfCheckPerson" :disabled="true"></el-input>
           </el-form-item>
@@ -34,20 +34,33 @@
             <el-input v-model="FormList.realitySelfCheckTime" :disabled="true"></el-input>
           </el-form-item>
         </el-form>
-        <el-form :model="FormList" label-width="160px" class="elInput">
+        <el-form :model="FormList" label-width="150px" class="elInput">
           <el-form-item label="具体位置:">
-            <el-input v-model="FormList.photoLocation" :disabled="true"></el-input>
+            <el-input v-model="FormList.photoLocation" :disabled="true" style="max-width:60vh"></el-input>
           </el-form-item>
         </el-form>
 
         <div class="content">
           <el-tabs type="border-card" v-model="tabPosition">
             <el-tab-pane label="影像资料" name="first">
-              <el-carousel :interval="3000" arrow="always" height="300px">
-                <el-carousel-item v-for="(item,index) in objlist" :key="index">
-                  <img :src="item.filePath" alt style="width:100%;height:100%">
-                </el-carousel-item>
-              </el-carousel>
+              <div class="imgContation">
+                <div class="imgLeft">
+                  <ul>
+                    <li>图片格式：{{imgListOne.fileType}}</li>
+                    <li>图片名称：{{imgListOne.fileName}}</li>
+                    <li>图片大小：{{imgListOne.fileSize}}</li>
+                    <li>经度：{{imgListOne.lgt}}</li>
+                    <li>纬度：{{imgListOne.lat}}</li>
+                  </ul>
+                </div>
+                <div class="imgRight">
+                  <ul>
+                    <li v-for="(item,index) in objlist" :key="index">
+                      <img :src="item.filePath" alt style="width:100%;height:100%">
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="second" style="height:300px;">
               <div id="selfMap"></div>
@@ -57,7 +70,7 @@
       </div>
       <div class="realBox">
         <h3>验收</h3>
-        <el-form :inline="true" :model="InitList" class="demo-form-inline">
+        <el-form :inline="true" :model="InitList" class="demo-form-inline" label-width="150px">
           <el-form-item label="计划验收人：">
             <el-input v-model="InitList.planCheckPerson" :disabled="true"></el-input>
           </el-form-item>
@@ -71,19 +84,32 @@
             <el-input v-model="InitList.realityCheckTime" :disabled="true"></el-input>
           </el-form-item>
         </el-form>
-        <el-form :model="FormList" label-width="160px" class="elInput">
+        <el-form :model="FormList" label-width="150px" class="elInput">
           <el-form-item label="具体位置:">
-            <el-input v-model="InitList.photoLocation" :disabled="true" v-if="flag"></el-input>
+            <el-input v-model="InitList.photoLocation" :disabled="true" v-if="flag" style="max-width:60vh"></el-input>
           </el-form-item>
         </el-form>
         <div class="content">
           <el-tabs type="border-card" v-model="tabShow">
             <el-tab-pane label="影像资料" name="three">
-              <el-carousel :interval="3000" arrow="always" height="300px">
-                <el-carousel-item v-for="(item,index) in imgRealList" :key="index">
-                  <img :src="item.filePath" alt style="width:100%;height:100%" v-if="flag">
-                </el-carousel-item>
-              </el-carousel>
+              <div class="imgContation">
+                <div class="imgLeft">
+                  <ul>
+                    <li>图片格式：{{selfImgOne.fileType}}</li>
+                    <li>图片名称：{{selfImgOne.fileName}}</li>
+                    <li>图片大小：{{selfImgOne.fileSize}}</li>
+                    <li>经度：{{selfImgOne.lgt}}</li>
+                    <li>纬度：{{selfImgOne.lat}}</li>
+                  </ul>
+                </div>
+                <div class="imgRight">
+                  <ul>
+                    <li v-for="(item,index) in imgRealList" :key="index">
+                      <img :src="item.filePath" alt style="width:100%;height:100%">
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="four" style="height:300px;">
               <div id="realMap" v-if="flag"></div>
@@ -130,7 +156,9 @@ export default {
       imgRealList: [], //验收
       tabPosition: "first",
       tabShow: "three",
-      flag:true,
+      flag: true,
+      imgListOne:[],   //自检
+      selfImgOne:[],    // 验收
     };
   },
   created() {},
@@ -156,7 +184,7 @@ export default {
     // 验收
     realInit() {
       if (this.processList.type == "realcheck") {
-        this.flag = true
+        this.flag = true;
         request
           .post("/rest/processCheck/getProcessDetail", {
             id: this.processList.processId
@@ -183,6 +211,7 @@ export default {
             this.InitList.realityCheckTime = conents.realityCheckTime;
             this.objlist = conents.selfFilePath; // 自检位置
             this.imgRealList = conents.filePath; // 验收位置
+            this.selfImgOne = this.imgRealList[0]
             if (this.processAll.state == "0") {
               this.processAll.stateProcess = "指定工序";
             }
@@ -204,7 +233,10 @@ export default {
               if (formData.lat == "" || formData.lat == null) {
                 formData.lat = 26.405528;
               }
-              if (formData.photoLocation == "" || formData.photoLocation == null) {
+              if (
+                formData.photoLocation == "" ||
+                formData.photoLocation == null
+              ) {
                 formData.photoLocation = "湖南常祁";
               }
               var map = new BMap.Map("realMap"); //创建地图实例
@@ -243,7 +275,10 @@ export default {
               if (selfData.lat == "" || selfData.lat == null) {
                 selfData.lat = 26.405528;
               }
-              if (selfData.photoLocation == "" || selfData.photoLocation == null) {
+              if (
+                selfData.photoLocation == "" ||
+                selfData.photoLocation == null
+              ) {
                 selfData.photoLocation = "湖南常祁";
               }
               var map1 = new BMap.Map("selfMap"); //创建地图实例
@@ -277,85 +312,88 @@ export default {
     // 自检
     selfInit() {
       if (this.processList.type == "selfcheck") {
-          this.flag = false
-         request
-        .post("/rest/processCheck/getProcessDetail", {
-          id: this.processList.processId
-        })
-        .then(res => {
-          if (res.data.respCode == "0") {
-            this.selfList = res.data.data;
-          }
-          // 自检信息
-          let conents = this.selfList;
-          this.processAll.projectItem = conents.projectItem;
-          this.processAll.processName = conents.processName;
-          this.processAll.zhuanghao = conents.zhuanghao;
-          this.processAll.state = conents.state2;
-          this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
-          this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
-          this.FormList.realitySelfCheckPerson = conents.realitySelfCheckPerson;
-          this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
-
-          this.InitList.planCheckTime = conents.planCheckTime;
-          this.InitList.planCheckPerson = conents.planCheckPerson;
-          this.InitList.realityCheckPerson = conents.realityCheckPerson;
-          this.InitList.realityCheckTime = conents.realityCheckTime;
-
-          this.objlist.length = 0;
-          this.objlist = conents.selfFilePath;
-
-          if (this.processAll.state == "0") {
-            this.processAll.stateProcess = "指定工序";
-          }
-          if (this.processAll.state == "1") {
-            this.processAll.stateProcess = "自检完成";
-          }
-          if (this.processAll.state == "2") {
-            this.processAll.stateProcess = "验收完成";
-          }
-          if (this.objlist.length > 0) {
-            this.FormList.photoLocation = conents.selfFilePath[0].photoLocation;
-            let selfData = conents.selfFilePath[0];
-            if (selfData.lgt == "" || selfData.lgt == null) {
-              selfData.lgt = 112.376609;
+        this.flag = false;
+        request
+          .post("/rest/processCheck/getProcessDetail", {
+            id: this.processList.processId
+          })
+          .then(res => {
+            if (res.data.respCode == "0") {
+              this.selfList = res.data.data;
             }
-            if (selfData.lat == "" || selfData.lat == null) {
-              selfData.lat = 26.405528;
+            // 自检信息
+            let conents = this.selfList;
+            this.processAll.projectItem = conents.projectItem;
+            this.processAll.processName = conents.processName;
+            this.processAll.zhuanghao = conents.zhuanghao;
+            this.processAll.state = conents.state2;
+            this.FormList.planSelfCheckPerson = conents.planSelfCheckPerson;
+            this.FormList.planSelfCheckTime = conents.planSelfCheckTime;
+            this.FormList.realitySelfCheckPerson =
+              conents.realitySelfCheckPerson;
+            this.FormList.realitySelfCheckTime = conents.realitySelfCheckTime;
+
+            this.InitList.planCheckTime = conents.planCheckTime;
+            this.InitList.planCheckPerson = conents.planCheckPerson;
+            this.InitList.realityCheckPerson = conents.realityCheckPerson;
+            this.InitList.realityCheckTime = conents.realityCheckTime;
+
+            this.objlist = conents.selfFilePath;
+            this.imgListOne = this.objlist[0]
+            if (this.processAll.state == "0") {
+              this.processAll.stateProcess = "指定工序";
             }
-            if (selfData.photoLocation == "" || selfData.photoLocation == null) {
-              selfData.photoLocation = "湖南常祁";
+            if (this.processAll.state == "1") {
+              this.processAll.stateProcess = "自检完成";
             }
-            var map1 = new BMap.Map("selfMap"); //创建地图实例
-            var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
-            map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
-            map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
-            map1.addControl(new BMap.ScaleControl()); // 比例尺
-            map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
-            map1.addControl(new BMap.MapTypeControl()); //地图类型
-            map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
-            map1.enableDoubleClickZoom(true);
-            var traffic1 = new BMap.TrafficLayer(); // 创建交通流量图层实例
-            map1.addTileLayer(traffic1); // 将图层添加到地图上
-            var marker1 = new BMap.Marker(point1); //创建标注
-            map1.addOverlay(marker1);
-            map1.centerAndZoom(point1, 15);
-            var stCtrl1 = new BMap.PanoramaControl();
-            stCtrl1.setOffset(new BMap.Size(0, 40));
-            map1.addControl(stCtrl1);
-            var opts1 = {
-              width: 180, // 信息窗口宽度
-              height: 50, // 信息窗口高度
-              title: selfData.photoLocation // 信息窗口标题
-            };
-            var infoWindow1 = new BMap.InfoWindow("", opts1); // 创建信息窗口对象
-            map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
-          }
-        });
+            if (this.processAll.state == "2") {
+              this.processAll.stateProcess = "验收完成";
+            }
+            if (this.objlist.length > 0) {
+              this.FormList.photoLocation =
+                conents.selfFilePath[0].photoLocation;
+              let selfData = conents.selfFilePath[0];
+              if (selfData.lgt == "" || selfData.lgt == null) {
+                selfData.lgt = 112.376609;
+              }
+              if (selfData.lat == "" || selfData.lat == null) {
+                selfData.lat = 26.405528;
+              }
+              if (
+                selfData.photoLocation == "" ||
+                selfData.photoLocation == null
+              ) {
+                selfData.photoLocation = "湖南常祁";
+              }
+              var map1 = new BMap.Map("selfMap"); //创建地图实例
+              var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
+              map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
+              map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+              map1.addControl(new BMap.ScaleControl()); // 比例尺
+              map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+              map1.addControl(new BMap.MapTypeControl()); //地图类型
+              map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+              map1.enableDoubleClickZoom(true);
+              var traffic1 = new BMap.TrafficLayer(); // 创建交通流量图层实例
+              map1.addTileLayer(traffic1); // 将图层添加到地图上
+              var marker1 = new BMap.Marker(point1); //创建标注
+              map1.addOverlay(marker1);
+              map1.centerAndZoom(point1, 15);
+              var stCtrl1 = new BMap.PanoramaControl();
+              stCtrl1.setOffset(new BMap.Size(0, 40));
+              map1.addControl(stCtrl1);
+              var opts1 = {
+                width: 180, // 信息窗口宽度
+                height: 50, // 信息窗口高度
+                title: selfData.photoLocation // 信息窗口标题
+              };
+              var infoWindow1 = new BMap.InfoWindow("", opts1); // 创建信息窗口对象
+              map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
+            }
+          });
       }
-     
     }
-  },
+  }
 };
 </script>
 
@@ -373,26 +411,64 @@ export default {
   height: 300px;
 }
 .content {
-  margin-left: 60px;
+  padding: 0 4vh;
+  .imgContation {
+     height: 30vh;
+    .imgLeft {
+      float: left;
+      width: 40%;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          height: 5vh;
+          color: blue;
+        }
+      }
+    }
+    .imgRight {
+      float: right;
+      width: 50%;
+      // background: blue;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          width:33%;
+          height:10vh;
+          float: left;
+          padding: 1%;
+        }
+      }
+    }
+  }
 }
 .allBox {
   overflow: hidden;
   .selfBox {
     width: 50%;
     float: left;
-    text-align: center;
     h3 {
-      font-size: 24px;
+      font-size: 20px;
+      text-align: center;
+      font-weight: normal;
     }
   }
   .realBox {
     width: 50%;
     float: right;
-    text-align: center;
     h3 {
-      font-size: 24px;
+      font-size: 20px;
+      text-align: center;
+      font-weight: normal;
     }
   }
+}
+.el-dialog__header{
+   padding: 20px 20px 10px;
+    text-align: center;
 }
 </style>
 

@@ -3,7 +3,7 @@
 
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}"  @click="checktwo(onlyOneChild)">
           <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
@@ -23,7 +23,7 @@
           :base-path="resolvePath(child.path)"
           class="nest-menu" />
         <app-link v-else :to="resolvePath(child.path)" :key="child.name">
-          <el-menu-item :index="resolvePath(child.path)">
+          <el-menu-item :index="resolvePath(child.path)"   @click="checkone(child)">
             <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title" />
           </el-menu-item>
         </app-link>
@@ -59,7 +59,8 @@ export default {
   },
   data() {
     return {
-      onlyOneChild: null
+      onlyOneChild: null,
+      isCollapse:true
     }
   },
   methods: {
@@ -95,6 +96,12 @@ export default {
     },
     isExternalLink(routePath) {
       return isExternal(routePath)
+    },
+    checkone(child){
+        console.log("one",child)
+    },
+    checktwo(onlyOneChild){
+         console.log("two",onlyOneChild)
     }
   }
 }

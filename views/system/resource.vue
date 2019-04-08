@@ -26,6 +26,7 @@
 
           <el-table-column label="操作" width="180">
             <template slot-scope="scope">
+              
               <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
               <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
               <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>

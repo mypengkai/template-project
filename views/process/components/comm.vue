@@ -27,8 +27,8 @@
         <el-input v-model="state" :disabled="true"></el-input>
       </el-form-item>
 
-       <el-form-item style="width:30vw" label="相关描述:" label-width="120px">
-        <el-input v-model="remark" :disabled="true"></el-input>
+      <el-form-item style="width:30vw" label="相关描述:" label-width="120px">
+        <el-input type="textarea" v-model="remark" :disabled="true"></el-input>
       </el-form-item>
     </el-form>
     <div class="allBox">
@@ -37,11 +37,22 @@
         <div class="content">
           <el-tabs type="border-card" v-model="tabPosition">
             <el-tab-pane label="影像资料" name="first">
-              <el-carousel :interval="3000" arrow="always" height="300px">
-                <el-carousel-item v-for="(item,index) in objlist" :key="index">
-                  <img :src="item.picture" alt style="width:100%;height:100%">
-                </el-carousel-item>
-              </el-carousel>
+             <div class="imgContation">
+                <div class="imgLeft">
+                  <ul>
+                    <li>图片格式：{{objOne.fileType}}</li>
+                    <li>经度：{{objOne.lgt}}</li>
+                    <li>纬度：{{objOne.lat}}</li>
+                  </ul>
+                </div>
+                <div class="imgRight">
+                  <ul>
+                    <li v-for="(item,index) in objlist" :key="index" @click="selfPicture(item)">
+                      <img :src="item.picture" alt style="width:100%;height:100%">
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="second">
               <div id="selfMap"></div>
@@ -54,11 +65,22 @@
         <div class="content">
           <el-tabs type="border-card" v-model="tabShow">
             <el-tab-pane label="影像资料" name="three">
-              <el-carousel :interval="3000" arrow="always" height="300px">
-                <el-carousel-item v-for="(item,index) in imgRealList" :key="index">
-                  <img :src="item.picture" alt style="width:100%;height:100%">
-                </el-carousel-item>
-              </el-carousel>
+              <div class="imgContation">
+                <div class="imgLeft">
+                  <ul>
+                    <li>图片格式：{{imgListOne.fileType}}</li>
+                    <li>经度：{{imgListOne.lgt}}</li>
+                    <li>纬度：{{imgListOne.lat}}</li>
+                  </ul>
+                </div>
+                <div class="imgRight">
+                  <ul>
+                    <li v-for="(item,index) in imgRealList" :key="index">
+                      <img :src="item.picture" alt style="width:100%;height:100%">
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="four">
               <div id="realMap"></div>
@@ -67,6 +89,10 @@
         </div>
       </div>
     </div>
+     <!-- 图片预览 -->
+     <el-dialog title="图片预览" :visible.sync="dialogTableVisible"  width="80%" append-to-body>
+          <viewer :photo="photo"></viewer>
+    </el-dialog>
   </div>
 </template>
 
@@ -77,7 +103,8 @@ export default {
   data() {
     return {
       reverse: true,
-      activities: [            // 时间线
+      activities: [
+        // 时间线
         {
           name: "",
           createTime: ""
@@ -109,17 +136,21 @@ export default {
           icon: "el-icon-location-outline"
         }
       ],
-      commList: [],         // 接口返回数据
-      tabPosition: "first",  // 切换
+      commList: [], // 接口返回数据
+      tabPosition: "first", // 切换
       tabShow: "three",
-      imgRealList: [],        // 指令完成图片详细信息
-      objlist: [],            // 发送指令信息
+      imgRealList: [], // 指令完成图片详细信息
+      objlist: [], // 发送指令信息
+      objOne:[],    // 发qi第一张图片信息
+      imgListOne:[],  //  wancheng第一张图片信息
       form: {
-        projectItem: "",      // 工程名
-        createTime: ""        // 时间
+        projectItem: "", // 工程名
+        createTime: "" // 时间
       },
-      state: "",             // 状态
-      remark: ""             // 描述
+      state: "", // 状态
+      remark: "", // 描述
+      dialogTableVisible:false,
+      photo:[],
     };
   },
   watch: {
@@ -130,7 +161,7 @@ export default {
   created() {
     this.commInit();
   },
- 
+
   mounted() {},
 
   methods: {
@@ -143,14 +174,18 @@ export default {
           if (res.data.respCode == "0") {
             this.commList = res.data.data;
           }
-          console.log(this.commList,'this.commList')
+          console.log(this.commList, "this.commList");
           this.form.projectItem = this.commList.projectItem;
           this.form.createTime = this.commList.createTime;
           this.remark = this.commList.remark;
           this.state = this.commList.commandState;
           this.objlist = this.commList.pictureOfCommand;
+          this.objOne = this.commList.pictureOfCommand[0]
           this.imgRealList = this.commList.finishPictureOfCommand;
           this.activities = this.commList.commandUser;
+          if(this.commList.finishPictureOfCommand.length >0){
+            this.imgListOne  = this.commList.finishPictureOfCommand[0]
+          }
           // 指令状态处理
           if (this.state == 0) {
             this.state = "未处理";
@@ -161,13 +196,16 @@ export default {
           //    发起人定位
           if (this.objlist.length > 0) {
             let formData = this.objlist[0];
-            if (formData.lgt == ""|| formData.lgt ==null ) {
+            if (formData.lgt == "" || formData.lgt == null) {
               formData.lgt = 112.376609;
             }
-            if (formData.lat == "" || formData.lat ==null) {
+            if (formData.lat == "" || formData.lat == null) {
               formData.lat = 26.405528;
             }
-            if (formData.photoLocation == "" || formData.photoLocation == null) {
+            if (
+              formData.photoLocation == "" ||
+              formData.photoLocation == null
+            ) {
               formData.photoLocation = "湖南常祁";
             }
             var map = new BMap.Map("selfMap"); //创建地图实例
@@ -199,13 +237,16 @@ export default {
           //   接收人定位
           if (this.imgRealList.length > 0) {
             let contentData = this.imgRealList[0];
-            if (contentData.lgt == "" || contentData.lgt == null ) {
+            if (contentData.lgt == "" || contentData.lgt == null) {
               contentData.lgt = 112.376609;
             }
             if (contentData.lat == "" || contentData.lat == null) {
               formData.lat = 26.405528;
             }
-            if (contentData.photoLocation == "" || contentData.photoLocation == null) {
+            if (
+              contentData.photoLocation == "" ||
+              contentData.photoLocation == null
+            ) {
               contentData.photoLocation = "湖南常祁";
             }
             var map1 = new BMap.Map("realMap"); //创建地图实例
@@ -273,8 +314,15 @@ export default {
           return this.activitiesIcon[0].type;
         }
       }
+    },
+    // 图片预览(发起人)
+    selfPicture(item){
+          let array = [];
+          array.push(item)
+          this.photo = array
+          console.log(this.photo ,"this.photo ")
+          this.dialogTableVisible = true
     }
-    // 地图
   }
 };
 </script>
@@ -292,7 +340,39 @@ export default {
   height: 300px;
 }
 .content {
-  margin-left: 60px;
+  padding: 0 4vh;
+  .imgContation {
+     height: 30vh;
+    .imgLeft {
+      float: left;
+      width: 40%;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          height: 5vh;
+          color: blue;
+        }
+      }
+    }
+    .imgRight {
+      float: right;
+      width: 50%;
+      // background: blue;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          width:33%;
+          height:10vh;
+          float: left;
+          padding: 1%;
+        }
+      }
+    }
+  }
 }
 
 .allBox {
@@ -300,19 +380,20 @@ export default {
   .selfBox {
     width: 50%;
     float: left;
-    text-align: center;
+    
     h3 {
       font-size: 16px;
       font-weight: normal;
+      text-align: center;
     }
   }
   .realBox {
     width: 50%;
     float: right;
-    text-align: center;
     h3 {
       font-size: 16px;
       font-weight: normal;
+      text-align: center;
     }
   }
 }
@@ -343,7 +424,7 @@ export default {
     left: 15px;
     width: 8vw;
     border-top: 2px solid #e4e7ed !important;
-    border-left:0
+    border-left: 0;
   }
 }
 .navb {

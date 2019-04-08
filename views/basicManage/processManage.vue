@@ -3,7 +3,7 @@
   <div class="engineer p20">
     <div class="processType">
       <!--查询 新增-->
-      <div class="query-add">
+      <!-- <div class="query-add">
         <div class="searchinfo">
           <span>工序类型:</span>
           <el-input v-model="searchText" size="small" placeholder="请输入工序类型" />
@@ -12,47 +12,111 @@
           <el-button type="primary" size="small" icon="el-icon-search" @click="initTable()">查询</el-button>
           <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="addType">新增</el-button>
         </div>
-      </div>
+      </div>-->
+      <el-row>
+        <el-col :span="20">
+          <div class="searchinfo">
+            <span>工序类型:</span>
+            <el-input v-model="searchText" size="small" placeholder="请输入工序类型"/>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="primary" size="small" icon="el-icon-search" @click="initTable()" v-if="!show">查询</el-button>
+        </el-col>
+        <el-col :span="2">
+          <el-button
+             v-if="!show"
+            type="primary"
+            size="small"
+            icon="el-icon-circle-plus-outline"
+            @click="addType"
+          >新增</el-button>
+        </el-col>
+      </el-row>
       <!--列表-->
       <div class="processtable">
-        <el-table :data="tableData" height="62vh" :row-style="{height: '0'}" stripe highlight-current-row border @selection-change="selectChange(selection)">
-          <el-table-column min-width="180px" prop="processType" fixed label="工序类型" />
-          <el-table-column min-width="120px" prop="seq" label="序号" sortable width="120px" />
-          <el-table-column prop="createName" min-width="120px" label="创建人" />
-          <el-table-column prop="createTime" min-width="160px" label="创建时间" />
+        <el-table
+          :data="tableData"
+          height="62vh"
+          :row-style="{height: '0'}"
+          stripe
+          highlight-current-row
+          border
+          @selection-change="selectChange(selection)"
+        >
+          <el-table-column min-width="180px" prop="processType" fixed label="工序类型"/>
+          <!-- <el-table-column min-width="120px" prop="seq" label="序号" sortable width="120px"/> -->
+          <el-table-column prop="createName" min-width="120px" label="创建人"/>
+          <el-table-column prop="createTime" min-width="160px" label="创建时间"/>
           <el-table-column min-width="150px" fixed="right" label="操作">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" content="修改" placement="top">
-                <el-button type="primary" size="small" icon="el-icon-edit" circle @click="editType(scope.row)"></el-button>
+                <el-button
+                  type="primary"
+                  size="small"
+                  icon="el-icon-edit"
+                  circle
+                  @click="editType(scope.row)"
+                ></el-button>
               </el-tooltip>
 
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                <el-button type="danger" size="small" icon="el-icon-delete" circle @click="deleteProcessType(scope.row.id)"></el-button>
+                <el-button
+                  type="danger"
+                  size="small"
+                  icon="el-icon-delete"
+                  circle
+                  @click="deleteProcessType(scope.row.id)"
+                ></el-button>
               </el-tooltip>
 
-              <el-tooltip class="item" effect="dark" content="新增" placement="top">
-                <el-button type="success" size="small" icon="el-icon-plus" circle @click="viewMore(scope.row, $event)"></el-button>
+              <el-tooltip class="item" effect="dark" content="查询" placement="top">
+                <el-button
+                  v-if="!show"
+                  type="success"
+                  size="small"
+                  icon="el-icon-arrow-right"
+                  circle
+                  @click="viewMore(scope.row, $event)"
+                ></el-button>
+                <el-button
+                  v-if="show"
+                  type="success"
+                  size="small"
+                  icon="el-icon-arrow-left"
+                  circle
+                  @click="viewMore(scope.row, $event)"
+                ></el-button>
               </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <!--分页-->
-    
-        <el-pagination  class="pageList mt1" :current-page="currentPage" :page-sizes="[15, 30, 60]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    
+
+      <el-pagination
+        class="pageList mt1"
+        :current-page="currentPage"
+        :page-sizes="[15, 30, 60]"
+        :page-size="pageSize"
+        :total="total"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
 
       <!--新增、修改弹框-->
       <el-dialog :visible.sync="dialogVisible" :title="type + '工序类型'" width="30%">
         <el-form :model="form" label-width="80px">
           <el-form-item label="工序类型">
-            <el-input v-model="form.processType" />
+            <el-input v-model="form.processType"/>
           </el-form-item>
           <el-form-item label="备注">
-            <el-input v-model="form.remark" />
+            <el-input v-model="form.remark"/>
           </el-form-item>
           <el-form-item label="序号">
-            <el-input v-model.number="form.seq" />
+            <el-input v-model.number="form.seq"/>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -63,7 +127,11 @@
     </div>
     <div class="processItem">
       <transition name="el-zoom-in-top">
-        <process v-show="show" :process-type-id="processTypeId" :process-type-name="processTypeName" />
+        <process
+          v-show="show"
+          :process-type-id="processTypeId"
+          :process-type-name="processTypeName"
+        />
       </transition>
     </div>
   </div>
@@ -197,19 +265,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body,
+html,
+.engineer {
+  width: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+}
 .processType {
-  float: left;
   width: 90%;
+  float: left;
   transition: width 0.3s;
+  margin-bottom: 10px;
+  overflow: hidden;
   .searchinfo {
     float: left;
+    height: 4.5vh;
     .el-input {
       width: 200px;
     }
   }
   .operator {
+    width: 20%;
     float: left;
-    margin-left: 50px;
   }
 }
 
@@ -217,5 +295,8 @@ export default {
   float: right;
   width: 50%;
   margin-top: 40px;
+}
+.el-table thead {
+    background-color: #ccc;
 }
 </style>

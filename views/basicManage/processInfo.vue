@@ -12,6 +12,7 @@
       </div>
     </div>
 
+  
     <!--列表-->
     <div class="processtable">
       <el-table :data="tableData" height="50vh" stripe border highlight-current-row>
@@ -160,13 +161,14 @@ export default {
 }
 .search {
   float: left;
+   margin-bottom: 10px;
   .el-input {
     width: 200px;
   }
 }
 .operator {
-  float: left;
-  margin-left: 50px;
+  float: right;
+  // margin-left: 100px;
 }
 </style>
 

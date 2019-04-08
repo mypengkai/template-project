@@ -1,20 +1,20 @@
 <template>
   <div class="logCheck">
-    <el-form :inline="true" :model="form" label-width="200px">
+    <el-form :inline="true" :model="form" label-width="100px">
       <el-form-item label="姓名">
-        <el-input v-model="form.createname" :disabled="true" style="width:160%"></el-input>
+        <el-input v-model="form.createname" :disabled="true" style="min-width:20vh"></el-input>
       </el-form-item>
       <el-form-item label="时间">
-        <el-input v-model="form.createTime" :disabled="true" style="width:160%"></el-input>
+        <el-input v-model="form.createTime" :disabled="true" style="min-width:20vh"></el-input>
       </el-form-item>
     </el-form>
-    <el-form :model="form" label-width="200px">
+    <el-form :model="form" label-width="100px">
       <div style="width:50%">
         <el-form-item label="日志描述">
-          <el-input v-model="form.describe" :disabled="true" style="width:200%"></el-input>
+          <el-input type="textarea" v-model="form.describe" :disabled="true" style="min-width:53vh"></el-input>
         </el-form-item>
         <el-form-item label="具体位置">
-          <el-input v-model="form.photoLocation" :disabled="true" style="width:200%"></el-input>
+          <el-input v-model="form.photoLocation" :disabled="true" style="min-width:53vh"></el-input>
         </el-form-item>
       </div>
     </el-form>
@@ -22,24 +22,45 @@
     <div class="content">
       <el-tabs type="border-card" v-model="tabPosition">
         <el-tab-pane label="影像资料" name="first">
-          <el-carousel :interval="3000" arrow="always" height="30vh">
-            <el-carousel-item v-for="(item,index) in imgList" :key="index">
-              <img :src="item.filePath" alt style="width:100%;height:100%">
-            </el-carousel-item>
-          </el-carousel>
+          <div class="imgContation">
+            <div class="imgLeft">
+              <ul>
+                <li>图片格式：{{imgListOne.fileType}}</li>
+                <li>图片名称：{{imgListOne.fileName}}</li>
+                <li>图片大小：{{imgListOne.fileSize}}</li>
+                <li>经度：{{imgListOne.lgt}}</li>
+                <li>纬度：{{imgListOne.lat}}</li>
+              </ul>
+            </div>
+            <div class="imgRight">
+              <ul>
+                <li v-for="(item,index) in imgList" :key="index" @click="picturePreve(item)">
+                  <img :src="item.filePath" alt style="width:100%;height:100%">
+                </li>
+              </ul>
+            </div>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="所在位置" name="second">
           <div id="logmap"></div>
         </el-tab-pane>
       </el-tabs>
     </div>
+    <!-- //图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="dialogTableVisible"  width="80%" append-to-body>
+          <viewer :photo="photo"></viewer>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import request from "@/utils/request";
+import viewer from "@/components/viewer";
 export default {
   props: ["targetID"],
+  components: {
+    viewer
+  },
   data() {
     return {
       imgList: [], //图片
@@ -51,17 +72,20 @@ export default {
         describe: "" //日志描述
       },
       tabPosition: "first",
-      logList: [],
+      logList: [], // 数据
+      imgListOne: [], //  第一组图片信息
+      dialogTableVisible: false,
+      photo: [] ,//点击图片信息
     };
   },
   created() {},
   mounted() {
     this.logInit();
   },
-  watch:{
-      targetID(){
-          this.logInit();
-      }
+  watch: {
+    targetID() {
+      this.logInit();
+    }
   },
   methods: {
     // 日志初始化数据
@@ -81,6 +105,7 @@ export default {
           this.form.photoDescribe = this.logList.photoDescribe;
           this.form.describe = this.logList.describe;
           this.imgList = this.logList.picMessage;
+          this.imgListOne = this.logList.picMessage[0];
           // ========================  地图    ============================
           if (this.logList.picMessage.length > 0) {
             let formData = this.logList.picMessage[0];
@@ -91,7 +116,10 @@ export default {
             if (formData.lat == "" || formData.lat == null) {
               formData.lat = 26.405528;
             }
-            if (formData.photoLocation == "" || formData.photoLocation == null) {
+            if (
+              formData.photoLocation == "" ||
+              formData.photoLocation == null
+            ) {
               formData.photoLocation = "湖南常祁";
             }
             var map = new BMap.Map("logmap"); //创建地图实例
@@ -120,13 +148,22 @@ export default {
             map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
           }
         });
+    },
+    //图片预览
+    picturePreve(item) {
+      let array = [];
+      array.push(item)
+      this.photo = array;
+      // this.photo = this.logList.picMessage;
+      // console.log(this.photo, "this.photo");
+      this.dialogTableVisible = true;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.logCheck{
+.logCheck {
   height: 70vh;
   overflow-y: scroll;
 }
@@ -138,6 +175,38 @@ export default {
   height: 30vh;
 }
 .content {
-  margin-left: 110px;
+  padding: 0 4vh;
+  .imgContation {
+    height: 30vh;
+    .imgLeft {
+      float: left;
+      width: 40%;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          height: 5vh;
+          color: blue;
+        }
+      }
+    }
+    .imgRight {
+      float: right;
+      width: 50%;
+      // background: blue;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          width: 33%;
+          height: 10vh;
+          float: left;
+          padding: 1%;
+        }
+      }
+    }
+  }
 }
 </style>
