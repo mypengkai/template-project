@@ -750,6 +750,7 @@ export default {
   width: 260px;
 }
 .acceptLayout {
+  max-height: 100vh;
   padding: 20px;
   /deep/ .select-tree .el-input.el-input--suffix {
     width: 15vw;

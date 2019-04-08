@@ -1,6 +1,6 @@
 <template>
   <div class="commandCheck">
-    <el-form :model="form" label-width="200px">
+    <el-form :model="form" label-width="150px">
       <div style="width:50%">
         <el-form-item label="工程分部分项：">
           <el-input v-model="form.projectItem" :disabled="true"></el-input>
@@ -15,23 +15,31 @@
           <el-input v-model="form.createTime" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="巡视描述：">
-          <el-input v-model="form.describe" :disabled="true"></el-input>
+          <el-input type="textarea" v-model="form.describe" :disabled="true"></el-input>
         </el-form-item>
       </div>
     </el-form>
     <div class="content">
       <el-tabs type="border-card" v-model="tabPosition">
         <el-tab-pane label="影像资料" name="first">
-          <el-carousel :interval="3000" arrow="always" height="300px">
-            <el-carousel-item v-for="(item,index) in imgList" :key="index">
-              <img
-                :src="item.filePath"
-                alt
-                style="width:100%;height:100%"
-                @click="showBigPicture(index,item)"
-              >
-            </el-carousel-item>
-          </el-carousel>
+          <div class="imgContation" >
+            <div class="imgLeft">
+              <ul>
+                <li>图片格式：{{imgListOne.fileType}}</li>
+                <li>图片名称：{{imgListOne.fileName}}</li>
+                <li>图片大小：{{imgListOne.fileSize}}</li>
+                <li>经度：{{imgListOne.lgt}}</li>
+                <li>纬度：{{imgListOne.lat}}</li>
+              </ul>
+            </div>
+            <div class="imgRight">
+              <ul>
+                <li v-for="(item,index) in imgList" :key="index" @click="showBigPicture(item)">
+                  <img :src="item.filePath" alt style="width:100%;height:100%">
+                </li>
+              </ul>
+            </div>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="所在位置" name="second">
           <div id="pollmap"></div>
@@ -39,14 +47,8 @@
       </el-tabs>
     </div>
     <!-- 图片详情弹出层 -->
-    <el-dialog title="图片详情" width="70%" :visible.sync="dialogImg" append-to-body>
-      <div class="bigPict">
-        <div class="imgContition">
-          <p>图片名称：{{imgName}}</p>
-          <p>图片格式：{{imgType}}</p>
-        </div>
-        <img :src="imgFile" alt>
-      </div>
+    <el-dialog title="图片详情" width="80%" :visible.sync="dialogImg" append-to-body >
+           <viewer :photo="photo"></viewer>
     </el-dialog>
   </div>
 </template>
@@ -54,9 +56,12 @@
 
 <script>
 import request from "@/utils/request";
-import BMap from "BMap";
+import viewer from "@/components/viewer"; 
 export default {
   props: ["targetID"],
+  components:{
+      viewer
+  },
   data() {
     return {
       form: {
@@ -69,12 +74,14 @@ export default {
         startStation: "" // 桩号
       },
       imgList: [],
+      imgListOne:[],
       tabPosition: "first",
       dialogImg: false,
       imgFile: "", // 图片路径
       imgName: "", // 图片名称
       imgType: "", // 图片格式
       pollingList: [],
+      photo:[],
     };
   },
   watch:{
@@ -105,7 +112,7 @@ export default {
           this.form.createname = this.pollingList.createname;
           this.form.describe = this.pollingList.describe;
           this.imgList = this.pollingList.picMessage;
-
+          this.imgListOne = this.pollingList.picMessage[0]
           if (this.pollingList.picMessage.length > 0) {
             let formData = this.pollingList.picMessage[0];
             console.log(formData.lgt, formData.lat);
@@ -146,12 +153,14 @@ export default {
         });
     },
     //点击图片显示大图片及图片信息
-    showBigPicture(index, item) {
-      console.log(index, item);
+    showBigPicture(item) {
+      console.log( item);
+      let arr = []
+      arr.push(item)
+      this.photo = arr
+      console.log(this.photo,'this.photo')
       this.dialogImg = true;
-      this.imgFile = item.filePath;
-      this.imgName = item.fileName;
-      this.imgType = item.fileType;
+     
     }
   }
 };
@@ -169,7 +178,38 @@ export default {
   height: 300px;
 }
 .content {
-  margin-left: 110px;
+  padding: 0 4vh;
+  .imgContation {
+     height: 30vh;
+    .imgLeft {
+      float: left;
+      width: 40%;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          height: 5vh;
+          color: blue;
+        }
+      }
+    }
+    .imgRight {
+      float: right;
+      width: 50%;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style-type: none;
+          width:33%;
+          height:10vh;
+          float: left;
+          padding: 1%;
+        }
+      }
+    }
+  }
 }
 .bigPict {
   width: 100%;
@@ -193,5 +233,8 @@ export default {
 }
 .bigPict:hover .imgContition {
   display: block;
+}
+.el-dialog__header{
+   text-align: center;
 }
 </style>

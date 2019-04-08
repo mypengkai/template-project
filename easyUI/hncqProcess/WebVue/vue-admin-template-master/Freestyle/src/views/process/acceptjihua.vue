@@ -348,7 +348,8 @@ export default {
           res.data.data.shift();
           this.imgData3 = res.data.data;
         });
-    }
+    },
+    
   }
 };
 </script>
@@ -356,6 +357,7 @@ export default {
 <style lang="scss" scoped>
 .acceptzh {
   padding: 20px;
+  max-height: 100%;
   // /deep/ .select-tree .el-input.el-input--suffix{
   //     width: 200px;
   // }

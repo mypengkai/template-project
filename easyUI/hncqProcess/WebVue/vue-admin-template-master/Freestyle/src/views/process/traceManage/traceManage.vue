@@ -13,9 +13,13 @@
         </el-col>
         <el-col :span="10" v-if="tabPosition == 'first'">
           <div class="grid-content">
-             <el-form inline>
-              <el-form-item label="单位分部分项：">
-                <select-tree :options="unitsTree"  v-on:noDe="handleCheckChangeUnit" :props="defaultPropsProject"/>
+            <el-form inline>
+              <el-form-item label="分部分项：">
+                <select-tree
+                  :options="unitsTree"
+                  v-on:noDe="handleCheckChangeUnit"
+                  :props="defaultPropsProject"
+                />
               </el-form-item>
             </el-form>
           </div>
@@ -28,7 +32,7 @@
               <el-form-item label="姓名：">
                 <select-tree :options="unitsTree"  v-on:noDe="handleCheckChangeUnit" :props="defaultPropsProject"/>
               </el-form-item>
-            </el-form> -->
+            </el-form>-->
             <span>姓名：</span>
             <input type="text" v-model="username" placeholder="输入姓名" class="inputName">
           </div>
@@ -65,14 +69,14 @@
       <el-row>
         <div class="grid-content">
           <span>日期：</span>
-          <el-date-picker v-model="dateFrom" type="date"/>
+          <el-date-picker v-model="dateFrom" type="date"  size="small"/>
           <span>至</span>
-          <el-date-picker v-model="dateTo" type="date"/>
+          <el-date-picker v-model="dateTo" type="date"  size="small"  />
         </div>
       </el-row>
     </div>
 
-    <div class="serchCheck" style="margin-top:20px">
+    <!-- <div class="serchCheck" style="margin-top:20px">
       <ul>
         <li
           v-for="(item,index) in serckCheck"
@@ -81,16 +85,16 @@
           @click="checkActive(index)"
         >{{item}}</li>
       </ul>
-    </div>
+    </div> -->
     <div class="content">
       <el-tabs type="border-card" v-model="tabPosition">
         <el-tab-pane label="工程痕迹管理" name="first">
-          <div style="min-height:200px">
+          <div class="conent-one">
             <list :trace-type="1" :conentOptions="conentOptions"/>
           </div>
         </el-tab-pane>
         <el-tab-pane label="人员痕迹管理" name="second">
-          <div style="min-height:200px;">
+          <div class="conent-one">
             <list :trace-type="2" :userOptions="userOptions"/>
           </div>
         </el-tab-pane>
@@ -110,7 +114,7 @@ export default {
   name: "TraceManage",
   components: {
     list,
-    SelectTree,
+    SelectTree
   },
   data() {
     return {
@@ -120,9 +124,9 @@ export default {
       tabPosition: "first",
       dateFrom: "", //日期
       dateTo: "",
-      active: "",   // 自定义属性
+      active: "", // 自定义属性
       options: [], //工程列表
-      unitsTree: [],  // 工程分项
+      unitsTree: [], // 工程分项
       username: "", //用户名
       conentOptions: [], // 展示数据
       userOptions: [], // 人员数据
@@ -132,7 +136,7 @@ export default {
         label: "name"
       },
       defaultPropsProject: {
-        //单位分部分项
+        //分部分项
         children: "children",
         label: "projectItem"
       },
@@ -151,11 +155,9 @@ export default {
   watch: {},
   created() {
     this.projectInit();
-    this.querySelected()
+    this.querySelected();
   },
-  mounted() {
-   
-  },
+  mounted() {},
   methods: {
     //  单位查询
     projectInit() {
@@ -170,8 +172,8 @@ export default {
     noDe(data, checked, indeterminate) {
       this.from.projectName = data.name;
       this.from.projectId = data.id;
-       // 工程查询
-       request
+      // 工程查询
+      request
         .post("/rest/projectItemInfo/getList", {
           orgId: this.from.projectId,
           "X-AUTH-TOKEN": token
@@ -183,7 +185,6 @@ export default {
     handleCheckChangeUnit(data) {
       this.from.unitsName = data.projectItem;
       this.from.unitsId = data.id;
-      
     },
     // 整体查询(工程痕迹)
     querySelected() {
@@ -193,11 +194,11 @@ export default {
             "X-AUTH-TOKEN": token,
             pageNo: 1,
             pageSize: 15,
-            startTime: this.dateFrom,       // 起始时间
-            endTime: this.dateTo,          // 结束时间
+            startTime: this.dateFrom, // 起始时间
+            endTime: this.dateTo, // 结束时间
             projectid: this.from.unitsId, //工程ID
-            orderby: this.active + 1,     // 筛选(时间，类型，人员)
-            type: this.searchType         // 工程   人员
+            orderby: this.active + 1, // 筛选(时间，类型，人员)
+            type: this.searchType // 工程   人员
           })
           .then(res => {
             this.conentOptions = res.data.data.data;
@@ -222,45 +223,20 @@ export default {
           });
       }
     },
-    checkActive(index) {
-      // 筛选
-      this.active = index;
-      this.querySelected();
-    }
-  },
+    // checkActive(index) {
+    //   // 筛选
+    //   this.active = index;
+    //   this.querySelected();
+    // }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .p20 {
   height: 100%;
-}
-.progectBox {
-  width: 50%;
-  position: relative;
-}
-.checkPoper,
-.checkUnit {
-  position: absolute;
-  min-width: 300px;
-  min-height: 100px;
-  left: 80px;
-  top: 50px;
-  z-index: 100;
-}
-.checkUnit {
-  left: 820px;
-}
-.institutionalBox {
-  width: 240px;
-  border: 1px solid #ccc;
-  background: white;
-  min-height: 60px;
-  position: absolute;
- 
-  left: 80px;
-  top: 50px;
-  z-index: 10000;
+  width:  100%;
+  font-size: 0.8vw;
 }
 .inputName {
   width: 20%;
@@ -273,26 +249,33 @@ export default {
   height: 40px;
   line-height: 40px;
   width: 100%;
+  font-size: 0.8vw;
+  font-weight: normal;
 }
 .content {
   margin-top: 10px;
-}
-.serchCheck {
-  ul {
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
-    li {
-      list-style: none;
-      float: left;
-      padding: 10px 40px;
-      text-align: center;
-      font-size: 20px;
-      border: 1px solid #ccc;
-    }
+  .conent-one{
+      overflow-y: auto;
+      height: 37vw;
   }
 }
-.color {
-  background: skyblue;
-}
+// .serchCheck {
+//   ul {
+//     overflow: hidden;
+//     padding: 0;
+//     margin: 0;
+//     li {
+//       list-style: none;
+//       float: left;
+//       padding: 10px 40px;
+//       text-align: center;
+//       font-size: 16px;
+//       font-weight: normal;
+//       border: 1px solid #ccc;
+//     }
+//   }
+// }
+// .color {
+//   background: skyblue;
+// }
 </style>

@@ -9,26 +9,26 @@
       <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes" />
 
       <span>姓名</span>
-      <el-input v-model="form.userName" placeholder="请输入内容"></el-input>
+      <el-input v-model="form.userName" placeholder="请输入内容" size="small"></el-input>
 
       <span>验收类型</span>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="value" placeholder="请选择" size="small">
         <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
     </div>
 
     <div class="topBar">
       <span>工序状态</span>
-      <el-select v-model="value1" placeholder="请选择">
+      <el-select v-model="value1" placeholder="请选择" size="small">
         <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
 
-      <span>日期</span>
-      <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
-      <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  日期</span>
+      <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间" size="small" style="min-width:200px"></el-date-picker>-
+      <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间" size="small" style="min-width:200px"></el-date-picker>
 
      
-        <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
+        <el-button class="elBoutton" type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
       
     </div>
 
@@ -362,11 +362,15 @@ export default {
 <style lang="scss" scoped>
 .acceptzh {
   padding: 20px;
+  height: 100%;
   // /deep/ .select-tree .el-input.el-input--suffix{
   //     width: 400px;
   // }
   // /deep/ .el-popper{
   //     width: 400px;
   // }
+  .elBoutton{
+      float: right;
+  }
 }
 </style>
