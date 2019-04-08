@@ -1,6 +1,5 @@
 <template>
-  <div id="allmap">
-      暂无地图
+  <div id="newallmap">
   </div>
 </template>
 
@@ -20,20 +19,20 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值
-      let formData = this.form.data.pictureOfCommand[0];
-      console.log(formData)
-      if (formData.lat == null || 0.00) {
+      console.log(this.form.data.finishPictureOfCommand[0]);
+      let formData = this.form.data.finishPictureOfCommand[0];
+      if (formData.lat == null) {
         formData.lat = 112.376609;
       }
-      if (formData.lgt == null || 0.00) {
+      if (formData.lgt == null) {
         formData.lat = 26.405528;
       }
       let locationData = this.form.data;
-      if (locationData.photoLocation == null || "") {
+      if (locationData.photoLocation == null) {
         locationData.photoLocation = "湖南常祁";
-      } return
-      var map = new BMap.Map("allmap"); //创建地图实例
-      var point = new BMap.Point(formData.lgt,formData.lat); //经纬度坐标
+      }
+      var map = new BMap.Map("newallmap"); //创建地图实例
+      var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
       map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
       map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
       map.addControl(new BMap.ScaleControl()); // 比例尺
@@ -62,7 +61,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" type="text/scss" scoped>
-#allmap {
+#newallmap {
   width: 100%;
   height: 100%;
 }

@@ -58,32 +58,33 @@
 
         <!-- 查看 -->
         <div :class="{reverseBox:nowItem!=='add'}">
-          <!-- 参考图标 -->
-          <div class="reference">
-            <el-timeline>
-              <el-timeline-item v-for="(activity, index) in activities2" :key="index" :icon="activity.icon" :type="activity.type" :color="activity.color" :size="activity.size" :timestamp="activity.timestamp">
-                {{activity.content}}
-              </el-timeline-item>
-            </el-timeline>
+          <!-- 左边信息 -->
+          <div style="width:47%" class="fl">
+            <el-form-item style="width:22vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
+              <el-input v-model="form.projectItem"></el-input>
+            </el-form-item>
 
-          </div>
-          <el-form-item style="width:22vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
-            <el-input v-model="form.projectItem"></el-input>
-          </el-form-item>
+            <el-form-item style="width:22vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
+              <el-input v-model="form.createTime"></el-input>
+            </el-form-item>
 
-          <el-form-item style="width:22vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
-            <el-input v-model="form.createTime"></el-input>
-          </el-form-item>
+            <el-form-item label="指令内容" v-if="nowItem !=='add'" label-width="120px">
+              <!-- 参考图标 -->
+              <div class="reference">
+                <el-timeline>
+                  <el-timeline-item v-for="(activity, index) in activities2" :key="index" :icon="activity.icon" :type="activity.type" :color="activity.color" :size="activity.size" :timestamp="activity.timestamp">
+                    {{activity.content}}
+                  </el-timeline-item>
+                </el-timeline>
+              </div>
 
-          <el-form-item label="指令内容" v-if="nowItem !=='add'" label-width="120px">
-            <div class="">
-
-              <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}">
-                <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(activity, 'icon')" :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')" :timestamp="activity.createTime">
-                  {{activity.commandStagePeople1}}: {{activity.name}}
-                </el-timeline-item>
-              </el-timeline>
-
+              <div class="pta">
+                <el-timeline :reverse="reverse">
+                  <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(activity, 'icon')" :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')" :timestamp="activity.finishTime">
+                    {{activity.name}} 指令描述 : {{ activity.remark }}
+                  </el-timeline-item>
+                </el-timeline>
+              </div>
               <div class="temporary">
                 <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
                 <el-input v-model="states"></el-input>
@@ -93,59 +94,75 @@
                 <span>相关描述:</span>
                 <el-input type="textarea" autosize v-model="remark"></el-input>
               </div>
-            </div>
-          </el-form-item>
 
-          <div v-if="nowItem !=='add'">
-            <!-- 导航切换 -->
-            <div class="navb" label-width="120px">
-              <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
-                <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
-                <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
-              </el-menu>
-            </div>
+              <!-- <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}"> -->
 
-            <!-- 轮播信息 -->
-            <div style="height:25vh" v-if="nowType==0">
-              <div class="p20" v-if="states == '已处理'">
-                <div class="fl w50">
-                  <span class="accomplish">发起</span>
-                  <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                    <el-carousel :interval="3000" arrow="always" height="31vh">
+            </el-form-item>
+          </div>
+          <!-- 右边图像 -->
+          <div style="width:50%" class="rl">
+            <!-- <div v-if="nowItem !=='add'&& states == '未处理'"> -->
+            <div v-if="nowItem !=='add'&& states == '已处理'">
+              <div class="fl w50">
+                <span class="accomplish">发起</span>
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                  <el-tab-pane label="影像资料" name="first">
+                    <el-carousel :interval="3000" arrow="always" height="45vh">
                       <el-carousel-item v-for="(item,index) in picture" :key="index">
                         <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('0')">
                       </el-carousel-item>
                     </el-carousel>
-                  </el-form-item>
-                </div>
+                  </el-tab-pane>
+                  <el-tab-pane label="拍照地点" name="second">
+                    <div style="height:45vh">
+                      <instructMap :nowItem="nowItem"></instructMap>
+                    </div>
+                  </el-tab-pane>
+                </el-tabs>
+              </div>
 
-                <div class="rl w50">
-                  <span class="accomplish">完成</span>
-                  <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                    <el-carousel :interval="3000" arrow="always" height="31vh">
+              <div class="rl w50">
+                <span class="accomplish">完成</span>
+                <el-tabs v-model="activeName1" @tab-click="handleClick">
+                  <el-tab-pane label="影像资料" name="first">
+                    <el-carousel :interval="3000" arrow="always" height="45vh">
                       <el-carousel-item v-for="(item,index) in pictures" :key="index">
                         <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('1')">
                       </el-carousel-item>
                     </el-carousel>
-                  </el-form-item>
-                </div>
-
+                  </el-tab-pane>
+                  <el-tab-pane label="拍照地点" name="second">
+                    <div style="height:45vh">
+                      <Map :nowItem="nowItem"></Map>
+                    </div>
+                  </el-tab-pane>
+                </el-tabs>
               </div>
+            </div>
 
-              <div v-if="states == '未处理'">
+            <!-- 完成的 -->
+            <div v-if="nowItem !=='add'&& states == '未处理'">
+              <!-- 导航切换 -->
+              <div class="navb" label-width="120px">
+                <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
+                  <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
+                  <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
+                </el-menu>
+              </div>
+              <!-- 轮播信息 -->
+              <div style="" v-if="nowType==0">
                 <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                  <el-carousel :interval="3000" arrow="always" height="31vh">
+                  <el-carousel :interval="3000" arrow="always" height="45vh">
                     <el-carousel-item v-for="(item,index) in picture" :key="index">
                       <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
                     </el-carousel-item>
                   </el-carousel>
                 </el-form-item>
               </div>
-
-            </div>
-            <!-- 地图 -->
-            <div style="height:33vh" v-if="nowType==1">
-              <instructMap :nowItem="nowItem"></instructMap>
+              <!-- 地图 -->
+              <div style="height:45vh" v-if="nowType==1">
+                <instructMap :nowItem="nowItem"></instructMap>
+              </div>
             </div>
 
           </div>
@@ -154,7 +171,7 @@
     </el-form>
     <!-- <div class="tar" v-if="$route.name=='instructReceive'"> -->
     <div class="tar">
-      <el-button @click="$emit('cancel')">取 消</el-button>
+      <!-- <el-button @click="$emit('cancel')">取 消</el-button> -->
       <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive' && states == '未处理'" @click="innerTranspond = true">转发指令</el-button>
       <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
     </div>
@@ -183,6 +200,8 @@
           <el-table-column prop="username" label="姓名">
           </el-table-column>
           <el-table-column prop="departname" label="职务">
+          </el-table-column>
+          <el-table-column prop="mobilePhone" label="电话">
           </el-table-column>
         </el-table>
       </div>
@@ -259,21 +278,26 @@ import project from "@/api/project.js";
 import Organization from "@/api/Organization.js";
 import processInfo from "@/api/process.js";
 import instructMap from "./instructMap";
+import Map from "./Map";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   inject: ["reload"],
   components: {
     SelectTree,
-    instructMap
+    instructMap,
+    Map
   },
   props: ["nowItem"],
   data() {
     return {
       reverse: true,
+      activeName: "second",
+      activeName1: "second",
       activities: [
         {
           name: "",
-          createTime: ""
+          finishTime: "",
+          remark: ""
         }
       ],
       activitiesIcon: [
@@ -333,6 +357,9 @@ export default {
       nowType: 0,
       activeIndex: "1",
       activeIndex2: "1",
+      newnowType: 0,
+      newactiveIndex: "1",
+      newactiveIndex2: "1",
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
@@ -462,6 +489,7 @@ export default {
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
+      console.log(this.activities);
       this.activities.forEach(v => {
         v.commandStagePeople == 1 && (v.commandStagePeople1 = "发出指令的人");
         v.commandStagePeople == 2 && (v.commandStagePeople1 = "转发指令的人");
@@ -478,6 +506,9 @@ export default {
       } else {
         this.states = "已处理";
       }
+    },
+    handleClick(tab, event) {
+      // console.log(tab, event);
     },
     // 切换
     handleSelect(key, keyPath) {},
@@ -667,6 +698,7 @@ export default {
     display: block;
   }
 }
+// 时间轴
 .timelineBox {
   height: 9vh;
   .el-timeline-item {
@@ -679,8 +711,14 @@ export default {
     border-top: 2px solid #e4e7ed !important;
   }
 }
+//图片地图切换
 .navb {
-  width: 30%;
+  width: 50%;
+  height: 7%;
+  margin-left: 30px;
+}
+.navbc {
+  width: 70%;
   height: 7%;
   margin-left: 30px;
 }
@@ -689,23 +727,53 @@ export default {
     margin-left: transparent;
   }
 }
+
 .reverseBox {
-  height: 66vh;
+  height: 62vh;
   overflow-y: scroll;
   position: relative;
-  .reference {
-    position: absolute;
-    width: 200px;
-    height: 300px;
-    // border: 1px solid #000000;
-    left: 55vw;
-    top: 1vw;
-  }
   /deep/.el-form-item__label {
     font-size: 0.7vw;
   }
   /deep/.el-input {
     font-size: 0.7vw;
+  }
+}
+//时间轴图标描述
+.reference {
+  width: 100%;
+  .el-timeline {
+    margin-left: -2vw;
+    font-size: 0.7vw;
+    list-style: none;
+  }
+  .el-timeline-item {
+    float: left;
+    padding-bottom: 0;
+    height: 3vh;
+    // padding-right: 1vw;
+  }
+  /deep/.el-timeline-item__node--normal {
+    width: 0.7vw;
+    height: 0.7vw;
+  }
+  /deep/.el-timeline-item__timestamp {
+    font-size: 0.8vw;
+  }
+  /deep/.el-timeline-item__tail {
+    position: absolute;
+    left: 0vw;
+    width: 0vw;
+    height: 3vh;
+    border-left: 0.1vw solid rgba(31, 68, 143, 0);
+  }
+  /deep/.el-timeline-item__node--normal {
+    left: 0.5vw;
+  }
+  /deep/.el-timeline-item__wrapper {
+    position: relative;
+    padding-left: 1.2vw;
+    top: -1.5vh;
   }
 }
 .accomplish {

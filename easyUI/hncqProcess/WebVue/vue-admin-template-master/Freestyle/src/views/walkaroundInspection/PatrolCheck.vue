@@ -20,12 +20,13 @@
 
       <div>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_chackList()">查询</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
 
     <!-- 查询列表 -->
     <el-table class="textList" :data="everyDayLogPageList" style="width: 100%" height="62vh">
-      <el-table-column prop="realname" label="巡视人姓名">
+      <el-table-column prop="realname" label="巡视人">
       </el-table-column>
 
       <el-table-column prop="projectItem" label="工程分部分项">
@@ -54,7 +55,7 @@
     <el-pagination class="pageList mt1" background :page-sizes="[6]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
     </el-pagination>
     <!-- 查看照片弹框 -->
-    <el-dialog  :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">
+    <el-dialog width="70%" :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
   </div>
@@ -68,6 +69,7 @@ import api from "@/api/Patrol.js";
 import user from "@/api/user";
 import project from "@/api/project.js";
 export default {
+  inject: ["reload"],
   components: {
     SelectTree,
     CheckPicture
@@ -139,6 +141,10 @@ export default {
     },
     changeDataRange(val) {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
+    },
+    // 重置按钮
+    reset() {
+      this.reload();
     }
   },
   watch: {
@@ -154,7 +160,7 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-.dialogBox{
-   margin-top: -9vh;
+.dialogBox {
+  margin-top: -9vh;
 }
 </style>
