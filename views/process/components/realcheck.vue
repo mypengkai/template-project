@@ -8,9 +8,6 @@
         <el-form-item label="验收人:">
           <el-input v-model="initList.userName" :disabled = 'true'></el-input>
         </el-form-item>
-        <!-- <el-form-item label="拍照时间:">
-          <el-input v-model="initList.createTime" :disabled = 'true'></el-input>
-        </el-form-item> -->
         <el-form-item label="上传时间:">
           <el-input v-model="initList.createTime" :disabled = 'true'></el-input>
         </el-form-item>
@@ -23,20 +20,7 @@
         <el-form-item label="具体位置:">
           <el-input v-model="initList.photoLocation" :disabled = 'true'></el-input>
         </el-form-item>
-        <!-- <el-form-item label="纬度:">
-          <el-input v-model="initList.lgt" :disabled = 'true'></el-input>
-        </el-form-item>
-        <el-form-item label="经度:">
-          <el-input v-model="initList.lat" :disabled = 'true'></el-input>
-        </el-form-item> -->
       </div>
-      <!-- <el-form-item label="图片展示:">
-        <el-carousel height="300px" :interval="5000" arrow="always" class="imgBox">
-          <el-carousel-item v-for="(value,index) in object" :key="index">
-            <img :src="value.filePath" alt style="width:100%;height:100%;">
-          </el-carousel-item>
-        </el-carousel>
-      </el-form-item> -->
     </el-form>
       <div class="content">
       <el-tabs type="border-card" v-model="tabPosition">
