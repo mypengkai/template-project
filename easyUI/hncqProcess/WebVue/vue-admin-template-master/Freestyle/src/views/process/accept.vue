@@ -17,28 +17,27 @@
     <div class="particularsList" v-if="treeFrom.projectType!=''&&treeFrom.projectType!=undefined">
       <div class="particulars brotherBar">
         <div style="left: 2vw;">
-          <span>工程名称:</span>
-          <el-input v-model="treeFrom.projectItem" readonly="true"></el-input>
+          <span>工程名称: {{ treeFrom.projectItem }}</span>
+
         </div>
         <div style="left: 21vw;">
-          <span>工程类型:</span>
-          <el-input v-model="treeFrom.projectType" readonly="true"></el-input>
+          <span>工程类型: {{ treeFrom.projectType }}</span>
+
         </div>
         <div style="right: 1vw;">
-          <span>代码:</span>
-          <el-input v-model="treeFrom.projectCode" readonly="true"></el-input>
+          <span>代码: {{ treeFrom.projectCode }}</span>
+
         </div>
         <div style="left: 2vw;bottom: 0">
-          <span>桩号:</span>
-          <el-input v-model="treeFrom.zhuanghao" readonly="true"></el-input>
+          <span>桩号: {{ treeFrom.zhuanghao }}</span>
         </div>
         <div style="left: 21vw;bottom: 0">
-          <span v-if="childrenId!=undefined&&childrenId!=''">状态:</span>
-          <el-input v-model="treeFrom.state1" readonly="true" v-if="childrenId!=undefined&&childrenId!=''"></el-input>
+          <span v-if="childrenId!=undefined&&childrenId!=''">状态: {{ treeFrom.state1 }}</span>
+          <!-- <el-input v-model="" readonly="true" v-if="childrenId!=undefined&&childrenId!=''"></el-input> -->
         </div>
         <div style="right: 1vw;bottom: 1vh">
-          <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button>
-          <!-- <el-button type="primary" icon="el-icon-circle-plus" plain @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button> -->
+          <el-button type="primary" icon="el-icon-plus" class="pan-btn light-blue-btn" @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button>
+          <!-- <el-button type="primary" class="btnSize" icon="el-icon-plus" circle @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''"></el-button> -->
         </div>
       </div>
       <!-- 操作列表 -->
@@ -53,12 +52,16 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="250">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2=='指定工序'">指定验收</el-button>
-              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2=='已指定验收计划'">修改指定验收</el-button>
-              <el-button type="primary" size="small" :id="scope.$index" @click="tjgx(scope)" style="display: none" v-else></el-button>
-              <!-- <el-button @click="handleClick(scope.row)" type="primary" size="small" style="margin-left:33px" v-if="scope.row.state2=='自检完成'">查看</el-button> -->
-              <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
-              <el-button type="danger" @click="dlet(scope)" size="small" v-if="scope.row.state2=='指定工序'">删除</el-button>
+              <!-- 指定验收 -->
+              <el-button type="primary" icon="el-icon-star-off" circle :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2=='指定工序'"></el-button>
+              <!-- 修改指定验收 -->
+              <el-button type="primary" icon="el-icon-edit-outline" circle :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2=='已指定验收计划'"></el-button>
+                <!-- 否则 -->
+              <el-button type="primary" icon="el-icon-share" circle :id="scope.$index" @click="tjgx(scope)" style="display: none" v-else></el-button>
+              <!-- 查看按钮 -->
+              <el-button type="primary" icon="el-icon-search" circle @click="handleClick(scope.row)"></el-button>
+              <!-- 删除按钮 -->
+              <el-button type="danger" icon="el-icon-delete" circle @click="dlet(scope)" size="small" v-if="scope.row.state2=='指定工序'"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -95,35 +98,34 @@
     <el-dialog title="指定验收" :visible.sync="bjDialogFormVisible" width="35%">
       <!-- 内嵌验收人弹框 -->
       <el-dialog width="50%" title="选中验收人" :visible.sync="innerVisible" append-to-body>
-        <div class="navBar topBar">
+        <div class="topBar">
           <span>姓名：</span>
-          <el-input v-model="ysrVul" placeholder="请输入内容" style="width:65%"></el-input>
+          <el-input v-model="ysrVul" placeholder="请输入内容"></el-input>
 
           <span>职务：</span>
-          <el-input v-model="ysrZhiwu" placeholder="请输入内容" style="width:65%"></el-input>
+          <el-input v-model="ysrZhiwu" placeholder="请输入内容"></el-input>
 
           <div class="rl">
-            <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="chaxun()">查询</el-button>
           </div>
         </div>
 
-        <el-table :data="ysrData" height="40vh">
-          <el-table-column fixed="left" label="选中验收人" width="300">
+        <el-table class="textList" :data="ysrData" height="40vh">
+          <el-table-column fixed="left" label="选中验收人">
             <template slot-scope="scope">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <input type="radio" name="Fruit" @click="xzk(scope,$event)">
             </template>
           </el-table-column>
-          <el-table-column property="username" label="姓名" width="300"></el-table-column>
+          <el-table-column property="username" label="姓名"></el-table-column>
           <el-table-column property="zhiwei" label="职务"></el-table-column>
           <el-table-column property="mobilePhone" label="电话"></el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,45,60]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="pageForm.total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,60,100]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="pageForm.total">
         </el-pagination>
 
         <div slot="footer" class="dialog-footer">
-          <el-button @click="innerVisible = false">取 消</el-button>
-          <el-button type="primary" @click="qdysr()">确 定</el-button>
+          <el-button class="btnSizes" @click="innerVisible = false">取 消</el-button>
+          <el-button class="btnSizes" type="primary" @click="qdysr()">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -719,19 +721,19 @@ export default {
     },
     // 点击图片展示图片详情接口
     imgLeft(data, imgTan) {
-      // imgTan;
-      // request.post('/rest/processCheck/getPictureDetail',{processLogId:this.imgId,Mark:data}).then((res)=>{
-      //   console.log(res)
-      //   this.imgForm.describe=res.data.data[0].describe;
-      //   this.imgForm.createTime=res.data.data[0].createTime;
-      //   this.imgForm.lat=res.data.data[0].lat;
-      //   this.imgForm.lgt=res.data.data[0].lgt;
-      //   this.imgForm.photoDescribe=res.data.data[0].photoDescribe;
-      //   this.imgForm.photoLocation=res.data.data[0].photoLocation;
-      //   this.imgForm.state=res.data.data[1].state=='0'?'自检':'验收';
-      //   res.data.data.shift();
-      //   this.imgData3=res.data.data;
-      // })
+      imgTan;
+      request.post('/rest/processCheck/getPictureDetail',{processLogId:this.imgId,Mark:data}).then((res)=>{
+        console.log(res)
+        this.imgForm.describe=res.data.data[0].describe;
+        this.imgForm.createTime=res.data.data[0].createTime;
+        this.imgForm.lat=res.data.data[0].lat;
+        this.imgForm.lgt=res.data.data[0].lgt;
+        this.imgForm.photoDescribe=res.data.data[0].photoDescribe;
+        this.imgForm.photoLocation=res.data.data[0].photoLocation;
+        this.imgForm.state=res.data.data[1].state=='0'?'自检':'验收';
+        res.data.data.shift();
+        this.imgData3=res.data.data;
+      })
     }
   }
 };
@@ -799,6 +801,10 @@ export default {
     }
   }
 }
+ .btnSizes{
+      font-size: 0.8vw !important;
+      padding: 0.8vw !important;
+  }
 .navBar {
   display: flex;
   justify-content: space-between;

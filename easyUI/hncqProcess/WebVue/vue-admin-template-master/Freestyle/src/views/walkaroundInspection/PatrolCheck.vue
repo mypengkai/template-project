@@ -12,7 +12,8 @@
         </el-select>
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-        <el-cascader clearable :options="projectList" :props="projectTree" change-on-select @change="projectChange"></el-cascader>
+         <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="handleCheckChange" v-model="value" />
+        <!-- <el-cascader clearable :options="projectList" :props="projectTree" change-on-select @change="projectChange"></el-cascader> -->
         <!-- 时间段 -->
         <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
         </el-date-picker>
@@ -52,7 +53,7 @@
     </el-table>
 
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :page-sizes="[6]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
+    <el-pagination class="pageList mt1" background :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
     </el-pagination>
     <!-- 查看照片弹框 -->
     <el-dialog width="70%" :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">
@@ -134,6 +135,10 @@ export default {
       project.projectList().then(res => {
         this.projectList = res.data.data;
       });
+    },
+    // 换回来的
+    handleCheckChange(data) {
+        this.sendData.projectCode = data.projectCode
     },
     // 分部分项选择后的数据
     projectChange(data) {
