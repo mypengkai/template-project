@@ -32,8 +32,14 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle  @click="bianTan(scope.row)"></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle @click="dlelTan(scope.row)"></el-button>
+            <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                 <el-button type="primary" icon="el-icon-edit" circle  @click="bianTan(scope.row)"></el-button>
+              </el-tooltip>
+
+         <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                 <el-button type="danger" icon="el-icon-delete" circle @click="dlelTan(scope.row)"></el-button>
+              </el-tooltip>
+          
         </template>
       </el-table-column>
     </tree-table>
@@ -86,7 +92,7 @@
               <el-tree :data="shuData" highlight-current :props="defaultProps" ref="vuetree" node-key="id" :default-expanded-keys="shumo" @node-click="dlestleNodeClick"></el-tree>
             </el-form-item>
             <el-form-item label="描述" label-width="120px">
-                <textarea style="height:100px;width:800px" v-model="formSet.miaoCode"></textarea>
+                <textarea style="height:100px;width:80%" v-model="formSet.miaoCode"></textarea>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -260,7 +266,7 @@ export default {
   background-color: #ffff99 !important;
 }
 /deep/ .el-select{
-    width: 800px;
+    max-width: 800px;
 }
 /deep/ .el-tree-node:focus>.el-tree-node__content{
 background-color: #ffff99;

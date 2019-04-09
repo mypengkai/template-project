@@ -1,15 +1,23 @@
 <template>
   <div class="p20">
     <!-- 选择区域 -->
-    <div class="">
+    <div class="elButton">
       <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
     <el-scrollbar style="height: 68vh;overflow-x: none;">
-      <tree-table class="textList" :data="dataList" ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
+      <tree-table
+        class="textList"
+        :data="dataList"
+        ref="projectItemTreeTable"
+        border
+        :eval-func="func"
+        :eval-args="args"
+        :expand-all="expandAll"
+      >
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.projectItem }}</span>
+            <span style>{{ scope.row.projectItem }}</span>
           </template>
         </el-table-column>
 
@@ -26,33 +34,42 @@
 
         <el-table-column label="所属组织机构">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.name }}</span>
+            <span style>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="起始桩号">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.startStation }}</span>
+            <span style>{{ scope.row.startStation }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="终止桩号">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.endStation }}</span>
+            <span style>{{ scope.row.endStation }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="创建时间">
           <template slot-scope="scope">
-            <span style="">{{ scope.row.createTime }}</span>
+            <span style>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-            <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+            <el-tooltip class="item" effect="dark" content="修改" placement="top">
+              <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="新增" placement="top">
+              <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
+            </el-tooltip>
+            
+             <el-tooltip class="item" effect="dark" content="删除" placement="top">
+              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+            </el-tooltip>
+
+            
           </template>
         </el-table-column>
       </tree-table>
@@ -60,7 +77,13 @@
 
     <!-- 新增弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible">
-      <Xcadd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
+      <Xcadd
+        :nopId="nopId"
+        :nowItem="nowItem"
+        v-if="nowItem"
+        @cancel="dialogFormVisible=false"
+        @comfirm="_projectList"
+      ></Xcadd>
     </el-dialog>
   </div>
 </template>
@@ -82,7 +105,7 @@ export default {
       expandAll: false,
       dataList: [],
       newTitle: "", // 弹框标题变量
-      answer: "",  // 删除的响应变量
+      answer: "", // 删除的响应变量
       nowItem: "",
       dialogFormVisible: false,
       total: 0,
@@ -187,4 +210,11 @@ export default {
 .Treebox::-webkit-scrollbar {
   // display: none;
 }
+.elButton{
+   overflow: hidden;
+   .pan-btn{
+     float: right;
+}
+}
+
 </style>

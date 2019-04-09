@@ -2,16 +2,16 @@
   <div class="acceptzh">
     <div class="topBar">
       <span>组织机构</span>
-      <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe" />
+      <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe"/>
 
       <span>分部分项</span>
       <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes" />
 
       <span>姓名</span>
-      <el-input v-model="form.userName" placeholder="请输入内容"></el-input>
+      <el-input v-model="form.userName" placeholder="请输入内容" size="small"></el-input>
 
       <span>验收类型</span>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="value" placeholder="请选择" size="small">
         <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -19,67 +19,20 @@
 
     <div class="topBar">
       <span>工序状态</span>
-      <el-select v-model="value1" placeholder="请选择">
+      <el-select v-model="value1" placeholder="请选择" size="small">
         <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
 
-      <span>日期</span>
-      <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间">
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  日期</span>
+      <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间" size="small" style="min-width:200px">
       </el-date-picker> -
-      <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间">
+      <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间" size="small" style="min-width:200px">
       </el-date-picker>
 
-      <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
+      <el-button  class="elBoutton"  type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
     </div>
 
-    <!-- <el-row>
-      <el-col :span="6">
-        <el-form :inline="true">
-          <el-form-item label="组织机构">
-            <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe" />
-          </el-form-item>
-        </el-form>
-      </el-col>
-      <el-col :span="6">
-        <el-form :inline="true">
-          <el-form-item label="分部分项">
-            <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes" />
-          </el-form-item>
-        </el-form>
-      </el-col>
-      <el-col :span="6">
-        姓名
-        <el-input v-model="form.userName" placeholder="请输入内容" style="width:70%"></el-input>
-      </el-col>
-      <el-col :span="6">
-        验收类型
-        <el-select v-model="value" placeholder="请选择">
-          <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </el-col>
-    </el-row>
-
-    <el-row>
-      <el-col :span="6">
-        工序状态
-        <el-select v-model="value1" placeholder="请选择">
-          <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="12">
-        日期
-        <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间">
-        </el-date-picker> -
-        <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间">
-        </el-date-picker>
-      </el-col>
-      <el-col :span="2">
-        <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
-      </el-col>
-    </el-row> -->
 
     <el-table class="textList" :data="tableData" border style="width: 100%;" height="56vh" v-if="tableData.length!=0">
       <el-table-column prop="name1" label="单位工程1">
@@ -94,12 +47,21 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
+          <!-- <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button> -->
+           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
+            <el-button
+              @click="handleClick(scope.row)"
+              type="primary"
+            
+              icon="el-icon-search"
+              v-if="tableData.length!=0"
+            ></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination class="pageList pt20" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,45,60]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="total">
+    <el-pagination class="pageList pt20" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,60,100]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
 
     <!-- 查看弹框 -->
@@ -357,12 +319,15 @@ export default {
 <style lang="scss" scoped>
 .acceptzh {
   padding: 20px;
-  max-height: 100%;
+  height: 100%;
   // /deep/ .select-tree .el-input.el-input--suffix{
   //     width: 200px;
   // }
   // /deep/ .el-popper{
   //     width: 200px;
   //  }
+  .elBoutton{
+      float: right;
+  }
 }
 </style>

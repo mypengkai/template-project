@@ -81,6 +81,7 @@ import { mapGetters } from "vuex";
 import Hamburger from "@/components/Hamburger";
 import request from "@/utils/request";
 import Mallki from "@/components/TextHoverEffect/Mallki";
+import qs from 'qs'
 export default {
   components: {
     // Breadcrumb,
@@ -113,7 +114,7 @@ export default {
           { min: 6, message: "请输入打入6位以上的密码", trigger: "blur" }
         ]
       },
-      uesrList: [] ,// 登陆用户信息
+      uesrList: [] // 登陆用户信息
     };
   },
   mounted() {
@@ -204,7 +205,7 @@ export default {
     },
     // 验证
     checkSure() {
-      console.log(this.form);
+      // console.log(this.form);
       let regMoble = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
       let regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
       if (!regMoble.test(this.form.mobilePhone)) {
@@ -223,7 +224,9 @@ export default {
         });
         return false;
       }
-      request.post("/rest/sysuser/modify", this.form).then(res => {
+    //  JSON.stringify
+      //  console.log(qs.stringify(this.form),'qs.stringify(this.form)')
+      request.post("/rest/sysuser/modify", (this.form)).then(res => {
         console.log(res.data, "res.data");
       });
     }
