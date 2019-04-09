@@ -10,16 +10,33 @@
       </el-form-item>
 
       <el-form-item label="指令内容" label-width="120px">
-        <div>
-          <el-timeline :reverse="reverse" :class="{'timelineBox':activities.length < 5}">
+         <!-- 参考图标 -->
+              <div class="reference">
+                <el-timeline>
+                  <el-timeline-item
+                    v-for="(activity, index) in activities2"
+                    :key="index"
+                    :icon="activity.icon"
+                    :type="activity.type"
+                    :color="activity.color"
+                    :size="activity.size"
+                    :timestamp="activity.timestamp"
+                  >{{activity.content}}</el-timeline-item>
+                </el-timeline>
+              </div>
+          
+
+
+        <div class="pta">
+          <el-timeline :reverse="reverse" >
             <el-timeline-item
               v-for="(activity, index) in activities"
               :key="index"
               :icon="convertIcon(activity, 'icon')"
               :type="convertIcon(activity, 'type')"
               :size="convertIcon(activity,'size')"
-              :timestamp="activity.createTime"
-            >{{activity.commandStagePeople1}}: {{activity.name}}</el-timeline-item>
+              :timestamp="activity.finishTime"
+            > {{activity.name}}</el-timeline-item>
           </el-timeline>
         </div>
       </el-form-item>
@@ -47,7 +64,7 @@
                 </div>
                 <div class="imgRight">
                   <ul>
-                    <li v-for="(item,index) in objlist" :key="index" @click="selfPicture(item)">
+                    <li v-for="(item,index) in objlist" :key="index" @click="commPicture(item)">
                       <img :src="item.picture" alt style="width:100%;height:100%">
                     </li>
                   </ul>
@@ -75,7 +92,7 @@
                 </div>
                 <div class="imgRight">
                   <ul>
-                    <li v-for="(item,index) in imgRealList" :key="index">
+                    <li v-for="(item,index) in imgRealList" :key="index"  @click="commPicture(item)">
                       <img :src="item.picture" alt style="width:100%;height:100%">
                     </li>
                   </ul>
@@ -91,15 +108,19 @@
     </div>
      <!-- 图片预览 -->
      <el-dialog title="图片预览" :visible.sync="dialogTableVisible"  width="80%" append-to-body>
-          <viewer :photo="photo"></viewer>
+          <viewer :photo="commPictureList"></viewer>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import request from "@/utils/request";
+import viewer from "@/components/viewer";
 export default {
   props: ["commandID"],
+  components:{
+      viewer
+  },
   data() {
     return {
       reverse: true,
@@ -136,6 +157,33 @@ export default {
           icon: "el-icon-location-outline"
         }
       ],
+       // 参考图标
+      activities2: [
+        {
+          content: "发出指令的人",
+          timestamp: "",
+          type: "primary",
+          icon: "el-icon-location-outline"
+        },
+        {
+          content: "转发指令的人",
+          timestamp: "",
+          type: "info",
+          icon: "el-icon-refresh"
+        },
+        {
+          content: "正在处理指令",
+          timestamp: "",
+          type: "primary",
+          icon: "el-icon-loading"
+        },
+        {
+          content: "完成指令的人",
+          timestamp: "",
+          type: "success",
+          icon: "el-icon-check"
+        }
+      ],
       commList: [], // 接口返回数据
       tabPosition: "first", // 切换
       tabShow: "three",
@@ -150,7 +198,7 @@ export default {
       state: "", // 状态
       remark: "", // 描述
       dialogTableVisible:false,
-      photo:[],
+      commPictureList:[],
     };
   },
   watch: {
@@ -207,7 +255,7 @@ export default {
               formData.photoLocation == null
             ) {
               formData.photoLocation = "湖南常祁";
-            }
+            } 
             var map = new BMap.Map("selfMap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -248,7 +296,7 @@ export default {
               contentData.photoLocation == null
             ) {
               contentData.photoLocation = "湖南常祁";
-            }
+            } 
             var map1 = new BMap.Map("realMap"); //创建地图实例
             var point1 = new BMap.Point(contentData.lgt, contentData.lat); //经纬度坐标
             map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
@@ -315,12 +363,11 @@ export default {
         }
       }
     },
-    // 图片预览(发起人)
-    selfPicture(item){
+    // 图片预览(发起人)  (jieshou人)
+    commPicture(item){
           let array = [];
           array.push(item)
-          this.photo = array
-          console.log(this.photo ,"this.photo ")
+          this.commPictureList = array
           this.dialogTableVisible = true
     }
   }
@@ -445,6 +492,42 @@ export default {
   display: block;
   text-align: center;
   font-size: 1vw;
+}
+.reference {
+  width: 100%;
+  .el-timeline {
+    margin-left: -2vw;
+    font-size: 0.7vw;
+    list-style: none;
+  }
+  .el-timeline-item {
+    float: left;
+    padding-bottom: 0;
+    height: 3vh;
+    // padding-right: 1vw;
+  }
+  /deep/.el-timeline-item__node--normal {
+    width: 0.7vw;
+    height: 0.7vw;
+  }
+  /deep/.el-timeline-item__timestamp {
+    font-size: 0.8vw;
+  }
+  /deep/.el-timeline-item__tail {
+    position: absolute;
+    left: 0vw;
+    width: 0vw;
+    height: 3vh;
+    border-left: 0.1vw solid rgba(31, 68, 143, 0);
+  }
+  /deep/.el-timeline-item__node--normal {
+    left: 0.5vw;
+  }
+  /deep/.el-timeline-item__wrapper {
+    position: relative;
+    padding-left: 1.2vw;
+    top: -1.5vh;
+  }
 }
 </style>
 

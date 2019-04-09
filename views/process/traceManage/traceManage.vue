@@ -256,7 +256,7 @@ export default {
   margin-top: 10px;
   .conent-one{
       overflow-y: auto;
-      height: 37vw;
+      height: 28vw;
   }
 }
 // .serchCheck {

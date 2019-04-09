@@ -26,10 +26,16 @@
 
           <el-table-column label="操作" width="180">
             <template slot-scope="scope">
+               <el-tooltip class="item" effect="dark" content="修改" placement="top">
+                 <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+              </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="新增" placement="top">
+                 <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
+              </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                 <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+              </el-tooltip>
               
-              <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-              <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
             </template>
           </el-table-column>
         </tree-table>

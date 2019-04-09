@@ -230,10 +230,10 @@ export default {
   .select-tree .el-input.el-input--suffix.rotate .el-input__suffix {
     transform: rotate(180deg);
   }
-  .el-popover{
-      padding: 12px;
-  }
-  .el-input__inner{
-      padding: 0  15px;
-  }
+  // .el-popover{
+  //     padding: 12px;
+  // }
+  // .el-input__inner{
+  //     padding: 0  15px;
+  // }
 </style>

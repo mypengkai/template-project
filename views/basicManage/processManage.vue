@@ -2,17 +2,6 @@
 <template>
   <div class="engineer p20">
     <div class="processType">
-      <!--查询 新增-->
-      <!-- <div class="query-add">
-        <div class="searchinfo">
-          <span>工序类型:</span>
-          <el-input v-model="searchText" size="small" placeholder="请输入工序类型" />
-        </div>
-        <div class="operator">
-          <el-button type="primary" size="small" icon="el-icon-search" @click="initTable()">查询</el-button>
-          <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="addType">新增</el-button>
-        </div>
-      </div>-->
       <el-row>
         <el-col :span="20">
           <div class="searchinfo">
@@ -280,7 +269,7 @@ html,
   overflow: hidden;
   .searchinfo {
     float: left;
-    height: 4.5vh;
+    height: 4.2vh;
     .el-input {
       width: 200px;
     }

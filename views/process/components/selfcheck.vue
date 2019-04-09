@@ -55,7 +55,7 @@
                 </div>
                 <div class="imgRight">
                   <ul>
-                    <li v-for="(item,index) in objlist" :key="index">
+                    <li v-for="(item,index) in objlist" :key="index" @click="selfPicture(item)">
                       <img :src="item.filePath" alt style="width:100%;height:100%">
                     </li>
                   </ul>
@@ -104,7 +104,7 @@
                 </div>
                 <div class="imgRight">
                   <ul>
-                    <li v-for="(item,index) in imgRealList" :key="index">
+                    <li v-for="(item,index) in imgRealList" :key="index" @click="selfPicture(item)">
                       <img :src="item.filePath" alt style="width:100%;height:100%">
                     </li>
                   </ul>
@@ -118,19 +118,29 @@
         </div>
       </div>
     </div>
+
+    <!-- 图片预览 -->
+     <el-dialog title="图片预览" :visible.sync="dialogTable" width="80%" append-to-body>
+          <viewer :photo="realPicture"></viewer>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import request from "@/utils/request";
+import viewer from "@/components/viewer";
 export default {
   props: {
     processList: {}
+  },
+  components:{
+     viewer
   },
   data() {
     return {
       selfList: [], // 自检数据
       realList: [], // 验收数据
+      dialogTable:false,
       processAll: {
         projectItem: "", // 工程
         zhuanghao: "", // 桩号
@@ -159,6 +169,7 @@ export default {
       flag: true,
       imgListOne:[],   //自检
       selfImgOne:[],    // 验收
+      realPicture:[],    // 自检预览信息
     };
   },
   created() {},
@@ -210,6 +221,7 @@ export default {
             this.InitList.realityCheckPerson = conents.realityCheckPerson;
             this.InitList.realityCheckTime = conents.realityCheckTime;
             this.objlist = conents.selfFilePath; // 自检位置
+            this.imgListOne = this.objlist[0]
             this.imgRealList = conents.filePath; // 验收位置
             this.selfImgOne = this.imgRealList[0]
             if (this.processAll.state == "0") {
@@ -340,6 +352,7 @@ export default {
 
             this.objlist = conents.selfFilePath;
             this.imgListOne = this.objlist[0]
+           
             if (this.processAll.state == "0") {
               this.processAll.stateProcess = "指定工序";
             }
@@ -392,7 +405,16 @@ export default {
             }
           });
       }
-    }
+    },
+    // z自检图片预览    // 验收图片预览
+    selfPicture(item){
+          let array = []
+          array.push(item)
+          this.realPicture = array
+          this.dialogTable = true
+    },
+   
+
   }
 };
 </script>
