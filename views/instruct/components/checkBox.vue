@@ -43,7 +43,7 @@
           </div>
 
           <el-form-item style="width:37vw" label="指令内容" v-if="nowItem =='add'" prop="remark" label-width="120px">
-            <el-input type="textarea" autosize v-model="form.remark"></el-input>
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
 
           <el-form-item label="图片选择" v-if="nowItem =='add'" prop="dialogImageUrl" label-width="120px">
@@ -92,7 +92,7 @@
 
               <div class="textareaBar">
                 <span>相关描述:</span>
-                <el-input type="textarea" autosize v-model="remark"></el-input>
+                <el-input type="textarea" style="width:70%" autosize v-model="remark"></el-input>
               </div>
 
               <!-- <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}"> -->
