@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <!-- 表头部分 -->
-    <div class="logoName">湖 南 常 祁 高 速 公 路 现 场 管 理 系 统</div>
+    <div class="logoName">湖 南 常 祁 高 速 现 场 管 理 系 统</div>
     <!-- 用户登录框部分 -->
     <el-form
       ref="loginForm"
@@ -54,7 +54,7 @@
     <div class="bq">
     <a href="#"><p>版权所有：上海同望信息技术有限公司</p></a>
     <!-- <p>建议使用谷歌浏览器阅览</p> -->
-    <p class="phone">联系电话：123456789</p>
+    <p class="phone">联系电话：027-87614140</p>
     </div>
   </div>
 </template>

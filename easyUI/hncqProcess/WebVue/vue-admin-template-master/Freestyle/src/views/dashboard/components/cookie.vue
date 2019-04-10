@@ -12,10 +12,13 @@ export default {
   methods: {
     record() {
       homePage.getOrgNumber().then(res => {
+        console.log(res.data.data);
         let cookieData = res.data.data;
+
         let cookieDataName = [];
         cookieData.forEach(v => {
-          v.name == "gongxu" && (v.name1 = "工序");
+          v.name == "gongxu" && (v.name1 = "任务验收");
+          v.name == "zizhu" && (v.name1 = "自主验收");
           v.name == "zhiling" && (v.name1 = "指令");
           v.name == "xunshi" && (v.name1 = "巡视");
           v.name == "log" && (v.name1 = "日志");
@@ -28,7 +31,7 @@ export default {
       let cookie = echarts.init(document.getElementById("cookie"));
       let option = {
         title: {
-          text: "查询组织机构轨迹数量",
+          text: "全局轨迹",
           x: "center"
         },
         tooltip: {
@@ -50,7 +53,8 @@ export default {
               { value: cookieData[0].number, name: cookieData[0].name1 },
               { value: cookieData[1].number, name: cookieData[1].name1 },
               { value: cookieData[2].number, name: cookieData[2].name1 },
-              { value: cookieData[3].number, name: cookieData[3].name1 }
+              { value: cookieData[3].number, name: cookieData[3].name1 },
+              { value: cookieData[4].number, name: cookieData[4].name1 }
             ],
             itemStyle: {
               emphasis: {
