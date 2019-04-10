@@ -66,16 +66,6 @@
     <el-dialog width="80%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
-    <!-- 组织机构树形表单 -->
-    <!-- <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
-      <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
-      </el-tree>
-    </el-dialog> -->
-    <!-- 分部分项树形表单 -->
-    <!-- <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
-      <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
-      </el-tree>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -116,7 +106,7 @@ export default {
         endtime: "", // 结束时间
         pageNo: 1, // 当前页
         orgId: "",
-        pageSize: 8, // 每页条数
+        pageSize: 15, // 每页条数
         Mark: 1 //  标记：1：发送、2：接收
       },
 

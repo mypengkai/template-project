@@ -111,7 +111,7 @@ export default {
         starttime: "", // 开始时间
         endtime: "", // 结束时间
         pageNo: 1, // 当前页
-        pageSize: 8, // 每页条数
+        pageSize: 15, // 每页条数
         orgId: "",
         Mark: 2 //  标记：1：发送、2：接收
       },
