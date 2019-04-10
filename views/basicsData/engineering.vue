@@ -2,7 +2,7 @@
   <div class="p20">
     <!-- 选择区域 -->
     <div class="elButton">
-      <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
+      <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
     <el-scrollbar style="height: 68vh;overflow-x: none;">

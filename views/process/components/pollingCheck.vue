@@ -14,31 +14,20 @@
         <el-form-item label="巡视时间：">
           <el-input v-model="form.createTime" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="巡视描述：">
-          <el-input type="textarea" v-model="form.describe" :disabled="true"></el-input>
-        </el-form-item>
       </div>
+       <el-form-item label="巡视描述：">
+          <el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 4}" v-model="form.describe" max-width="50vh" :disabled="true"></el-input>
+        </el-form-item>
     </el-form>
     <div class="content">
       <el-tabs type="border-card" v-model="tabPosition">
         <el-tab-pane label="影像资料" name="first">
           <div class="imgContation" >
-            <div class="imgLeft">
-              <ul>
-                <li>图片格式：{{imgListOne.fileType}}</li>
-                <li>图片名称：{{imgListOne.fileName}}</li>
-                <li>图片大小：{{imgListOne.fileSize}}</li>
-                <li>经度：{{imgListOne.lgt}}</li>
-                <li>纬度：{{imgListOne.lat}}</li>
-              </ul>
-            </div>
-            <div class="imgRight">
               <ul>
                 <li v-for="(item,index) in imgList" :key="index" @click="showBigPicture(item)">
                   <img :src="item.filePath" alt style="width:100%;height:100%">
                 </li>
               </ul>
-            </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="所在位置" name="second">
@@ -180,36 +169,25 @@ export default {
 .content {
   padding: 0 4vh;
   .imgContation {
-     height: 30vh;
-    .imgLeft {
+     
+     ul {
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
       float: left;
-      width: 40%;
-      ul {
-        padding: 0;
-        margin: 0;
-        li {
-          list-style-type: none;
-          height: 5vh;
-          color: blue;
-        }
+      width: 25%;
+      height: 15vh;
+      padding: 1%;
+      img{
+         width: 100%;
+         height:100%;
+         display: block;
       }
     }
-    .imgRight {
-      float: right;
-      width: 50%;
-      ul {
-        padding: 0;
-        margin: 0;
-        li {
-          list-style-type: none;
-          width:33%;
-          height:10vh;
-          float: left;
-          padding: 1%;
-        }
-      }
-    }
+  }  
   }
+  
 }
 .bigPict {
   width: 100%;
@@ -231,10 +209,12 @@ export default {
     }
   }
 }
-.bigPict:hover .imgContition {
-  display: block;
-}
-.el-dialog__header{
-   text-align: center;
-}
+/deep/ .dialogBox{
+    .el-dialog{
+        width: 60%;
+    }
+    .el-dialog__header{
+        text-align: center;
+    }
+  }
 </style>

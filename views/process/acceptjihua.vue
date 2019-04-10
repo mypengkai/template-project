@@ -1,46 +1,91 @@
 <template>
   <div class="acceptzh">
     <div class="topBar">
-      <span>组织机构</span>
-      <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe"/>
-
-      <span>分部分项</span>
-      <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes" />
-
-      <span>姓名</span>
-      <el-input v-model="form.userName" placeholder="请输入内容" size="small"></el-input>
-
-      <span>验收类型</span>
-      <el-select v-model="value" placeholder="请选择" size="small">
-        <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
+      <el-row>
+        <el-col :span="6">
+          <span>组织机构:</span>
+          <select-tree :options="options" :props="defaultProp" v-on:noDe="noDe"/>
+        </el-col>
+        <el-col :span="6">
+          <span>分部分项:</span>
+          <select-tree :options="options1" :props="defaultProps" v-on:noDe="noDes"/>
+        </el-col>
+        <el-col :span="6">
+          <span>姓名:</span>
+          <el-input v-model="form.userName" placeholder="请输入内容" size="small"></el-input>
+        </el-col>
+        <el-col :span="6">
+          <span>验收类型:</span>
+          <el-select v-model="value" placeholder="请选择" size="small">
+            <el-option
+              v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
     </div>
 
+     
     <div class="topBar">
-      <span>工序状态</span>
-      <el-select v-model="value1" placeholder="请选择" size="small">
-        <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  日期</span>
-      <el-date-picker v-model="form.starttime" type="datetime" placeholder="选择开始日期时间" size="small" style="min-width:200px">
-      </el-date-picker> -
-      <el-date-picker v-model="form.endtime" type="datetime" placeholder="选择结束日期时间" size="small" style="min-width:200px">
-      </el-date-picker>
-
-      <el-button  class="elBoutton"  type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button>
+       <el-row>
+        <el-col :span="6">
+          <span>工序状态</span>
+          <el-select v-model="value1" placeholder="请选择" size="small">
+            <el-option
+              v-for="item in options3"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="14">
+          <span>轨迹日期:</span>
+          <el-date-picker
+            v-model="form.starttime"
+            type="datetime"
+            placeholder="选择开始日期时间"
+            size="small"
+            style="min-width:200px"
+          ></el-date-picker>-
+          <el-date-picker
+            v-model="form.endtime"
+            type="datetime"
+            placeholder="选择结束日期时间"
+            size="small"
+            style="min-width:200px"
+          ></el-date-picker>
+        </el-col>
+        <el-col :span="2">
+          <el-button
+            class="pan-btn light-blue-btn"
+            type="primary"
+            icon="el-icon-search"
+            @click="chaxun()"
+          >查询</el-button>
+        </el-col>
+        <el-col :span="2">
+          <el-button
+            type="primary"
+            class="pan-btn light-blue-btn"
+            icon="el-icon-refresh"
+            @click="reset()"
+          >重置</el-button>
+        </el-col>
+      </el-row>
     </div>
 
 
     <el-table class="textList" :data="tableData" border style="width: 100%;" height="56vh" v-if="tableData.length!=0">
-      <el-table-column prop="name1" label="单位工程1">
+      <el-table-column prop="name1" label="分部分项">
       </el-table-column>
       <el-table-column prop="processName" label="工序名">
       </el-table-column>
-      <el-table-column prop="processType" label="工序过程">
-      </el-table-column>
+      <!-- <el-table-column prop="processType" label="工序过程">
+      </el-table-column> -->
       <el-table-column prop="planCheckTime" label="计划验收时间">
       </el-table-column>
       <el-table-column prop="state" label="状态">
@@ -165,6 +210,7 @@ export default {
     fn() {
       request.get("/rest/organizate/depart").then(res => {
         this.options = res.data.data;
+        
       });
     },
     // 点击组织机构节点展示分部分项
@@ -176,6 +222,7 @@ export default {
         .then(res => {
           if (res.data.data == null) return false;
           this.options1 = res.data.data;
+          console.log( this.options1,' this.options1')
         });
     },
     // 获取分部分项id

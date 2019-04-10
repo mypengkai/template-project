@@ -2,7 +2,7 @@
   <div class="p20">
     <div class="search">
       <el-row>
-        <el-col :span="10" v-if="tabPosition == 'first'">
+        <el-col :span="9" v-if="tabPosition == 'first'">
           <div class="grid-content">
             <el-form inline>
               <el-form-item label="组织机构：">
@@ -11,7 +11,7 @@
             </el-form>
           </div>
         </el-col>
-        <el-col :span="10" v-if="tabPosition == 'first'">
+        <el-col :span="9" v-if="tabPosition == 'first'">
           <div class="grid-content">
             <el-form inline>
               <el-form-item label="分部分项：">
@@ -26,7 +26,7 @@
         </el-col>
         <!-- ========================================== -->
         <!-- 人员查询 -->
-        <el-col :span="20" v-if="tabPosition == 'second'">
+        <el-col :span="18" v-if="tabPosition == 'second'">
           <div class="grid-content">
             <!-- <el-form inline>
               <el-form-item label="姓名：">
@@ -34,21 +34,34 @@
               </el-form-item>
             </el-form>-->
             <span>姓名：</span>
-            <input type="text" v-model="username" placeholder="输入姓名" class="inputName">
+            <el-input
+                size="small"
+                class="inputName"
+                placeholder="请输入姓名"
+                v-model="username"
+                clearable>
+              </el-input>
           </div>
         </el-col>
         <!-- ===================================== -->
         <el-col :span="2">
           <div class="grid-content">
             <span>
-              <el-button type="primary" icon="el-icon-search" @click="querySelected">查询</el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="querySelected">查询</el-button>
             </span>
           </div>
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
             <span>
-              <el-button type="primary" icon="el-icon-search">导出</el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset">重置</el-button>
+            </span>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content">
+            <span>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-zoom-out">导出</el-button>
             </span>
           </div>
         </el-col>
@@ -69,8 +82,8 @@
       <el-row>
         <div class="grid-content">
           <span>日期：</span>
-          <el-date-picker v-model="dateFrom" type="date"  size="small"/>
-          <span>至</span>
+          <el-date-picker v-model="dateFrom" type="date"  size="small"/>-
+          <!-- <span>至</span> -->
           <el-date-picker v-model="dateTo" type="date"  size="small"  />
         </div>
       </el-row>
@@ -155,9 +168,12 @@ export default {
   watch: {},
   created() {
     this.projectInit();
-    this.querySelected();
+    this.projecQuery();
+    this.peopleQuery();
   },
-  mounted() {},
+  mounted() {
+      
+  },
   methods: {
     //  单位查询
     projectInit() {
@@ -186,10 +202,50 @@ export default {
       this.from.unitsName = data.projectItem;
       this.from.unitsId = data.id;
     },
+    // 查询按钮查询
+    querySelected(){
+          if (this.tabPosition == "first") { this.projecQuery();}
+          if (this.tabPosition == "second") { this.peopleQuery();}
+    },
     // 整体查询(工程痕迹)
-    querySelected() {
-      if (this.tabPosition == "first") {
-        request
+    // querySelected() {
+    //   if (this.tabPosition == "first") {
+    //     request
+    //       .post("/rest/mark/chakan", {
+    //         "X-AUTH-TOKEN": token,
+    //         pageNo: 1,
+    //         pageSize: 15,
+    //         startTime: this.dateFrom, // 起始时间
+    //         endTime: this.dateTo, // 结束时间
+    //         projectid: this.from.unitsId, //工程ID
+    //         orderby: this.active + 1, // 筛选(时间，类型，人员)
+    //         type: this.searchType // 工程   人员
+    //       })
+    //       .then(res => {
+    //         this.conentOptions = res.data.data.data;
+    //         // console.log(this.conentOptions);
+    //       });
+    //   } else if (this.tabPosition == "second") {
+    //     //人员痕迹查询
+    //     request
+    //       .post("/rest/mark/chakan", {
+    //         "X-AUTH-TOKEN": token,
+    //         pageNo: 1,
+    //         pageSize: 15,
+    //         startTime: this.dateFrom,
+    //         endTime: this.dateTo,
+    //         searchname: this.username,
+    //         orderby: this.active + 1,
+    //         type: this.searchType
+    //       })
+    //       .then(res => {
+    //         this.userOptions = res.data.data.data;
+    //         // console.log(this.userOptions, "this.userOptions");
+    //       });
+    //   }
+    // },
+    projecQuery(){         // 工程查询
+           request
           .post("/rest/mark/chakan", {
             "X-AUTH-TOKEN": token,
             pageNo: 1,
@@ -204,9 +260,9 @@ export default {
             this.conentOptions = res.data.data.data;
             // console.log(this.conentOptions);
           });
-      } else if (this.tabPosition == "second") {
-        //人员痕迹查询
-        request
+    },
+    peopleQuery(){               // 人员查询
+           request
           .post("/rest/mark/chakan", {
             "X-AUTH-TOKEN": token,
             pageNo: 1,
@@ -220,14 +276,18 @@ export default {
           .then(res => {
             this.userOptions = res.data.data.data;
             // console.log(this.userOptions, "this.userOptions");
-          });
-      }
+          }); 
     },
     // checkActive(index) {
     //   // 筛选
     //   this.active = index;
     //   this.querySelected();
     // }
+    //数据重置
+     reset(){
+         this.$router.go(0)
+         
+     }
   }
 };
 </script>
@@ -241,13 +301,11 @@ export default {
 .inputName {
   width: 20%;
   height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   text-indent: 10px;
 }
 .grid-content {
-  height: 40px;
-  line-height: 40px;
+  height: 3vw;
+  line-height: 3vw;
   width: 100%;
   font-size: 0.8vw;
   font-weight: normal;

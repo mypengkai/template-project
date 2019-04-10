@@ -16,11 +16,11 @@
     <!--列表-->
     <div class="processtable">
       <el-table :data="tableData" height="50vh" stripe border highlight-current-row>
-        <el-table-column prop="process" label="工序名" />
-        <el-table-column prop="seq" label="序号" />
+        <el-table-column prop="process" label="工序过程" />
+        <!-- <el-table-column prop="seq" label="序号" /> -->
         <el-table-column prop="createName" label="创建人" />
         <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column prop="remark" label="备注" />
+        <!-- <el-table-column prop="remark" label="备注" /> -->
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" size="small" circle @click="edit(scope.row)" />
@@ -32,10 +32,10 @@
 
     <!--分页-->
 
-    <el-pagination class="pageList mt1" :current-page="currentPage" :page-sizes="[10, 20, 30]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination class="pageList mt1" :current-page="currentPage" :page-sizes="[15, 30, 60]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
     <!--新增、编辑弹框-->
-    <el-dialog :visible.sync="dialogVisible" title="新增工序" width="30%">
+    <el-dialog :visible.sync="dialogVisible" title="新增工序" width="30%" append-to-body>
       <el-form :model="form" label-width="80px">
         <el-form-item label="工序名">
           <el-input v-model="form.process" />
@@ -128,6 +128,14 @@ export default {
       );
     },
     addNew() {
+      if(this.form.process == "" || this.form.process == undefined){
+            this.$message({
+          showClose: true,
+          message: "请输入工序名",
+          type: "warning"
+        });
+        return false;
+      }
       this.form.processTypeId = this.processTypeId;
       return request.post("rest/process/processAdd", this.form).then(res => {
         this.dialogVisible = false;
