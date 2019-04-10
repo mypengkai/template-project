@@ -19,9 +19,13 @@
         </el-form-item>
 
         <el-form-item label="组织机构">
-          <el-input v-model="user.departName" :disabled="true">
+            <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
+          <!-- <el-input v-model="user.departName" :disabled="true">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
-          </el-input>
+          </el-input> -->
+
+
+        
         </el-form-item>
 
         <el-form-item label="角色" prop="userKey">
@@ -57,14 +61,10 @@
     <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
       <el-button type="primary" v-if="nowItem!=='add'" @click="_execute">修 改</el-button>
-      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">保 存</el-button>
+      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">保 存</el-button>
     </div>
 
-    <!-- 组织机构树形表单提交 -->
-    <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
-      <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
-      </el-tree>
-    </el-dialog>
+   
   </div>
 </template>
 
@@ -73,9 +73,13 @@ import { getToken } from "@/utils/auth";
 import user from "@/api/user.js";
 import api from "@/api/role.js";
 import Organization from "@/api/Organization.js";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   inject: ["reload"],
   props: ["nowItem"],
+  components:{
+    SelectTree
+  },
   data() {
     return {
       uploadUrl: process.env.BASE_API + "/rest/sysuser/add",
@@ -114,6 +118,7 @@ export default {
       },
       id: "",
       name: "",
+      value:"",
       uploadFileParams: {},
       files: null,
       dialogFormVisible: true,
@@ -143,23 +148,22 @@ export default {
     fileChange(file) {
       this.files = file.raw;
     },
-    _comfirm() {
+    _comfirm(file) {
       // 表单校验
-      if (this.$refs.userFrom.validate()) {
+       this.$refs[file].validate(valid => {
+        if (valid) {
+          // 新增
+           if (this.$refs.userFrom.validate()) {
         this.$refs.upload.submit();
       }
       this.$emit("cancel");
       this.reload();
-      // // 新增
-      // this.nowItem == "add" &&
-      //   user.sysuserAdd(this.form).then(res => {
-      //     this.$emit("comfirm");
-      //   });
-      // // 查看单个 修改
-      // this.nowItem != "add" &&
-      //   user.sysuserAdd(this.form).then(res => {
-      //     this.$emit("comfirm");
-      //   });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+     
     },
     //查看
     _execute() {

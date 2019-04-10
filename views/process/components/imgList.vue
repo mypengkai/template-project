@@ -1,6 +1,6 @@
 <template>
     <div class="imgez">
-        <el-table :data="chakanData" border>
+        <el-table class="textList" :data="chakanData" border>
             <el-row>
                 <el-col :span="5">
                     <el-table-column property="projectCode" label="代码"></el-table-column>
@@ -102,9 +102,9 @@
             </div>
         </div>
         <!-- 轮播图 -->
-        <div class="describeBox">
+        <div class="describeBox" v-for="(item,index) in datac" :key="index">
             <span class="fl">
-                <p class="br1">自检描述</p>
+                <p class="br1">自检描述: {{ item.selfCheckDescribe }}</p>
                 <div class="" v-if="imgData!=null">
                     <el-carousel :interval="5000" arrow="always" height="40vh">
                         <el-carousel-item v-for="(item,index) in imgData" :key="index">
@@ -117,7 +117,7 @@
                 </div>
             </span>
             <span class="rl">
-                <p>验收描述</p>
+                <p>验收描述: {{ item.describe }}</p>
                 <div v-if="imgData2!=null">
                          <el-carousel :interval="5000" arrow="always" height="40vh">
                     <el-carousel-item v-for="(item,index) in imgData2" :key="index">

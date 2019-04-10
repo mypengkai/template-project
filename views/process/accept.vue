@@ -53,15 +53,26 @@
           <el-table-column fixed="right" label="操作" width="250">
             <template slot-scope="scope">
               <!-- 指定验收 -->
-              <el-button type="primary" icon="el-icon-star-off" circle :id="scope.$index" @click="tjgx(scope)" v-if="scope.row.state2=='指定工序'"></el-button>
+              <el-tooltip class="item" effect="dark" content="指定工序" placement="top" v-if="scope.row.state2=='指定工序'">
+                <el-button type="primary" icon="el-icon-star-off" circle :id="scope.$index" @click="tjgx(scope)"></el-button>
+              </el-tooltip>
+
               <!-- 修改指定验收 -->
-              <el-button type="primary" icon="el-icon-edit-outline" circle :id="scope.$index" @click="tjgx(scope)" v-else-if="scope.row.state2=='已指定验收计划'"></el-button>
-                <!-- 否则 -->
+              <el-tooltip class="item" effect="dark" content="已指定验收计划" placement="top" v-else-if="scope.row.state2=='已指定验收计划'">
+                <el-button type="primary" icon="el-icon-edit-outline" circle :id="scope.$index" @click="tjgx(scope)"></el-button>
+              </el-tooltip>
+
+              <!-- 否则 -->
               <el-button type="primary" icon="el-icon-share" circle :id="scope.$index" @click="tjgx(scope)" style="display: none" v-else></el-button>
               <!-- 查看按钮 -->
-              <el-button type="primary" icon="el-icon-search" circle @click="handleClick(scope.row)"></el-button>
+               <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
+                  <el-button type="primary" icon="el-icon-search" circle @click="handleClick(scope.row)"></el-button>
+              </el-tooltip>
+           
               <!-- 删除按钮 -->
-              <el-button type="danger" icon="el-icon-delete" circle @click="dlet(scope)" size="small" v-if="scope.row.state2=='指定工序'"></el-button>
+              <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                <el-button type="danger" icon="el-icon-delete" circle @click="dlet(scope)" size="small" v-if="scope.row.state2=='指定工序'"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -106,12 +117,13 @@
           <el-input v-model="ysrZhiwu" placeholder="请输入内容"></el-input>
 
           <div class="rl">
-              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="chaxun()">查询</el-button>
+            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="chaxun()">查询</el-button>
+            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
           </div>
         </div>
 
         <el-table class="textList" :data="ysrData" height="40vh">
-          <el-table-column fixed="left" label="选中验收人">
+          <el-table-column fixed="left" label="" width="80">
             <template slot-scope="scope">
               <input type="radio" name="Fruit" @click="xzk(scope,$event)">
             </template>
@@ -166,6 +178,7 @@ import imgList from "./components/imgList";
 import request from "@/utils/request";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
+  inject: ["reload"],
   components: {
     SelectTree,
     imgList
@@ -446,7 +459,6 @@ export default {
     },
     // 点击树形节点展示右边详情列表
     handleNodeClick(data) {
-   
       this.childrenId = "";
       this.treeId = data.id;
       this.ztrrFrom();
@@ -524,7 +536,6 @@ export default {
             processId: this.bjFrom.processId
           })
           .then(res => {
-       
             this.bjFrom.name = res.data.data.planSelfCheckPerson;
             this.bjFrom.time = res.data.data.planSelfCheckTime;
             this.bjFrom.names = res.data.data.planCheckPerson;
@@ -722,18 +733,26 @@ export default {
     // 点击图片展示图片详情接口
     imgLeft(data, imgTan) {
       imgTan;
-      request.post('/rest/processCheck/getPictureDetail',{processLogId:this.imgId,Mark:data}).then((res)=>{
-      
-        this.imgForm.describe=res.data.data[0].describe;
-        this.imgForm.createTime=res.data.data[0].createTime;
-        this.imgForm.lat=res.data.data[0].lat;
-        this.imgForm.lgt=res.data.data[0].lgt;
-        this.imgForm.photoDescribe=res.data.data[0].photoDescribe;
-        this.imgForm.photoLocation=res.data.data[0].photoLocation;
-        this.imgForm.state=res.data.data[1].state=='0'?'自检':'验收';
-        res.data.data.shift();
-        this.imgData3=res.data.data;
-      })
+      request
+        .post("/rest/processCheck/getPictureDetail", {
+          processLogId: this.imgId,
+          Mark: data
+        })
+        .then(res => {
+          this.imgForm.describe = res.data.data[0].describe;
+          this.imgForm.createTime = res.data.data[0].createTime;
+          this.imgForm.lat = res.data.data[0].lat;
+          this.imgForm.lgt = res.data.data[0].lgt;
+          this.imgForm.photoDescribe = res.data.data[0].photoDescribe;
+          this.imgForm.photoLocation = res.data.data[0].photoLocation;
+          this.imgForm.state = res.data.data[1].state == "0" ? "自检" : "验收";
+          res.data.data.shift();
+          this.imgData3 = res.data.data;
+        });
+    },
+    // 重置按钮
+    reset() {
+      this.reload();
     }
   }
 };
@@ -801,10 +820,10 @@ export default {
     }
   }
 }
- .btnSizes{
-      font-size: 0.8vw !important;
-      padding: 0.8vw !important;
-  }
+.btnSizes {
+  font-size: 0.8vw !important;
+  padding: 0.8vw !important;
+}
 .navBar {
   display: flex;
   justify-content: space-between;

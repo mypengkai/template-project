@@ -8,18 +8,25 @@
       <span>工程选择</span>
       <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
 
-      <span>时间:</span>
-      <el-date-picker class="mybox" v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-      </el-date-picker>
-
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">搜索</el-button>
-        <el-button type="primary" icon="el-icon-plus" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
+         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
       </div>
+    </div>
+
+    <div class="topBar">
+      
+        <span>轨迹日期:</span>
+        <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
+        <!-- <span>至</span>    -->
+        <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>
+      <!-- <el-date-picker class="mybox" v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+      </el-date-picker> -->
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table class="textList" :data="getList" style="width: 100%" height="62.5vh">
+      <el-table class="textList" :data="getList" style="width: 100%" height="59vh">
         <el-table-column prop="project" label="分部分项">
         </el-table-column>
 
@@ -52,7 +59,7 @@
       </el-table>
     </div>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
+    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
     </el-pagination>
 
     <!-- 编辑弹框 -->
@@ -79,6 +86,7 @@ import Organization from "@/api/Organization.js";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 import project from "@/api/project.js";
 export default {
+  inject: ["reload"],
   components: {
     SelectTree,
     checkBox
@@ -210,6 +218,10 @@ export default {
         return ([this.sendData.starttime, this.sendData.endtime] = []);
       }
       [this.sendData.starttime, this.sendData.endtime] = val;
+    },
+     // 重置按钮
+    reset() {
+      this.reload();
     }
   },
   watch: {
