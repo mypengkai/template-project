@@ -8,7 +8,7 @@
       />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="../../../../static/timg.jpg" alt class="user-avatar">
+          <img src="../../../../static/home.png" alt class="user-avatar">
           <i class="el-icon-caret-bottom"/>
         </div>
 

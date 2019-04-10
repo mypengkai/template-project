@@ -446,7 +446,7 @@ export default {
     },
     // 点击树形节点展示右边详情列表
     handleNodeClick(data) {
-      // console.log(data)
+   
       this.childrenId = "";
       this.treeId = data.id;
       this.ztrrFrom();
@@ -524,7 +524,7 @@ export default {
             processId: this.bjFrom.processId
           })
           .then(res => {
-            // console.log(res)
+       
             this.bjFrom.name = res.data.data.planSelfCheckPerson;
             this.bjFrom.time = res.data.data.planSelfCheckTime;
             this.bjFrom.names = res.data.data.planCheckPerson;
@@ -723,7 +723,7 @@ export default {
     imgLeft(data, imgTan) {
       imgTan;
       request.post('/rest/processCheck/getPictureDetail',{processLogId:this.imgId,Mark:data}).then((res)=>{
-        console.log(res)
+      
         this.imgForm.describe=res.data.data[0].describe;
         this.imgForm.createTime=res.data.data[0].createTime;
         this.imgForm.lat=res.data.data[0].lat;

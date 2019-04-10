@@ -1,13 +1,12 @@
 <template>
   <div id="photograph">
+    <span class="p20">本周轨迹</span>
     <el-timeline>
-      <el-timeline-item v-for="(activity, index) in dataArr" :key="index" placement="top">
-        <el-card>
-          <h4>桩号: {{ activity.commandzhuanghao }}</h4>
-          <h4>拍摄地点: {{ activity.logphotoLocation }}</h4>
-          <p>时间: {{ activity.logcreateTime }}</p>
-          <img :src="activity.logfilePath" alt="">
-        </el-card>
+      <el-timeline-item v-for="(item, index) in weekData" :key="index">
+          <h4>桩号: {{ item.commandzhuanghao }}</h4>
+          <h4>拍摄地点: {{ item.logphotoLocation }}</h4>
+          <p>时间: {{ item.logcreateTime }}</p>
+          <img :src="item.logfilePath" alt="">
       </el-timeline-item>
     </el-timeline>
   </div>
@@ -19,7 +18,7 @@ import echarts from "echarts";
 export default {
   data() {
     return {
-      dataArr: []
+      weekData: []
     };
   },
   mounted() {
@@ -28,8 +27,7 @@ export default {
   methods: {
     shoot() {
       homePage.getPicMessage().then(res => {
-        this.dataArr = res.data.data;
-        console.log(this.dataArr);
+        this.weekData = res.data.data;
       });
     }
   }
@@ -42,8 +40,8 @@ export default {
   height: 100%;
   overflow-y: scroll;
   img {
-    width: 5vw;
-    height: 5vw;
+    width: 8vw;
+    height: 8vw;
   }
 }
 </style>

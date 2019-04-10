@@ -60,15 +60,15 @@
         <div :class="{reverseBox:nowItem!=='add'}">
           <!-- 左边信息 -->
           <div style="width:47%" class="fl">
-            <el-form-item style="width:22vw" label="相关工程" v-if="nowItem !=='add'" label-width="120px">
+            <el-form-item style="width:22vw" label="相关工程" v-if="nowItem !=='add'" label-width="100px">
               <el-input v-model="form.projectItem"></el-input>
             </el-form-item>
 
-            <el-form-item style="width:22vw" label="创建时间" v-if="nowItem !=='add'" label-width="120px">
+            <el-form-item style="width:22vw" label="创建时间" v-if="nowItem !=='add'" label-width="100px">
               <el-input v-model="form.createTime"></el-input>
             </el-form-item>
 
-            <el-form-item label="指令内容" v-if="nowItem !=='add'" label-width="120px">
+            <el-form-item label="指令时间轴" v-if="nowItem !=='add'" label-width="100px">
               <!-- 参考图标 -->
               <div class="reference">
                 <el-timeline>
@@ -768,7 +768,7 @@ export default {
     border-left: 0.1vw solid rgba(31, 68, 143, 0);
   }
   /deep/.el-timeline-item__node--normal {
-    left: 0.5vw;
+    left: 0.4vw;
   }
   /deep/.el-timeline-item__wrapper {
     position: relative;

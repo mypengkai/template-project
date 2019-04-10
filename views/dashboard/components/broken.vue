@@ -12,17 +12,18 @@ export default {
   methods: {
     statistics() {
       homePage.getUserMessage().then(res => {
+          // console.log(res.data.data.splice(0, 5))
         let testData = res.data.data; // 取整个数组
         testData.forEach(v => {
-          v.name == "planCheck" && (v.name1 = "计划验收数");
+          v.name == "planCheck" && (v.name1 = "任务验收"); // 要
           v.name == "planSelfCheck" && (v.name1 = "计划自检数");
           v.name == "realityCheck" && (v.name1 = "实际验收数");
           v.name == "realitySelfCheck" && (v.name1 = "实际自检数");
-          v.name == "z_realityCheck" && (v.name1 = "实际验收数--自主");
+          v.name == "z_realityCheck" && (v.name1 = "自主验收"); // 要
           v.name == "z_realitySelfCheck" && (v.name1 = "实际自检数--自主");
-          v.name == "command" && (v.name1 = "处理指令数");
-          v.name == "log" && (v.name1 = "发送日志数");
-          v.name == "polling" && (v.name1 = "发送巡视数");
+          v.name == "command" && (v.name1 = "指令");  // 要
+          v.name == "log" && (v.name1 = "日志");  // 要
+          v.name == "polling" && (v.name1 = "巡视"); // 要
         });
         let testDataX = [];
         let testDataY = [];
@@ -39,13 +40,11 @@ export default {
 
       let option = {
         title: {
-          text: "当前用户下属单位",
-
+          text: "当前用户本月统计",
           x: "1%",
-
           textStyle: {
             color: "#000",
-            fontSize: "22"
+            fontSize: "18"
           },
           subtextStyle: {
             color: "#90979c",
@@ -65,7 +64,7 @@ export default {
           borderWidth: 0,
           left: 80,
           right: 10,
-          top: 100,
+          top: 50,
           bottom: 95,
           textStyle: {
             color: "#fff"

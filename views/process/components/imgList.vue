@@ -16,7 +16,123 @@
                 </el-col>
             </el-row>
         </el-table>
-        <el-row>
+
+        <!-- 新的图象 -->
+        <div class="database" v-for="(item,index) in datac" :key="index">
+            <!-- 头部的工序名状态 -->
+            <div class="headData">
+                <!-- 工序名 -->
+                <div class="fl">
+                    <span class="fl processName">
+                        <p>工序名:</p>
+                    </span>
+                    <span class="rl" style="width:70%">
+                        <p>{{ item.processName }}</p>
+                    </span>
+                </div>
+                <!-- 状态 -->
+                <div class="rl">
+                    <span class="fl stateName">
+                        <p>状态</p>
+                    </span>
+                    <span class="rl" style="width:70%">
+                        <p>{{ item.state2 }}</p>
+                    </span>
+                </div>
+            </div>
+            <!-- 自检盒子 -->
+            <div class="selfinspection fl">
+                <div class="textName">
+                    <p>自检</p>
+                </div>
+                <!-- 计划盒子 -->
+                <div class="selfPlanBox">
+                    <span style="width:20%" class="br1">
+                        <p>计划</p>
+                    </span>
+                    <span style="width:40%" class="br1">
+                        <p class="bt1">时间</p>
+                        <p>{{ item.planSelfCheckTime }}</p>
+                    </span>
+                    <span style="width:40%">
+                        <p class="bt1">自检人</p>
+                        <p>{{ item.planSelfCheckPerson }}</p>
+                    </span>
+                </div>
+                <!-- 实际盒子 -->
+                <div class="selfRealityBox">
+                    <span style="width:20%" class="br1">
+                        <p>实际</p>
+                    </span>
+                    <span style="width:40%" class="br1">
+                        <p>{{ item.realitySelfCheckTime }}</p>
+                    </span>
+                    <span style="width:40%">
+                        <p>{{ item.realitySelfCheckPerson }}</p>
+                    </span>
+                </div>
+            </div>
+            <!-- 验收盒子 -->
+            <div class="acceptance rl">
+                <div class="textNameOne">
+                    <p>验收</p>
+                </div>
+                <!-- 计划盒子 -->
+                <div class="selfPlanBox">
+                  
+                    <span style="width:50%" class="br1">
+                        <p class="bt1">时间</p>
+                        <p>{{ item.planCheckTime }}</p>
+                    </span>
+                    <span style="width:50%">
+                        <p class="bt1">验收人</p>
+                        <p>{{ item.planCheckPerson }}</p>
+                    </span>
+                </div>
+                <!-- 实际盒子 -->
+                <div class="selfRealityBox">
+                  
+                    <span style="width:50%" class="br1">
+                        <p>{{ item.realityCheckTime }}</p>
+                    </span>
+                    <span style="width:50%">
+                        <p>{{ item.realityCheckPerson }}</p>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- 轮播图 -->
+        <div class="describeBox">
+            <span class="fl">
+                <p class="br1">自检描述</p>
+                <div class="" v-if="imgData!=null">
+                    <el-carousel :interval="5000" arrow="always" height="40vh">
+                        <el-carousel-item v-for="(item,index) in imgData" :key="index">
+                            <img :src="item.filePath" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+                        </el-carousel-item>
+                    </el-carousel>
+                </div>
+                <div v-else>
+                    <div class="zjimg">没有初验图片</div>
+                </div>
+            </span>
+            <span class="rl">
+                <p>验收描述</p>
+                <div v-if="imgData2!=null">
+                         <el-carousel :interval="5000" arrow="always" height="40vh">
+                    <el-carousel-item v-for="(item,index) in imgData2" :key="index">
+                        <img :src="item.filePath" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+                    </el-carousel-item>
+                </el-carousel>
+                </div>
+                <div v-else>
+                      <div class="ysimg">没有验收图片</div>
+                </div>
+            </span>
+
+        </div>
+        <!-- 这里开始 -->
+        <!-- <el-row>
             <el-col :span="12">
                 <div class="zj">自检资料</div>
             </el-col>
@@ -69,7 +185,7 @@
             <el-col :span="12" v-else>
                 <div class="ysimg">没有验收图片</div>
             </el-col>
-        </el-row>
+        </el-row> -->
         <!-- 照片详情信息查看 -->
         <el-dialog width="60%" top="5vh" :title="imgForm.state" :visible.sync="imginnerVisible" append-to-body class="dialogBox">
             <el-form class="reverseBox" :model="imgForm" label-width="100px">
@@ -82,7 +198,7 @@
                     </el-form-item>
                     <el-form-item label="路基工程:">
                         <el-input v-model="imgForm.photoLocation"></el-input>
-                    </el-form-item> 
+                    </el-form-item>
                 </div>
                 <el-form-item label="图片展示:">
                     <el-carousel :interval="3000" arrow="always" height="30vh">
@@ -111,10 +227,19 @@ export default {
   },
   data() {
     return {
-      imginnerVisible: false
+      imginnerVisible: false,
+      datac: []
     };
   },
-  methods: {}
+  created() {
+    this.srty();
+  },
+  methods: {
+    srty() {
+      this.datac = this.chakanData;
+      console.log(this.datac);
+    }
+  }
 };
 </script>
 
@@ -142,8 +267,8 @@ export default {
   .zjimg,
   .ysimg {
     text-align: center;
-    height: 300px;
-    line-height: 300px;
+    height: 45vh;
+    line-height: 45vh;
   }
 }
 .reverseBox {
@@ -151,7 +276,7 @@ export default {
   overflow-y: scroll;
   /deep/.el-input__inner {
     padding: 0 0.5vw;
-}
+  }
   .el-form-item {
     margin-bottom: 4vh;
   }
@@ -160,6 +285,108 @@ export default {
   }
   /deep/.el-input {
     font-size: 0.7vw;
+  }
+}
+// 新表格
+.database {
+  width: 100%;
+  height: 50.6vh;
+  border: 1px solid #666;
+  .headData {
+    height: 7vh;
+    div {
+      width: 50%;
+      .processName {
+        width: 30%;
+        border-right: 1px solid #666;
+      }
+      .stateName {
+        width: 30%;
+        border-right: 1px solid #666;
+        border-left: 1px solid #666;
+      }
+      span {
+        display: block;
+        height: 7vh;
+        text-align: center;
+      }
+    }
+  }
+  //   自检盒子
+  .selfinspection {
+    width: 50%;
+    height: 42vh;
+    border-top: 1px solid #666;
+    border-right: 1px solid #666;
+    .textName {
+      height: 5vh;
+      border-bottom: 1px solid #666;
+      text-align: center;
+    }
+    .selfPlanBox {
+      height: 18vh;
+      border-bottom: 1px solid #666;
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
+    .selfRealityBox {
+      height: 18vh;
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
+  }
+  //   验收盒子
+  .acceptance {
+    width: 50%;
+    height: 42vh;
+    border-top: 1px solid #666;
+    .textNameOne {
+      height: 5vh;
+      border-bottom: 1px solid #666;
+      text-align: center;
+    }
+    .selfPlanBox {
+      height: 18vh;
+      border-bottom: 1px solid #666;
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
+    .selfRealityBox {
+      height: 18vh;
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
+  }
+}
+.describeBox {
+  height: 50vh;
+  border: 1px solid #666;
+  margin-top: 1vh;
+  span {
+    width: 50%;
+    display: block;
+    text-align: center;
+    p {
+      height: 5vh;
+      border-bottom: 1px solid #666;
+      padding: transparent !important;
+    }
   }
 }
 </style>
