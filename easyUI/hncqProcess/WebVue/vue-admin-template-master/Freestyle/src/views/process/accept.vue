@@ -379,10 +379,29 @@ export default {
     this.fn();
   },
   methods: {
+
+    fnc(obj){
+        // console.log('传入的值',obj)
+      if(obj.children.length>0){
+        for(var i = 0; i <obj.children.length; i++) {
+          return  this.fnc(obj.children[i])
+        }
+        
+      }else{
+        // console.log(obj.description)
+        return obj.description;
+      }
+    },
     // 初始化合同段input框数据
     fn() {
       request.get("/rest/organizate/depart").then(res => {
         this.options = res.data.data;
+        for(var i = 0; i <this.options.length; i++ ) {
+                let a =  this.fnc(this.options[i])
+                 console.log('查到的值',a)
+        }
+   
+       
       });
     },
     // 初始化新增工序类型input框数据

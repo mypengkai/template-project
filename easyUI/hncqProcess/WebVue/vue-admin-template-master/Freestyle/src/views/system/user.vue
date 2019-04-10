@@ -99,7 +99,7 @@ export default {
         SQLrealname: "", //用户真实姓名
         SQLorgid: "", //部门id
         pageNo: 1,
-        pageSize: 8
+        pageSize: 15
       }
     };
   },

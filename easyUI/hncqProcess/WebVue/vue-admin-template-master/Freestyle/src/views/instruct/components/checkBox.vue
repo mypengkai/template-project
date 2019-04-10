@@ -4,22 +4,22 @@
       <div>
         <!-- 新增 -->
         <div :class="{reverseAddBox:nowItem=='add'}">
-          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="org" label-width="120px">
-            <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
+          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="" label-width="120px">
+            <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="form.value2" />
             <!-- <el-input v-model="name" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
           </el-input> -->
           </el-form-item>
 
-          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="projectVerify" label-width="120px">
-            <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
+          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="" label-width="120px">
+            <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="form.value1" />
             <!-- <el-input v-model="projectItem" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input> -->
           </el-form-item>
 
           <el-form-item style="width:20vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
-            <el-input v-model="username" :disabled="true">
+            <el-input v-model="form.username" :disabled="true">
               <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
             </el-input>
           </el-form-item>
@@ -27,7 +27,7 @@
           <div class="TimeAndType" v-if="nowItem =='add'">
             <span class="fl">
               <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime" label-width="120px">
-                <el-date-picker v-model="planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+                <el-date-picker v-model="form.planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
                 </el-date-picker>
               </el-form-item>
             </span>
@@ -46,7 +46,7 @@
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
 
-          <el-form-item label="图片选择" v-if="nowItem =='add'" prop="dialogImageUrl" label-width="120px">
+          <el-form-item label="图片选择" v-if="nowItem =='add'" prop="" label-width="120px">
             <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="form">
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -363,7 +363,7 @@ export default {
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
-      value1: "",
+
       planTime: "",
       headers: {
         "X-AUTH-TOKEN": getToken()
@@ -371,6 +371,7 @@ export default {
       form: {
         id: "",
         infologid: "", // 工序id
+        username: "",
         realname: "", // 接收人姓名
         project: "", // 相关工程
         initiator: "", // 发起人
@@ -384,15 +385,17 @@ export default {
         planCheckTime: "", // 计划检查时间
         commandType: "", // 指令类型
         projectItem: "", // 工程项目
-        batchNo: ""
+        batchNo: "",
+        value2: "",
+        value1: ""
       },
       rules: {
-        org: { required: true, message: "必填项", trigger: "blur" },
+        orgVerify: { required: true, message: "必填项", trigger: "blur" },
         projectVerify: { required: true, message: "必填项", trigger: "blur" },
         username: { required: true, message: "必填项", trigger: "blur" },
         projectItem: { required: true, message: "必填项", trigger: "blur" },
         dialogImageUrl: { required: true, message: "必填项", trigger: "blur" },
-        planTime: { required: true, message: "必填项", trigger: "blur" },
+        planTime: { required: true, message: "必填项", trigger: "change" }
       }, //表单校验规则
       //   转发指令
       transpondForm: {
@@ -444,7 +447,7 @@ export default {
       ],
       sendData: {
         pageNo: 1, // 当前页
-        pageSize: 8, // 每页条数
+        pageSize: 15, // 每页条数
         orgId: "",
         Mark: "" // 标记， 1项目，2业主，3监理，4标段
       },
@@ -488,7 +491,6 @@ export default {
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
-      console.log(this.activities);
       this.activities.forEach(v => {
         v.commandStagePeople == 1 && (v.commandStagePeople1 = "发出指令的人");
         v.commandStagePeople == 2 && (v.commandStagePeople1 = "转发指令的人");
@@ -556,7 +558,7 @@ export default {
     //用户列表点击回填
     tableClick(item) {
       this.form.ReceiveUserid = item.id; // 新增传接收人id
-      this.username = item.username; // 新增接收人id名回填
+      this.form.username = item.username; // 新增接收人id名回填
       this.transpondForm.zhidingren = item.id; // 转发指定人id
       this.transpondName = item.username; // 转发指定人姓名回填
       this.acceptUser = false;
