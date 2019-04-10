@@ -53,10 +53,10 @@
         </el-table>
       </div>
       <!-- 分页 -->
-      <el-pagination class="pageList pt20" background :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_userList()">
+      <el-pagination class="pageList pt20" background :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_userList()">
       </el-pagination>
       <!-- 弹框 -->
-      <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
+      <el-dialog class="dialogBox" :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
         <userAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @execute="_userList" @comfirm="_userList"></userAdd>
       </el-dialog>
 

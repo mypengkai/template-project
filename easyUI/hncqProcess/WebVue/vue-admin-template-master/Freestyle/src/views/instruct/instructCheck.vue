@@ -9,9 +9,10 @@
       <span>工程选择</span>
       <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
 
-      <span>时间:</span>
-      <el-date-picker v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-      </el-date-picker>
+       <span>轨迹日期:</span>
+        <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
+        <!-- <span>至</span>    -->
+        <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>
 
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">搜索</el-button>
@@ -53,7 +54,7 @@
       </el-table>
     </div>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
+    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
     </el-pagination>
     <!-- 编辑弹框 -->
     <el-dialog width="80%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">

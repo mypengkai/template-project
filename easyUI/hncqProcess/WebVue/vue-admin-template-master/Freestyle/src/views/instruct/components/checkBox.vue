@@ -4,14 +4,14 @@
       <div>
         <!-- 新增 -->
         <div :class="{reverseAddBox:nowItem=='add'}">
-          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="" label-width="120px">
+          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="org" label-width="120px">
             <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
             <!-- <el-input v-model="name" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
           </el-input> -->
           </el-form-item>
 
-          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="" label-width="120px">
+          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="projectVerify" label-width="120px">
             <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
             <!-- <el-input v-model="projectItem" :disabled="true">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
@@ -33,7 +33,7 @@
             </span>
 
             <span class="rl mr">
-              <el-form-item label="指令类型" v-if="nowItem =='add'" prop="label" label-width="120px">
+              <el-form-item label="指令类型" v-if="nowItem =='add'" label-width="120px">
                 <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
                   <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
                   </el-option>
@@ -42,7 +42,7 @@
             </span>
           </div>
 
-          <el-form-item style="width:37vw" label="指令内容" v-if="nowItem =='add'" prop="remark" label-width="120px">
+          <el-form-item style="width:32vw" label="指令内容" v-if="nowItem =='add'" label-width="120px">
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
 
@@ -173,7 +173,7 @@
     <div class="tar">
       <!-- <el-button @click="$emit('cancel')">取 消</el-button> -->
       <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive' && states == '未处理'" @click="innerTranspond = true">转发指令</el-button>
-      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm">确 定</el-button>
+      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
     </div>
 
     <!-- 组织机构树形表单 -->
@@ -387,13 +387,12 @@ export default {
         batchNo: ""
       },
       rules: {
-        name: { required: true, message: "必填项", trigger: "blur" },
+        org: { required: true, message: "必填项", trigger: "blur" },
+        projectVerify: { required: true, message: "必填项", trigger: "blur" },
         username: { required: true, message: "必填项", trigger: "blur" },
         projectItem: { required: true, message: "必填项", trigger: "blur" },
-        remark: { required: true, message: "必填项", trigger: "blur" },
         dialogImageUrl: { required: true, message: "必填项", trigger: "blur" },
-        // planTime: { required: true, message: "必填项", trigger: "blur" },
-        label: { required: true, message: "必填项", trigger: "blur" }
+        planTime: { required: true, message: "必填项", trigger: "blur" },
       }, //表单校验规则
       //   转发指令
       transpondForm: {
@@ -614,16 +613,19 @@ export default {
       this.form.planCheckTime = val;
     },
     _comfirm(file) {
-      // 新增
-      if (this.nowItem === "add") {
-        this.$refs.upload.submit();
-      }
-      // this.$message({
-      //   type: "success",
-      //   message: "成功"
-      // });
-      this.$emit("cancel");
-      this.reload();
+      this.$refs[file].validate(valid => {
+        if (valid) {
+          // 新增
+          if (this.nowItem === "add") {
+            this.$refs.upload.submit();
+          }
+          this.$emit("cancel");
+          this.reload();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     // 转发指令
     _delivery() {
@@ -782,7 +784,7 @@ export default {
   font-size: 1vw;
 }
 .reverseAddBox {
-  width: 90%;
+  width: 100%;
   height: 65vh;
   overflow-y: scroll;
   /deep/.el-form-item__label {
