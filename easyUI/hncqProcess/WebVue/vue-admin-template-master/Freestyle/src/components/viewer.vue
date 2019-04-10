@@ -40,7 +40,9 @@ export default {
     ul {
       padding: 0;
       margin: 0;
+    
       li {
+        width:10vh;
         list-style-type: none;
         height: 6vh;
         line-height: 6vh;

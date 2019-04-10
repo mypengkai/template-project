@@ -73,7 +73,7 @@
       </el-dialog>
     
     <!-- 编辑弹框 -->
-        <el-dialog title="编辑详情" :visible.sync="biandialogFormVisible">
+        <el-dialog title="编辑详情" :visible.sync="biandialogFormVisible" >
           <el-form :model="formSet">
             <el-form-item label="组织机构" label-width="120px">
               <el-input v-model="formSet.roleCode" autocomplete="off"></el-input>
@@ -270,5 +270,9 @@ export default {
 }
 /deep/ .el-tree-node:focus>.el-tree-node__content{
 background-color: #ffff99;
+}
+/deep/.el-dialog__body{
+     max-height: 50vh;
+     overflow-x: hidden;
 }
 </style>

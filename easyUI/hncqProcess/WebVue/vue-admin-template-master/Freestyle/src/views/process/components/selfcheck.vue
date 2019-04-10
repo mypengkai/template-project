@@ -35,8 +35,8 @@
           </el-form-item>
         </el-form>
         <el-form :model="FormList" label-width="150px" class="elInput">
-          <el-form-item label="具体位置:">
-            <el-input v-model="FormList.photoLocation" :disabled="true" style="max-width:60vh"></el-input>
+          <el-form-item label="具体位置:" style="width:30vw">
+            <el-input v-model="FormList.photoLocation" :disabled="true" ></el-input>
           </el-form-item>
         </el-form>
 
@@ -44,25 +44,16 @@
           <el-tabs type="border-card" v-model="tabPosition">
             <el-tab-pane label="影像资料" name="first">
               <div class="imgContation">
-                <div class="imgLeft">
-                  <ul>
-                    <li>图片格式：{{imgListOne.fileType}}</li>
-                    <li>图片名称：{{imgListOne.fileName}}</li>
-                    <li>图片大小：{{imgListOne.fileSize}}</li>
-                    <li>经度：{{imgListOne.lgt}}</li>
-                    <li>纬度：{{imgListOne.lat}}</li>
-                  </ul>
-                </div>
-                <div class="imgRight">
+               
                   <ul>
                     <li v-for="(item,index) in objlist" :key="index" @click="selfPicture(item)">
                       <img :src="item.filePath" alt style="width:100%;height:100%">
                     </li>
                   </ul>
-                </div>
+                
               </div>
             </el-tab-pane>
-            <el-tab-pane label="所在位置" name="second" style="height:300px;">
+            <el-tab-pane label="所在位置" name="second" style="max-height:300px;">
               <div id="selfMap"></div>
             </el-tab-pane>
           </el-tabs>
@@ -85,33 +76,22 @@
           </el-form-item>
         </el-form>
         <el-form :model="FormList" label-width="150px" class="elInput">
-          <el-form-item label="具体位置:">
-            <el-input v-model="InitList.photoLocation" :disabled="true" v-if="flag" style="max-width:60vh"></el-input>
+          <el-form-item  label="具体位置:"    style="width:30vw">
+            <el-input v-model="InitList.photoLocation" :disabled="true" v-if="flag"></el-input>
           </el-form-item>
         </el-form>
         <div class="content">
           <el-tabs type="border-card" v-model="tabShow">
             <el-tab-pane label="影像资料" name="three">
               <div class="imgContation">
-                <div class="imgLeft">
-                  <ul>
-                    <li>图片格式：{{selfImgOne.fileType}}</li>
-                    <li>图片名称：{{selfImgOne.fileName}}</li>
-                    <li>图片大小：{{selfImgOne.fileSize}}</li>
-                    <li>经度：{{selfImgOne.lgt}}</li>
-                    <li>纬度：{{selfImgOne.lat}}</li>
-                  </ul>
-                </div>
-                <div class="imgRight">
                   <ul>
                     <li v-for="(item,index) in imgRealList" :key="index" @click="selfPicture(item)">
                       <img :src="item.filePath" alt style="width:100%;height:100%">
                     </li>
                   </ul>
-                </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="所在位置" name="four" style="height:300px;">
+            <el-tab-pane label="所在位置" name="four" style="max-height:300px;">
               <div id="realMap" v-if="flag"></div>
             </el-tab-pane>
           </el-tabs>
@@ -239,18 +219,18 @@ export default {
             if (this.imgRealList.length > 0) {
               let formData = conents.filePath[0];
               this.InitList.photoLocation = conents.filePath[0].photoLocation;
-              if (formData.lgt == "" || formData.lgt == null) {
-                formData.lgt = 112.376609;
-              }
-              if (formData.lat == "" || formData.lat == null) {
-                formData.lat = 26.405528;
-              }
-              if (
-                formData.photoLocation == "" ||
-                formData.photoLocation == null
-              ) {
-                formData.photoLocation = "湖南常祁";
-              }
+              // if (formData.lgt == "" || formData.lgt == null) {
+              //    formData.lgt = 112.376609;
+              // }
+              // if (formData.lat == "" || formData.lat == null) {
+              //   formData.lat = 26.405528;
+              // }
+              // if (
+              //   formData.photoLocation == "" ||
+              //   formData.photoLocation == null
+              // ) {
+              //   formData.photoLocation = "湖南常祁";
+              // }
               var map = new BMap.Map("realMap"); //创建地图实例
               var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
               map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -281,18 +261,18 @@ export default {
               this.FormList.photoLocation =
                 conents.selfFilePath[0].photoLocation;
               let selfData = conents.selfFilePath[0];
-              if (selfData.lgt == "" || selfData.lgt == null) {
-                selfData.lgt = 112.376609;
-              }
-              if (selfData.lat == "" || selfData.lat == null) {
-                selfData.lat = 26.405528;
-              }
-              if (
-                selfData.photoLocation == "" ||
-                selfData.photoLocation == null
-              ) {
-                selfData.photoLocation = "湖南常祁";
-              }
+              // if (selfData.lgt == "" || selfData.lgt == null) {
+              //   selfData.lgt = 112.376609;
+              // }
+              // if (selfData.lat == "" || selfData.lat == null) {
+              //   selfData.lat = 26.405528;
+              // }
+              // if (
+              //   selfData.photoLocation == "" ||
+              //   selfData.photoLocation == null
+              // ) {
+              //   selfData.photoLocation = "湖南常祁";
+              // }
               var map1 = new BMap.Map("selfMap"); //创建地图实例
               var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
               map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
@@ -366,18 +346,18 @@ export default {
               this.FormList.photoLocation =
                 conents.selfFilePath[0].photoLocation;
               let selfData = conents.selfFilePath[0];
-              if (selfData.lgt == "" || selfData.lgt == null) {
-                selfData.lgt = 112.376609;
-              }
-              if (selfData.lat == "" || selfData.lat == null) {
-                selfData.lat = 26.405528;
-              }
-              if (
-                selfData.photoLocation == "" ||
-                selfData.photoLocation == null
-              ) {
-                selfData.photoLocation = "湖南常祁";
-              }
+              // if (selfData.lgt == "" || selfData.lgt == null) {
+              //   selfData.lgt = 112.376609;
+              // }
+              // if (selfData.lat == "" || selfData.lat == null) {
+              //   selfData.lat = 26.405528;
+              // }
+              // if (
+              //   selfData.photoLocation == "" ||
+              //   selfData.photoLocation == null
+              // ) {
+              //   selfData.photoLocation = "湖南常祁";
+              // }
               var map1 = new BMap.Map("selfMap"); //创建地图实例
               var point1 = new BMap.Point(selfData.lgt, selfData.lat); //经纬度坐标
               map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
@@ -421,7 +401,7 @@ export default {
 
 <style lang="scss" scoped>
 .selfcheck {
-  max-height: 600px;
+  max-height: 60vh;
   overflow-x: hidden;
 }
 .imgBox {
@@ -435,36 +415,22 @@ export default {
 .content {
   padding: 0 4vh;
   .imgContation {
-     height: 30vh;
-    .imgLeft {
+      ul {
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
       float: left;
-      width: 40%;
-      ul {
-        padding: 0;
-        margin: 0;
-        li {
-          list-style-type: none;
-          height: 5vh;
-          color: blue;
-        }
+      width: 25%;
+      height: 15vh;
+      padding: 1%;
+      img{
+         width: 100%;
+         height:100%;
+         display: block;
       }
     }
-    .imgRight {
-      float: right;
-      width: 50%;
-      // background: blue;
-      ul {
-        padding: 0;
-        margin: 0;
-        li {
-          list-style-type: none;
-          width:33%;
-          height:10vh;
-          float: left;
-          padding: 1%;
-        }
-      }
-    }
+  }  
   }
 }
 .allBox {
@@ -488,9 +454,13 @@ export default {
     }
   }
 }
-.el-dialog__header{
-   padding: 20px 20px 10px;
-    text-align: center;
-}
+/deep/ .dialogBox{
+    .el-dialog{
+        width: 60%;
+    }
+    /deep/.el-dialog__header{
+        text-align: center;
+    }
+  }
 </style>
 

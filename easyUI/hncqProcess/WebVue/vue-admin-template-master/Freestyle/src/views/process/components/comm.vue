@@ -45,7 +45,7 @@
       </el-form-item>
 
       <el-form-item style="width:30vw" label="相关描述:" label-width="120px">
-        <el-input type="textarea" v-model="remark" :disabled="true"></el-input>
+        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"  v-model="remark" :disabled="true"></el-input>
       </el-form-item>
     </el-form>
     <div class="allBox">
@@ -55,20 +55,13 @@
           <el-tabs type="border-card" v-model="tabPosition">
             <el-tab-pane label="影像资料" name="first">
              <div class="imgContation">
-                <div class="imgLeft">
-                  <ul>
-                    <li>图片格式：{{objOne.fileType}}</li>
-                    <li>经度：{{objOne.lgt}}</li>
-                    <li>纬度：{{objOne.lat}}</li>
-                  </ul>
-                </div>
-                <div class="imgRight">
+               
                   <ul>
                     <li v-for="(item,index) in objlist" :key="index" @click="commPicture(item)">
                       <img :src="item.picture" alt style="width:100%;height:100%">
                     </li>
                   </ul>
-                </div>
+               
               </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="second">
@@ -83,20 +76,13 @@
           <el-tabs type="border-card" v-model="tabShow">
             <el-tab-pane label="影像资料" name="three">
               <div class="imgContation">
-                <div class="imgLeft">
-                  <ul>
-                    <li>图片格式：{{imgListOne.fileType}}</li>
-                    <li>经度：{{imgListOne.lgt}}</li>
-                    <li>纬度：{{imgListOne.lat}}</li>
-                  </ul>
-                </div>
-                <div class="imgRight">
+               
                   <ul>
                     <li v-for="(item,index) in imgRealList" :key="index"  @click="commPicture(item)">
                       <img :src="item.picture" alt style="width:100%;height:100%">
                     </li>
                   </ul>
-                </div>
+               
               </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="four">
@@ -107,7 +93,7 @@
       </div>
     </div>
      <!-- 图片预览 -->
-     <el-dialog title="图片预览" :visible.sync="dialogTableVisible"  width="80%" append-to-body>
+     <el-dialog title="图片预览" :visible.sync="dialogcomm" width="80%" append-to-body>
           <viewer :photo="commPictureList"></viewer>
     </el-dialog>
   </div>
@@ -197,7 +183,7 @@ export default {
       },
       state: "", // 状态
       remark: "", // 描述
-      dialogTableVisible:false,
+      dialogcomm:false,
       commPictureList:[],
     };
   },
@@ -244,18 +230,18 @@ export default {
           //    发起人定位
           if (this.objlist.length > 0) {
             let formData = this.objlist[0];
-            if (formData.lgt == "" || formData.lgt == null) {
-              formData.lgt = 112.376609;
-            }
-            if (formData.lat == "" || formData.lat == null) {
-              formData.lat = 26.405528;
-            }
-            if (
-              formData.photoLocation == "" ||
-              formData.photoLocation == null
-            ) {
-              formData.photoLocation = "湖南常祁";
-            } 
+            // if (formData.lgt == "" || formData.lgt == null) {
+            //   formData.lgt = 112.376609;
+            // }
+            // if (formData.lat == "" || formData.lat == null) {
+            //   formData.lat = 26.405528;
+            // }
+            // if (
+            //   formData.photoLocation == "" ||
+            //   formData.photoLocation == null
+            // ) {
+            //   formData.photoLocation = "湖南常祁";
+            // } 
             var map = new BMap.Map("selfMap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -285,18 +271,18 @@ export default {
           //   接收人定位
           if (this.imgRealList.length > 0) {
             let contentData = this.imgRealList[0];
-            if (contentData.lgt == "" || contentData.lgt == null) {
-              contentData.lgt = 112.376609;
-            }
-            if (contentData.lat == "" || contentData.lat == null) {
-              formData.lat = 26.405528;
-            }
-            if (
-              contentData.photoLocation == "" ||
-              contentData.photoLocation == null
-            ) {
-              contentData.photoLocation = "湖南常祁";
-            } 
+            // if (contentData.lgt == "" || contentData.lgt == null) {
+            //   contentData.lgt = 112.376609;
+            // }
+            // if (contentData.lat == "" || contentData.lat == null) {
+            //   formData.lat = 26.405528;
+            // }
+            // if (
+            //   contentData.photoLocation == "" ||
+            //   contentData.photoLocation == null
+            // ) {
+            //   contentData.photoLocation = "湖南常祁";
+            // } 
             var map1 = new BMap.Map("realMap"); //创建地图实例
             var point1 = new BMap.Point(contentData.lgt, contentData.lat); //经纬度坐标
             map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
@@ -368,7 +354,7 @@ export default {
           let array = [];
           array.push(item)
           this.commPictureList = array
-          this.dialogTableVisible = true
+          this.dialogcomm = true
     }
   }
 };
@@ -389,36 +375,22 @@ export default {
 .content {
   padding: 0 4vh;
   .imgContation {
-     height: 30vh;
-    .imgLeft {
+      ul {
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
       float: left;
-      width: 40%;
-      ul {
-        padding: 0;
-        margin: 0;
-        li {
-          list-style-type: none;
-          height: 5vh;
-          color: blue;
-        }
+      width: 25%;
+      height: 10vh;
+      padding: 1%;
+      img{
+         width: 100%;
+         height:100%;
+         display: block;
       }
     }
-    .imgRight {
-      float: right;
-      width: 50%;
-      // background: blue;
-      ul {
-        padding: 0;
-        margin: 0;
-        li {
-          list-style-type: none;
-          width:33%;
-          height:10vh;
-          float: left;
-          padding: 1%;
-        }
-      }
-    }
+  }  
   }
 }
 
@@ -529,6 +501,14 @@ export default {
     top: -1.5vh;
   }
 }
+/deep/ .dialogBox{
+    .el-dialog{
+        width: 60%;
+    }
+    .el-dialog__header{
+        text-align: center;
+    }
+  }
 </style>
 
 

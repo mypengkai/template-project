@@ -1,5 +1,4 @@
 <template>
-
   <div class="p20">
     <!-- 头部选择栏 -->
     <div class="navBar topBar">
@@ -7,60 +6,102 @@
         <!-- 姓名选择 -->
         <span>姓名选择:</span>
         <el-select v-model="sendData.userId" clearable placeholder="请选择">
-          <el-option v-for="(item,index) in getListByUser" :key="index" :label="item.realname" :value="item.id">
-          </el-option>
+          <el-option
+            v-for="(item,index) in getListByUser"
+            :key="index"
+            :label="item.realname"
+            :value="item.id"
+          ></el-option>
         </el-select>
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-         <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="handleCheckChange" v-model="value" />
-        <!-- <el-cascader clearable :options="projectList" :props="projectTree" change-on-select @change="projectChange"></el-cascader> -->
-        <!-- 时间段 -->
-        <el-date-picker type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="timeRange" @change="changeDataRange">
-        </el-date-picker>
+        <select-tree
+          clearable
+          :options="projectList"
+          :props="projectTree"
+          v-on:noDe="handleCheckChange"
+          v-model="value"
+        />
+       
+        <span>轨迹日期:</span>
+        <el-date-picker
+          v-model="sendData.startTime"
+          type="datetime"
+          placeholder="选择日期时间"
+          size="small"
+          style="min-width:200px"
+        ></el-date-picker>-
+        <!-- <span>至</span>    -->
+        <el-date-picker
+          v-model="sendData.endTime"
+          type="datetime"
+          placeholder="选择日期时间"
+          size="small"
+          style="min-width:200px"
+        ></el-date-picker>
       </div>
 
       <div>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_chackList()">查询</el-button>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button
+          type="primary"
+          class="pan-btn light-blue-btn"
+          icon="el-icon-search"
+          @click="_chackList()"
+        >查询</el-button>
+        <el-button
+          type="primary"
+          class="pan-btn light-blue-btn"
+          icon="el-icon-refresh"
+          @click="reset()"
+        >重置</el-button>
       </div>
     </div>
 
     <!-- 查询列表 -->
     <el-table class="textList" :data="everyDayLogPageList" style="width: 100%" height="62vh">
-      <el-table-column prop="realname" label="巡视人">
-      </el-table-column>
+      <el-table-column prop="realname" label="巡视人"></el-table-column>
 
-      <el-table-column prop="projectItem" label="工程分部分项">
-      </el-table-column>
+      <el-table-column prop="projectItem" label="分部分项"></el-table-column>
 
-      <el-table-column prop="zhuanghao" label="桩号">
-      </el-table-column>
+      <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
 
-      <el-table-column prop="describe" label="巡视说明">
-      </el-table-column>
+      <el-table-column prop="describe" label="巡视说明"></el-table-column>
 
-      <el-table-column prop="photoLocation" label="拍照地点">
-      </el-table-column>
+      <el-table-column prop="photoLocation" label="拍照地点"></el-table-column>
 
-      <el-table-column prop="createTime" label="创建时间">
-      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
       <el-table-column fixed="right" label="照片">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-picture" circle @click="action(scope.row)"></el-button>
+          <el-tooltip class="item" effect="dark" content="查看详情" placement="top">
+            <el-button type="primary" icon="el-icon-picture" circle @click="action(scope.row)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()">
-    </el-pagination>
+    <el-pagination
+      class="pageList mt1"
+      background
+      :page-sizes="[15,30,60,100]"
+      :page-size="1"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      :current-page.sync="sendData.pageNo"
+      @size-change="handleSizeChange"
+      @current-change="_chackList()"
+    ></el-pagination>
     <!-- 查看照片弹框 -->
-    <el-dialog width="70%" :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">
+    <el-dialog
+      width="70%"
+      :title="nowItem=='add'?'上传':'巡视查看'"
+      :visible.sync="dialogFormVisible"
+      class="dialogBox"
+    >
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
@@ -138,7 +179,7 @@ export default {
     },
     // 换回来的
     handleCheckChange(data) {
-        this.sendData.projectCode = data.projectCode
+      this.sendData.projectCode = data.projectCode;
     },
     // 分部分项选择后的数据
     projectChange(data) {
@@ -148,9 +189,10 @@ export default {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
     },
     // 重置按钮
-    reset() {
-      this.reload();
-    }
+   reset() {
+      
+      this.$router.go(0)
+    },
   },
   watch: {
     dialogFormVisible(val) {

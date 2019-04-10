@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class>
     <!-- 照片详情信息查看 -->
     <el-form class="reverseBox" :model="form">
       <div class="fl pth" style="width:42.6%">
@@ -30,7 +30,13 @@
 
       <div class="rl" style="width:50%">
         <div class="navb" label-width="100px">
-          <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
+          <el-menu
+            :default-active="activeIndex2"
+            mode="horizontal"
+            @select="handleSelect"
+            text-color="#ccc"
+            active-text-color="#409EFF"
+          >
             <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
             <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
           </el-menu>
@@ -38,13 +44,18 @@
 
         <!-- 轮播信息 -->
         <div class="condition" v-if="nowType==0">
-          <el-form-item class="">
+          <!-- <el-form-item class="">
             <el-carousel :interval="3000" arrow="always" height="45vh">
               <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
                 <img :src="item.picture" alt="">
               </el-carousel-item>
             </el-carousel>
-          </el-form-item>
+          </el-form-item>-->
+          <ul>
+            <li v-for="(item,index) in filePathImg" :key="index">
+              <img :src="item.picture" alt >
+            </li>
+          </ul>
         </div>
         <!-- 地图 -->
         <div style="height:52vh" v-if="nowType==1">
@@ -52,7 +63,6 @@
         </div>
       </div>
       <!-- 导航切换 -->
-
     </el-form>
   </div>
 </template>
@@ -125,7 +135,7 @@ export default {
   overflow-y: scroll;
   /deep/.el-input__inner {
     padding: 0 0.5vw;
-}
+  }
   .el-form-item {
     margin-bottom: 4vh;
   }
@@ -154,5 +164,21 @@ export default {
 }
 .condition {
   margin-top: 50px;
+  ul {
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
+      float: left;
+      width: 25%;
+      height: 15vh;
+      padding: 1%;
+      img{
+         width: 100%;
+         height:100%;
+         display: block;
+      }
+    }
+  }
 }
 </style>
