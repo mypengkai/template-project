@@ -6,7 +6,7 @@
           <el-button type="primary" icon="el-icon-circle-plus" @click="addtan()">新增</el-button>
         </div>
       </div>
-      <tree-table :data="shuData" border style="">
+      <tree-table :data="shuData" border style="" row-key>
       <el-table-column label="组织机构">
         <template slot-scope="scope">
           <span style="">{{ scope.row.name }}</span>

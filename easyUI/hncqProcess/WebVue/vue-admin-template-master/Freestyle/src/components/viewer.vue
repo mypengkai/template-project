@@ -1,23 +1,25 @@
 <template>
   <div class="viewer" >
-    <div class="viewLeft" v-for="(item,index) in photo" :key="index">
-      <ul>
-        <li>图片名称：{{item.fileName}}</li>
-        <li>图片格式：{{item.fileType}}</li>
-        <li>图片大小：{{item.fileSize}}</li>
-        <li>经度：{{item.lgt}}</li>
-        <li>纬度：{{item.lat}}</li>
-      </ul>
-    </div>
-    <div class="viewRight" style="height:300px">
-      <viewer :images="photo">
-        <!-- <el-carousel :interval="3000" arrow="always" height="30vh">
-          <el-carousel-item > -->
-            <img v-for="(item,index) in photo" :key="index" :src="item.filePath" alt style="width:100%;height:100%" >
-          <!-- </el-carousel-item>
-        </el-carousel> -->
-      </viewer>
-    </div>
+    <el-row>
+        <el-col :span="8">
+            <div class="viewLeft" v-for="(item,index) in photo" :key="index">
+                <ul>
+                  <li>图片名称：{{item.fileName}}</li>
+                  <li>图片格式：{{item.fileType}}</li>
+                  <li>图片大小：{{item.fileSize}}</li>
+                  <li>经度：{{item.lgt}}</li>
+                  <li>纬度：{{item.lat}}</li>
+                </ul>
+              </div>
+        </el-col>
+        <el-col :span="16"> 
+              <div class="viewRight" >
+                  <viewer :images="photo">
+                        <img v-for="(item,index) in photo" :key="index" :src="item.filePath" alt style="width:100%;height:100%" >
+                  </viewer>
+                </div>
+      </el-col>
+</el-row>
   </div>
 </template>
 <script>
@@ -28,32 +30,52 @@ export default {
        
     };
   },
+  created(){
+      
+  }
 };
 </script>
 <style lang="scss" scoped>
 .viewer {
-    height: 100%;
-    overflow: hidden;
   .viewLeft {
-    float: left;
-    width: 40%;
     ul {
       padding: 0;
       margin: 0;
-    
       li {
-        width:10vh;
         list-style-type: none;
-        height: 6vh;
-        line-height: 6vh;
+        height: 10vh;
+        line-height:3vh;
         color: black;
         font-size: 0.8vw;
       }
     }
   }
   .viewRight{
-      float: right;
-      width: 60%;
+       width:300px;
+       height:300px;
+       margin:0 auto;
+       
   }
+}
+/deep/.viewer-container {
+    width: 60%;
+    height: 80%;
+    // bottom: 0;
+    direction: ltr;
+    font-size: 0;
+    // left: 0; 
+    line-height: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    -webkit-tap-highlight-color: transparent;
+    top: 0;
+    -ms-touch-action: none;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 </style>

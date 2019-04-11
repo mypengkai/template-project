@@ -4,6 +4,7 @@
       <div class="a1">
         <img src="../../../../../static/layout.jpg" alt="" style=" cursor:pointer" @click="$router.push('/')">
       </div>
+     
       <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
     </el-menu>
   </el-scrollbar>
@@ -23,7 +24,7 @@ export default {
     isCollapse() {
       return !this.sidebar.opened;
     }
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -34,5 +35,6 @@ export default {
     height: 100%;
   }
 }
+
 </style>
 

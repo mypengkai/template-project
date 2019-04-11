@@ -15,7 +15,7 @@
   
     <!--列表-->
     <div class="processtable">
-      <el-table :data="tableData" height="50vh" stripe border highlight-current-row>
+      <el-table :data="tableData" height="50vh" stripe border highlight-current-row   class="textList">
         <el-table-column prop="process" label="工序过程" />
         <!-- <el-table-column prop="seq" label="序号" /> -->
         <el-table-column prop="createName" label="创建人" />
@@ -35,7 +35,7 @@
     <el-pagination class="pageList mt1" :current-page="currentPage" :page-sizes="[15, 30, 60]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
     <!--新增、编辑弹框-->
-    <el-dialog :visible.sync="dialogVisible" title="新增工序" width="30%" append-to-body>
+    <el-dialog :visible.sync="dialogVisible" title="新增工序" width="30%" append-to-body class="dialogBox">
       <el-form :model="form" label-width="80px">
         <el-form-item label="工序名">
           <el-input v-model="form.process" />

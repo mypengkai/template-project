@@ -110,7 +110,7 @@
     </el-pagination>
 
     <!-- 查看弹框 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%">
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%" class="dialogBox">
       <imgList :chakanData='chakanData' :imgData='imgData' :imgData2='imgData2' :imgId='imgId' :zijian='zijian' :yanshou='yanshou' :imgForm='imgForm' :imgData3='imgData3' @imgLeft='imgLeft'></imgList>
     </el-dialog>
   </div>
@@ -121,6 +121,7 @@ import SelectTree from "@/components/SelectTree/selectTree.vue";
 import imgList from "./components/imgList";
 import request from "@/utils/request";
 export default {
+   inject: ["reload"],
   components: {
     SelectTree,
     imgList
@@ -212,6 +213,9 @@ export default {
         this.options = res.data.data;
         
       });
+    },
+    reset(){
+       this.reload();
     },
     // 点击组织机构节点展示分部分项
     noDe(data) {

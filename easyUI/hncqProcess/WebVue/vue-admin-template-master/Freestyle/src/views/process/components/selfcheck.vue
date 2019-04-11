@@ -454,13 +454,5 @@ export default {
     }
   }
 }
-/deep/ .dialogBox{
-    .el-dialog{
-        width: 60%;
-    }
-    /deep/.el-dialog__header{
-        text-align: center;
-    }
-  }
 </style>
 

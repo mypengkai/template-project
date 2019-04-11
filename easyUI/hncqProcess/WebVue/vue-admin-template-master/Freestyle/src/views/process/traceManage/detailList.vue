@@ -1,5 +1,5 @@
 <template>
-  <div class="p20">
+  <div class="p20 conentlist">
     <!-- 工程痕迹 -->
     <div class="projectConent" v-if="this.traceType === 1">
       <div
@@ -16,7 +16,7 @@
             <el-col :span="18">
               <div class="grid-content bg-purple timeOut" style="color:#8080ff">{{item.createTime}}</div>
             </el-col>
-            <el-col :span="6" style="color:#8080ff ; margin-top:9px;">
+            <el-col :span="6" style="color:#8080ff ; margin-top:0.5vw;">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
@@ -26,15 +26,15 @@
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
-          <p style="color:#8080ff">{{item.zhuanghao}}</p>
+          <p style="color:#8080ff; height:1vw; line-height:1vw; ">{{item.zhuanghao}}</p>
           <el-row>
             <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="12">
               <div class="grid-content bg-purple-light">{{item.departname}}</div>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <div class="grid-content bg-purple">{{item.zhiwei}}</div>
             </el-col>
           </el-row>
@@ -43,7 +43,6 @@
             <template v-if="item.state == 0">未处理</template>
             <template v-else-if="item.state == 1">已完成</template>
           </div>
-          <span class="spanTwo el-icon-download"></span>
         </div>
       </div>
     </div>
@@ -62,10 +61,10 @@
         </div>
         <div class="p20-contation">
           <el-row>
-            <el-col :span="20">
+            <el-col :span="18">
               <div class="grid-content bg-purple timeOut" style="color:#8080ff">{{item.createTime}}</div>
             </el-col>
-            <el-col :span="4" style="color:#8080ff ; margin-top:9px;">
+            <el-col :span="6" style="color:#8080ff ; margin-top:0.5vw;">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
@@ -75,7 +74,7 @@
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
-          <p style="color:#8080ff; height:20px; line-height:20px;">{{item.zhuanghao}}</p>
+          <p style="color:#8080ff; height:1vw; line-height:1vw;">{{item.zhuanghao}}</p>
           <el-row>
             <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
@@ -91,25 +90,24 @@
             <template v-if="item.state == 0">未处理</template>
             <template v-else-if="item.state == 1">已完成</template>
           </div>
-          <span class="spanTwo el-icon-download"></span>
         </div>
       </div>
     </div>
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
-    <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%">
+    <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%" class="dialogBox">
       <comm :commandID="commandID"></comm>
     </el-dialog>
     <!-- 巡视查看 -->
-    <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%">
+    <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
       <pollingCheck :targetID="targetID"></pollingCheck>
     </el-dialog>
     <!-- 自检查看   验收查看-->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%">
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%" class="dialogBox">
       <selfcheck :processList="processList"></selfcheck>
     </el-dialog>
     <!-- 日志查看 -->
-    <el-dialog title="日志详情" :visible.sync="dialogTableVisiblelogcheck" width="60%">
+    <el-dialog title="日志详情" :visible.sync="dialogTableVisiblelogcheck" width="60%" class="dialogBox">
       <logCheck :targetID="targetID"></logCheck>
     </el-dialog>
   </div>
@@ -187,11 +185,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.p20 {
+.conentlist {
   margin: 0;
   padding: 0;
-  max-height: 19vw;
-  overflow-x: hidden;
   .conent {
     overflow: hidden;
     width: 18%;
@@ -212,14 +208,14 @@ export default {
     }
     .p20-contation {
       border: 1px solid #ccc;
-      margin-top: 20px;
+      margin-top: 10px;
       box-sizing: border-box;
       padding: 10px;
       overflow: hidden;
       h3 {
         font-size: 12px;
-        margin: 20px 0;
-        height: 40px;
+        margin: 10px 0;
+        height: 25px;
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -228,9 +224,7 @@ export default {
         font-weight: normal;
       }
       p {
-        font-size: 14px;
-        height: 18px;
-        line-height: 20px;
+        font-size: 12px;
       }
       .timeOut {
         overflow: hidden;
@@ -241,19 +235,20 @@ export default {
         -webkit-box-orient: vertical;
       }
       .grid-content {
-        font-size: 12px;
-        height:18px;
+        font-size: 0.8vw;
+        max-height:1vw;
         overflow: hidden;
          text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
-        margin: 10px 0;
+        margin: 0.5vw 0;
         font-weight: normal;
       }
       .spanOne {
         float: left;
-        font-size: 14px;
+        font-size: 1vw;
+        height:1vw;
         color: red;
       }
       .spanTwo {
@@ -266,4 +261,5 @@ export default {
     border: 1px solid red;
   }
 }
+
 </style>

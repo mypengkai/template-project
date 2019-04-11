@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+     
      <router-view v-if="isRouterAlive" />
   </div>
 </template>
@@ -32,5 +33,6 @@ export default {
 #app::-webkit-scrollbar {
   display: none;
 }
+
 </style>
 
