@@ -63,7 +63,7 @@
     </el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="80%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
   </div>

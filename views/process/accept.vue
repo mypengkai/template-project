@@ -5,7 +5,7 @@
       <span style="padding-top: 10px;">
         <el-form inline>
           <el-form-item label="组织机构：">
-            <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp" />
+            <select-tree ref="userGroupSelectTree" :options="options" v-on:noDe="noDe" :props="defaultProp" />
           </el-form-item>
         </el-form>
       </span>
@@ -36,7 +36,7 @@
           <!-- <el-input v-model="" readonly="true" v-if="childrenId!=undefined&&childrenId!=''"></el-input> -->
         </div>
         <div style="right: 1vw;bottom: 1vh">
-          <el-button type="primary" icon="el-icon-plus" class="pan-btn light-blue-btn" @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button>
+          <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button>
           <!-- <el-button type="primary" class="btnSize" icon="el-icon-plus" circle @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''"></el-button> -->
         </div>
       </div>
@@ -65,10 +65,10 @@
               <!-- 否则 -->
               <el-button type="primary" icon="el-icon-share" circle :id="scope.$index" @click="tjgx(scope)" style="display: none" v-else></el-button>
               <!-- 查看按钮 -->
-               <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
-                  <el-button type="primary" icon="el-icon-search" circle @click="handleClick(scope.row)"></el-button>
+              <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
+                <el-button type="primary" icon="el-icon-search" circle @click="handleClick(scope.row)"></el-button>
               </el-tooltip>
-           
+
               <!-- 删除按钮 -->
               <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
                 <el-button type="danger" icon="el-icon-delete" circle @click="dlet(scope)" size="small" v-if="scope.row.state2=='指定工序'"></el-button>
@@ -379,15 +379,13 @@ export default {
     this.fn();
   },
   methods: {
-
-    fnc(obj){
-        // console.log('传入的值',obj)
-      if(obj.children.length>0){
-        for(var i = 0; i <obj.children.length; i++) {
-          return  this.fnc(obj.children[i])
+    fnc(obj) {
+      // console.log('传入的值',obj)
+      if (obj.children.length > 0) {
+        for (var i = 0; i < obj.children.length; i++) {
+          return this.fnc(obj.children[i]);
         }
-        
-      }else{
+      } else {
         // console.log(obj.description)
         return obj.description;
       }
@@ -396,19 +394,16 @@ export default {
     fn() {
       request.get("/rest/organizate/depart").then(res => {
         this.options = res.data.data;
-        for(var i = 0; i <this.options.length; i++ ) {
-                let a =  this.fnc(this.options[i])
-                 console.log('查到的值',a)
+        for (var i = 0; i < this.options.length; i++) {
+          let a = this.fnc(this.options[i]);
+          //  console.log('查到的值',a)
         }
-   
-       
       });
     },
     // 初始化新增工序类型input框数据
     fnLei() {
       request.post("/rest/processType/getList").then(res => {
         this.options1 = res.data.data.data;
-
         this.fnGong(this.options1[0].id);
         this.processMDictId = this.options1[0].id;
         this.gongxuMrz = this.options1[0].processType;
@@ -423,16 +418,23 @@ export default {
     },
     // 根据input ID获取树形结构
     noDe(data) {
-      this.value = data.description;
-      this.valId = data.id;
-      this.userGroupId = data.id;
-      // this.processName='';
-      this.treeFrom.projectItem = "";
-      request
-        .post("/rest/projectItemInfo/getList", { orgId: this.valId })
-        .then(res => {
-          this.data = res.data.data;
+      if (data.children.length === 0) {
+        this.value = data.description;
+        this.valId = data.id;
+        this.userGroupId = data.id;
+        // this.processName='';
+        this.treeFrom.projectItem = "";
+        request
+          .post("/rest/projectItemInfo/getList", { orgId: this.data.id })
+          .then(res => {
+            this.data = res.data.data;
+          });
+      } else {
+        this.$message({
+          message: "请选择施工单位",
+          type: "warning"
         });
+      }
     },
     // 点击树节点展示右边详情接口
     ztrrFrom() {

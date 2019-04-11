@@ -6,19 +6,13 @@
         <div :class="{reverseAddBox:nowItem=='add'}">
           <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="" label-width="120px">
             <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="form.value2" />
-            <!-- <el-input v-model="name" :disabled="true">
-            <el-button slot="append" icon="el-icon-search" @click="innerVisible = true"></el-button>
-          </el-input> -->
           </el-form-item>
 
           <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="" label-width="120px">
             <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="form.value1" />
-            <!-- <el-input v-model="projectItem" :disabled="true">
-            <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
-          </el-input> -->
           </el-form-item>
 
-          <el-form-item style="width:20vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
+          <el-form-item style="width:20vw" label="接收人" v-if="nowItem =='add'" prop="" label-width="120px">
             <el-input v-model="form.username" :disabled="true">
               <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
             </el-input>
@@ -26,7 +20,7 @@
 
           <div class="TimeAndType" v-if="nowItem =='add'">
             <span class="fl">
-              <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime" label-width="120px">
+              <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="" label-width="120px">
                 <el-date-picker v-model="form.planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
                 </el-date-picker>
               </el-form-item>
@@ -176,18 +170,8 @@
       <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
     </div>
 
-    <!-- 组织机构树形表单 -->
-    <!-- <el-dialog width="30%" title="所属单位" :visible.sync="innerVisible" append-to-body>
-      <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
-      </el-tree>
-    </el-dialog> -->
-    <!-- 分部分项树形表单 -->
-    <!-- <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
-      <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
-      </el-tree>
-    </el-dialog> -->
     <!-- 接受人id -->
-    <el-dialog width="40%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
+    <el-dialog class="dialogBox" width="40%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
       <div>
         <span>用户类型</span>
         <el-select v-model="value" placeholder="请选择" @change="changeUserList">
@@ -206,7 +190,7 @@
         </el-table>
       </div>
       <div>
-        <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_userList()" :total="total">
+        <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_userList()" :total="total">
         </el-pagination>
       </div>
     </el-dialog>
@@ -329,13 +313,13 @@ export default {
       // 参考图标
       activities2: [
         {
-          content: "发出指令的人",
+          content: "发出指令",
           timestamp: "",
           type: "primary",
           icon: "el-icon-location-outline"
         },
         {
-          content: "转发指令的人",
+          content: "转发指令",
           timestamp: "",
           type: "info",
           icon: "el-icon-refresh"
@@ -347,7 +331,7 @@ export default {
           icon: "el-icon-loading"
         },
         {
-          content: "完成指令的人",
+          content: "完成指令",
           timestamp: "",
           type: "success",
           icon: "el-icon-check"
@@ -615,19 +599,49 @@ export default {
       this.form.planCheckTime = val;
     },
     _comfirm(file) {
-      this.$refs[file].validate(valid => {
-        if (valid) {
-          // 新增
-          if (this.nowItem === "add") {
-            this.$refs.upload.submit();
-          }
-          this.$emit("cancel");
-          this.reload();
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+      // 组织机构不为空
+      if (this.form.value2 == "") {
+        this.$message({
+          showClose: true,
+          message: "请输入内容",
+          type: "warning"
+        });
+        return false;
+      }
+        // 分部分项不为空
+      if (this.form.value1 == "") {
+        this.$message({
+          showClose: true,
+          message: "请输入内容",
+          type: "warning"
+        });
+        return false;
+      }
+         // 接收人
+      if (this.form.username == "") {
+        this.$message({
+          showClose: true,
+          message: "请输入内容",
+          type: "warning"
+        });
+        return false;
+      }
+      // 日期不为空
+      if (this.form.planTime == "") {
+        this.$message({
+          showClose: true,
+          message: "请输入内容",
+          type: "warning"
+        });
+        return false;
+      }
+
+      // 新增
+      if (this.nowItem === "add") {
+        this.$refs.upload.submit();
+      }
+      this.$emit("cancel");
+      this.reload();
     },
     // 转发指令
     _delivery() {

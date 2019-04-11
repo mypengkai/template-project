@@ -76,7 +76,7 @@
     </el-scrollbar>
 
     <!-- 新增弹框 -->
-    <el-dialog :title="newTitle" :visible.sync="dialogFormVisible">
+    <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" class="dialogBox">
       <Xcadd
         :nopId="nopId"
         :nowItem="nowItem"
