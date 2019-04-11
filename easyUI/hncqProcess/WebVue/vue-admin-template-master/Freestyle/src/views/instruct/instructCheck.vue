@@ -57,7 +57,7 @@
     <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total">
     </el-pagination>
     <!-- 编辑弹框 -->
-    <el-dialog width="80%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
     <!-- 组织机构树形表单 -->
