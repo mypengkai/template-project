@@ -1,12 +1,13 @@
 <template>
   <div id="photograph">
-    <span class="p20">本周轨迹</span>
+    <span class="trackTitle p20">本周轨迹</span>
     <el-timeline>
       <el-timeline-item v-for="(item, index) in weekData" :key="index">
           <h4>桩号: {{ item.commandzhuanghao }}</h4>
-          <h4>拍摄地点: {{ item.logphotoLocation }}</h4>
-          <p>时间: {{ item.logcreateTime }}</p>
-          <img :src="item.logfilePath" alt="">
+          <h4>工程类型:{{ item.projectItem }}</h4>
+          <h4>拍摄地点: {{ item.commandphotoLocation }}</h4>
+          <p>时间: {{ item.commandcreateTime }}</p>
+          <img :src="item.commandfilePath" alt="">
       </el-timeline-item>
     </el-timeline>
   </div>
@@ -28,6 +29,7 @@ export default {
     shoot() {
       homePage.getPicMessage().then(res => {
         this.weekData = res.data.data;
+        console.log(this.weekData)
       });
     }
   }
@@ -40,8 +42,12 @@ export default {
   height: 100%;
   overflow-y: scroll;
   img {
-    width: 8vw;
-    height: 8vw;
+    width: 20vw;
+    height: 10vw;
   }
+}
+.trackTitle{
+  font-size: 1vw;
+  font-weight: 600;
 }
 </style>

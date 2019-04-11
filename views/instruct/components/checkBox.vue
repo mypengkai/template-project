@@ -213,7 +213,7 @@
       </div>
     </el-dialog>
     <!-- 照片详情查看 -->
-    <el-dialog width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
+    <el-dialog class="dialogBox" width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
       <el-form :model="formSon" label-width="200px">
         <div style="width:80%">
 
@@ -231,10 +231,6 @@
 
           <el-form-item label="纬度">
             <el-input v-model="formSon.lgt"></el-input>
-          </el-form-item>
-
-          <el-form-item label="照片描述">
-            <el-input v-model="formSon.photoDescribe"></el-input>
           </el-form-item>
 
           <el-form-item label="拍摄地点">

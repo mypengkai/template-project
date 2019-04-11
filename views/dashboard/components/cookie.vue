@@ -12,9 +12,7 @@ export default {
   methods: {
     record() {
       homePage.getOrgNumber().then(res => {
-        console.log(res.data.data);
         let cookieData = res.data.data;
-
         let cookieDataName = [];
         cookieData.forEach(v => {
           v.name == "gongxu" && (v.name1 = "任务验收");

@@ -13,6 +13,7 @@
       </el-input> -->
         <div class="rl">
           <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">搜索</el-button>
+           <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
           <el-button type="primary" class="pan-btn blue-btn" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
         </div>
       </div>
@@ -74,6 +75,7 @@ import api from "@/api/user.js";
 import Organization from "@/api/Organization.js";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
+  inject: ["reload"],
   components: {
     SelectTree,
     userAdd
@@ -165,6 +167,10 @@ export default {
       this.sendData.SQLorgid = data.id;
       this.name = data.name;
       this.innerVisible = false;
+    },
+ // 重置按钮
+    reset() {
+      this.reload();
     }
   },
   watch: {
