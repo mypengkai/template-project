@@ -228,9 +228,9 @@
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0);
     #deteilButton{
      float: right; 
-     padding: 0.5vw;
-     margin-top:0.2vw;
-     font-size: 0.2vw;
+     padding: 0.3vw;
+    //  margin-top:0.2vw;
+     font-size: 0.1vw;
  }
   }
   /deep/.el-scrollbar__thumb {
