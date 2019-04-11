@@ -168,6 +168,6 @@ export default {
 .btncalss{
   position: absolute;
   top: 0.1vw;
-  right: 0;
+  right: 1vw;
 }
 </style>
