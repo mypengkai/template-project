@@ -6,15 +6,7 @@
     </div>
     <!-- 操作列表 -->
     <el-scrollbar style="height: 68vh;overflow-x: none;">
-      <tree-table
-        class="textList"
-        :data="dataList"
-        ref="projectItemTreeTable"
-        border
-        :eval-func="func"
-        :eval-args="args"
-        :expand-all="expandAll"
-      >
+      <tree-table class="textList" :data="dataList" row-key="id" ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
         <el-table-column label="工程分布分项">
           <template slot-scope="scope">
             <span style>{{ scope.row.projectItem }}</span>
@@ -64,12 +56,11 @@
             <el-tooltip class="item" effect="dark" content="新增" placement="top">
               <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
             </el-tooltip>
-            
-             <el-tooltip class="item" effect="dark" content="删除" placement="top">
+
+            <el-tooltip class="item" effect="dark" content="删除" placement="top">
               <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
             </el-tooltip>
 
-            
           </template>
         </el-table-column>
       </tree-table>
@@ -77,13 +68,7 @@
 
     <!-- 新增弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" class="dialogBox">
-      <Xcadd
-        :nopId="nopId"
-        :nowItem="nowItem"
-        v-if="nowItem"
-        @cancel="dialogFormVisible=false"
-        @comfirm="_projectList"
-      ></Xcadd>
+      <Xcadd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
     </el-dialog>
   </div>
 </template>
@@ -210,11 +195,10 @@ export default {
 .Treebox::-webkit-scrollbar {
   // display: none;
 }
-.elButton{
-   overflow: hidden;
-   .pan-btn{
-     float: right;
+.elButton {
+  overflow: hidden;
+  .pan-btn {
+    float: right;
+  }
 }
-}
-
 </style>

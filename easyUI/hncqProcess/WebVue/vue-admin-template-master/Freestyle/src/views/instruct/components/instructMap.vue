@@ -21,7 +21,6 @@ export default {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值
       let formData = this.form.data.pictureOfCommand[0];
-      console.log(formData)
       if (formData.lat == null || 0.00) {
         formData.lat = 112.376609;
       }

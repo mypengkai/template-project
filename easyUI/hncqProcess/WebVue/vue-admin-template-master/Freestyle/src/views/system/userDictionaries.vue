@@ -2,11 +2,10 @@
   <div class="app-container">
       <div class="inquire" style="">
         <div class="rl" style="margin-bottom:10px">
-          <!-- <el-button type="primary" icon="el-icon-search" @click="chaxun()">查询</el-button> -->
-          <el-button type="primary" icon="el-icon-circle-plus" @click="addtan()">新增</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="addtan()">新增</el-button>
         </div>
       </div>
-      <tree-table :data="shuData" border style="" row-key>
+      <tree-table class="textList" :data="shuData" border style="" row-key="id">
       <el-table-column label="组织机构">
         <template slot-scope="scope">
           <span style="">{{ scope.row.name }}</span>

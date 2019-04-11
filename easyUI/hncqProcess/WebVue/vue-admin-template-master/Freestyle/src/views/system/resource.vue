@@ -1,11 +1,14 @@
 <template>
   <div class="p20">
     <!-- 新增 -->
-    <el-button type="primary" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
+    <div class="btncalss">
+       <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
+    </div>
+   
     <!-- 列表 -->
     <div class="pt20">
       <el-scrollbar style="height: 68vh;overflow-x: none;">
-        <tree-table class="textList" :data="menuList" border>
+        <tree-table class="textList" :data="menuList" border row-key="id">
           <el-table-column label="菜单名称">
             <template slot-scope="scope">
               <span style="">{{ scope.row.functionName }}</span>
@@ -161,5 +164,10 @@ export default {
 /* for Chrome */
 .inner-container::-webkit-scrollbar {
   display: none;
+}
+.btncalss{
+  position: absolute;
+  top: 0.1vw;
+  right: 0;
 }
 </style>
