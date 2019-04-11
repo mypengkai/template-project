@@ -46,7 +46,11 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-               <el-button type="primary" icon="el-icon-search" circle @click="handleEdit(scope.row)"></el-button>
+               <el-tooltip class="item" effect="dark" content="查看详情" placement="top-start">
+      <el-button type="primary" icon="el-icon-search" circle @click="handleEdit(scope.row)"></el-button>
+    </el-tooltip>
+
+              
           </template>
         </el-table-column>
       </el-table>
