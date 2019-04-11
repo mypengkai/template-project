@@ -227,10 +227,21 @@
     border-bottom: 1px solid #d8dce5;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0);
     #deteilButton{
-     float: right;
-     margin-top:0.3vw;
+     float: right; 
+     padding: 0.5vw;
+     margin-top:0.2vw;
+     font-size: 0.2vw;
  }
   }
+  /deep/.el-scrollbar__thumb {
+    position: relative;
+    display: block;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+    -webkit-transition: .3s background-color;
+    transition: .3s background-color;
+}
  
 </style>
 
