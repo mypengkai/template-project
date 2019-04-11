@@ -41,6 +41,7 @@
       <!--列表-->
       <div class="processtable">
         <el-table
+          class="textList"
           :data="tableData"
           height="62vh"
           :row-style="{height: '0'}"
@@ -103,7 +104,7 @@
       />
 
       <!--新增、修改弹框-->
-      <el-dialog :visible.sync="dialogVisible" :title="type + '工序类型'" width="30%" append-to-body>
+      <el-dialog :visible.sync="dialogVisible" :title="type + '工序类型'" width="30%" append-to-body class="dialogBox">
         <el-form :model="form" label-width="80px">
           <el-form-item label="工序类型">
             <el-input v-model="form.processType"/>
@@ -122,23 +123,13 @@
       </el-dialog>
     </div>
     <!-- //查询工序 -->
-    <el-dialog title="查询用户信息" :visible.sync="dialogVisibleProcess" width="60%">
+    <el-dialog title="查询用户信息" :visible.sync="dialogVisibleProcess" width="60%" class="dialogBox">
           <process
           :process-type-id="processTypeId"
           :process-type-name="processTypeName"
         />
         
     </el-dialog>
-
-    <!-- <div class="processItem">
-      <transition name="el-zoom-in-top">
-        <process
-          v-show="show"
-          :process-type-id="processTypeId"
-          :process-type-name="processTypeName"
-        />
-      </transition>
-    </div> -->
   </div>
 </template>
 

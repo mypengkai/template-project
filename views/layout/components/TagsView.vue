@@ -1,6 +1,8 @@
 <template>
-  <div class="tags-view-container">
+  <div class="tags-view-container" style="width:80%">
+    
     <scroll-pane ref="scrollPane" class="tags-view-wrapper">
+      <div class="fhBox"><el-button type="success" size="mini"  id="deteilButton" icon="el-icon-arrow-left" @click="detileLog" v-if="flag">返回首页</el-button></div>
       <router-link
         v-for="tag in Array.from(visitedViews)"
         ref="tag"
@@ -35,7 +37,8 @@
         visible: false,
         top: 0,
         left: 0,
-        selectedTag: {}
+        selectedTag: {},
+        flag:true
       }
     },
     computed: {
@@ -47,6 +50,13 @@
       $route() {
         this.addViewTags()
         this.moveToCurrentTag()
+        // console.log(this.$route.path,'this.$route.path')
+        if(this.$route.path == '/dashboard'){
+               this.flag = false
+          }
+          if(this.$route.path != '/dashboard'){
+               this.flag = true
+          }
       },
       visible(value) {
         if (value) {
@@ -129,6 +139,10 @@
       },
       closeMenu() {
         this.visible = false
+      },
+      detileLog(){
+          this.$router.push('/')
+          this.flag = false
       }
     }
   }
@@ -200,6 +214,24 @@
   }
   }
   }
+  .fhBox{
+    width:20%;
+    padding: 0;
+    margin: 0;
+    height: 4vh;
+    line-height: 4vh;
+    position: fixed;
+    top:8.5vh;
+    right:0;
+    background: #fff;
+    border-bottom: 1px solid #d8dce5;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0);
+    #deteilButton{
+     float: right;
+     margin-top:0.3vw;
+ }
+  }
+ 
 </style>
 
 <style rel="stylesheet/scss" lang="scss">

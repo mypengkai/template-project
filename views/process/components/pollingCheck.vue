@@ -104,16 +104,16 @@ export default {
           this.imgListOne = this.pollingList.picMessage[0]
           if (this.pollingList.picMessage.length > 0) {
             let formData = this.pollingList.picMessage[0];
-            console.log(formData.lgt, formData.lat);
-            if (formData.lgt == "" || formData.lgt == null) {
-              formData.lgt = 112.376609;
-            }
-            if (formData.lat == "" || formData.lat == null) {
-              formData.lat = 26.405528;
-            }
-            if (formData.photoLocation == "" || formData.photoLocation == null) {
-              formData.photoLocation = "湖南常祁";
-            }
+            // console.log(formData.lgt, formData.lat);
+            // if (formData.lgt == "" || formData.lgt == null) {
+            //   formData.lgt = 112.376609;
+            // }
+            // if (formData.lat == "" || formData.lat == null) {
+            //   formData.lat = 26.405528;
+            // }
+            // if (formData.photoLocation == "" || formData.photoLocation == null) {
+            //   formData.photoLocation = "湖南常祁";
+            // }
             var map = new BMap.Map("pollmap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -147,7 +147,7 @@ export default {
       let arr = []
       arr.push(item)
       this.photo = arr
-      console.log(this.photo,'this.photo')
+      // console.log(this.photo,'this.photo')
       this.dialogImg = true;
      
     }
@@ -156,7 +156,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .commandCheck {
-  max-height: 600px;
+  max-height: 60vh;
   overflow-x: hidden;
 }
 .imgBox {

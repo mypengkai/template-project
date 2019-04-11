@@ -114,7 +114,8 @@ export default {
           { min: 6, message: "请输入打入6位以上的密码", trigger: "blur" }
         ]
       },
-      uesrList: [] // 登陆用户信息
+      uesrList: [], // 登陆用户信息
+     
     };
   },
   mounted() {
@@ -226,7 +227,15 @@ export default {
       }
     //  JSON.stringify
       //  console.log(qs.stringify(this.form),'qs.stringify(this.form)')
-      request.post("/rest/sysuser/modify", (this.form)).then(res => {
+      //  {headers:{
+      //       'Content-Type':'multipart/form-data'}
+      //   }
+      request.post("/rest/sysuser/modify",
+        
+      (this.form), {headers:{
+            'Content-Type':'multipart/form-data'}
+        }
+       ).then(res => {
         console.log(res.data, "res.data");
       });
     }

@@ -23,10 +23,9 @@
       <el-tabs type="border-card" v-model="tabPosition">
         <el-tab-pane label="影像资料" name="first">
           <div class="imgContation">
-
               <ul>
                 <li v-for="(item,index) in imgList" :key="index" @click="picturePreve(item)">
-                  <img :src="item.filePath" alt style="width:100%;height:100%">
+                    <img :src="item.filePath" alt style="width:100%;height:100%">
                 </li>
               </ul>
           </div>
@@ -37,9 +36,12 @@
       </el-tabs>
     </div>
     <!-- //图片预览 -->
-    <el-dialog title="图片预览" :visible.sync="dialogTableVisible" width="80%" append-to-body>
+    <el-dialog title="图片预览" :visible.sync="dialogTableVisible" fullscreen append-to-body>
           <viewer :photo="photo"></viewer>
     </el-dialog>
+        
+          
+
   </div>
 </template>
 
@@ -99,19 +101,19 @@ export default {
           // ========================  地图    ============================
           if (this.logList.picMessage.length > 0) {
             let formData = this.logList.picMessage[0];
-            console.log(formData.lgt, formData.lat);
-            if (formData.lgt == "" || formData.lgt == null) {
-              formData.lgt = 112.376609;
-            }
-            if (formData.lat == "" || formData.lat == null) {
-              formData.lat = 26.405528;
-            }
-            if (
-              formData.photoLocation == "" ||
-              formData.photoLocation == null
-            ) {
-              formData.photoLocation = "湖南常祁";
-            }
+            // console.log(formData.lgt, formData.lat);
+            // if (formData.lgt == "" || formData.lgt == null) {
+            //   formData.lgt = 112.376609;
+            // }
+            // if (formData.lat == "" || formData.lat == null) {
+            //   formData.lat = 26.405528;
+            // }
+            // if (
+            //   formData.photoLocation == "" ||
+            //   formData.photoLocation == null
+            // ) {
+            //   formData.photoLocation = "湖南常祁";
+            // }
             var map = new BMap.Map("logmap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -141,11 +143,10 @@ export default {
     },
     //图片预览
     picturePreve(item) {
+      console.log(item,'item')
       let array = [];
       array.push(item)
       this.photo = array;
-      // this.photo = this.logList.picMessage;
-      // console.log(this.photo, "this.photo");
       this.dialogTableVisible = true;
     }
   }
@@ -154,7 +155,7 @@ export default {
 
 <style lang="scss" scoped>
 .logCheck {
-  height: 70vh;
+  height: 60vh;
   overflow-y: scroll;
 }
 .imgBox {
@@ -185,16 +186,16 @@ export default {
   }  
   }
 }
-/deep/ .dialogBox{
-    .el-dialog{
-        width: 60%;
-    }
-    .el-dialog__header{
-        text-align: center;
-    }
-  }
-  .el-dialog__body{
-       max-height:60vh;
-       overflow-y: auto;
-  }
+// /deep/ .dialogBox{
+//     .el-dialog{
+//         width: 60%;
+//     }
+//     .el-dialog__header{
+//         text-align: center;
+//     }
+//   }
+//   .el-dialog__body{
+//        max-height:60vh;
+//        overflow-y: auto;
+//   }
 </style>

@@ -113,7 +113,7 @@
     ></el-pagination>
 
     <!-- 查看弹框 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%" top="5vh">
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%"  class="dialogBox">
       <imgList
         :chakanData="chakanData"
         :imgData="imgData"
@@ -134,6 +134,7 @@ import SelectTree from "@/components/SelectTree/selectTree.vue";
 import imgList from "./components/imgList";
 import request from "@/utils/request";
 export default {
+   inject: ["reload"],
   components: {
     SelectTree,
     imgList
@@ -245,7 +246,7 @@ export default {
     //重置
     reset() {
       
-      this.$router.go(0)
+      this.reload()
     },
     // 查询接口
     chaxun() {

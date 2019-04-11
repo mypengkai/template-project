@@ -3,8 +3,8 @@
     <div class="search">
       <el-row>
         <el-col :span="9" v-if="tabPosition == 'first'">
-          <div class="grid-content">
-            <el-form inline>
+          <div >
+            <el-form :inline='true' class="grid-content">
               <el-form-item label="组织机构：">
                 <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
               </el-form-item>
@@ -12,8 +12,8 @@
           </div>
         </el-col>
         <el-col :span="9" v-if="tabPosition == 'first'">
-          <div class="grid-content">
-            <el-form inline>
+          <div >
+            <el-form :inline='true' class="grid-content">
               <el-form-item label="分部分项：">
                 <select-tree
                   :options="unitsTree"
@@ -54,7 +54,7 @@
         <el-col :span="2">
           <div class="grid-content">
             <span>
-              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset">重置</el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
             </span>
           </div>
         </el-col>
@@ -83,22 +83,11 @@
         <div class="grid-content">
           <span>日期：</span>
           <el-date-picker v-model="dateFrom" type="date"  size="small"/>-
-          <!-- <span>至</span> -->
           <el-date-picker v-model="dateTo" type="date"  size="small"  />
         </div>
       </el-row>
     </div>
 
-    <!-- <div class="serchCheck" style="margin-top:20px">
-      <ul>
-        <li
-          v-for="(item,index) in serckCheck"
-          :key="index"
-          :class="{'color':index == active}"
-          @click="checkActive(index)"
-        >{{item}}</li>
-      </ul>
-    </div> -->
     <div class="content">
       <el-tabs type="border-card" v-model="tabPosition">
         <el-tab-pane label="工程痕迹管理" name="first">
@@ -125,6 +114,7 @@ let token = localStorage.getItem("myToken");
 
 export default {
   name: "TraceManage",
+   inject: ["reload"],
   components: {
     list,
     SelectTree
@@ -207,43 +197,6 @@ export default {
           if (this.tabPosition == "first") { this.projecQuery();}
           if (this.tabPosition == "second") { this.peopleQuery();}
     },
-    // 整体查询(工程痕迹)
-    // querySelected() {
-    //   if (this.tabPosition == "first") {
-    //     request
-    //       .post("/rest/mark/chakan", {
-    //         "X-AUTH-TOKEN": token,
-    //         pageNo: 1,
-    //         pageSize: 15,
-    //         startTime: this.dateFrom, // 起始时间
-    //         endTime: this.dateTo, // 结束时间
-    //         projectid: this.from.unitsId, //工程ID
-    //         orderby: this.active + 1, // 筛选(时间，类型，人员)
-    //         type: this.searchType // 工程   人员
-    //       })
-    //       .then(res => {
-    //         this.conentOptions = res.data.data.data;
-    //         // console.log(this.conentOptions);
-    //       });
-    //   } else if (this.tabPosition == "second") {
-    //     //人员痕迹查询
-    //     request
-    //       .post("/rest/mark/chakan", {
-    //         "X-AUTH-TOKEN": token,
-    //         pageNo: 1,
-    //         pageSize: 15,
-    //         startTime: this.dateFrom,
-    //         endTime: this.dateTo,
-    //         searchname: this.username,
-    //         orderby: this.active + 1,
-    //         type: this.searchType
-    //       })
-    //       .then(res => {
-    //         this.userOptions = res.data.data.data;
-    //         // console.log(this.userOptions, "this.userOptions");
-    //       });
-    //   }
-    // },
     projecQuery(){         // 工程查询
            request
           .post("/rest/mark/chakan", {
@@ -278,15 +231,10 @@ export default {
             // console.log(this.userOptions, "this.userOptions");
           }); 
     },
-    // checkActive(index) {
-    //   // 筛选
-    //   this.active = index;
-    //   this.querySelected();
-    // }
+    
     //数据重置
      reset(){
-         this.$router.go(0)
-         
+         this.reload();  
      }
   }
 };
@@ -304,17 +252,17 @@ export default {
   text-indent: 10px;
 }
 .grid-content {
-  height: 3vw;
-  line-height: 3vw;
+  height: 40px;
+  line-height: 40px;
   width: 100%;
-  font-size: 0.8vw;
-  font-weight: normal;
+  font-size: 1vw;
+  // font-weight: normal;
 }
 .content {
   margin-top: 10px;
   .conent-one{
       overflow-y: auto;
-      height: 28vw;
+      height: 25vw;
   }
 }
 // .serchCheck {
@@ -336,4 +284,5 @@ export default {
 // .color {
 //   background: skyblue;
 // }
+
 </style>

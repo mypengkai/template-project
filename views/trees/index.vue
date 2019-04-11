@@ -5,14 +5,20 @@
       <span>姓名</span>
       <el-input v-model="form.userName" clearable placeholder="请输入内容"></el-input>
       <!-- 时间选择器 -->
-      <span>日期:</span>
-      <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择日期时间">
+      <span>轨迹日期:</span>
+      <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择日期时间"  style="min-width:200px">
       </el-date-picker>
-      <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择日期时间">
+      <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择日期时间"  style="min-width:200px">
       </el-date-picker>
 
       <div class="rl">
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="chaxun">查询</el-button>
+        <el-button
+          type="primary"
+          class="pan-btn light-blue-btn"
+          icon="el-icon-refresh"
+          @click="reset"
+        >重置</el-button>
       </div>
     </div>
     <!-- 表单 -->
@@ -20,7 +26,7 @@
       <el-table class="textList" :data="tableData" height="65vh" style="width: 100%;padding-left:15px">
         <el-table-column label="图片">
           <template slot-scope="scope">
-            <img :src="scope.row.filePath" alt="" style="height:150px">
+            <img :src="scope.row.filePath" alt="" style="height:100px;width:100px">
           </template>
         </el-table-column>
         <el-table-column prop="realname" label="姓名">
@@ -46,7 +52,7 @@
       </el-table>
     </div>
     <!-- 分页 -->
-    <el-pagination class="pageList mt1" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[8]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
+    <el-pagination class="pageList mt1" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
 
     <!-- 日志查看弹框 -->
@@ -62,6 +68,7 @@ import chaKanList from "./components/chakanList";
 import request from "@/utils/request";
 import logCheck from "@/views/process/components/logCheck";
 export default {
+  inject: ["reload"],
   components: {
     chaKanList,
     logCheck
@@ -100,7 +107,7 @@ export default {
       total: 0,
       bookType: "",
       tableData: null,
-      currentPage4: 15,
+      currentPage4: 1,
       noType: "",
         targetID:'',   // 查看项id
     };
@@ -113,6 +120,9 @@ export default {
     handleCurrentChange(val) {
       this.form.pageNo = val;
       this.fn();
+    },
+    reset(){              //重置
+        this.reload()
     },
     fn() {
       let objFrom = {

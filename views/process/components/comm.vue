@@ -1,7 +1,7 @@
 <template>
   <div class="diaMAP">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item style="width:30vw" label="相关工程" label-width="120px">
+      <el-form-item style="width:30vw" label="分部分项" label-width="120px">
         <el-input v-model="form.projectItem" :disabled="true"></el-input>
       </el-form-item>
 
@@ -9,7 +9,7 @@
         <el-input v-model="form.createTime" :disabled="true"></el-input>
       </el-form-item>
 
-      <el-form-item label="指令内容" label-width="120px">
+      <el-form-item label="指令时间轴" label-width="120px">
          <!-- 参考图标 -->
               <div class="reference">
                 <el-timeline>

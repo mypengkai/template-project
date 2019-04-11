@@ -51,6 +51,7 @@
 import list from './detailList'
 export default {
   name: 'TraceManage',
+  
   components: {
     list
   },

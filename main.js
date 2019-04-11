@@ -30,7 +30,8 @@ import 'viewerjs/dist/viewer.css'
 Vue.use(Viewer)
 Viewer.setDefaults({
   Options: {
-    'inline': true,
+    'zIndex': 9999,
+    'inline': false,
     'button': true,
     'navbar': true,
     'title': true,
