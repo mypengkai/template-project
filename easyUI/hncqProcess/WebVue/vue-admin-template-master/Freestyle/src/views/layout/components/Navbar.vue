@@ -190,6 +190,7 @@ export default {
       this.$store.dispatch("LogOut").then(() => {
         Cookies.remove("names");
         location.reload(); // 为了重新实例化vue-router对象 避免bug
+        
       });
     },
     // 请求接口

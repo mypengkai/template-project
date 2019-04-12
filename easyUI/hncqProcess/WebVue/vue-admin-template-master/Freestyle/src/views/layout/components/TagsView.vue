@@ -50,7 +50,6 @@
       $route() {
         this.addViewTags()
         this.moveToCurrentTag()
-        // console.log(this.$route.path,'this.$route.path')
         if(this.$route.path == '/dashboard'){
                this.flag = false
           }
@@ -231,7 +230,7 @@
      padding: 0.3vw;
     //  margin-top:0.2vw;
      font-size: 0.1vw;
- }
+    }
   }
   /deep/.el-scrollbar__thumb {
     position: relative;
@@ -242,7 +241,6 @@
     -webkit-transition: .3s background-color;
     transition: .3s background-color;
 }
- 
 </style>
 
 <style rel="stylesheet/scss" lang="scss">

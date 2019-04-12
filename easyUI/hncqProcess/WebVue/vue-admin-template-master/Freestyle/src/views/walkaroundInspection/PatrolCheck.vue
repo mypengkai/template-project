@@ -12,7 +12,7 @@
         <span>工程选择:</span>
         <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="handleCheckChange" v-model="value" />
 
-        <span>轨迹日期:</span>
+        <span>创建日期:</span>
         <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
         <!-- <span>至</span>    -->
         <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>
@@ -141,9 +141,9 @@ export default {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
     },
     // 重置按钮
-    reset() {
+   reset() {
       this.reload();
-    }
+    },
   },
   watch: {
     dialogFormVisible(val) {

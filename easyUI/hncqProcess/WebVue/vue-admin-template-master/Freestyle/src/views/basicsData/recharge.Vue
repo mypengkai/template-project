@@ -15,7 +15,7 @@
 
     <!-- table表 -->
     <div class="userList">
-      <el-table :data="userList" style="width: 100%" height="67vh">
+      <el-table :data="userList" style="width: 100%" height="67vh" class="textList">
         <el-table-column prop="departname" label="组织机构"/>
         <el-table-column prop="remainSmsNum" label="剩余短信"/>
         <el-table-column prop="sendSmsSuccessNum" label="发送成功"/>
@@ -45,7 +45,7 @@
         </el-pagination>
       </div>
     <!-- 新增对话框 -->
-    <el-dialog :visible.sync="addDialog" title="新增" width="550px">
+    <el-dialog :visible.sync="addDialog" title="新增" width="550px" class="dialogBox">
       <el-form ref="formSet" :model="formSet" label-width="120px" :rules="rules">
         <el-form-item label="组织机构:">
           <el-tree :data="options" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
