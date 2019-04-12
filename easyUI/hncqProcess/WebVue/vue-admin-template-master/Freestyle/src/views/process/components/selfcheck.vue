@@ -53,9 +53,9 @@
                 
               </div>
             </el-tab-pane>
-            <el-tab-pane label="所在位置" name="second" style="max-height:300px;">
+            <!-- <el-tab-pane label="所在位置" name="second" style="max-height:300px;">
               <div id="selfMap"></div>
-            </el-tab-pane>
+            </el-tab-pane> -->
           </el-tabs>
         </div>
       </div>
@@ -91,9 +91,9 @@
                   </ul>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="所在位置" name="four" style="max-height:300px;">
+            <!-- <el-tab-pane label="所在位置" name="four" style="max-height:300px;">
               <div id="realMap" v-if="flag"></div>
-            </el-tab-pane>
+            </el-tab-pane> -->
           </el-tabs>
         </div>
       </div>

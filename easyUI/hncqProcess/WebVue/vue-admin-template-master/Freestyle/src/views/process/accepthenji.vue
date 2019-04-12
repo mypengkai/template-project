@@ -42,7 +42,7 @@
           </el-select>
         </el-col>
         <el-col :span="14">
-          <span>轨迹日期:</span>
+          <span>创建日期:</span>
           <el-date-picker
             v-model="form.starttime"
             type="datetime"
@@ -82,7 +82,7 @@
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
       <el-table-column prop="processName" label="工序名"></el-table-column>
       <!-- <el-table-column prop="processType" label="工序过程"></el-table-column> -->
-      <el-table-column prop="planCheckTime" label="验收时间"></el-table-column>
+      <el-table-column prop="planCheckTime" label="创建时间"></el-table-column>
       <el-table-column prop="shijiyanshouren" label="验收人员"></el-table-column>
       <el-table-column prop="state" label="状态"></el-table-column>
       <el-table-column fixed="right" label="操作">
@@ -91,6 +91,7 @@
             <el-button
               @click="handleClick(scope.row)"
               type="primary"
+              circle
               icon="el-icon-search"
               v-if="tableData.length!=0"
             ></el-button>

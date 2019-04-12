@@ -38,7 +38,7 @@
               <div class="grid-content bg-purple">{{item.zhiwei}}</div>
             </el-col>
           </el-row>
-          <div class="spanOne">
+          <div class="spanOne"  :style="{'color':(item.state == flag ? 'red' :'green')}">
             <!-- 转码  0 ==> 未处理     1 ==>已完成 -->
             <template v-if="item.state == 0">未处理</template>
             <template v-else-if="item.state == 1">已完成</template>
@@ -86,7 +86,7 @@
               <div class="grid-content bg-purple">{{item.zhiwei}}</div>
             </el-col>
           </el-row>
-          <div class="spanOne">
+          <div class="spanOne" :style="{'color':(item.state == flag ? 'red' :'green')}">
             <template v-if="item.state == 0">未处理</template>
             <template v-else-if="item.state == 1">已完成</template>
           </div>
@@ -102,9 +102,13 @@
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
       <pollingCheck :targetID="targetID"></pollingCheck>
     </el-dialog>
-    <!-- 自检查看   验收查看-->
+    <!--验收查看-->
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleRealcheck" width="80%" class="dialogBox">
+        <processCheck :realList="realList"></processCheck>
+    </el-dialog>
+    <!-- 自检查看 -->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%" class="dialogBox">
-      <selfcheck :processList="processList"></selfcheck>
+        <realcheck :selfList="selfList"></realcheck>
     </el-dialog>
     <!-- 日志查看 -->
     <el-dialog title="日志详情" :visible.sync="dialogTableVisiblelogcheck" width="60%" class="dialogBox">
@@ -116,10 +120,10 @@
 <script>
 import request from "@/utils/request";
 import comm from "@/views/process/components/comm";
-import selfcheck from "@/views/process/components/selfcheck";
 import logCheck from "@/views/process/components/logCheck";
 import pollingCheck from "@/views/process/components/pollingCheck";
-
+import processCheck from '@/views/process/components/processCheck'
+import realcheck from '@/views/process/components/realcheck'
 export default {
   name: "DetailList",
   props: {
@@ -131,10 +135,12 @@ export default {
     userOptions: {} //人员数据
   },
   components: {
-    selfcheck,
+    // selfcheck,
     logCheck,
     pollingCheck,
-    comm
+    comm,
+    realcheck,
+    processCheck
   },
   data() {
     return {
@@ -142,14 +148,25 @@ export default {
       dialogTableVisiblePolling: false, //巡视
       dialogTableVisibleSelfcheck: false, // 自检
       dialogTableVisiblelogcheck: false, //日志
+      dialogTableVisibleRealcheck:false,  // 验收
       targetID: "", // 点击每一项的ID
       commandID: "", // 指令查询ID
-      processList: {} //自检验收信息
+      processList: {} ,//自检验收信息
+      flag:false,
+      selfList:[],      // 自检数据
+      realList:[],       // 验收数据
     };
   },
-
-  created() {},
-  mounted() {},
+  watch:{
+    
+  },
+  created() {
+     
+  },
+  mounted() {
+      
+      
+  },
   computed: {
     title() {
       return this.traceType === 1 ? "工程痕迹管理" : "人员痕迹管理";
@@ -174,12 +191,38 @@ export default {
       if (item.type == "polling") {
         this.dialogTableVisiblePolling = true;
       }
-      //验收     自检
-      if (item.type == "realcheck" || item.type == "selfcheck") {
-        this.processList = item; // 验收 自检 信息
-        this.dialogTableVisibleSelfcheck = true;
+      // 验收
+      if(item.type == "realcheck"){
+          this.dialogTableVisibleRealcheck = true
+            request
+          .post("/rest/processCheck/getProcessDetail", {
+            id: item.processId
+          }).then(res=>{
+              if(res.data.respCode == '0'){
+                    let arr = [];
+                    arr.push(res.data.data)
+                    this.realList = arr
+                   
+              }
+          })
       }
-    }
+      // 自检
+      if(item.type == "selfcheck"){
+         this.dialogTableVisibleSelfcheck = true;
+               request
+          .post("/rest/processCheck/getProcessDetail", {
+            id: item.processId
+          }).then(res=>{
+              if(res.data.respCode == '0'){
+                    let array = [];
+                    array.push(res.data.data)
+                    this.selfList = array  
+                     console.log( this.selfList,' this.selfList')   
+              }
+          })
+      }
+    },
+     
   }
 };
 </script>
@@ -249,7 +292,7 @@ export default {
         float: left;
         font-size: 1vw;
         height:1vw;
-        color: red;
+        color: red; 
       }
       .spanTwo {
         float: right;

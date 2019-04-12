@@ -5,7 +5,7 @@
         <el-input v-model="form.createname" :disabled="true" style="min-width:20vh"></el-input>
       </el-form-item>
       <el-form-item label="时间">
-        <el-input v-model="form.createTime" :disabled="true" style="min-width:20vh"></el-input>
+        <el-input v-model="form.createTime" :disabled="true" style="min-width:22vh"></el-input>
       </el-form-item>
     </el-form>
     <el-form :model="form" label-width="100px">
@@ -101,19 +101,6 @@ export default {
           // ========================  地图    ============================
           if (this.logList.picMessage.length > 0) {
             let formData = this.logList.picMessage[0];
-            // console.log(formData.lgt, formData.lat);
-            // if (formData.lgt == "" || formData.lgt == null) {
-            //   formData.lgt = 112.376609;
-            // }
-            // if (formData.lat == "" || formData.lat == null) {
-            //   formData.lat = 26.405528;
-            // }
-            // if (
-            //   formData.photoLocation == "" ||
-            //   formData.photoLocation == null
-            // ) {
-            //   formData.photoLocation = "湖南常祁";
-            // }
             var map = new BMap.Map("logmap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -168,14 +155,15 @@ export default {
 .content {
   padding: 0 4vh;
   .imgContation {
+     height: 30vh;
      ul {
     padding: 0;
     margin: 0;
     li {
       list-style: none;
       float: left;
-      width: 25%;
-      height: 15vh;
+      width: 33%;
+      height: 10vh;
       padding: 1%;
       img{
          width: 100%;
