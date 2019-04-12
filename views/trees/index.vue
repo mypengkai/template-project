@@ -5,7 +5,7 @@
       <span>姓名</span>
       <el-input v-model="form.userName" clearable placeholder="请输入内容"></el-input>
       <!-- 时间选择器 -->
-      <span>轨迹日期:</span>
+      <span>创建日期:</span>
       <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择日期时间"  style="min-width:200px">
       </el-date-picker>
       <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择日期时间"  style="min-width:200px">
@@ -39,7 +39,7 @@
             <span>{{ scope.row.describe }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="记录时间">
+        <el-table-column label="创建时间">
           <template slot-scope="scope">
             <span>{{ scope.row.createTime }}</span>
           </template>

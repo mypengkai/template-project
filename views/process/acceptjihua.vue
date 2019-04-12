@@ -43,7 +43,7 @@
           </el-select>
         </el-col>
         <el-col :span="14">
-          <span>轨迹日期:</span>
+          <span>创建日期:</span>
           <el-date-picker
             v-model="form.starttime"
             type="datetime"
@@ -97,7 +97,7 @@
             <el-button
               @click="handleClick(scope.row)"
               type="primary"
-            
+              circle
               icon="el-icon-search"
               v-if="tableData.length!=0"
             ></el-button>

@@ -35,7 +35,7 @@ export const constantRouterMap = [
     meta: { title: '首页', icon: 'table' },
     children: [{
       path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      component: () => import('@/views/dashboard/index'),
     }]
   },
   {
@@ -193,6 +193,25 @@ export const constantRouterMap = [
       },
     ]
   },
+  {
+    path: '/synchronization',
+    component: Layout,
+    meta: { title: '数据同步', icon: 'example' },
+    children: [
+    {
+    path: 'department',
+    name: 'department',
+    component: () => import('@/views/synchronization/department'),
+    meta: { title: '同步部门', icon: 'example' }
+    },
+    {
+    path: 'subscriber',
+    name: 'subscriber',
+    component: () => import('@/views/synchronization/subscriber'),
+    meta: { title: '用户同步', icon: 'information' }
+    }
+    ]
+    },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

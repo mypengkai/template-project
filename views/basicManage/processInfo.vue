@@ -17,14 +17,17 @@
     <div class="processtable">
       <el-table :data="tableData" height="50vh" stripe border highlight-current-row   class="textList">
         <el-table-column prop="process" label="工序过程" />
-        <!-- <el-table-column prop="seq" label="序号" /> -->
         <el-table-column prop="createName" label="创建人" />
         <el-table-column prop="createTime" label="创建时间" />
-        <!-- <el-table-column prop="remark" label="备注" /> -->
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="small" circle @click="edit(scope.row)" />
-            <el-button type="danger" icon="el-icon-delete" size="small" circle @click="deleteProcess(scope.row.id)" />
+              <el-tooltip class="item" effect="dark" content="修改" placement="top">
+                <el-button type="primary" icon="el-icon-edit" size="small" circle @click="edit(scope.row)" />
+              </el-tooltip>
+               <el-tooltip class="item" effect="dark" content="修改" placement="top">
+                <el-button type="danger" icon="el-icon-delete" size="small" circle @click="deleteProcess(scope.row.id)" />
+              </el-tooltip>
+            
           </template>
         </el-table-column>
       </el-table>
@@ -32,10 +35,10 @@
 
     <!--分页-->
 
-    <el-pagination class="pageList mt1" :current-page="currentPage" :page-sizes="[15, 30, 60]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination class="pageList mt1" :current-page="currentPage" :page-sizes="[15, 30, 60,100]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
     <!--新增、编辑弹框-->
-    <el-dialog :visible.sync="dialogVisible" title="新增工序" width="30%" append-to-body class="dialogBox">
+    <el-dialog :visible.sync="dialogVisible" title="修改工序信息" width="30%" append-to-body class="dialogBox">
       <el-form :model="form" label-width="80px">
         <el-form-item label="工序名">
           <el-input v-model="form.process" />
@@ -86,7 +89,6 @@ export default {
       total: 0,
       currentPage: 1,
       pageSize: 10,
-      titile: "新增"
     };
   },
   watch: {

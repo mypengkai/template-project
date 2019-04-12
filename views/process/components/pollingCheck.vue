@@ -1,10 +1,11 @@
 <template>
   <div class="commandCheck">
     <el-form :model="form" label-width="150px">
-      <div style="width:50%">
         <el-form-item label="工程分部分项：">
-          <el-input v-model="form.projectItem" :disabled="true"></el-input>
+          <el-input type="textarea" style="width:30vw" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.projectItem" :disabled="true"></el-input>
         </el-form-item>
+      <div style="width:50%">
+        
         <el-form-item label="桩号：">
           <el-input v-model="form.startStation" :disabled="true"></el-input>
         </el-form-item>
@@ -16,7 +17,7 @@
         </el-form-item>
       </div>
        <el-form-item label="巡视描述：">
-          <el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 4}" v-model="form.describe" max-width="50vh" :disabled="true"></el-input>
+          <el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 4}" v-model="form.describe" style="width:30vw" :disabled="true"></el-input>
         </el-form-item>
     </el-form>
     <div class="content">
@@ -104,16 +105,6 @@ export default {
           this.imgListOne = this.pollingList.picMessage[0]
           if (this.pollingList.picMessage.length > 0) {
             let formData = this.pollingList.picMessage[0];
-            // console.log(formData.lgt, formData.lat);
-            // if (formData.lgt == "" || formData.lgt == null) {
-            //   formData.lgt = 112.376609;
-            // }
-            // if (formData.lat == "" || formData.lat == null) {
-            //   formData.lat = 26.405528;
-            // }
-            // if (formData.photoLocation == "" || formData.photoLocation == null) {
-            //   formData.photoLocation = "湖南常祁";
-            // }
             var map = new BMap.Map("pollmap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -164,20 +155,20 @@ export default {
 }
 #pollmap {
   width: 100%;
-  height: 300px;
+  height: 30vh;
 }
 .content {
   padding: 0 4vh;
   .imgContation {
-     
+     height: 30vh;
      ul {
     padding: 0;
     margin: 0;
     li {
       list-style: none;
       float: left;
-      width: 25%;
-      height: 15vh;
+      width: 33%;
+      height: 10vh;
       padding: 1%;
       img{
          width: 100%;

@@ -5,7 +5,7 @@
       <div class="processHeader">
         <el-row>
           <el-col :span="18">
-            <div class="searchinfo" >
+            <div class="searchinfo">
               <span>工序类型:</span>
               <el-input v-model="searchText" size="small" placeholder="请输入工序类型"/>
             </div>
@@ -16,7 +16,7 @@
               size="small"
               icon="el-icon-search"
               class="pan-btn light-blue-btn"
-              @click="initTable()" 
+              @click="initTable()"
             >查询</el-button>
           </el-col>
           <el-col :span="2">
@@ -29,7 +29,7 @@
           </el-col>
           <el-col :span="2">
             <el-button
-              class="pan-btn light-blue-btn"
+              class="pan-btn blue-btn"
               type="primary"
               size="small"
               icon="el-icon-circle-plus-outline"
@@ -94,7 +94,7 @@
       <el-pagination
         class="pageList mt1"
         :current-page="currentPage"
-        :page-sizes="[15, 30, 60]"
+        :page-sizes="[15, 30, 60,100]"
         :page-size="pageSize"
         :total="total"
         background
@@ -104,7 +104,13 @@
       />
 
       <!--新增、修改弹框-->
-      <el-dialog :visible.sync="dialogVisible" :title="type + '工序类型'" width="30%" append-to-body class="dialogBox">
+      <el-dialog
+        :visible.sync="dialogVisible"
+        :title="type + '工序类型'"
+        width="30%"
+        append-to-body
+        class="dialogBox"
+      >
         <el-form :model="form" label-width="80px">
           <el-form-item label="工序类型">
             <el-input v-model="form.processType"/>
@@ -123,12 +129,8 @@
       </el-dialog>
     </div>
     <!-- //查询工序 -->
-    <el-dialog title="查询用户信息" :visible.sync="dialogVisibleProcess" width="60%" class="dialogBox">
-          <process
-          :process-type-id="processTypeId"
-          :process-type-name="processTypeName"
-        />
-        
+    <el-dialog title="查询工序信息" :visible.sync="dialogVisibleProcess" width="60%" class="dialogBox">
+      <process :process-type-id="processTypeId" :process-type-name="processTypeName"/>
     </el-dialog>
   </div>
 </template>
@@ -150,7 +152,7 @@ export default {
         seq: ""
       },
       dialogVisible: false,
-      dialogVisibleProcess:false,
+      dialogVisibleProcess: false,
       searchText: "",
       currentPage: 1, // 当前页
       pageSize: 10, // 每页显示数
@@ -180,13 +182,11 @@ export default {
             this.tableData[i].view = false;
           }
         }
-        console.log("typelist", res.data.data);
       });
     },
     addNew(obj) {
-    
-     if(this.form.processType == "" || this.form.processType == undefined){
-       this.$message({
+      if (this.form.processType == "" || this.form.processType == undefined) {
+        this.$message({
           showClose: true,
           message: "请输入工序类型",
           type: "warning"
@@ -195,30 +195,18 @@ export default {
       }
       request.post("/rest/processType/projectTypeAdd", obj).then(res => {
         if (res.data.respCode === "0") {
-           this.$message({
-          showClose: true,
-          message: "恭喜你，添加成功",
-          type: "warning"
-        });
+          // this.$message({
+          //   showClose: true,
+          //   message: "恭喜你，添加成功",
+          //   type: "warning"
+          // });
           this.dialogVisible = false;
           this.initTable();
         }
       });
     },
     viewMore(processType, event) {
-         this.dialogVisibleProcess = true
-      // if (this.lastRow === processType) {
-      //   this.lastRow.view = false;
-      //   this.processFold();
-      //   this.lastRow = null;
-      // } else {
-      //   if (this.lastRow != null) {
-      //     this.lastRow.view = false;
-      //   }
-      //   processType.view = true;
-      //   this.processUnfold();
-      //   this.lastRow = processType;
-      // }
+      this.dialogVisibleProcess = true;
       this.processTypeId = processType.id;
       this.processTypeName = processType.processType;
     },
@@ -236,20 +224,24 @@ export default {
     },
     addType() {
       this.dialogVisible = true;
-      this.type = "新增"
+      this.type = "新增";
       this.form = {};
     },
     editType(row) {
       this.dialogVisible = true;
       this.type = "修改";
       this.form = Object.assign({}, row);
-
       console.log("getbyrow", row);
-
       request
         .get(`/rest/processType/getProcessTypeById/${row.id}`)
         .then(res => {
-          console.log("getbyid", res.data);
+          if (res.data.respCode == "0") {
+            // this.$message({
+            //   showClose: true,
+            //   message: "恭喜你，修改成功",
+            //   type: "warning"
+            // });
+          }
         });
     },
     handleSizeChange(size) {
@@ -262,16 +254,16 @@ export default {
       this.currentPage = curPage;
       this.initTable();
     },
-    // 折叠process侧边栏
-    processFold() {
-      this.show = false;
-      $(".processType").css("width", "90%");
-    },
-    // 展开process侧边栏
-    processUnfold() {
-      this.show = true;
-      $(".processType").css("width", "50%");
-    },
+    // // 折叠process侧边栏
+    // processFold() {
+    //   this.show = false;
+    //   $(".processType").css("width", "90%");
+    // },
+    // // 展开process侧边栏
+    // processUnfold() {
+    //   this.show = true;
+    //   $(".processType").css("width", "50%");
+    // },
     // 重置按钮
     reset() {
       this.$router.go(0);

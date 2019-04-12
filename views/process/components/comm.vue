@@ -10,25 +10,23 @@
       </el-form-item>
 
       <el-form-item label="指令时间轴" label-width="120px">
-         <!-- 参考图标 -->
-              <div class="reference">
-                <el-timeline>
-                  <el-timeline-item
-                    v-for="(activity, index) in activities2"
-                    :key="index"
-                    :icon="activity.icon"
-                    :type="activity.type"
-                    :color="activity.color"
-                    :size="activity.size"
-                    :timestamp="activity.timestamp"
-                  >{{activity.content}}</el-timeline-item>
-                </el-timeline>
-              </div>
-          
-
+        <!-- 参考图标 -->
+        <div class="reference">
+          <el-timeline>
+            <el-timeline-item
+              v-for="(activity, index) in activities2"
+              :key="index"
+              :icon="activity.icon"
+              :type="activity.type"
+              :color="activity.color"
+              :size="activity.size"
+              :timestamp="activity.timestamp"
+            >{{activity.content}}</el-timeline-item>
+          </el-timeline>
+        </div>
 
         <div class="pta">
-          <el-timeline :reverse="reverse" >
+          <el-timeline :reverse="reverse">
             <el-timeline-item
               v-for="(activity, index) in activities"
               :key="index"
@@ -36,7 +34,7 @@
               :type="convertIcon(activity, 'type')"
               :size="convertIcon(activity,'size')"
               :timestamp="activity.finishTime"
-            > {{activity.name}}</el-timeline-item>
+            >{{activity.name}} 指令描述 : {{ activity.remark }}</el-timeline-item>
           </el-timeline>
         </div>
       </el-form-item>
@@ -45,7 +43,12 @@
       </el-form-item>
 
       <el-form-item style="width:30vw" label="相关描述:" label-width="120px">
-        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"  v-model="remark" :disabled="true"></el-input>
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          v-model="remark"
+          :disabled="true"
+        ></el-input>
       </el-form-item>
     </el-form>
     <div class="allBox">
@@ -54,18 +57,17 @@
         <div class="content">
           <el-tabs type="border-card" v-model="tabPosition">
             <el-tab-pane label="影像资料" name="first">
-             <div class="imgContation">
-               
-                  <ul>
-                    <li v-for="(item,index) in objlist" :key="index" @click="commPicture(item)">
-                      <img :src="item.picture" alt style="width:100%;height:100%">
-                    </li>
-                  </ul>
-               
+              <div class="imgContation">
+                <ul>
+                  <li v-for="(item,index) in objlist" :key="index" @click="commPicture(item)">
+                    <img :src="item.picture" alt style="width:100%;height:100%">
+                  </li>
+                </ul>
               </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="second">
-              <div id="selfMap"></div>
+              <div id="selfMap" v-if="objlist !=null"></div>
+              <div v-else>暂无地图</div>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -76,25 +78,27 @@
           <el-tabs type="border-card" v-model="tabShow">
             <el-tab-pane label="影像资料" name="three">
               <div class="imgContation">
-               
-                  <ul>
-                    <li v-for="(item,index) in imgRealList" :key="index"  @click="commPicture(item)">
-                      <img :src="item.picture" alt style="width:100%;height:100%">
-                    </li>
-                  </ul>
-               
+                <ul>
+                  <li v-for="(item,index) in imgRealList" :key="index" @click="commPicture(item)">
+                    <img :src="item.picture" alt style="width:100%;height:100%">
+                  </li>
+                </ul>
               </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="four">
-              <div id="realMap"></div>
+              <div v-if="imgRealList !=null">
+                <div id="realMap"></div>
+              </div>
+
+              <div v-else>暂无地图</div>
             </el-tab-pane>
           </el-tabs>
         </div>
       </div>
     </div>
-     <!-- 图片预览 -->
-     <el-dialog title="图片预览" :visible.sync="dialogcomm" width="80%" append-to-body>
-          <viewer :photo="commPictureList"></viewer>
+    <!-- 图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="dialogcomm" width="80%" append-to-body>
+      <viewer :photo="commPictureList"></viewer>
     </el-dialog>
   </div>
 </template>
@@ -104,8 +108,8 @@ import request from "@/utils/request";
 import viewer from "@/components/viewer";
 export default {
   props: ["commandID"],
-  components:{
-      viewer
+  components: {
+    viewer
   },
   data() {
     return {
@@ -143,7 +147,7 @@ export default {
           icon: "el-icon-location-outline"
         }
       ],
-       // 参考图标
+      // 参考图标
       activities2: [
         {
           content: "发出指令的人",
@@ -175,16 +179,16 @@ export default {
       tabShow: "three",
       imgRealList: [], // 指令完成图片详细信息
       objlist: [], // 发送指令信息
-      objOne:[],    // 发qi第一张图片信息
-      imgListOne:[],  //  wancheng第一张图片信息
+      objOne: [], // 发qi第一张图片信息
+      imgListOne: [], //  wancheng第一张图片信息
       form: {
         projectItem: "", // 工程名
         createTime: "" // 时间
       },
       state: "", // 状态
       remark: "", // 描述
-      dialogcomm:false,
-      commPictureList:[],
+      dialogcomm: false,
+      commPictureList: []
     };
   },
   watch: {
@@ -214,11 +218,11 @@ export default {
           this.remark = this.commList.remark;
           this.state = this.commList.commandState;
           this.objlist = this.commList.pictureOfCommand;
-          this.objOne = this.commList.pictureOfCommand[0]
+          this.objOne = this.commList.pictureOfCommand[0];
           this.imgRealList = this.commList.finishPictureOfCommand;
           this.activities = this.commList.commandUser;
-          if(this.commList.finishPictureOfCommand.length >0){
-            this.imgListOne  = this.commList.finishPictureOfCommand[0]
+          if (this.commList.finishPictureOfCommand.length > 0) {
+            this.imgListOne = this.commList.finishPictureOfCommand[0];
           }
           // 指令状态处理
           if (this.state == 0) {
@@ -230,59 +234,36 @@ export default {
           //    发起人定位
           if (this.objlist.length > 0) {
             let formData = this.objlist[0];
-            // if (formData.lgt == "" || formData.lgt == null) {
-            //   formData.lgt = 112.376609;
-            // }
-            // if (formData.lat == "" || formData.lat == null) {
-            //   formData.lat = 26.405528;
-            // }
-            // if (
-            //   formData.photoLocation == "" ||
-            //   formData.photoLocation == null
-            // ) {
-            //   formData.photoLocation = "湖南常祁";
-            // } 
-            var map = new BMap.Map("selfMap"); //创建地图实例
-            var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
-            map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
-            map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
-            map.addControl(new BMap.ScaleControl()); // 比例尺
-            map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
-            map.addControl(new BMap.MapTypeControl()); //地图类型
-            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
-            map.enableDoubleClickZoom(true);
-            var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
-            map.addTileLayer(traffic); // 将图层添加到地图上
-            var marker = new BMap.Marker(point); //创建标注
-            map.addOverlay(marker);
-            map.centerAndZoom(point, 15);
-            var stCtrl = new BMap.PanoramaControl();
-            stCtrl.setOffset(new BMap.Size(0, 40));
-            map.addControl(stCtrl);
-            var opts = {
-              width: 180, // 信息窗口宽度
-              height: 50, // 信息窗口高度
-              title: formData.photoLocation // 信息窗口标题
-            };
-            var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
-            map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
+              var map = new BMap.Map("selfMap"); //创建地图实例
+              var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
+              map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
+              map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+              map.addControl(new BMap.ScaleControl()); // 比例尺
+              map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+              map.addControl(new BMap.MapTypeControl()); //地图类型
+              map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+              map.enableDoubleClickZoom(true);
+              var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
+              map.addTileLayer(traffic); // 将图层添加到地图上
+              var marker = new BMap.Marker(point); //创建标注
+              map.addOverlay(marker);
+              map.centerAndZoom(point, 15);
+              var stCtrl = new BMap.PanoramaControl();
+              stCtrl.setOffset(new BMap.Size(0, 40));
+              map.addControl(stCtrl);
+              var opts = {
+                width: 180, // 信息窗口宽度
+                height: 50, // 信息窗口高度
+                title: formData.photoLocation // 信息窗口标题
+              };
+              var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
+              map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
+            
           }
 
           //   接收人定位
           if (this.imgRealList.length > 0) {
             let contentData = this.imgRealList[0];
-            // if (contentData.lgt == "" || contentData.lgt == null) {
-            //   contentData.lgt = 112.376609;
-            // }
-            // if (contentData.lat == "" || contentData.lat == null) {
-            //   formData.lat = 26.405528;
-            // }
-            // if (
-            //   contentData.photoLocation == "" ||
-            //   contentData.photoLocation == null
-            // ) {
-            //   contentData.photoLocation = "湖南常祁";
-            // } 
             var map1 = new BMap.Map("realMap"); //创建地图实例
             var point1 = new BMap.Point(contentData.lgt, contentData.lat); //经纬度坐标
             map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
@@ -350,18 +331,18 @@ export default {
       }
     },
     // 图片预览(发起人)  (jieshou人)
-    commPicture(item){
-          let array = [];
-          array.push(item)
-          this.commPictureList = array
-          this.dialogcomm = true
+    commPicture(item) {
+      let array = [];
+      array.push(item);
+      this.commPictureList = array;
+      this.dialogcomm = true;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
 .diaMAP {
-  max-height: 600px;
+  max-height: 60vh;
   overflow-x: hidden;
 }
 .imgBox {
@@ -370,27 +351,28 @@ export default {
 #selfMap,
 #realMap {
   width: 100%;
-  height: 300px;
+  height: 30vh;
 }
 .content {
-  padding: 0 4vh;
+  padding: 1vh;
   .imgContation {
-      ul {
-    padding: 0;
-    margin: 0;
-    li {
-      list-style: none;
-      float: left;
-      width: 25%;
-      height: 10vh;
-      padding: 1%;
-      img{
-         width: 100%;
-         height:100%;
-         display: block;
+    height: 30vh;
+    ul {
+      padding: 0;
+      margin: 0;
+      li {
+        list-style: none;
+        float: left;
+        width: 33%;
+        height: 10vh;
+        padding: 1%;
+        img {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
       }
     }
-  }  
   }
 }
 
@@ -399,7 +381,7 @@ export default {
   .selfBox {
     width: 50%;
     float: left;
-    
+
     h3 {
       font-size: 16px;
       font-weight: normal;
@@ -501,14 +483,14 @@ export default {
     top: -1.5vh;
   }
 }
-/deep/ .dialogBox{
-    .el-dialog{
-        width: 60%;
-    }
-    .el-dialog__header{
-        text-align: center;
-    }
+/deep/ .dialogBox {
+  .el-dialog {
+    width: 60%;
   }
+  .el-dialog__header {
+    text-align: center;
+  }
+}
 </style>
 
 
