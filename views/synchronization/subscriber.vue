@@ -81,6 +81,7 @@ export default {
       });
     },
     getUserList() {
+      
       //展示用户中间表信息
       api.userData(this.sendData).then(res => {
 

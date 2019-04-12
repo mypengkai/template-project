@@ -14,6 +14,7 @@
                 </template>
             </el-table-column>
              <el-table-column label="同步状态">
+               
                 <template slot-scope="scope">
                     
                     <template v-if="scope.row.syncId === 'null'">
