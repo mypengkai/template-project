@@ -2,16 +2,20 @@
   <div class="acceptLayout">
     <!-- 左边标段选择 -->
     <div class="section">
-      <span style="padding-top: 10px;">
-        <el-form inline>
-          <el-form-item label="组织机构：">
-            <select-tree ref="userGroupSelectTree" :options="options" v-on:noDe="noDe" :props="defaultProp" />
-          </el-form-item>
-        </el-form>
+
+      <div class="topBar">
+        <span>组织机构：</span>
+        <select-tree ref="userGroupSelectTree" :options="options" v-on:noDe="noDe" :props="defaultProp" />
+      </div>
+
+    <div class="topBar">
+    
+         <span>分部分项：</span>
+         <select-tree :options="data" v-on:noDe="handleNodeClick" :props="defaultProps" />
+        <!-- <el-tree style="margin-left:74px;margin-top:-15px" :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
       </span>
-      <span v-if="value!=''">
-        <el-tree style="margin-left:74px;margin-top:-15px" :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-      </span>
+    </div>
+     
     </div>
     <!-- 右边详情列表 -->
     <div class="particularsList" v-if="treeFrom.projectType!=''&&treeFrom.projectType!=undefined">
@@ -795,10 +799,10 @@ export default {
   max-height: 100vh;
   padding: 20px;
   /deep/ .select-tree .el-input.el-input--suffix {
-    width: 15vw;
+    width: 19vw;
   }
   /deep/ .el-popper {
-    width: 400px;
+    width: 15vw;
   }
   .ysr {
     color: blue;
@@ -811,11 +815,11 @@ export default {
 
   .section {
     float: left;
-    width: 30%;
+    width: 35%;
   }
   .particularsList {
     float: left;
-    width: 70%;
+    width: 65%;
     height: 75vh;
     .particulars {
       height: 10vh;

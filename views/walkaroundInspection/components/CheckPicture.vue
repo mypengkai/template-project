@@ -2,41 +2,35 @@
   <div class>
     <!-- 照片详情信息查看 -->
     <el-form class="reverseBox" :model="form">
-      <div class="fl pth" style="width:42.6%">
-        <el-form-item label="工程分部分项" label-width="100px">
-          <el-input v-model="form.projectItem"></el-input>
+      <div class="fl pth" style="width:43.6%">
+        <el-form-item label="工程分部分项" label-width="120px">
+          <el-input type="textarea" autosize readonly v-model="form.projectItem"></el-input>
         </el-form-item>
 
-        <el-form-item label="桩号" label-width="100px">
-          <el-input v-model="form.zhuanghao"></el-input>
+        <el-form-item label="桩号" label-width="120px">
+          <el-input readonly v-model="form.zhuanghao"></el-input>
         </el-form-item>
 
-        <el-form-item label="巡视人" label-width="100px">
-          <el-input v-model="form.createName"></el-input>
+        <el-form-item label="巡视人" label-width="120px">
+          <el-input readonly v-model="form.createName"></el-input>
         </el-form-item>
 
-        <el-form-item label="创建时间" label-width="100px">
-          <el-input v-model="form.createTime"></el-input>
+        <el-form-item label="创建时间" label-width="120px">
+          <el-input readonly v-model="form.createTime"></el-input>
         </el-form-item>
 
-        <el-form-item label="拍照地点" label-width="100px">
-          <el-input v-model="photoLocation"></el-input>
+        <el-form-item label="拍照地点" label-width="120px">
+          <el-input readonly type="textarea" autosize v-model="photoLocation"></el-input>
         </el-form-item>
 
-        <el-form-item label="描述" label-width="100px">
-          <el-input v-model="form.describe"></el-input>
+        <el-form-item label="描述" label-width="120px">
+          <el-input readonly v-model="form.describe"></el-input>
         </el-form-item>
       </div>
 
       <div class="rl" style="width:50%">
-        <div class="navb" label-width="100px">
-          <el-menu
-            :default-active="activeIndex2"
-            mode="horizontal"
-            @select="handleSelect"
-            text-color="#ccc"
-            active-text-color="#409EFF"
-          >
+        <div class="navb">
+          <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
             <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
             <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
           </el-menu>
@@ -53,7 +47,7 @@
           </el-form-item>-->
           <ul>
             <li v-for="(item,index) in filePathImg" :key="index">
-              <img :src="item.picture" alt >
+              <img :src="item.picture" alt>
             </li>
           </ul>
         </div>
@@ -170,13 +164,13 @@ export default {
     li {
       list-style: none;
       float: left;
-      width: 25%;
+      width: 33%;
       height: 15vh;
       padding: 1%;
-      img{
-         width: 100%;
-         height:100%;
-         display: block;
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
     }
   }

@@ -4,13 +4,11 @@
     <div class="navBar topBar">
       <div>
         <!-- 姓名选择 -->
-        <span>姓名选择:</span>
-        <el-select v-model="sendData.userId" clearable placeholder="请选择">
-          <el-option v-for="(item,index) in getListByUser" :key="index" :label="item.realname" :value="item.id"></el-option>
-        </el-select>
+        <span>组织机构:</span>
+       <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value1" />
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-        <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="handleCheckChange" v-model="value" />
+        <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value" />
 
         <span>创建日期:</span>
         <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
@@ -61,6 +59,7 @@ import CheckPicture from "./components/CheckPicture";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 import api from "@/api/Patrol.js";
 import user from "@/api/user";
+import Organization from "@/api/Organization.js";
 import project from "@/api/project.js";
 export default {
   inject: ["reload"],
@@ -72,17 +71,26 @@ export default {
     return {
       nowItem: "",
       value: "",
+      value1:"",
+      orgTree:[],
       getListByUser: [], // 用户列表
       everyDayLogPageList: [], // 当前列表
       total: 0,
       timeRange: "", // 时间日期范围
       sendData: {
+         departId: "", //部门id
         userId: "", // 用户名参数
         projectCode: "", // 分部分项Code
+        orgId:"",
         pageNo: 1, //当前页
-        pageSize: 6, // 每页条数
+        pageSize: 15, // 每页条数
         startTime: "", // 开始时间
         endTime: "" // 结束时间
+      },
+       // 组织机构树显示
+      defaultProps: {
+        children: "children",
+        label: "name"
       },
       // 工程分项树显示
       projectTree: {
@@ -121,22 +129,33 @@ export default {
 
     // 获取用户列表数据
     _getListByUser() {
-      user.getListByUser().then(res => {
-        this.getListByUser = res.data.data;
-      });
-      // 分部分项树
-      project.projectList().then(res => {
+      // 组织机构
+      Organization.organizateTree().then(res => {
+         this.orgTree = res.data.data;
+      })
+    },
+
+     // 组织机构下拉树
+    handleCheckChange(data) {
+      this.projectList = [];
+      this.sendData.orgId = data.id;
+      this.sendData.departId = data.id;
+      project.projectList(this.sendData).then(res => {
+        if (res.data.data == null) {
+          res.data.data = [];
+        }
         this.projectList = res.data.data;
       });
     },
-    // 换回来的
-    handleCheckChange(data) {
+
+    // 分部分项选择后的数据
+    projectChange(data) {
       this.sendData.projectCode = data.projectCode;
     },
     // 分部分项选择后的数据
-    projectChange(data) {
-      this.sendData.projectCode = data[data.length - 1];
-    },
+    // projectChange(data) {
+    //   this.sendData.projectCode = data[data.length - 1];
+    // },
     changeDataRange(val) {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
     },

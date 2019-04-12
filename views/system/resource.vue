@@ -8,7 +8,7 @@
     <!-- 列表 -->
     <div class="pt20">
       <el-scrollbar style="height: 68vh;overflow-x: none;">
-        <tree-table class="textList" :data="menuList" border row-key="id">
+        <tree-table class="textList" :data="menuList" border row-key>
           <el-table-column label="菜单名称">
             <template slot-scope="scope">
               <span style="">{{ scope.row.functionName }}</span>
@@ -46,7 +46,7 @@
 
     </div>
     <!-- 弹框 -->
-    <el-dialog :title="newTitle" :visible.sync="dialogFormVisible">
+    <el-dialog class="dialogBox" :title="newTitle" :visible.sync="dialogFormVisible">
       <resourceAdd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="resourceList"></resourceAdd>
     </el-dialog>
   </div>
