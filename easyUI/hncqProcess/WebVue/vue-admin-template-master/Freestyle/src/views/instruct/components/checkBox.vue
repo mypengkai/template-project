@@ -4,15 +4,15 @@
       <div>
         <!-- 新增 -->
         <div :class="{reverseAddBox:nowItem=='add'}">
-          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="" label-width="120px">
+          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="orgVerify" label-width="120px">
             <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="form.value2" />
           </el-form-item>
 
-          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="" label-width="120px">
+          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="projectVerify" label-width="120px">
             <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="form.value1" />
           </el-form-item>
 
-          <el-form-item style="width:20vw" label="接收人" v-if="nowItem =='add'" prop="" label-width="120px">
+          <el-form-item style="width:20vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
             <el-input v-model="form.username" :disabled="true">
               <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
             </el-input>
@@ -20,7 +20,7 @@
 
           <div class="TimeAndType" v-if="nowItem =='add'">
             <span class="fl">
-              <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="" label-width="120px">
+              <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime" label-width="120px">
                 <el-date-picker v-model="form.planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
                 </el-date-picker>
               </el-form-item>
@@ -54,12 +54,12 @@
         <div :class="{reverseBox:nowItem!=='add'}">
           <!-- 左边信息 -->
           <div style="width:47%" class="fl">
-            <el-form-item style="width:22vw" label="相关工程" v-if="nowItem !=='add'" label-width="100px">
-              <el-input v-model="form.projectItem"></el-input>
+            <el-form-item style="width:22vw" label="分部分项" v-if="nowItem !=='add'" label-width="100px">
+              <el-input type="textarea" autosize readonly v-model="form.projectItem"></el-input>
             </el-form-item>
 
             <el-form-item style="width:22vw" label="创建时间" v-if="nowItem !=='add'" label-width="100px">
-              <el-input v-model="form.createTime"></el-input>
+              <el-input readonly v-model="form.createTime"></el-input>
             </el-form-item>
 
             <el-form-item label="指令时间轴" v-if="nowItem !=='add'" label-width="100px">
@@ -76,17 +76,18 @@
                 <el-timeline :reverse="reverse">
                   <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(activity, 'icon')" :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')" :timestamp="activity.finishTime">
                     {{activity.name}} 指令描述 : {{ activity.remark }}
+                    <p></p>
                   </el-timeline-item>
                 </el-timeline>
               </div>
               <div class="temporary">
                 <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
-                <el-input v-model="states"></el-input>
+                <el-input readonly v-model="states"></el-input>
               </div>
 
               <div class="textareaBar">
                 <span>相关描述:</span>
-                <el-input type="textarea" style="width:70%" autosize v-model="remark"></el-input>
+                <el-input type="textarea" readonly style="width:70%" autosize v-model="remark"></el-input>
               </div>
 
               <!-- <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}"> -->
@@ -144,14 +145,20 @@
                 </el-menu>
               </div>
               <!-- 轮播信息 -->
-              <div style="" v-if="nowType==0">
-                <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
+              <div class="condition" v-if="nowType==0">
+
+                <!-- <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
                   <el-carousel :interval="3000" arrow="always" height="45vh">
                     <el-carousel-item v-for="(item,index) in picture" :key="index">
                       <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
                     </el-carousel-item>
                   </el-carousel>
-                </el-form-item>
+                </el-form-item> -->
+                <ul>
+                  <li v-for="(item,index) in picture" :key="index">
+                    <img :src="item.picture" style="cursor:pointer" @click="actionImg()">
+                  </li>
+                </ul>
               </div>
               <!-- 地图 -->
               <div style="height:45vh" v-if="nowType==1">
@@ -171,7 +178,7 @@
     </div>
 
     <!-- 接受人id -->
-    <el-dialog class="dialogBox" width="40%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
+    <el-dialog class="dialogBox" width="50%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
       <div>
         <span>用户类型</span>
         <el-select v-model="value" placeholder="请选择" @change="changeUserList">
@@ -180,7 +187,12 @@
         </el-select>
       </div>
       <div>
-        <el-table :data="userList" style="width: 100%" @row-click="tableClick">
+        <el-table :data="userList" style="width: 100%" height="60vh">
+          <el-table-column fixed="left" label="" width="50">
+            <template slot-scope="scope">
+              <input type="radio" @click="selectDot(scope,$event)">
+            </template>
+          </el-table-column>
           <el-table-column prop="username" label="姓名">
           </el-table-column>
           <el-table-column prop="departname" label="职务">
@@ -193,18 +205,21 @@
         <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_userList()" :total="total">
         </el-pagination>
       </div>
+      <div class="tar">
+        <el-button type="primary" @click="toggleSelection('fData')">确 定</el-button>
+      </div>
     </el-dialog>
     <!-- 转发信息 -->
-    <el-dialog width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
-      <el-form :model="transpondForm" label-width="80px">
-        <el-form-item label="指定人">
-          <el-input v-model="transpondName">
+    <el-dialog class="dialogBox" width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
+      <el-form :model="transpondForm" :rules="rulesform" label-width="80px">
+        <el-form-item label="指定人" prop="transpondName">
+          <el-input v-model="transpondForm.transpondName">
             <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
           </el-input>
         </el-form-item>
 
         <el-form-item label="备注">
-          <el-input v-model="transpondForm.remark"></el-input>
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="transpondForm.remark"></el-input>
         </el-form-item>
       </el-form>
       <div class="tar">
@@ -273,6 +288,7 @@ export default {
       reverse: true,
       activeName: "second",
       activeName1: "second",
+      inData: {},
       activities: [
         {
           name: "",
@@ -377,11 +393,19 @@ export default {
         dialogImageUrl: { required: true, message: "必填项", trigger: "blur" },
         planTime: { required: true, message: "必填项", trigger: "change" }
       }, //表单校验规则
+      rulesform: {
+        transpondName: {
+          required: true,
+          message: "请选择指定人",
+          trigger: "blur"
+        }
+      },
       //   转发指令
       transpondForm: {
         commanduserId: "", // 指令用户表id
         zhidingren: "", // 指定人id
-        remark: "" // 备注
+        remark: "", // 备注
+        transpondName: ""
       },
       // 指令内容框框
       commandUser: {
@@ -471,6 +495,7 @@ export default {
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
+      console.log(this.activities)
       this.activities.forEach(v => {
         v.commandStagePeople == 1 && (v.commandStagePeople1 = "发出指令的人");
         v.commandStagePeople == 2 && (v.commandStagePeople1 = "转发指令的人");
@@ -535,14 +560,7 @@ export default {
     commandTypeList(val) {
       this.form.commandType = val;
     },
-    //用户列表点击回填
-    tableClick(item) {
-      this.form.ReceiveUserid = item.id; // 新增传接收人id
-      this.form.username = item.username; // 新增接收人id名回填
-      this.transpondForm.zhidingren = item.id; // 转发指定人id
-      this.transpondName = item.username; // 转发指定人姓名回填
-      this.acceptUser = false;
-    },
+
     convertIcon(activity, type) {
       // 发出指令的人
       if (activity.commandStagePeople == 1) {
@@ -599,25 +617,25 @@ export default {
       if (this.form.value2 == "") {
         this.$message({
           showClose: true,
-          message: "请输入内容",
+          message: "请输入必选项",
           type: "warning"
         });
         return false;
       }
-        // 分部分项不为空
+      // 分部分项不为空
       if (this.form.value1 == "") {
         this.$message({
           showClose: true,
-          message: "请输入内容",
+          message: "请输入必选项",
           type: "warning"
         });
         return false;
       }
-         // 接收人
+      // 接收人
       if (this.form.username == "") {
         this.$message({
           showClose: true,
-          message: "请输入内容",
+          message: "请输入必选项",
           type: "warning"
         });
         return false;
@@ -626,7 +644,7 @@ export default {
       if (this.form.planTime == "") {
         this.$message({
           showClose: true,
-          message: "请输入内容",
+          message: "请输入必选项",
           type: "warning"
         });
         return false;
@@ -641,6 +659,14 @@ export default {
     },
     // 转发指令
     _delivery() {
+      if (this.transpondForm.transpondName == "") {
+        this.$message({
+          showClose: true,
+          message: "请输入指定人",
+          type: "warning"
+        });
+        return false;
+      }
       instruct.InstructionCommand(this.transpondForm).then(res => {
         let _message = res.data.message;
         if (_message == "成功") {
@@ -656,6 +682,23 @@ export default {
         this.reload();
       });
     },
+
+    selectDot(data, e) {
+      this.inData = data.row;
+    },
+
+    //用户列表点击回填
+    tableClick(item) {},
+
+    toggleSelection(rows) {
+      this.fData = this.inData;
+      this.form.ReceiveUserid = this.fData.id; // 新增传接收人id
+      this.form.username = this.fData.username; // 新增接收人id名回填
+      this.transpondForm.zhidingren = this.fData.id; // 转发指定人id
+      this.transpondForm.transpondName = this.fData.username; // 转发指定人姓名回填
+      this.acceptUser = false;
+    },
+
     // 图片上传
     handleRemove(file, fileList) {
       // console.log(file, fileList);
@@ -804,6 +847,24 @@ export default {
   }
   /deep/.el-input {
     font-size: 0.7vw;
+  }
+}
+.condition {
+  ul {
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
+      float: left;
+      width: 33%;
+      height: 15vh;
+      padding: 1%;
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
   }
 }
 </style>

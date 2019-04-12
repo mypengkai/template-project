@@ -3,13 +3,13 @@
     <!-- 选项栏 -->
     <div class="topBar">
 
-      <span>所属单位</span>
+      <span>组织机构:</span>
       <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
 
-      <span>工程选择</span>
+      <span>分部分项:</span>
       <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
 
-     <span>轨迹日期:</span>
+     <span>创建日期:</span>
         <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
         <!-- <span>至</span>    -->
         <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>

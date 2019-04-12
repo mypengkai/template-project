@@ -6,27 +6,27 @@
     </div>
     <!-- 操作列表 -->
     <el-scrollbar style="height: 68vh;overflow-x: none;">
-      <tree-table class="textList" :data="dataList" row-key="id" ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
-        <el-table-column label="工程分布分项">
+      <tree-table class="textList" :data="dataList" row-key ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
+        <el-table-column label="工程分部分项">
           <template slot-scope="scope">
             <span style>{{ scope.row.projectItem }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="类型">
-          <template slot-scope="scope">
-            <template v-if="scope.row.projectType==='1'">单位工程:</template>
-            <template v-else-if="scope.row.projectType==='2'">子单位工程:</template>
-            <template v-else-if="scope.row.projectType==='3'">分部工程:</template>
-            <template v-else-if="scope.row.projectType==='4'">子分部工程:</template>
-            <template v-else-if="scope.row.projectType==='5'">分项工程:</template>
-            <template v-else-if="scope.row.projectType==='6'">子分项工程:</template>
           </template>
         </el-table-column>
 
         <el-table-column label="所属组织机构">
           <template slot-scope="scope">
             <span style>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <template v-if="scope.row.projectType==='1'">单位工程</template>
+            <template v-else-if="scope.row.projectType==='2'">子单位工程</template>
+            <template v-else-if="scope.row.projectType==='3'">分部工程</template>
+            <template v-else-if="scope.row.projectType==='4'">子分部工程</template>
+            <template v-else-if="scope.row.projectType==='5'">分项工程</template>
+            <template v-else-if="scope.row.projectType==='6'">子分项工程</template>
           </template>
         </el-table-column>
 

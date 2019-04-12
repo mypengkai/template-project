@@ -2,22 +2,22 @@
   <div class="p20">
     <!-- 选项栏 -->
     <div class="topBar">
-      <span>所属单位</span>
+      <span>组织机构:</span>
       <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
 
-      <span>工程选择</span>
+      <span>分部分项:</span>
       <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value1" />
 
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">搜索</el-button>
          <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>
       </div>
     </div>
 
     <div class="topBar">
       
-        <span>轨迹日期:</span>
+        <span>创建日期:</span>
         <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
         <!-- <span>至</span>    -->
         <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>

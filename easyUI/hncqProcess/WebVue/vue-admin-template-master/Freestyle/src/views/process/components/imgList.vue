@@ -106,11 +106,20 @@
             <span class="fl">
                 <p class="br1">自检描述: {{ item.selfCheckDescribe }}</p>
                 <div class="" v-if="imgData!=null">
-                    <el-carousel :interval="5000" arrow="always" height="40vh">
+
+         <ul>
+            <li v-for="(item,index) in imgData" :key="index">
+              <img :src="item.filePath" alt @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+            </li>
+          </ul>
+
+
+
+                    <!-- <el-carousel :interval="5000" arrow="always" height="40vh">
                         <el-carousel-item v-for="(item,index) in imgData" :key="index">
                             <img :src="item.filePath" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
                         </el-carousel-item>
-                    </el-carousel>
+                    </el-carousel> -->
                 </div>
                 <div v-else>
                     <div class="zjimg">没有初验图片</div>
@@ -119,11 +128,19 @@
             <span class="rl">
                 <p>验收描述: {{ item.describe }}</p>
                 <div v-if="imgData2!=null">
-                         <el-carousel :interval="5000" arrow="always" height="40vh">
+
+
+        <ul>
+            <li v-for="(item,index) in imgData2" :key="index">
+              <img :src="item.filePath" alt @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
+            </li>
+          </ul>
+
+                         <!-- <el-carousel :interval="5000" arrow="always" height="40vh">
                     <el-carousel-item v-for="(item,index) in imgData2" :key="index">
                         <img :src="item.filePath" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
                     </el-carousel-item>
-                </el-carousel>
+                </el-carousel> -->
                 </div>
                 <div v-else>
                       <div class="ysimg">没有验收图片</div>
@@ -322,6 +339,7 @@ export default {
       height: 5vh;
       border-bottom: 1px solid #666;
       text-align: center;
+        // background-color:  rgba(190, 195, 195,0.5);
     }
     .selfPlanBox {
       height: 18vh;
@@ -352,6 +370,7 @@ export default {
       height: 5vh;
       border-bottom: 1px solid #666;
       text-align: center;
+        //  background-color:  rgba(190, 195, 195,0.5);
     }
     .selfPlanBox {
       height: 18vh;
@@ -386,6 +405,22 @@ export default {
       height: 5vh;
       border-bottom: 1px solid #666;
       padding: transparent !important;
+    }
+  }
+  ul {
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
+      float: left;
+      width: 33%;
+      height: 15vh;
+      padding: 1%;
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
     }
   }
 }
