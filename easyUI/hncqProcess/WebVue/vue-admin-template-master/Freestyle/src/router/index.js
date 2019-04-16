@@ -146,18 +146,18 @@ export const constantRouterMap = [
         component: () => import('@/views/basicManage/processManage'),
         meta: { title: '工序管理', icon: 'acceptance' }
       },
-      {
-        path: 'recharge',
-        name: 'recharge',
-        component: () => import('@/views/basicsData/recharge'),
-        meta: { title: '短信记录', icon: 'acceptance' }
-      },
-      {
-        path: 'record',
-        name: 'record',
-        component: () => import('@/views/basicsData/record'),
-        meta: { title: '短信充值', icon: 'acceptance' }
-      }
+      // {
+      //   path: 'recharge',
+      //   name: 'recharge',
+      //   component: () => import('@/views/basicsData/recharge'),
+      //   meta: { title: '短信记录', icon: 'acceptance' }
+      // },
+      // {
+      //   path: 'record',
+      //   name: 'record',
+      //   component: () => import('@/views/basicsData/record'),
+      //   meta: { title: '短信充值', icon: 'acceptance' }
+      // }
     ]
   },
 

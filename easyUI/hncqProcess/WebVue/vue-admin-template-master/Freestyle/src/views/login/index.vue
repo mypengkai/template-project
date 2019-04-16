@@ -38,23 +38,28 @@
         >登 录</el-button>
         <div class="jy">*建议使用谷歌浏览器阅览*</div>
       </el-form-item>
- 
     </el-form>
     <!-- 二维码部分 -->
     <div class="ewmimg1">
-      <img src="../../../static/ewm1 (1).png" alt>
+      <div class="ewmpicture">
+        <img src="../../../static/adrrr.png" alt>
+      </div>
       <div class="ewm1">[Android]</div>
     </div>
 
     <div class="ewmimg2">
-      <img src="../../../static/ewm1 (2).png" alt>
+      <div class="ewmpicture">
+        <img src="../../../static/iosss.png" alt>
+      </div>
       <div class="ewm2">[ios]</div>
     </div>
-               <!-- 表尾部分 -->
+    <!-- 表尾部分 -->
     <div class="bq">
-    <a href="#"><p>版权所有：上海同望信息技术有限公司</p></a>
-    <!-- <p>建议使用谷歌浏览器阅览</p> -->
-    <p class="phone">联系电话：027-87614140</p>
+      <a href="#">
+        <p>版权所有：上海同望信息技术有限公司</p>
+      </a>
+      <!-- <p>建议使用谷歌浏览器阅览</p> -->
+      <p class="phone">联系电话：027-87614140</p>
     </div>
   </div>
 </template>
@@ -226,6 +231,13 @@ $light_gray: #eee;
     position: absolute;
     right: 40px;
     bottom: 20%;
+  }
+  .ewmpicture {
+    width: 10vw;
+    img {
+      width: 100%;
+    
+    }
   }
   .bq {
     color: #ccc;

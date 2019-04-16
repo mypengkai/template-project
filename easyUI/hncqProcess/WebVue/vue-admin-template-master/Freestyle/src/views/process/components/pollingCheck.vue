@@ -32,12 +32,15 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="所在位置" name="second">
-          <div id="pollmap"></div>
+          <div id="pollmap" v-show="!flag"></div>
+          <div style="height:30vh" v-show="flag">
+                    暂无地图
+              </div>    
         </el-tab-pane>
       </el-tabs>
     </div>
     <!-- 图片详情弹出层 -->
-    <el-dialog title="图片详情" width="80%" :visible.sync="dialogImg" append-to-body >
+    <el-dialog title="图片详情" fullscreen :visible.sync="dialogImg" append-to-body >
            <viewer :photo="photo"></viewer>
     </el-dialog>
   </div>
@@ -72,6 +75,7 @@ export default {
       imgType: "", // 图片格式
       pollingList: [],
       photo:[],
+      flag:false
     };
   },
   watch:{
@@ -105,6 +109,9 @@ export default {
           this.imgListOne = this.pollingList.picMessage[0]
           if (this.pollingList.picMessage.length > 0) {
             let formData = this.pollingList.picMessage[0];
+            if(formData.photoLocation == null || formData.photoLocation == ''){
+                  this.flag = true
+            }
             var map = new BMap.Map("pollmap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -138,7 +145,6 @@ export default {
       let arr = []
       arr.push(item)
       this.photo = arr
-      // console.log(this.photo,'this.photo')
       this.dialogImg = true;
      
     }
@@ -160,7 +166,7 @@ export default {
 .content {
   padding: 0 4vh;
   .imgContation {
-     height: 30vh;
+     min-height: 30vh;
      ul {
     padding: 0;
     margin: 0;
@@ -168,7 +174,7 @@ export default {
       list-style: none;
       float: left;
       width: 33%;
-      height: 10vh;
+      height: 15vh;
       padding: 1%;
       img{
          width: 100%;

@@ -86,7 +86,7 @@
       </el-table-column>
       <!-- <el-table-column prop="processType" label="工序过程">
       </el-table-column> -->
-      <el-table-column prop="planCheckTime" label="计划验收时间">
+      <el-table-column prop="planCheckTime" label="创建时间">
       </el-table-column>
       <el-table-column prop="state" label="状态">
       </el-table-column>

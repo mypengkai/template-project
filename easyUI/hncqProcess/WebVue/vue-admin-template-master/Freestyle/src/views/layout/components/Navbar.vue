@@ -231,10 +231,19 @@ export default {
       //  {headers:{
       //       'Content-Type':'multipart/form-data'}
       //   }
+      let formData= new FormData();
+      formData.append('userName', this.form.userName);
+      formData.append('realName', this.form.realName);
+      formData.append('mobilePhone', this.form.mobilePhone);
+      formData.append('email', this.form.email);
       request.post("/rest/sysuser/modify",
-        
-      (this.form), {headers:{
-            'Content-Type':'multipart/form-data'}
+        this.form,
+    //  {userName:this.form.userName,
+    //  realName:this.form.userName,
+    //  mobilePhone:this.form.userName,
+    //  email:this.form.email},
+      {headers:{
+            'Content-Type':'application/json'}
         }
        ).then(res => {
         console.log(res.data, "res.data");

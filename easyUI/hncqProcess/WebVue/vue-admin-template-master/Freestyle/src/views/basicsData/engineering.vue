@@ -2,11 +2,11 @@
   <div class="p20">
     <!-- 选择区域 -->
     <div class="elButton">
-      <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
+      <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"  @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <el-scrollbar style="height: 68vh;overflow-x: none;">
-      <tree-table class="textList" :data="dataList" row-key ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll">
+    <el-scrollbar style="height: 68vh;overflow-x: hidden;">
+      <tree-table class="textList scroBar"  :data="dataList" row-key ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll" >
         <el-table-column label="工程分部分项">
           <template slot-scope="scope">
             <span style>{{ scope.row.projectItem }}</span>
@@ -185,6 +185,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .Treebox {
   // height: 60vh;
   overflow-x: hidden;

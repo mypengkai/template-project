@@ -2,35 +2,33 @@
   <div class="acceptLayout">
     <!-- 左边标段选择 -->
     <div class="section">
-
       <div class="topBar">
         <span>组织机构：</span>
-        <select-tree ref="userGroupSelectTree" :options="options" v-on:noDe="noDe" :props="defaultProp" />
+        <select-tree
+          ref="userGroupSelectTree"
+          :options="options"
+          v-on:noDe="noDe"
+          :props="defaultProp"
+        />
       </div>
 
-    <div class="topBar">
-    
-         <span>分部分项：</span>
-         <select-tree :options="data" v-on:noDe="handleNodeClick" :props="defaultProps" />
+      <div class="topBar">
+        <span>分部分项：</span>
+        <select-tree :options="data" v-on:noDe="handleNodeClick" :props="defaultProps"/>
         <!-- <el-tree style="margin-left:74px;margin-top:-15px" :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
-      </span>
-    </div>
-     
+      </div>
     </div>
     <!-- 右边详情列表 -->
     <div class="particularsList" v-if="treeFrom.projectType!=''&&treeFrom.projectType!=undefined">
       <div class="particulars brotherBar">
         <div style="left: 2vw;">
           <span>工程名称: {{ treeFrom.projectItem }}</span>
-
         </div>
         <div style="left: 21vw;">
           <span>工程类型: {{ treeFrom.projectType }}</span>
-
         </div>
         <div style="right: 1vw;">
           <span>代码: {{ treeFrom.projectCode }}</span>
-
         </div>
         <div style="left: 2vw;bottom: 0">
           <span>桩号: {{ treeFrom.zhuanghao }}</span>
@@ -40,46 +38,109 @@
           <!-- <el-input v-model="" readonly="true" v-if="childrenId!=undefined&&childrenId!=''"></el-input> -->
         </div>
         <div style="right: 1vw;bottom: 1vh">
-          <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''">添加工序</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-circle-plus-outline"
+            class="pan-btn light-blue-btn"
+            @click="addGx()"
+            v-if="childrenId!=undefined&&childrenId!=''"
+          >添加工序</el-button>
           <!-- <el-button type="primary" class="btnSize" icon="el-icon-plus" circle @click="addGx()" v-if="childrenId!=undefined&&childrenId!=''"></el-button> -->
         </div>
       </div>
       <!-- 操作列表 -->
 
-      <div class="Cztab" v-if="childrenId!=undefined&&childrenId!=''">
-        <el-table :data="tableData" border style="width: 100%" height="65vh">
-          <el-table-column prop="processName" label="工序过程">
-          </el-table-column>
-          <el-table-column prop="planCheckTime" label="时间">
-          </el-table-column>
-          <el-table-column prop="state2" label="状态">
-          </el-table-column>
-          <el-table-column fixed="right" label="操作" width="250">
+      <div class="Cztab" v-if="childrenId!=undefined&&childrenId!=''" >
+        <el-table :data="tableData" border >
+          <!-- height="65vh" -->
+          <el-table-column prop="processName" label="工序过程"></el-table-column>
+          <el-table-column prop="planCheckTime" label="时间"></el-table-column>
+          <el-table-column prop="state2" label="状态"></el-table-column>
+          <el-table-column fixed="right" label="操作" min-width="200">
             <template slot-scope="scope">
               <!-- 指定验收 -->
-              <el-tooltip class="item" effect="dark" content="指定工序" placement="top" v-if="scope.row.state2=='指定工序'">
-                <el-button type="primary" icon="el-icon-star-off" circle :id="scope.$index" @click="tjgx(scope)"></el-button>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="指定工序"
+                placement="top"
+                v-if="scope.row.state2=='指定工序'"
+              >
+                <el-button
+                  type="primary"
+                  size="small"
+                  icon="el-icon-star-off"
+                  circle
+                  :id="scope.$index"
+                  @click="tjgx(scope)"
+                ></el-button>
               </el-tooltip>
 
               <!-- 修改指定验收 -->
-              <el-tooltip class="item" effect="dark" content="已指定验收计划" placement="top" v-else-if="scope.row.state2=='已指定验收计划'">
-                <el-button type="primary" icon="el-icon-edit-outline" circle :id="scope.$index" @click="tjgx(scope)"></el-button>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="已指定验收计划"
+                placement="top"
+                v-else-if="scope.row.state2=='已指定验收计划'"
+              >
+                <el-button
+                  type="primary"
+                  size="small"
+                  icon="el-icon-edit-outline"
+                  circle
+                  :id="scope.$index"
+                  @click="tjgx(scope)"
+                ></el-button>
               </el-tooltip>
 
               <!-- 否则 -->
-              <el-button type="primary" icon="el-icon-share" circle :id="scope.$index" @click="tjgx(scope)" style="display: none" v-else></el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-share"
+                size="small"
+                circle
+                :id="scope.$index"
+                @click="tjgx(scope)"
+                style="display: none"
+                v-else
+              ></el-button>
               <!-- 查看按钮 -->
               <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
-                <el-button type="primary" icon="el-icon-search" circle @click="handleClick(scope.row)"></el-button>
+                <el-button
+                  type="primary"
+                  size="small"
+                  icon="el-icon-search"
+                  circle
+                  @click="handleClick(scope.row)"
+                ></el-button>
               </el-tooltip>
 
               <!-- 删除按钮 -->
               <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
-                <el-button type="danger" icon="el-icon-delete" circle @click="dlet(scope)" size="small" v-if="scope.row.state2=='指定工序'"></el-button>
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  @click="dlet(scope)"
+                  size="small"
+                  v-if="scope.row.state2=='指定工序'"
+                ></el-button>
               </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
+        <!-- <div class="block">
+              <el-pagination 
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage4"
+                  :page-sizes="[15, 30, 60, 100]"
+                  :page-size="15"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="tableData.length+1">
+              </el-pagination>
+            </div> -->
       </div>
     </div>
     <!-- 添加工序弹框 -->
@@ -87,18 +148,32 @@
       <el-form :model="form" :rules="acceptRule" ref="addAccept">
         <el-form-item label="工序类型" label-width="120px">
           <el-select v-model="value1" :placeholder="gongxuMrz" style="width:20vw" @change="tree1">
-            <el-option v-for="item in options1" :key="item.index" :label="item.processType" :value="item">
-            </el-option>
+            <el-option
+              v-for="item in options1"
+              :key="item.index"
+              :label="item.processType"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="工序" label-width="120px">
           <el-select v-model="value2" placeholder="全部" style="width:20vw" @change="tree2">
-            <el-option v-for="item in options2" :key="item.index" :label="item.process" :value="item">
-            </el-option>
+            <el-option
+              v-for="item in options2"
+              :key="item.index"
+              :label="item.process"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="工序验收次数" label-width="120px" prop="cishu">
-          <el-input v-model="form.cishu" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' style="width:20vw" autocomplete="off"></el-input>
+          <el-input
+            v-model="form.cishu"
+            type="number"
+            onkeypress="return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )"
+            style="width:20vw"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px" prop="beizhu">
           <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="form.beizhu"></el-input>
@@ -121,13 +196,23 @@
           <el-input v-model="ysrZhiwu" placeholder="请输入内容"></el-input>
 
           <div class="rl">
-            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="chaxun()">查询</el-button>
-            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+            <el-button
+              type="primary"
+              class="pan-btn light-blue-btn"
+              icon="el-icon-search"
+              @click="chaxun()"
+            >查询</el-button>
+            <el-button
+              type="primary"
+              class="pan-btn light-blue-btn"
+              icon="el-icon-refresh"
+              @click="reset()"
+            >重置</el-button>
           </div>
         </div>
 
         <el-table class="textList" :data="ysrData" height="40vh">
-          <el-table-column fixed="left" label="" width="80">
+          <el-table-column fixed="left" label width="80">
             <template slot-scope="scope">
               <input type="radio" name="Fruit" @click="xzk(scope,$event)">
             </template>
@@ -136,8 +221,15 @@
           <el-table-column property="zhiwei" label="职务"></el-table-column>
           <el-table-column property="mobilePhone" label="电话"></el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,60,100]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="pageForm.total">
-        </el-pagination>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage4"
+          :page-sizes="[15,30,60,100]"
+          :page-size="15"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageForm.total"
+        ></el-pagination>
 
         <div slot="footer" class="dialog-footer">
           <el-button class="btnSizes" @click="innerVisible = false">取 消</el-button>
@@ -145,24 +237,32 @@
         </div>
       </el-dialog>
 
-      <el-form :model="bjFrom" :rules="accept" ref='deleAccept'>
+      <el-form :model="bjFrom" :rules="accept" ref="deleAccept">
         <el-form-item label="监理验收人" label-width="125px" prop="jlysr">
-          <el-input v-model="bjFrom.name" :readonly="true" autocomplete="off" style="width:50%"></el-input>
-          &nbsp;&nbsp;&nbsp;
+          <el-input v-model="bjFrom.name" :readonly="true" autocomplete="off" style="width:50%"></el-input>&nbsp;&nbsp;&nbsp;
           <span class="ysr" @click="jlYsr('3')">[选择验收人]</span>
         </el-form-item>
         <el-form-item label="监理验收时间" label-width="125px" prop="jlysrTime">
-          <el-date-picker :editable="false" v-model="bjFrom.time" type="date" placeholder="选择日期" style="width:253px">
-          </el-date-picker>
+          <el-date-picker
+            :editable="false"
+            v-model="bjFrom.time"
+            type="date"
+            placeholder="选择日期"
+            style="width:253px"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="施工验收人" label-width="125px" prop="sgysr">
-          <el-input v-model="bjFrom.names" :readonly="true" autocomplete="off" style="width:50%"></el-input>
-          &nbsp;&nbsp;&nbsp;
+          <el-input v-model="bjFrom.names" :readonly="true" autocomplete="off" style="width:50%"></el-input>&nbsp;&nbsp;&nbsp;
           <span class="ysr" @click="jlYsr('4')">[选择验收人]</span>
         </el-form-item>
         <el-form-item label="施工验收时间" label-width="125px" prop="sgysrTime">
-          <el-date-picker :editable="false" v-model="bjFrom.times" type="date" placeholder="选择日期" style="width:253px">
-          </el-date-picker>
+          <el-date-picker
+            :editable="false"
+            v-model="bjFrom.times"
+            type="date"
+            placeholder="选择日期"
+            style="width:253px"
+          ></el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -172,7 +272,17 @@
     </el-dialog>
     <!-- 查看弹框 -->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%">
-      <imgList :chakanData='chakanData' :imgData='imgData' :imgData2='imgData2' :imgId='imgId' :zijian='zijian' :yanshou='yanshou' :imgForm='imgForm' :imgData3='imgData3' @imgLeft='imgLeft'></imgList>
+      <imgList
+        :chakanData="chakanData"
+        :imgData="imgData"
+        :imgData2="imgData2"
+        :imgId="imgId"
+        :zijian="zijian"
+        :yanshou="yanshou"
+        :imgForm="imgForm"
+        :imgData3="imgData3"
+        @imgLeft="imgLeft"
+      ></imgList>
     </el-dialog>
   </div>
 </template>
@@ -230,6 +340,7 @@ export default {
       // 点击图片详情的图片
       imgData3: null,
       // 分部分项树
+  
       data: [],
       // 操作列表table值
       tableData: null,
@@ -435,7 +546,7 @@ export default {
           });
       } else {
         this.$message({
-          message: "请选择施工单位",
+          message: "组织机构只能选择标段",
           type: "warning"
         });
       }
@@ -453,18 +564,19 @@ export default {
             type == "1"
               ? "单位工程"
               : type == "2"
-                ? "子单位工程"
-                : type == "3"
-                  ? "分部工程"
-                  : type == "4"
-                    ? "子分部工程"
-                    : type == "5"
-                      ? "分部项程"
-                      : type == "6" ? "子分项工程" : "";
+              ? "子单位工程"
+              : type == "3"
+              ? "分部工程"
+              : type == "4"
+              ? "子分部工程"
+              : type == "5"
+              ? "分部项程"
+              : type == "6"
+              ? "子分项工程"
+              : "";
           this.treeFrom.projectCode = res.data.data.projects.projectCode;
           this.treeFrom.zhuanghao = res.data.data.projects.zhuanghao;
           this.tableData = res.data.data.detail;
-
           this.tableData.forEach(i => {
             if (i.planCheckTime == "null") {
               i.planCheckTime = "";
@@ -472,10 +584,10 @@ export default {
             i.state2 == 0
               ? (i.state2 = "指定工序")
               : i.state2 == 1
-                ? (i.state2 = "已指定验收计划")
-                : i.state2 == 2
-                  ? (i.state2 = "自检完成")
-                  : (i.state2 = "验收完成");
+              ? (i.state2 = "已指定验收计划")
+              : i.state2 == 2
+              ? (i.state2 = "自检完成")
+              : (i.state2 = "验收完成");
           });
           this.treeFrom.state1 =
             res.data.data.projects.state1 != null ? "已指定验收" : "未指定验收";
@@ -487,6 +599,12 @@ export default {
       this.childrenId = "";
       this.treeId = data.id;
       this.ztrrFrom();
+      if (data.children.length > 0) {
+        this.$message({
+          message: "分部分项只能选施工单位"
+        });
+        return false;
+      }
       if (data.children.length == 0) {
         this.childrenId = data.id;
       }
@@ -518,31 +636,49 @@ export default {
     },
     // 新增工序接口
     addXzgx(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          let fromData = {
-            userGroupId: this.userGroupId,
-            processMDictId: this.processMDictId,
-            processDictId: this.processDictId,
-            projectItemId: this.treeId,
-            remark: this.form.beizhu,
-            checkNum: this.form.cishu
-          };
-
-          request.post("/rest/processCheck/addProcess", fromData).then(res => {
-            if (res.data.respCode == 0) {
-              this.$message({
-                message: "恭喜你，新增成功",
-                type: "success"
-              });
-              this.form.beizhu = "";
-              this.form.cishu = "";
-              this.ztrrFrom();
-              this.dialogFormVisible = false;
-            }
+      const reg = /^(10|[1-9])$/; // 验收次数限制
+      let fromData = {
+        userGroupId: this.userGroupId,
+        processMDictId: this.processMDictId,
+        processDictId: this.processDictId,
+        projectItemId: this.treeId,
+        remark: this.form.beizhu,
+        checkNum: this.form.cishu
+      };
+      if (this.value1 == "") {
+        this.$message({
+          message: "工序类型不能为空"
+        });
+        return false;
+      }
+      if (this.value2 == "") {
+        this.$message({
+          message: "工序名不能为空"
+        });
+        return false;
+      }
+      if (this.form.cishu == "") {
+        this.$message({
+          message: "验收次数不能为空"
+        });
+        return false;
+      }
+      if (!reg.test(this.form.cishu)) {
+        this.$message({
+          message: "验收次数只能1到10"
+        });
+        return false;
+      }
+      request.post("/rest/processCheck/addProcess", fromData).then(res => {
+        if (res.data.respCode == 0) {
+          this.$message({
+            message: "恭喜你，新增成功",
+            type: "success"
           });
-        } else {
-          return false;
+          this.form.beizhu = "";
+          this.form.cishu = "";
+          this.ztrrFrom();
+          this.dialogFormVisible = false;
         }
       });
     },
@@ -663,12 +799,16 @@ export default {
         planSelfCheckPerson:
           this.treeFrom.state2 == "指定工序"
             ? this.bjFrom.nameId
-            : this.bjFrom.nameId != "" ? this.bjFrom.nameId : this.xgzdsgId,
+            : this.bjFrom.nameId != ""
+            ? this.bjFrom.nameId
+            : this.xgzdsgId,
         planCheckTime: timesDate,
         planCheckPerson:
           this.treeFrom.state2 == "指定工序"
             ? this.bjFrom.namesId
-            : this.bjFrom.namesId != "" ? this.bjFrom.namesId : this.xgzdjlId
+            : this.bjFrom.namesId != ""
+            ? this.bjFrom.namesId
+            : this.xgzdjlId
       };
       this.$refs.deleAccept.validate(valid => {
         if (valid) {
@@ -729,23 +869,25 @@ export default {
                 i.projectType == "1"
                   ? "单位工程"
                   : i.projectType == "2"
-                    ? "子单位工程"
-                    : i.projectType == "3"
-                      ? "分部工程"
-                      : i.projectType == "4"
-                        ? "子分部工程"
-                        : i.projectType == "5"
-                          ? "分部项程"
-                          : i.projectType == "6" ? "子分项工程" : "";
+                  ? "子单位工程"
+                  : i.projectType == "3"
+                  ? "分部工程"
+                  : i.projectType == "4"
+                  ? "子分部工程"
+                  : i.projectType == "5"
+                  ? "分部项程"
+                  : i.projectType == "6"
+                  ? "子分项工程"
+                  : "";
               i.state1 = i.state1 == 1 ? "已指定验收" : "未指定验收";
 
               i.state2 == 0
                 ? (i.state2 = "指定工序")
                 : i.state2 == 1
-                  ? (i.state2 = "已指定验收计划")
-                  : i.state2 == 2
-                    ? (i.state2 = "自检完成")
-                    : (i.state2 = "验收完成");
+                ? (i.state2 = "已指定验收计划")
+                : i.state2 == 2
+                ? (i.state2 = "自检完成")
+                : (i.state2 = "验收完成");
             });
             this.zijian = this.chakanData.selfCheckDescribe;
             this.yanshou = this.chakanData.checkDescribe;
@@ -787,6 +929,7 @@ export default {
 .dwmc {
   margin-left: 170px;
   font-weight: 900;
+  
 }
 .fz {
   margin-left: 198px;
@@ -838,6 +981,7 @@ export default {
       height: 60vh;
       border: 1px solid #ccc;
       border-radius: 10px;
+      overflow-x:hidden;
       .paging {
         padding-top: 2vh;
         padding-left: 12vw;
@@ -852,5 +996,8 @@ export default {
 .navBar {
   display: flex;
   justify-content: space-between;
+}
+/deep/.el-button+.el-button {
+    margin-left:0
 }
 </style>

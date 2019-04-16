@@ -66,8 +66,10 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="second">
-              <div id="selfMap" v-if="objlist !=null"></div>
-              <div v-else>暂无地图</div>
+              <div v-show="!flag">
+                <div id="selfMap" ref="selfMap"></div>
+              </div>
+              <div style="height:30vh" v-show="flag">暂无地图</div>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -86,18 +88,15 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="所在位置" name="four">
-              <div v-if="imgRealList !=null">
-                <div id="realMap"></div>
-              </div>
-
-              <div v-else>暂无地图</div>
+              <div id="realMap" v-show="!flags" ref="realMap"></div>
+              <div style="height:30vh" v-show="flags">暂无地图</div>
             </el-tab-pane>
           </el-tabs>
         </div>
       </div>
     </div>
     <!-- 图片预览 -->
-    <el-dialog title="图片预览" :visible.sync="dialogcomm" width="80%" append-to-body>
+    <el-dialog title="图片预览" :visible.sync="dialogcomm"  fullscreen append-to-body>
       <viewer :photo="commPictureList"></viewer>
     </el-dialog>
   </div>
@@ -107,7 +106,8 @@
 import request from "@/utils/request";
 import viewer from "@/components/viewer";
 export default {
-  props: ["commandID"],
+  inject: ["reload"],
+  props: ["commandId"],
   components: {
     viewer
   },
@@ -188,42 +188,48 @@ export default {
       state: "", // 状态
       remark: "", // 描述
       dialogcomm: false,
-      commPictureList: []
+      commPictureList: [],
+      flag: false,
+      flags: false,
+      map: null,
+      map1: null
     };
   },
   watch: {
-    commandID(val) {
-      this.commInit();
-    }
+    commandId(val) {
+      this.flag = true;
+      this.flags = true; 
+      this.$nextTick(() => {
+        this.commInit();
+        this.flag = false;
+        this.flags = false;
+      });
+    },
+  
   },
   created() {
     this.commInit();
   },
-
-  mounted() {},
-
+  mounted() {
+    
+  },
   methods: {
     commInit() {
       request
         .post("/rest/command/searchOne", {
-          id: this.commandID
+          id: this.commandId
         })
         .then(res => {
           if (res.data.respCode == "0") {
             this.commList = res.data.data;
           }
-          console.log(this.commList, "this.commList");
           this.form.projectItem = this.commList.projectItem;
           this.form.createTime = this.commList.createTime;
           this.remark = this.commList.remark;
           this.state = this.commList.commandState;
           this.objlist = this.commList.pictureOfCommand;
-          this.objOne = this.commList.pictureOfCommand[0];
           this.imgRealList = this.commList.finishPictureOfCommand;
           this.activities = this.commList.commandUser;
-          if (this.commList.finishPictureOfCommand.length > 0) {
-            this.imgListOne = this.commList.finishPictureOfCommand[0];
-          }
           // 指令状态处理
           if (this.state == 0) {
             this.state = "未处理";
@@ -234,64 +240,74 @@ export default {
           //    发起人定位
           if (this.objlist.length > 0) {
             let formData = this.objlist[0];
-              var map = new BMap.Map("selfMap"); //创建地图实例
-              var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
-              map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
-              map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
-              map.addControl(new BMap.ScaleControl()); // 比例尺
-              map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
-              map.addControl(new BMap.MapTypeControl()); //地图类型
-              map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
-              map.enableDoubleClickZoom(true);
-              var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
-              map.addTileLayer(traffic); // 将图层添加到地图上
-              var marker = new BMap.Marker(point); //创建标注
-              map.addOverlay(marker);
-              map.centerAndZoom(point, 15);
-              var stCtrl = new BMap.PanoramaControl();
-              stCtrl.setOffset(new BMap.Size(0, 40));
-              map.addControl(stCtrl);
-              var opts = {
-                width: 180, // 信息窗口宽度
-                height: 50, // 信息窗口高度
-                title: formData.photoLocation // 信息窗口标题
-              };
-              var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
-              map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口
-            
+            if (
+              formData.photoLocation == null ||
+              formData.photoLocation == ""
+            ) {
+              this.flag = true;
+            }
+            this.map = new BMap.Map("selfMap"); //创建地图实例
+            var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
+            this.map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
+            this.map.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+            this.map.addControl(new BMap.ScaleControl()); // 比例尺
+            this.map.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+            this.map.addControl(new BMap.MapTypeControl()); //地图类型
+            this.map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+            this.map.enableDoubleClickZoom(true);
+            var traffic = new BMap.TrafficLayer(); // 创建交通流量图层实例
+            this.map.addTileLayer(traffic); // 将图层添加到地图上
+            var marker = new BMap.Marker(point); //创建标注
+            this.map.addOverlay(marker);
+            this.map.centerAndZoom(point, 15);
+            var stCtrl = new BMap.PanoramaControl();
+            stCtrl.setOffset(new BMap.Size(0, 40));
+            this.map.addControl(stCtrl);
+            var opts = {
+              width: 180, // 信息窗口宽度
+              height: 50, // 信息窗口高度
+              title: formData.photoLocation // 信息窗口标题
+            };
+            var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
+            this.map.openInfoWindow(infoWindow, this.map.getCenter()); // 打开信息窗口
           }
 
           //   接收人定位
           if (this.imgRealList.length > 0) {
             let contentData = this.imgRealList[0];
-            var map1 = new BMap.Map("realMap"); //创建地图实例
+            if (
+              contentData.photoLocation == null ||
+              contentData.photoLocation == ""
+            ) {
+              this.flags = true;
+            }
+            this.map1 = new BMap.Map("realMap"); //创建地图实例
             var point1 = new BMap.Point(contentData.lgt, contentData.lat); //经纬度坐标
-            map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
-            map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
-            map1.addControl(new BMap.ScaleControl()); // 比例尺
-            map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
-            map1.addControl(new BMap.MapTypeControl()); //地图类型
-            map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
-            map1.enableDoubleClickZoom(true);
+            this.map1.centerAndZoom(point1, 14); //初始化地图,设置中心点坐标和地图级别
+            this.map1.addControl(new BMap.NavigationControl()); //PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方
+            this.map1.addControl(new BMap.ScaleControl()); // 比例尺
+            this.map1.addControl(new BMap.OverviewMapControl()); //默认位于地图右下方，是一个可折叠的缩略地图
+            this.map1.addControl(new BMap.MapTypeControl()); //地图类型
+            this.map1.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+            this.map1.enableDoubleClickZoom(true);
             var traffic1 = new BMap.TrafficLayer(); // 创建交通流量图层实例
-            map1.addTileLayer(traffic1); // 将图层添加到地图上
+            this.map1.addTileLayer(traffic1); // 将图层添加到地图上
             var marker1 = new BMap.Marker(point1); //创建标注
-            map1.addOverlay(marker1);
-            map1.centerAndZoom(point1, 15);
+            this.map1.addOverlay(marker1);
+            this.map1.centerAndZoom(point1, 15);
             var stCtrl1 = new BMap.PanoramaControl();
             stCtrl1.setOffset(new BMap.Size(0, 40));
-            map1.addControl(stCtrl1);
+            this.map1.addControl(stCtrl1);
             var opts1 = {
               width: 180, // 信息窗口宽度
               height: 50, // 信息窗口高度
               title: contentData.photoLocation // 信息窗口标题
             };
             var infoWindow1 = new BMap.InfoWindow("", opts1); // 创建信息窗口对象
-            map1.openInfoWindow(infoWindow1, map1.getCenter()); // 打开信息窗口
+            this.map1.openInfoWindow(infoWindow1, this.map1.getCenter()); // 打开信息窗口
           }
         });
     },
-
     convertIcon(activity, type) {
       // 指令人处理
       this.activities.forEach(v => {
@@ -330,6 +346,12 @@ export default {
         }
       }
     },
+    destoryed() {
+      this.reload();
+      this.map = null;
+      this.map1 = null;
+    },
+
     // 图片预览(发起人)  (jieshou人)
     commPicture(item) {
       let array = [];
@@ -381,7 +403,6 @@ export default {
   .selfBox {
     width: 50%;
     float: left;
-
     h3 {
       font-size: 16px;
       font-weight: normal;

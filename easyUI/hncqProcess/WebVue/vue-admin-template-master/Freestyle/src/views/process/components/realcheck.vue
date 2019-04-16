@@ -42,20 +42,18 @@
       </div>
       <!-- 自检盒子 -->
       <div class="selfinspection fl">
-        <div class="textName">
-          <p>自检</p>
-        </div>
+        <div class="textName">自检</div>
         <!-- 计划盒子 -->
         <div class="selfPlanBox">
           <span style="width:20%" class="br1">
             <p>计划</p>
           </span>
           <span style="width:40%" class="br1">
-            <p class="bt1">时间</p>
+            <div class="bt1">时间</div>
             <p>{{ item.planSelfCheckTime }}</p>
           </span>
           <span style="width:40%">
-            <p class="bt1">自检人</p>
+            <div class="bt1">自检人</div>
             <p>{{ item.planSelfCheckPerson }}</p>
           </span>
         </div>
@@ -65,35 +63,43 @@
             <p>实际</p>
           </span>
           <span style="width:40%" class="br1">
+            <div class="bt1">时间</div>
             <p>{{ item.realitySelfCheckTime }}</p>
           </span>
           <span style="width:40%">
+            <div class="bt1">时间</div>
             <p>{{ item.realitySelfCheckPerson }}</p>
           </span>
         </div>
       </div>
       <!-- 验收盒子 -->
       <div class="acceptance rl">
-        <div class="textNameOne">
-          <p>验收</p>
-        </div>
+        <div class="textName">验收</div>
         <!-- 计划盒子 -->
         <div class="selfPlanBox">
-          <span style="width:50%" class="br1">
-            <p class="bt1">时间</p>
+          <span style="width:20%" class="br1">
+            <p>计划</p>
+          </span>
+          <span style="width:40%" class="br1">
+            <div class="bt1">时间</div>
             <p>{{ item.planCheckTime }}</p>
           </span>
-          <span style="width:50%">
-            <p class="bt1">验收人</p>
+          <span style="width:40%">
+            <div class="bt1">验收人</div>
             <p>{{ item.planCheckPerson }}</p>
           </span>
         </div>
         <!-- 实际盒子 -->
         <div class="selfRealityBox">
-          <span style="width:50%" class="br1">
+           <span style="width:20%" class="br1">
+            <p>实际</p>
+          </span>
+          <span style="width:40%" class="br1">
+            <div class="bt1">时间</div>
             <p>{{ item.realityCheckTime }}</p>
           </span>
-          <span style="width:50%">
+          <span style="width:40%">
+            <div class="bt1">验收人</div>
             <p>{{ item.realityCheckPerson }}</p>
           </span>
         </div>
@@ -102,45 +108,54 @@
     <!-- 轮播图 -->
     <div class="describeBox" v-for="(item,index) in selfList" :key="'describeBox'-index">
       <span class="fl">
-        <p class="br1">自检描述: {{ item.selfCheckDescribe }}</p>
-        <div class v-if="imgData!=null">
-               <ul>
-                 <li v-for="(item,index) in imgData" :key="index">
-                      <img :src="item.filePath" alt="">
-                 </li>
-               </ul>
+        <div class="br1 first-box">自检描述: {{ item.selfCheckDescribe }}</div>
+        <div class="second-box" v-if="imgData!=null">
+          <ul>
+            <li v-for="(item,index) in imgData" :key="index"  @click="picturereal(item)">
+              <img :src="item.filePath" alt>
+            </li>
+          </ul>
         </div>
         <div v-else>
           <div class="zjimg">没有初验图片</div>
         </div>
       </span>
       <span class="rl">
-        <p>验收描述: {{ item.describe }}</p>
-        <div v-if="imgData2!=null">
+        <div class="first-box">验收描述: {{ item.describe }}</div>
+        <div  v-if="imgData2!=null">
           <ul>
-                 <li v-for="(item,index) in imgData2" :key="index">
-                      <img :src="item.filePath" alt="">
-                 </li>
-               </ul>
+            <li v-for="(item,index) in imgData2" :key="index" @click="picturereal(item)">
+              <img :src="item.filePath" alt>
+            </li>
+          </ul>
         </div>
         <div v-else>
           <div class="ysimg">没有验收图片</div>
         </div>
       </span>
     </div>
+     <el-dialog title="图片预览" :visible.sync="dialogreal" fullscreen append-to-body>
+          <viewer :photo="realPicture"></viewer>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import request from "@/utils/request";
+import viewer from "@/components/viewer";
 export default {
   props: ["selfList"],
+  components:{
+      viewer
+  },
   data() {
     return {
       imginnerVisible: false,
       datac: [],
       imgData: [],
-      imgData2: []
+      imgData2: [],
+      dialogreal:false,
+      realPicture:[],
     };
   },
   watch: {
@@ -172,16 +187,17 @@ export default {
           ? (i.state2 = "自检完成")
           : (i.state2 = "验收完成");
       });
-    }
+    },
+    
   },
-  created() {
-    // this.srty();
-  },
+  created() {},
   methods: {
-    // srty() {
-    //   this.datac = this.selfList;
-    //   console.log(this.datac);
-    // }
+      picturereal(item){
+        let array = []
+        array.push(item)
+        this.photo= array
+        this.dialogreal = true
+    }
   }
 };
 </script>
@@ -233,88 +249,71 @@ export default {
 // 新表格
 .database {
   width: 100%;
-  height: 50.6vh;
+  overflow: hidden;
   border: 1px solid #666;
   .headData {
-    height: 7vh;
     div {
       width: 50%;
       .processName {
         width: 30%;
-        border-right: 1px solid #666;
+        border-right:1px solid #666;
+        background-color: rgba(190, 195, 195, 0.5) !important;
       }
       .stateName {
         width: 30%;
         border-right: 1px solid #666;
         border-left: 1px solid #666;
+        background-color: rgba(190, 195, 195, 0.5) !important;
       }
       span {
         display: block;
-        height: 7vh;
         text-align: center;
       }
     }
   }
   //   自检盒子
-  .selfinspection {
+  .selfinspection,.acceptance {
     width: 50%;
-    height: 42vh;
     border-top: 1px solid #666;
-    border-right: 1px solid #666;
     .textName {
-      height: 5vh;
       border-bottom: 1px solid #666;
       text-align: center;
+      height: 5vh;
+      line-height: 5vh;
+      background-color: rgba(190, 195, 195, 0.5) !important;
     }
-    .selfPlanBox {
-      height: 18vh;
+    .selfPlanBox,
+    .selfRealityBox {
+      overflow: hidden;
       border-bottom: 1px solid #666;
       span {
         display: block;
         float: left;
-        height: 18vh;
         text-align: center;
-      }
-    }
-    .selfRealityBox {
-      height: 18vh;
-      span {
-        display: block;
-        float: left;
-        height: 18vh;
-        text-align: center;
+        height: 10vh;
+        &:first-child {
+          line-height: 8vh;
+          background-color: rgba(190, 195, 195, 0.5) !important;
+          
+        }
+        &:nth-child(2),
+        &:nth-child(3) {
+          div {
+            height: 5vh;
+            line-height: 5vh;
+            background-color: rgba(190, 195, 195, 0.5) !important;
+          }
+        }
       }
     }
   }
   //   验收盒子
   .acceptance {
     width: 50%;
-    height: 42vh;
-    border-top: 1px solid #666;
-    .textNameOne {
-      height: 5vh;
-      border-bottom: 1px solid #666;
-      text-align: center;
-    }
-    .selfPlanBox {
-      height: 18vh;
-      border-bottom: 1px solid #666;
-      span {
-        display: block;
-        float: left;
-        height: 18vh;
-        text-align: center;
-      }
-    }
-    .selfRealityBox {
-      height: 18vh;
-      span {
-        display: block;
-        float: left;
-        height: 18vh;
-        text-align: center;
-      }
-    }
+    border-left: 1px solid #666;
+  }
+  .selfRealityBox{
+     border-bottom: 0 !important;
   }
 }
 .describeBox {
@@ -325,25 +324,34 @@ export default {
     width: 50%;
     display: block;
     text-align: center;
-    p {
+     .first-box{
+          border-bottom: 1px solid #666;
+          height:5vh;
+    }
+     .second-box{
+           border-right: 1px solid #666;
+            height:45vh;
+     }
+    div {
       height: 5vh;
-      border-bottom: 1px solid #666;
+      line-height: 5vh;
       padding: transparent !important;
     }
   }
-  ul{
+ 
+  ul {
     padding: 0;
     margin: 0;
-    li{
+    li {
       list-style: none;
-      width:33%;
-      height:15vh;
+      width: 33%;
+      height: 15vh;
       padding: 1%;
       float: left;
-      img{
-         width:100%;
-         height:100%;
-         display: block;
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
     }
   }

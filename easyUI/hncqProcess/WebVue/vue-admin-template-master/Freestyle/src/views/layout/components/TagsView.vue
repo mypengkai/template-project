@@ -31,6 +31,7 @@
   //import { generateTitle } from '@/utils/i18n'
 
   export default {
+     inject: ["reload"],
     components: { ScrollPane },
     data() {
       return {
@@ -98,14 +99,15 @@
         })
       },
       refreshSelectedTag(view) {
-        this.$store.dispatch('delCachedView', view).then(() => {
-          const { fullPath } = view
-          this.$nextTick(() => {
-            this.$router.replace({
-              path: '/redirect' + fullPath
-            })
-          })
-        })
+        // this.$store.dispatch('delCachedView', view).then(() => {
+        //   const { fullPath } = view
+        //   this.$nextTick(() => {
+        //     this.$router.replace({
+        //       path: '/redirect' + fullPath
+        //     })
+        //   })
+        // })
+        this.reload();
       },
       closeSelectedTag(view) {
         this.$store.dispatch('delView', view).then(({ visitedViews }) => {

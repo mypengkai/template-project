@@ -29,7 +29,7 @@
           </el-col>
           <el-col :span="2">
             <el-button
-              class="pan-btn blue-btn"
+              class="pan-btn light-blue-btn"
               type="primary"
               size="small"
               icon="el-icon-circle-plus-outline"
@@ -100,8 +100,9 @@
         background
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+        @current-change="handleCurrentChange">
+      </el-pagination>
+      
 
       <!--新增、修改弹框-->
       <el-dialog
@@ -111,15 +112,12 @@
         append-to-body
         class="dialogBox"
       >
-        <el-form :model="form" label-width="80px">
-          <el-form-item label="工序类型">
+        <el-form :model="form" label-width="80px" :rules="rules">
+          <el-form-item label="工序类型"  prop="processType">
             <el-input v-model="form.processType"/>
           </el-form-item>
           <el-form-item label="备注">
-            <el-input v-model="form.remark"/>
-          </el-form-item>
-          <el-form-item label="序号">
-            <el-input type="number" v-model.number="form.seq"/>
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"/>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -129,7 +127,7 @@
       </el-dialog>
     </div>
     <!-- //查询工序 -->
-    <el-dialog title="查询工序信息" :visible.sync="dialogVisibleProcess" width="60%" class="dialogBox">
+    <el-dialog title="工序信息" :visible.sync="dialogVisibleProcess" width="60%" class="dialogBox">
       <process :process-type-id="processTypeId" :process-type-name="processTypeName"/>
     </el-dialog>
   </div>
@@ -140,6 +138,7 @@ import request from "@/utils/request";
 import process from "./processInfo";
 import $ from "jquery";
 export default {
+  inject: ["reload"],
   components: {
     process
   },
@@ -155,13 +154,18 @@ export default {
       dialogVisibleProcess: false,
       searchText: "",
       currentPage: 1, // 当前页
-      pageSize: 10, // 每页显示数
+      pageSize: 15, // 每页显示数
       total: 0, // 总数
       processTypeId: "",
       processTypeName: "",
       // show: false,
       lastRow: null,
-      type: "新增"
+      type: "新增",
+      rules: {
+        processType: [
+          { required: true, message: "请输入工序", trigger: "blur" }
+        ]
+      }
     };
   },
   mounted() {
@@ -184,7 +188,7 @@ export default {
         }
       });
     },
-    addNew(obj) {
+    addNew(form) {
       if (this.form.processType == "" || this.form.processType == undefined) {
         this.$message({
           showClose: true,
@@ -193,7 +197,7 @@ export default {
         });
         return false;
       }
-      request.post("/rest/processType/projectTypeAdd", obj).then(res => {
+      request.post("/rest/processType/projectTypeAdd", form).then(res => {
         if (res.data.respCode === "0") {
           // this.$message({
           //   showClose: true,
@@ -254,19 +258,9 @@ export default {
       this.currentPage = curPage;
       this.initTable();
     },
-    // // 折叠process侧边栏
-    // processFold() {
-    //   this.show = false;
-    //   $(".processType").css("width", "90%");
-    // },
-    // // 展开process侧边栏
-    // processUnfold() {
-    //   this.show = true;
-    //   $(".processType").css("width", "50%");
-    // },
     // 重置按钮
     reset() {
-      this.$router.go(0);
+      this.reload();
     }
   }
 };
@@ -281,9 +275,6 @@ html,
   overflow: hidden;
 }
 .processType {
-  // width: 90%;
-  // float: left;
-  // transition: width 0.3s;
   margin-bottom: 10px;
   overflow: hidden;
   .searchinfo {
@@ -297,11 +288,6 @@ html,
   }
 }
 
-// .processItem {
-//   float: right;
-//   width: 50%;
-//   margin-top: 4.1vw;
-// }
 .el-table thead {
   background-color: #ccc;
 }
