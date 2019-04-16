@@ -39,7 +39,7 @@
         top: 0,
         left: 0,
         selectedTag: {},
-        flag:true
+        flag:false
       }
     },
     computed: {
@@ -230,7 +230,6 @@
     #deteilButton{
      float: right; 
      padding: 0.3vw;
-    //  margin-top:0.2vw;
      font-size: 0.1vw;
     }
   }

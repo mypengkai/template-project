@@ -4,36 +4,48 @@
     <div class="search-add">
       <div class="search">
         <span>工序名:</span>
-        <el-input v-model="searchText" size="small" placeholder="请输入工序名" />
+        <el-input v-model="searchText" size="small" placeholder="请输入工序名"/>
       </div>
       <div class="operator">
         <el-button type="primary" size="small" icon="el-icon-search" @click="initTable">查询</el-button>
         <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
-        <el-button
-              type="primary"
-              size="small"
-              icon="el-icon-refresh"
-              @click="reset()"
-            >重置</el-button>
+        <el-button type="primary" size="small" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
 
-  
     <!--列表-->
     <div class="processtable">
-      <el-table :data="tableData" height="50vh" stripe border highlight-current-row   class="textList">
-        <el-table-column prop="process" label="工序过程" />
-        <el-table-column prop="createName" label="创建人" />
-        <el-table-column prop="createTime" label="创建时间" />
+      <el-table
+        :data="tableData"
+        height="50vh"
+        stripe
+        border
+        highlight-current-row
+        class="textList"
+      >
+        <el-table-column prop="process" label="工序过程"/>
+        <el-table-column prop="createName" label="创建人"/>
+        <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="修改" placement="top">
-                <el-button type="primary" icon="el-icon-edit" size="small" circle @click="edit(scope.row)" />
-              </el-tooltip>
-               <el-tooltip class="item" effect="dark" content="修改" placement="top">
-                <el-button type="danger" icon="el-icon-delete" size="small" circle @click="deleteProcess(scope.row.id)" />
-              </el-tooltip>
-            
+            <el-tooltip class="item" effect="dark" content="修改" placement="top">
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="small"
+                circle
+                @click="edit(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="修改" placement="top">
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="small"
+                circle
+                @click="deleteProcess(scope.row.id)"
+              />
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -41,19 +53,35 @@
 
     <!--分页-->
 
-    <el-pagination class="pageList mt1" :current-page="currentPage" :page-sizes="[15, 30, 60,100]" :page-size="pageSize" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination
+      class="pageList mt1"
+      :current-page="currentPage"
+      :page-sizes="[15, 30, 60,100]"
+      :page-size="pageSize"
+      :total="total"
+      background
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
 
     <!--新增、编辑弹框-->
-    <el-dialog :visible.sync="dialogVisible" title="修改工序信息" width="30%" append-to-body class="dialogBox">
+    <el-dialog
+      :visible.sync="dialogVisible"
+      title="修改工序信息"
+      width="30%"
+      append-to-body
+      class="dialogBox"
+    >
       <el-form :model="form" label-width="80px">
         <el-form-item label="工序名">
-          <el-input v-model="form.process" />
+          <el-input v-model="form.process"/>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input v-model="form.remark" />
+          <el-input v-model="form.remark"/>
         </el-form-item>
         <el-form-item label="序号">
-          <el-input v-model.number="form.seq" />
+          <el-input v-model.number="form.seq"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -61,15 +89,13 @@
         <el-button type="primary" @click="addNew">确 定</el-button>
       </div>
     </el-dialog>
-
   </div>
-
 </template>
 
 <script>
 import request from "@/utils/request";
 export default {
-   inject: ["reload"],
+  inject: ["reload"],
   name: "ProcessInfo",
   props: {
     processTypeId: {
@@ -95,7 +121,7 @@ export default {
       // 分页
       total: 0,
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 10
     };
   },
   watch: {
@@ -137,8 +163,8 @@ export default {
       );
     },
     addNew() {
-      if(this.form.process == "" || this.form.process == undefined){
-            this.$message({
+      if (this.form.process == "" || this.form.process == undefined) {
+        this.$message({
           showClose: true,
           message: "请输入工序名",
           type: "warning"
@@ -168,10 +194,8 @@ export default {
       this.currentPage = curPage;
       this.initTable();
     },
-
-
-    reset(){
-        this.reload()
+    reset() {
+      this.reload();
     }
   }
 };
@@ -183,7 +207,7 @@ export default {
 }
 .search {
   float: left;
-   margin-bottom: 10px;
+  margin-bottom: 10px;
   .el-input {
     width: 200px;
   }

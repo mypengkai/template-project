@@ -96,7 +96,7 @@
       </div>
     </div>
     <!-- 图片预览 -->
-    <el-dialog title="图片预览" :visible.sync="dialogcomm"  fullscreen append-to-body>
+    <el-dialog title="图片预览" :visible.sync="dialogcomm"  fullscreen append-to-body >
       <viewer :photo="commPictureList"></viewer>
     </el-dialog>
   </div>
