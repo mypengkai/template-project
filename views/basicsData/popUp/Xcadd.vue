@@ -3,45 +3,48 @@
     <el-form class="reverseBox" :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
         <el-form-item label="所属机构" :label-width="formLabelWidth">
-          <el-input v-model="form.name" :disabled="true">
+          <!-- <el-input v-model="form.name" :disabled="true">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
-          </el-input>
+            
+          </el-input> -->
+            <select-tree :options="orgTree" v-on:noDe="handleCheckChange" :props="defaultProps"/>
         </el-form-item>
 
         <el-form-item label="工程分部分项" :label-width="formLabelWidth" prop="projectItem">
-          <el-input v-model="form.projectItem"></el-input>
+          <!-- <el-input v-model="form.projectItem"></el-input> -->
+          <select-tree :options="projectList" v-on:noDe="projectChange" :props="projectTree"/>
         </el-form-item>
 
         <el-form-item v-if="nowItem!=='add'" label="父工程分部分项" :label-width="formLabelWidth">
-          <el-input v-model="form.pName" :disabled="true">
+          <el-input v-model="form.pName" :disabled="true" size="small">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
         </el-form-item>
 
         <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="startStation">
-          <el-input v-model="form.startStation"></el-input>
+          <el-input v-model="form.startStation" size="small"></el-input>
         </el-form-item>
 
         <el-form-item label="终止桩号" :label-width="formLabelWidth" prop="endStation">
-          <el-input v-model="form.endStation"></el-input>
+          <el-input v-model="form.endStation" size="small"></el-input>
         </el-form-item>
 
         <el-form-item label="经度" :label-width="formLabelWidth">
-          <el-input v-model="form.lgt"></el-input>
+          <el-input v-model="form.lgt" size="small"></el-input>
         </el-form-item>
 
         <el-form-item label="纬度" :label-width="formLabelWidth">
-          <el-input v-model="form.lat"></el-input>
+          <el-input v-model="form.lat" size="small"></el-input>
         </el-form-item>
 
         <el-form-item v-if="nowItem=='add'" label="工程类型" :label-width="formLabelWidth">
-          <el-select v-model="form.projectType" placeholder="请选择">
+          <el-select v-model="form.projectType" placeholder="请选择" size="small">
             <el-option label="单位工程" value=1></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item v-if="nowItem!=='add'" label="工程类型" :label-width="formLabelWidth">
-          <el-select v-model="form.projectType" placeholder="请选择">
+          <el-select v-model="form.projectType" placeholder="请选择" size="small">
             <el-option label="单位工程" value=1></el-option>
             <el-option label="子单位工程" value=2></el-option>
             <el-option label="分部工程" value=3></el-option>
@@ -58,23 +61,27 @@
     </div>
 
     <!-- 树形表单提交 -->
-    <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
+    <!-- <el-dialog width="30%" title="所属机构" :visible.sync="innerVisible" append-to-body>
       <el-tree :data="orgTree" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="handleCheckChange" :props="defaultProps">
       </el-tree>
-    </el-dialog>
+    </el-dialog> -->
     <!-- 分部分项树形表单 -->
-    <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
+    <!-- <el-dialog width="30%" title="分部分项" :visible.sync="projectVisible" append-to-body>
       <el-tree :data="projectList" :highlight-current="true" :render-after-expand="false" node-key="id" @node-click="projectChange" :props="projectTree">
       </el-tree>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
 import api from "@/api/project.js";
 import Organization from "@/api/Organization.js";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   props: ["nowItem"],
+  components:{
+      SelectTree
+  },
   data() {
     return {
       orgTree: [], // 组织机构树

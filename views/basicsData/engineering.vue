@@ -6,7 +6,7 @@
     </div>
     <!-- 操作列表 -->
     <!-- <el-scrollbar> -->
-      <tree-table class="textList scroBar"  :data="dataList" row-key ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll" >
+      <tree-table class="textList"  :data="dataList" row-key ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll" height="68vh">
         <el-table-column label="工程分部分项">
           <template slot-scope="scope">
             <span style>{{ scope.row.projectItem }}</span>

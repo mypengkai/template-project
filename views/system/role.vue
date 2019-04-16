@@ -9,7 +9,7 @@
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="chaxun()">搜索</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="dialogFormVisible=true">新增</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="dialogFormVisible=true">新增</el-button>
       </div>
     </div>
     <!-- <div class="fl">

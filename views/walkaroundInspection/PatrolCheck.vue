@@ -11,9 +11,9 @@
         <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value" />
 
         <span>创建日期:</span>
-        <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
+        <el-date-picker v-model="sendData.startTime" type="date" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
         <!-- <span>至</span>    -->
-        <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>
+        <el-date-picker v-model="sendData.endTime" type="date" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>
       </div>
 
       <div>
