@@ -5,7 +5,7 @@
       <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"  @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <el-scrollbar style="height: 68vh;overflow-x: hidden;">
+    <!-- <el-scrollbar> -->
       <tree-table class="textList scroBar"  :data="dataList" row-key ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll" >
         <el-table-column label="工程分部分项">
           <template slot-scope="scope">
@@ -64,7 +64,7 @@
           </template>
         </el-table-column>
       </tree-table>
-    </el-scrollbar>
+    <!-- </el-scrollbar> -->
 
     <!-- 新增弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" class="dialogBox">

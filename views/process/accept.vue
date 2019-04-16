@@ -51,7 +51,7 @@
       <!-- 操作列表 -->
 
       <div class="Cztab" v-if="childrenId!=undefined&&childrenId!=''" >
-        <el-table :data="tableData" border >
+        <el-table :data="tableData" border height="60vh" class="textList">
           <!-- height="65vh" -->
           <el-table-column prop="processName" label="工序过程"></el-table-column>
           <el-table-column prop="planCheckTime" label="时间"></el-table-column>
@@ -130,7 +130,8 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- <div class="block">
+      </div>
+       <!-- <div class="block">
               <el-pagination 
                   @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
@@ -140,8 +141,7 @@
                   layout="total, sizes, prev, pager, next, jumper"
                   :total="tableData.length+1">
               </el-pagination>
-            </div> -->
-      </div>
+            </div>    -->
     </div>
     <!-- 添加工序弹框 -->
     <el-dialog title="指定工序" :visible.sync="dialogFormVisible">
@@ -979,9 +979,9 @@ export default {
     .Cztab {
       margin-top: 10px;
       height: 60vh;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      overflow-x:hidden;
+      // border: 1px solid #ccc;
+      // border-radius: 10px;
+      overflow:hidden;
       .paging {
         padding-top: 2vh;
         padding-left: 12vw;

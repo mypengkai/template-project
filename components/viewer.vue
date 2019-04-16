@@ -77,7 +77,7 @@ export default {
         height: 10vh;
         line-height: 3vh;
         color: black;
-        font-size: 0.8vw;
+        font-size: 1vw;
       }
     }
   }

@@ -2,7 +2,7 @@
   <div class="p20">
     <!-- 新增 -->
     <div class="btncalss">
-       <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="action('add')">新增</el-button>
+       <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>
     </div>
    
     <!-- 列表 -->
