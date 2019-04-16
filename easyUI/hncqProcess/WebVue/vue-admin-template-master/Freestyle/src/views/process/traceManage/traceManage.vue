@@ -195,7 +195,6 @@ export default {
         this.from.projectName = data.name;
         this.from.projectId = data.id;
       }
-
       // 工程查询
       request
         .post("/rest/projectItemInfo/getList", {
@@ -234,7 +233,7 @@ export default {
         })
         .then(res => {
           this.conentOptions = res.data.data.data;
-          // console.log(this.conentOptions);
+          console.log(this.conentOptions);
         });
     },
     peopleQuery() {

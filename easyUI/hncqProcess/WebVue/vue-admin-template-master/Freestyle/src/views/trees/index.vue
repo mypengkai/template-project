@@ -6,9 +6,9 @@
       <el-input v-model="form.userName" clearable placeholder="请输入内容"></el-input>
       <!-- 时间选择器 -->
       <span>创建日期:</span>
-      <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择日期时间"  style="min-width:200px">
+      <el-date-picker v-model="form.startTime" type="date" placeholder="选择日期时间"  style="min-width:200px">
       </el-date-picker>
-      <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择日期时间"  style="min-width:200px">
+      <el-date-picker v-model="form.endTime" type="date" placeholder="选择日期时间"  style="min-width:200px">
       </el-date-picker>
 
       <div class="rl">

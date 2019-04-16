@@ -19,19 +19,26 @@
         </el-form-item>
 
         <el-form-item label="组织机构">
-            <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value" />
+          <select-tree
+            clearable
+            :options="orgTree"
+            :props="defaultProps"
+            v-on:noDe="handleCheckChange"
+            v-model="value"
+          />
           <!-- <el-input v-model="user.departName" :disabled="true">
             <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
-          </el-input> -->
-
-
-        
+          </el-input>-->
         </el-form-item>
 
         <el-form-item label="角色" prop="userKey">
           <el-select v-model="user.userKey" multiple placeholder="请选择角色">
-            <el-option v-for="(item,index) in roleList" :key="index.id" :label="item.rolename" :value="item.id">
-            </el-option>
+            <el-option
+              v-for="(item,index) in roleList"
+              :key="index.id"
+              :label="item.rolename"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
 
@@ -40,11 +47,30 @@
         </el-form-item>
 
         <el-form-item label="手机号码" prop="mobilePhone">
-          <el-input class="numInput" type="number" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' v-model="user.mobilePhone"></el-input>
+          <el-input
+            class="numInput"
+            type="number"
+            onkeypress="return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )"
+            v-model="user.mobilePhone"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="上传头像" v-if="nowItem=='add'">
-          <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" :multiple="false" name="files" :headers="headers" list-type="picture-card" :limit="1" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="user">
+          <el-upload
+            class="avatar-uploader"
+            ref="upload"
+            :action="uploadUrl"
+            :multiple="false"
+            name="files"
+            :headers="headers"
+            list-type="picture-card"
+            :limit="1"
+            :auto-upload="false"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :on-exceed="handleExceed"
+            :data="user"
+          >
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -53,9 +79,8 @@
         </el-form-item>
 
         <el-form-item label="头像查看" v-if="nowItem!=='add'">
-          <img :src="user.picture" alt="" class="avatar">
+          <img :src="user.picture" alt class="avatar">
         </el-form-item>
-
       </div>
     </el-form>
     <div class="tar">
@@ -63,8 +88,6 @@
       <el-button type="primary" v-if="nowItem!=='add'" @click="_execute">修 改</el-button>
       <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">保 存</el-button>
     </div>
-
-   
   </div>
 </template>
 
@@ -77,10 +100,23 @@ import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   inject: ["reload"],
   props: ["nowItem"],
-  components:{
+  components: {
     SelectTree
   },
   data() {
+    var checkPhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        console.log(reg.test(value));
+        if (reg.test(value)) {
+          callback();
+        } else {
+          return callback(new Error("请输入正确的手机号"));
+        }
+      }
+    };
     return {
       uploadUrl: process.env.BASE_API + "/rest/sysuser/add",
       orgTree: [],
@@ -97,7 +133,7 @@ export default {
         realName: [{ required: true, message: "必填项", trigger: "blur" }],
         name: [{ required: true, message: "必填项", trigger: "blur" }],
         userKey: [{ required: true, message: "必填项", trigger: "blur" }],
-        mobilePhone: { required: true, message: "必填项", trigger: "blur" },
+        mobilePhone: { required: true,validator: checkPhone, trigger: "blur" },
         portrait: [{ required: true, message: "必填项", trigger: "blur" }]
       }, //表单校验规则
       user: {
@@ -118,7 +154,7 @@ export default {
       },
       id: "",
       name: "",
-      value:"",
+      value: "",
       uploadFileParams: {},
       files: null,
       dialogFormVisible: true,
@@ -150,20 +186,19 @@ export default {
     },
     _comfirm(file) {
       // 表单校验
-       this.$refs[file].validate(valid => {
+      this.$refs[file].validate(valid => {
         if (valid) {
           // 新增
-           if (this.$refs.userFrom.validate()) {
-        this.$refs.upload.submit();
-      }
-      this.$emit("cancel");
-      this.reload();
+          if (this.$refs.userFrom.validate()) {
+            this.$refs.upload.submit();
+          }
+          this.$emit("cancel");
+          this.reload();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
-     
     },
     //查看
     _execute() {
