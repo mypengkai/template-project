@@ -9,6 +9,12 @@
       <div class="operator">
         <el-button type="primary" size="small" icon="el-icon-search" @click="initTable">查询</el-button>
         <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
+        <el-button
+              type="primary"
+              size="small"
+              icon="el-icon-refresh"
+              @click="reset()"
+            >重置</el-button>
       </div>
     </div>
 
@@ -63,6 +69,7 @@
 <script>
 import request from "@/utils/request";
 export default {
+   inject: ["reload"],
   name: "ProcessInfo",
   props: {
     processTypeId: {
@@ -160,6 +167,11 @@ export default {
     handleCurrentChange(curPage) {
       this.currentPage = curPage;
       this.initTable();
+    },
+
+
+    reset(){
+        this.reload()
     }
   }
 };

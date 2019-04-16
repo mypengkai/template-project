@@ -31,7 +31,10 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="所在位置" name="second">
-          <div id="logmap"></div>
+          <div id="logmap" v-show="!flag"></div>
+           <div style="height:30vh" v-show="flag">
+                    暂无地图
+              </div>    
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -68,6 +71,7 @@ export default {
       imgListOne: [], //  第一组图片信息
       dialogTableVisible: false,
       photo: [] ,//点击图片信息
+      flag:false
     };
   },
   created() {},
@@ -101,6 +105,9 @@ export default {
           // ========================  地图    ============================
           if (this.logList.picMessage.length > 0) {
             let formData = this.logList.picMessage[0];
+            if(formData.photoLocation=="" || formData.photoLocation==null){
+                 this.flag = true
+            }
             var map = new BMap.Map("logmap"); //创建地图实例
             var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
             map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -130,7 +137,6 @@ export default {
     },
     //图片预览
     picturePreve(item) {
-      console.log(item,'item')
       let array = [];
       array.push(item)
       this.photo = array;
@@ -155,7 +161,8 @@ export default {
 .content {
   padding: 0 4vh;
   .imgContation {
-     height: 30vh;
+    min-height: 30vh;
+    overflow-x: hidden;
      ul {
     padding: 0;
     margin: 0;
@@ -163,7 +170,7 @@ export default {
       list-style: none;
       float: left;
       width: 33%;
-      height: 10vh;
+      height: 15vh;
       padding: 1%;
       img{
          width: 100%;
@@ -174,16 +181,5 @@ export default {
   }  
   }
 }
-// /deep/ .dialogBox{
-//     .el-dialog{
-//         width: 60%;
-//     }
-//     .el-dialog__header{
-//         text-align: center;
-//     }
-//   }
-//   .el-dialog__body{
-//        max-height:60vh;
-//        overflow-y: auto;
-//   }
+
 </style>

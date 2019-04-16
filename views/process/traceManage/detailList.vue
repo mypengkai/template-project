@@ -38,7 +38,7 @@
               <div class="grid-content bg-purple">{{item.zhiwei}}</div>
             </el-col>
           </el-row>
-          <div class="spanOne"  :style="{'color':(item.state == flag ? 'red' :'green')}">
+          <div class="spanOne" :style="{'color':(item.state == flag ? 'red' :'green')}">
             <!-- 转码  0 ==> 未处理     1 ==>已完成 -->
             <template v-if="item.state == 0">未处理</template>
             <template v-else-if="item.state == 1">已完成</template>
@@ -96,22 +96,37 @@
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
     <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%" class="dialogBox">
-      <comm :commandID="commandID"></comm>
+      <comm :commandId="commandId" v-if="hackReset"></comm>
     </el-dialog>
     <!-- 巡视查看 -->
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
       <pollingCheck :targetID="targetID"></pollingCheck>
     </el-dialog>
     <!--验收查看-->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleRealcheck" width="80%" class="dialogBox">
-        <processCheck :realList="realList"></processCheck>
+    <el-dialog
+      title="查看详情"
+      :visible.sync="dialogTableVisibleRealcheck"
+      width="80%"
+      class="dialogBox"
+    >
+      <processCheck :realList="realList"></processCheck>
     </el-dialog>
     <!-- 自检查看 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%" class="dialogBox">
-        <realcheck :selfList="selfList"></realcheck>
+    <el-dialog
+      title="查看详情"
+      :visible.sync="dialogTableVisibleSelfcheck"
+      width="80%"
+      class="dialogBox"
+    >
+      <realcheck :selfList="selfList"></realcheck>
     </el-dialog>
     <!-- 日志查看 -->
-    <el-dialog title="日志详情" :visible.sync="dialogTableVisiblelogcheck" width="60%" class="dialogBox">
+    <el-dialog
+      title="日志详情"
+      :visible.sync="dialogTableVisiblelogcheck"
+      width="60%"
+      class="dialogBox"
+    >
       <logCheck :targetID="targetID"></logCheck>
     </el-dialog>
   </div>
@@ -122,9 +137,10 @@ import request from "@/utils/request";
 import comm from "@/views/process/components/comm";
 import logCheck from "@/views/process/components/logCheck";
 import pollingCheck from "@/views/process/components/pollingCheck";
-import processCheck from '@/views/process/components/processCheck'
-import realcheck from '@/views/process/components/realcheck'
+import processCheck from "@/views/process/components/processCheck";
+import realcheck from "@/views/process/components/realcheck";
 export default {
+  inject: ["reload"],
   name: "DetailList",
   props: {
     traceType: {
@@ -135,7 +151,6 @@ export default {
     userOptions: {} //人员数据
   },
   components: {
-    // selfcheck,
     logCheck,
     pollingCheck,
     comm,
@@ -148,24 +163,19 @@ export default {
       dialogTableVisiblePolling: false, //巡视
       dialogTableVisibleSelfcheck: false, // 自检
       dialogTableVisiblelogcheck: false, //日志
-      dialogTableVisibleRealcheck:false,  // 验收
+      dialogTableVisibleRealcheck: false, // 验收
       targetID: "", // 点击每一项的ID
-      commandID: "", // 指令查询ID
-      processList: {} ,//自检验收信息
-      flag:false,
-      selfList:[],      // 自检数据
-      realList:[],       // 验收数据
+      commandId: "", // 指令查询ID
+      processList: {}, //自检验收信息
+      flag: false,
+      selfList: [], // 自检数据
+      realList: [], // 验收数据
+      hackReset: false
     };
   },
-  watch:{
-    
-  },
-  created() {
-     
-  },
+  created() {},
   mounted() {
-      
-      
+  
   },
   computed: {
     title() {
@@ -180,8 +190,11 @@ export default {
       //指令
       if (item.type == "command") {
         this.dialogTableVisibleCommied = true;
-        this.commandID = item.commandId;
-        console.log(this.commandID, " this.commandID");
+        this.commandId = item.commandId;
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        });
       }
       //日志
       if (item.type == "log") {
@@ -192,37 +205,36 @@ export default {
         this.dialogTableVisiblePolling = true;
       }
       // 验收
-      if(item.type == "realcheck"){
-          this.dialogTableVisibleRealcheck = true
-            request
+      if (item.type == "realcheck") {
+        this.dialogTableVisibleRealcheck = true;
+        request
           .post("/rest/processCheck/getProcessDetail", {
             id: item.processId
-          }).then(res=>{
-              if(res.data.respCode == '0'){
-                    let arr = [];
-                    arr.push(res.data.data)
-                    this.realList = arr
-                   
-              }
           })
+          .then(res => {
+            if (res.data.respCode == "0") {
+              let arr = [];
+              arr.push(res.data.data);
+              this.realList = arr;
+            }
+          });
       }
       // 自检
-      if(item.type == "selfcheck"){
-         this.dialogTableVisibleSelfcheck = true;
-               request
+      if (item.type == "selfcheck") {
+        this.dialogTableVisibleSelfcheck = true;
+        request
           .post("/rest/processCheck/getProcessDetail", {
             id: item.processId
-          }).then(res=>{
-              if(res.data.respCode == '0'){
-                    let array = [];
-                    array.push(res.data.data)
-                    this.selfList = array  
-                     console.log( this.selfList,' this.selfList')   
-              }
           })
+          .then(res => {
+            if (res.data.respCode == "0") {
+              let array = [];
+              array.push(res.data.data);
+              this.selfList = array;
+            }
+          });
       }
-    },
-     
+    }
   }
 };
 </script>
@@ -271,7 +283,7 @@ export default {
       }
       .timeOut {
         overflow: hidden;
-        height:18px;
+        height: 18px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 1;
@@ -279,9 +291,9 @@ export default {
       }
       .grid-content {
         font-size: 0.8vw;
-        max-height:1vw;
+        max-height: 1vw;
         overflow: hidden;
-         text-overflow: ellipsis;
+        text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
@@ -291,8 +303,8 @@ export default {
       .spanOne {
         float: left;
         font-size: 1vw;
-        height:1vw;
-        color: red; 
+        height: 1vw;
+        color: red;
       }
       .spanTwo {
         float: right;
@@ -304,5 +316,4 @@ export default {
     border: 1px solid red;
   }
 }
-
 </style>
