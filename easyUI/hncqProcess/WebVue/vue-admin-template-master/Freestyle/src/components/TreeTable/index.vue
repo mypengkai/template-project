@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs" height="68vh">
+  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs" height="68vh"  ref="refTable">
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
@@ -64,7 +64,8 @@ export default {
         ? Array.concat([tmp, this.expandAll], this.evalArgs)
         : [tmp, this.expandAll];
       return func.apply(null, args);
-    }
+    },
+    
   },
   methods: {
     showRow: function(row) {
@@ -85,6 +86,16 @@ export default {
     iconShow(index, record) {
       return index === 0 && record.children && record.children.length > 0;
     }
+  },
+  data(){
+      return{
+         
+      }
+  },
+
+  mounted(){
+     console.log(this.$refs.refTable,"refTable")
+    
   }
 };
 </script>
