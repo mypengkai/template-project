@@ -4,15 +4,44 @@
       <div>
         <!-- 新增 -->
         <div :class="{reverseAddBox:nowItem=='add'}">
-          <el-form-item style="width:20vw" label="组织机构" v-if="nowItem =='add'" prop="orgVerify" label-width="120px">
-            <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="form.value2" />
+          <el-form-item
+            style="width:20vw"
+            label="组织机构"
+            v-if="nowItem =='add'"
+            prop="orgVerify"
+            label-width="120px"
+          >
+            <select-tree
+              clearable
+              :options="orgTree"
+              :props="defaultProps"
+              v-on:noDe="handleCheckChange"
+              v-model="form.value2"
+            />
           </el-form-item>
 
-          <el-form-item style="width:20vw" label="分部分项" v-if="nowItem =='add'" prop="projectVerify" label-width="120px">
-            <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="form.value1" />
+          <el-form-item
+            style="width:20vw"
+            label="分部分项"
+            v-if="nowItem =='add'"
+            prop="projectVerify"
+            label-width="120px"
+          >
+            <select-tree
+              :options="projectList"
+              :props="projectTree"
+              v-on:noDe="projectChange"
+              v-model="form.value1"
+            />
           </el-form-item>
 
-          <el-form-item style="width:20vw" label="接收人" v-if="nowItem =='add'" prop="username" label-width="120px">
+          <el-form-item
+            style="width:20vw"
+            label="接收人"
+            v-if="nowItem =='add'"
+            prop="username"
+            label-width="120px"
+          >
             <el-input v-model="form.username" :disabled="true">
               <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
             </el-input>
@@ -20,17 +49,31 @@
 
           <div class="TimeAndType" v-if="nowItem =='add'">
             <span class="fl">
-              <el-form-item label="计划检查时间" v-if="nowItem =='add'" prop="planTime" label-width="120px">
-                <el-date-picker v-model="form.planTime" type="datetime" @change="planDataRange" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
-                </el-date-picker>
+              <el-form-item
+                label="计划检查时间"
+                v-if="nowItem =='add'"
+                prop="planTime"
+                label-width="120px"
+              >
+                <el-date-picker
+                  v-model="form.planTime"
+                  type="datetime"
+                  @change="planDataRange"
+                  placeholder="选择日期时间"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                ></el-date-picker>
               </el-form-item>
             </span>
 
             <span class="rl mr">
               <el-form-item label="指令类型" v-if="nowItem =='add'" label-width="120px">
                 <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
-                  <el-option v-for="(item,index) in TypeList" :key="index" :label="item.label" :value="item.value">
-                  </el-option>
+                  <el-option
+                    v-for="(item,index) in TypeList"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
                 </el-select>
               </el-form-item>
             </span>
@@ -40,8 +83,20 @@
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
 
-          <el-form-item label="图片选择" v-if="nowItem =='add'" prop="" label-width="120px">
-            <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-exceed="handleExceed" :data="form">
+          <el-form-item label="图片选择" v-if="nowItem =='add'" prop label-width="120px">
+            <el-upload
+              class="avatar-uploader"
+              ref="upload"
+              :action="uploadUrl"
+              name="files"
+              :headers="headers"
+              list-type="picture-card"
+              :auto-upload="false"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              :on-exceed="handleExceed"
+              :data="form"
+            >
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
@@ -54,11 +109,21 @@
         <div :class="{reverseBox:nowItem!=='add'}">
           <!-- 左边信息 -->
           <div style="width:47%" class="fl">
-            <el-form-item style="width:22vw" label="分部分项" v-if="nowItem !=='add'" label-width="100px">
+            <el-form-item
+              style="width:22vw"
+              label="分部分项"
+              v-if="nowItem !=='add'"
+              label-width="100px"
+            >
               <el-input type="textarea" autosize readonly v-model="form.projectItem"></el-input>
             </el-form-item>
 
-            <el-form-item style="width:22vw" label="创建时间" v-if="nowItem !=='add'" label-width="100px">
+            <el-form-item
+              style="width:22vw"
+              label="创建时间"
+              v-if="nowItem !=='add'"
+              label-width="100px"
+            >
               <el-input readonly v-model="form.createTime"></el-input>
             </el-form-item>
 
@@ -66,15 +131,27 @@
               <!-- 参考图标 -->
               <div class="reference">
                 <el-timeline>
-                  <el-timeline-item v-for="(activity, index) in activities2" :key="index" :icon="activity.icon" :type="activity.type" :color="activity.color" :size="activity.size" :timestamp="activity.timestamp">
-                    {{activity.content}}
-                  </el-timeline-item>
+                  <el-timeline-item
+                    v-for="(activity, index) in activities2"
+                    :key="index"
+                    :icon="activity.icon"
+                    :type="activity.type"
+                    :color="activity.color"
+                    :size="activity.size"
+                    :timestamp="activity.timestamp"
+                  >{{activity.content}}</el-timeline-item>
                 </el-timeline>
               </div>
-
               <div class="pta">
                 <el-timeline :reverse="reverse">
-                  <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="convertIcon(activity, 'icon')" :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')" :timestamp="activity.finishTime">
+                  <el-timeline-item
+                    v-for="(activity, index) in activities"
+                    :key="index"
+                    :icon="convertIcon(activity, 'icon')"
+                    :type="convertIcon(activity, 'type')"
+                    :size="convertIcon(activity,'size')"
+                    :timestamp="activity.finishTime"
+                  >
                     {{activity.name}} 指令描述 : {{ activity.remark }}
                     <p></p>
                   </el-timeline-item>
@@ -84,14 +161,10 @@
                 <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
                 <el-input readonly v-model="states"></el-input>
               </div>
-
               <div class="textareaBar">
                 <span>相关描述:</span>
                 <el-input type="textarea" readonly style="width:70%" autosize v-model="remark"></el-input>
               </div>
-
-              <!-- <el-timeline :reverse="reverse" :class="{timelineBox:activities.length < 5}"> -->
-
             </el-form-item>
           </div>
           <!-- 右边图像 -->
@@ -102,11 +175,16 @@
                 <span class="accomplish">发起</span>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                   <el-tab-pane label="影像资料" name="first">
-                    <el-carousel :interval="3000" arrow="always" height="45vh">
+                    <!-- <el-carousel :interval="3000" arrow="always" height="45vh">
                       <el-carousel-item v-for="(item,index) in picture" :key="index">
                         <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('0')">
                       </el-carousel-item>
-                    </el-carousel>
+                    </el-carousel>-->
+                    <ul>
+                      <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
+                        <img :src="item.picture" style="cursor:pointer" >
+                      </li>
+                    </ul>
                   </el-tab-pane>
                   <el-tab-pane label="拍照地点" name="second">
                     <div style="height:45vh">
@@ -120,11 +198,22 @@
                 <span class="accomplish">完成</span>
                 <el-tabs v-model="activeName1" @tab-click="handleClick">
                   <el-tab-pane label="影像资料" name="first">
-                    <el-carousel :interval="3000" arrow="always" height="45vh">
+                    <!-- <el-carousel :interval="3000" arrow="always" height="45vh">
                       <el-carousel-item v-for="(item,index) in pictures" :key="index">
-                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('1')">
+                        <img
+                          :src="item.picture"
+                          alt
+                          style="cursor:pointer"
+                          class="avatar"
+                          @click="actionImg('1')"
+                        >
                       </el-carousel-item>
-                    </el-carousel>
+                    </el-carousel> -->
+                    <ul>
+                      <li v-for="(item,index) in pictures" :key="index" @click="actionImg(item)">
+                        <img :src="item.picture" style="cursor:pointer">
+                      </li>
+                    </ul>
                   </el-tab-pane>
                   <el-tab-pane label="拍照地点" name="second">
                     <div style="height:45vh">
@@ -139,24 +228,29 @@
             <div v-if="nowItem !=='add'&& states == '未处理'">
               <!-- 导航切换 -->
               <div class="navb" label-width="120px">
-                <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" text-color="#ccc" active-text-color="#409EFF">
+                <el-menu
+                  :default-active="activeIndex2"
+                  mode="horizontal"
+                  @select="handleSelect"
+                  text-color="#ccc"
+                  active-text-color="#409EFF"
+                >
                   <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
                   <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
                 </el-menu>
               </div>
               <!-- 轮播信息 -->
               <div class="condition" v-if="nowType==0">
-
                 <!-- <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
                   <el-carousel :interval="3000" arrow="always" height="45vh">
                     <el-carousel-item v-for="(item,index) in picture" :key="index">
                       <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
                     </el-carousel-item>
                   </el-carousel>
-                </el-form-item> -->
+                </el-form-item>-->
                 <ul>
-                  <li v-for="(item,index) in picture" :key="index">
-                    <img :src="item.picture" style="cursor:pointer" @click="actionImg()">
+                  <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
+                    <img :src="item.picture" style="cursor:pointer" >
                   </li>
                 </ul>
               </div>
@@ -165,7 +259,6 @@
                 <instructMap :nowItem="nowItem"></instructMap>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -173,44 +266,68 @@
     <!-- <div class="tar" v-if="$route.name=='instructReceive'"> -->
     <div class="tar">
       <!-- <el-button @click="$emit('cancel')">取 消</el-button> -->
-      <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive' && states == '未处理'" @click="innerTranspond = true">转发指令</el-button>
+      <el-button
+        type="primary"
+        v-if="nowItem !=='add' && $route.name=='instructReceive' && states == '未处理'"
+        @click="innerTranspond = true"
+      >转发指令</el-button>
       <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
     </div>
 
     <!-- 接受人id -->
-    <el-dialog class="dialogBox" width="50%" title="选择接收人" :visible.sync="acceptUser" append-to-body>
+    <el-dialog
+      class="dialogBox"
+      width="50%"
+      title="选择接收人"
+      :visible.sync="acceptUser"
+      append-to-body
+    >
       <div>
         <span>用户类型</span>
         <el-select v-model="value" placeholder="请选择" @change="changeUserList">
-          <el-option v-for="(item,index) in MarkList" :key="index" :label="item.label" :value="item.value">
-          </el-option>
+          <el-option
+            v-for="(item,index) in MarkList"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
         </el-select>
       </div>
       <div>
         <el-table :data="userList" style="width: 100%" height="60vh">
-          <el-table-column fixed="left" label="" width="50">
+          <el-table-column fixed="left" label width="50">
             <template slot-scope="scope">
               <input type="radio" @click="selectDot(scope,$event)">
             </template>
           </el-table-column>
-          <el-table-column prop="username" label="姓名">
-          </el-table-column>
-          <el-table-column prop="departname" label="职务">
-          </el-table-column>
-          <el-table-column prop="mobilePhone" label="电话">
-          </el-table-column>
+          <el-table-column prop="username" label="姓名"></el-table-column>
+          <el-table-column prop="departname" label="职务"></el-table-column>
+          <el-table-column prop="mobilePhone" label="电话"></el-table-column>
         </el-table>
       </div>
       <div>
-        <el-pagination background :current-page.sync="sendData.pageNo" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" @current-change="_userList()" :total="total">
-        </el-pagination>
+        <el-pagination
+          background
+          :current-page.sync="sendData.pageNo"
+          :page-sizes="[15,30,60,100]"
+          :page-size="1"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="_userList()"
+          :total="total"
+        ></el-pagination>
       </div>
       <div class="tar">
         <el-button type="primary" @click="toggleSelection('fData')">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 转发信息 -->
-    <el-dialog class="dialogBox" width="30%" title="转发信息" :visible.sync="innerTranspond" append-to-body>
+    <el-dialog
+      class="dialogBox"
+      width="30%"
+      title="转发信息"
+      :visible.sync="innerTranspond"
+      append-to-body
+    >
       <el-form :model="transpondForm" :rules="rulesform" label-width="80px">
         <el-form-item label="指定人" prop="transpondName">
           <el-input v-model="transpondForm.transpondName">
@@ -219,7 +336,11 @@
         </el-form-item>
 
         <el-form-item label="备注">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="transpondForm.remark"></el-input>
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            v-model="transpondForm.remark"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div class="tar">
@@ -227,11 +348,22 @@
         <el-button type="primary" @click="_delivery">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- 照片详情查看 -->
-    <el-dialog class="dialogBox" width="60%" title="详情查看" :visible.sync="innerVisibleSon" append-to-body>
+   
+     <!-- 图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="dialogcommcheck"  fullscreen append-to-body >
+      <viewer :photo="commcheckList"></viewer>
+    </el-dialog>
+    
+
+    <!-- <el-dialog
+      class="dialogBox"
+      width="60%"
+      title="详情查看"
+      :visible.sync="innerVisibleSon"
+      append-to-body
+    >
       <el-form :model="formSon" label-width="200px">
         <div style="width:80%">
-
           <el-form-item label="指令描述">
             <el-input v-model="formSon.describe"></el-input>
           </el-form-item>
@@ -255,13 +387,13 @@
           <el-form-item label="照片">
             <el-carousel :interval="3000" arrow="always" height="20vh">
               <el-carousel-item v-for="(item,index) in imgData" :key="index">
-                <img :src="item.filePath" alt="">
+                <img :src="item.filePath" alt>
               </el-carousel-item>
             </el-carousel>
           </el-form-item>
         </div>
       </el-form>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -275,12 +407,14 @@ import processInfo from "@/api/process.js";
 import instructMap from "./instructMap";
 import Map from "./Map";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
+import viewer from "@/components/viewer";
 export default {
   inject: ["reload"],
   components: {
     SelectTree,
     instructMap,
-    Map
+    Map,
+    viewer
   },
   props: ["nowItem"],
   data() {
@@ -289,6 +423,7 @@ export default {
       activeName: "second",
       activeName1: "second",
       inData: {},
+      dialogcommcheck:false,
       activities: [
         {
           name: "",
@@ -359,7 +494,7 @@ export default {
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
-
+      commcheckList:[],   // 预览图片信息
       planTime: "",
       headers: {
         "X-AUTH-TOKEN": getToken()
@@ -495,7 +630,7 @@ export default {
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
-      console.log(this.activities)
+      console.log(this.activities);
       this.activities.forEach(v => {
         v.commandStagePeople == 1 && (v.commandStagePeople1 = "发出指令的人");
         v.commandStagePeople == 2 && (v.commandStagePeople1 = "转发指令的人");
@@ -503,8 +638,14 @@ export default {
         v.commandStagePeople == 4 && (v.commandStagePeople1 = "完成指令的人");
       });
       this.picture = ObCopyData.data.pictureOfCommand; // 图片数组
+
+      // console.log(this.picture,'picture')
+
       this.sendDataSon = this.form.processLogId; // 发送工序id
       this.pictures = ObCopyData.data.finishPictureOfCommand;
+
+      // console.log(this.pictures,'pictures')
+
       this.remark = this.commandUser[this.commandUser.length - 1].remark;
       this.states = this.form.finishPictureOfCommand; // 指令内容是否处理
       if (this.states.length == 0) {
@@ -732,6 +873,14 @@ export default {
     handleExceed: function(files, fileList) {
       // console.log(files);
       // console.log(fileList);
+    },
+    //图片预览
+    actionImg(item){
+        console.log(item,'item')
+        let array = []
+        array.push(item)
+        this.commcheckList = array
+        this.dialogcommcheck = true
     }
   }
 };

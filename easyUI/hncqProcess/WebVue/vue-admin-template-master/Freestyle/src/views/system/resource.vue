@@ -7,7 +7,7 @@
    
     <!-- 列表 -->
     <div class="pt20">
-      <el-scrollbar style="height: 68vh;overflow-x: none;">
+      <!-- <el-scrollbar style="height: 68vh;overflow-x: none;"> -->
         <tree-table class="textList" :data="menuList" border row-key>
           <el-table-column label="菜单名称">
             <template slot-scope="scope">
@@ -42,7 +42,7 @@
             </template>
           </el-table-column>
         </tree-table>
-      </el-scrollbar>
+      <!-- </el-scrollbar> -->
 
     </div>
     <!-- 弹框 -->

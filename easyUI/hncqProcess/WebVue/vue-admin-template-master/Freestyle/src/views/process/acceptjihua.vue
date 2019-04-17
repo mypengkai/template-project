@@ -28,9 +28,8 @@
       </el-row>
     </div>
 
-     
     <div class="topBar">
-       <el-row>
+      <el-row>
         <el-col :span="6">
           <span>工序状态</span>
           <el-select v-model="value1" placeholder="请选择" size="small">
@@ -78,22 +77,24 @@
       </el-row>
     </div>
 
-
-    <el-table class="textList" :data="tableData" border style="width: 100%;" height="56vh" v-if="tableData.length!=0">
-      <el-table-column prop="name1" label="分部分项">
-      </el-table-column>
-      <el-table-column prop="processName" label="工序名">
-      </el-table-column>
+    <el-table
+      class="textList"
+      :data="tableData"
+      border
+      style="width: 100%;"
+      height="56vh"
+      v-if="tableData.length!=0"
+    >
+      <el-table-column prop="name1" label="分部分项"></el-table-column>
+      <el-table-column prop="processName" label="工序名"></el-table-column>
       <!-- <el-table-column prop="processType" label="工序过程">
-      </el-table-column> -->
-      <el-table-column prop="planCheckTime" label="创建时间">
-      </el-table-column>
-      <el-table-column prop="state" label="状态">
-      </el-table-column>
+      </el-table-column>-->
+      <el-table-column prop="planCheckTime" label="创建时间"></el-table-column>
+      <el-table-column prop="state" label="状态"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <!-- <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button> -->
-           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
+          <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button
               @click="handleClick(scope.row)"
               type="primary"
@@ -106,25 +107,46 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination class="pageList pt20" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,60,100]" :page-size="15" layout="total, sizes, prev, pager, next, jumper" :total="total">
-    </el-pagination>
+    <el-pagination
+      class="pageList pt20"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[15,30,60,100]"
+      :page-size="15"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
 
     <!-- 查看弹框 -->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%" class="dialogBox">
-      <imgList :chakanData='chakanData' :imgData='imgData' :imgData2='imgData2' :imgId='imgId' :zijian='zijian' :yanshou='yanshou' :imgForm='imgForm' :imgData3='imgData3' @imgLeft='imgLeft'></imgList>
+      <!-- <imgList
+        :chakanData="chakanData"
+        :imgData="imgData"
+        :imgData2="imgData2"
+        :imgId="imgId"
+        :zijian="zijian"
+        :yanshou="yanshou"
+        :imgForm="imgForm"
+        :imgData3="imgData3"
+        @imgLeft="imgLeft"
+      ></imgList> -->
+      <processCheck :realList="chakanData"></processCheck>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import SelectTree from "@/components/SelectTree/selectTree.vue";
-import imgList from "./components/imgList";
+import processCheck from "@/views/process/components/processCheck";
+// import imgList from "./components/imgList";
 import request from "@/utils/request";
 export default {
-   inject: ["reload"],
+  inject: ["reload"],
   components: {
     SelectTree,
-    imgList
+    processCheck,
+    // imgList
   },
   data() {
     return {
@@ -211,11 +233,10 @@ export default {
     fn() {
       request.get("/rest/organizate/depart").then(res => {
         this.options = res.data.data;
-        
       });
     },
-    reset(){
-       this.reload();
+    reset() {
+      this.reload();
     },
     // 点击组织机构节点展示分部分项
     noDe(data) {
@@ -226,7 +247,7 @@ export default {
         .then(res => {
           if (res.data.data == null) return false;
           this.options1 = res.data.data;
-          console.log( this.options1,' this.options1')
+          console.log(this.options1, " this.options1");
         });
     },
     // 获取分部分项id
@@ -279,9 +300,9 @@ export default {
             console.log(res);
             this.tableData = res.data.data.data;
             this.tableData.forEach(i => {
-              // if(i.planCheckTime=="null"){
-              //     i.planCheckTime=''
-              // }
+              if(i.planCheckTime=="null"){
+                  i.planCheckTime=''
+              }
               i.state == "0"
                 ? (i.state = "指定工序")
                 : (i.state = "已指定验收计划");
@@ -310,35 +331,39 @@ export default {
         .then(res => {
           console.log(res);
           if (res.data.respCode == "0") {
-            if (res.data.data == null && !res.data.data.length) return false;
-            this.chakanData.push(res.data.data);
-            this.chakanData.forEach(i => {
-              i.projectType =
-                i.projectType == "1"
-                  ? "单位工程"
-                  : i.projectType == "2"
-                    ? "子单位工程"
-                    : i.projectType == "3"
-                      ? "分部工程"
-                      : i.projectType == "4"
-                        ? "子分部工程"
-                        : i.projectType == "5"
-                          ? "分部项程"
-                          : i.projectType == "6" ? "子分项工程" : "";
-              i.state1 = i.state1 == 1 ? "已指定验收" : "未指定验收";
-              i.state2 == 0
-                ? (i.state2 = "指定工序")
-                : i.state2 == 1
-                  ? (i.state2 = "已指定验收计划")
-                  : i.state2 == 2
-                    ? (i.state2 = "自检完成")
-                    : (i.state2 = "验收完成");
-            });
-            this.zijian = this.chakanData.selfCheckDescribe;
-            this.yanshou = this.chakanData.checkDescribe;
-            this.imgData = res.data.data.selfFilePath;
-            this.imgData2 = res.data.data.filePath;
-            this.imgId = this.chakanData[0].processLogId;
+              let array = []
+              array.push(res.data.data)
+              this.chakanData = array
+            // this.chakanData.push(res.data.data);
+            // this.chakanData.forEach(i => {
+            //   i.projectType =
+            //     i.projectType == "1"
+            //       ? "单位工程"
+            //       : i.projectType == "2"
+            //       ? "子单位工程"
+            //       : i.projectType == "3"
+            //       ? "分部工程"
+            //       : i.projectType == "4"
+            //       ? "子分部工程"
+            //       : i.projectType == "5"
+            //       ? "分部项程"
+            //       : i.projectType == "6"
+            //       ? "子分项工程"
+            //       : "";
+            //   i.state1 = i.state1 == 1 ? "已指定验收" : "未指定验收";
+            //   i.state2 == 0
+            //     ? (i.state2 = "指定工序")
+            //     : i.state2 == 1
+            //     ? (i.state2 = "已指定验收计划")
+            //     : i.state2 == 2
+            //     ? (i.state2 = "自检完成")
+            //     : (i.state2 = "验收完成");
+            // });
+            // this.zijian = this.chakanData.selfCheckDescribe;
+            // this.yanshou = this.chakanData.checkDescribe;
+            // this.imgData = res.data.data.selfFilePath;
+            // this.imgData2 = res.data.data.filePath;
+            // this.imgId = this.chakanData[0].processLogId;
           }
         });
     },
@@ -361,8 +386,7 @@ export default {
           res.data.data.shift();
           this.imgData3 = res.data.data;
         });
-    },
-    
+    }
   }
 };
 </script>
@@ -377,8 +401,8 @@ export default {
   // /deep/ .el-popper{
   //     width: 200px;
   //  }
-  .elBoutton{
-      float: right;
+  .elBoutton {
+    float: right;
   }
 }
 </style>

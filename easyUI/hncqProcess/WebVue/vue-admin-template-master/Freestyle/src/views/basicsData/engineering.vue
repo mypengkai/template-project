@@ -5,8 +5,9 @@
       <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"  @click="action('add')">新增</el-button>
     </div>
     <!-- 操作列表 -->
-    <!-- <el-scrollbar> -->
-      <tree-table class="textList"  :data="dataList" row-key ref="projectItemTreeTable" border :eval-func="func" :eval-args="args" :expand-all="expandAll" height="68vh">
+    <!-- <el-scrollbar> -->    
+      <!-- :eval-func="func" :eval-args="args" :expand-all="expandAll" -->
+      <tree-table class="textList"  :data="dataList" row-key  ref="projectItemTreeTable" border >
         <el-table-column label="工程分部分项">
           <template slot-scope="scope">
             <span style>{{ scope.row.projectItem }}</span>
@@ -49,6 +50,7 @@
         </el-table-column>
 
         <el-table-column label="操作" width="180">
+
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="修改" placement="top">
               <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
@@ -95,11 +97,12 @@ export default {
       dialogFormVisible: false,
       total: 0,
       nopId: "",
-      args: [null, null, "timeLine"]
+      args: [null, null, "timeLine"],
+
     };
   },
   mounted() {
-    this.$refs.projectItemTreeTable.$el.classList.add("el-table--scrollable-y");
+    // this.$refs.projectItemTreeTable.$el.classList.add("el-table--scrollable-x");
   },
   created() {
     this._projectList();
@@ -146,6 +149,7 @@ export default {
     _projectList() {
       api.projectList().then(res => {
         this.dataList = res.data.data;
+        console.log(this.dataList,'this.dataList')
         let dataList = this.dataList;
       });
     },

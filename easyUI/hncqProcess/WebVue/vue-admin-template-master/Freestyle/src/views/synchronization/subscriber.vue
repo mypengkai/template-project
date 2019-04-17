@@ -3,7 +3,7 @@
        <div class="tongbu" style="">
             <div class="rl" style="margin-bottom:10px">
               <el-button type="primary" icon="el-icon-refresh"   @click="tongbu()">从物质平台同步</el-button>
-               
+               <el-button type="primary" icon="el-icon-refresh"   @click="tongData()">同步数据</el-button>
             </div>
        </div>
      
@@ -77,7 +77,7 @@ export default {
           res.data.ok = true;
           res.data.respCode = -1;
         }
-        this.getUserList();
+       
       });
     },
     getUserList() {
@@ -91,6 +91,9 @@ export default {
       });
     },
     handleSizeChange(val) {
+    },
+     tongData(){
+      this.getUserList();
     },
     renew(data) {     
        var sid = data.sid

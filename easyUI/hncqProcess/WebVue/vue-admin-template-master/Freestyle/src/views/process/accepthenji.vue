@@ -115,30 +115,22 @@
 
     <!-- 查看弹框 -->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%"  class="dialogBox">
-      <imgList
-        :chakanData="chakanData"
-        :imgData="imgData"
-        :imgData2="imgData2"
-        :imgId="imgId"
-        :zijian="zijian"
-        :yanshou="yanshou"
-        :imgForm="imgForm"
-        :imgData3="imgData3"
-        @imgLeft="imgLeft"
-      ></imgList>
+      <processCheck :realList="chakanData"></processCheck>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import SelectTree from "@/components/SelectTree/selectTree.vue";
-import imgList from "./components/imgList";
+// import imgList from "./components/imgList";
 import request from "@/utils/request";
+import processCheck from "@/views/process/components/processCheck";
 export default {
    inject: ["reload"],
   components: {
     SelectTree,
-    imgList
+    // imgList,
+    processCheck
   },
   data() {
     return {
@@ -329,37 +321,40 @@ export default {
         .post("/rest/processCheck/getProcessDetail", { id: row.gongxuid })
         .then(res => {
           if (res.data.respCode == "0") {
-            if (res.data.data == null && !res.data.data.length) return false;
-            this.chakanData.push(res.data.data);
-            this.chakanData.forEach(i => {
-              i.projectType =
-                i.projectType == "1"
-                  ? "单位工程"
-                  : i.projectType == "2"
-                  ? "子单位工程"
-                  : i.projectType == "3"
-                  ? "分部工程"
-                  : i.projectType == "4"
-                  ? "子分部工程"
-                  : i.projectType == "5"
-                  ? "分部项程"
-                  : i.projectType == "6"
-                  ? "子分项工程"
-                  : "";
-              i.state1 = i.state1 == 1 ? "已指定验收" : "未指定验收";
-              i.state2 == 0
-                ? (i.state2 = "指定工序")
-                : i.state2 == 1
-                ? (i.state2 = "已指定验收计划")
-                : i.state2 == 2
-                ? (i.state2 = "自检完成")
-                : (i.state2 = "验收完成");
-            });
-            this.zijian = this.chakanData.selfCheckDescribe;
-            this.yanshou = this.chakanData.checkDescribe;
-            this.imgData = res.data.data.selfFilePath;
-            this.imgData2 = res.data.data.filePath;
-            this.imgId = this.chakanData[0].processLogId;
+            let array = []
+            array.push(res.data.data)
+            this.chakanData = array
+            console.log(this.chakanData,'chakanData')
+            // this.chakanData.push(res.data.data);
+            // this.chakanData.forEach(i => {
+            //   i.projectType =
+            //     i.projectType == "1"
+            //       ? "单位工程"
+            //       : i.projectType == "2"
+            //       ? "子单位工程"
+            //       : i.projectType == "3"
+            //       ? "分部工程"
+            //       : i.projectType == "4"
+            //       ? "子分部工程"
+            //       : i.projectType == "5"
+            //       ? "分部项程"
+            //       : i.projectType == "6"
+            //       ? "子分项工程"
+            //       : "";
+            //   i.state1 = i.state1 == 1 ? "已指定验收" : "未指定验收";
+            //   i.state2 == 0
+            //     ? (i.state2 = "指定工序")
+            //     : i.state2 == 1
+            //     ? (i.state2 = "已指定验收计划")
+            //     : i.state2 == 2
+            //     ? (i.state2 = "自检完成")
+            //     : (i.state2 = "验收完成");
+            // });
+            // this.zijian = this.chakanData.selfCheckDescribe;
+            // this.yanshou = this.chakanData.checkDescribe;
+            // this.imgData = res.data.data.selfFilePath;
+            // this.imgData2 = res.data.data.filePath;
+            // this.imgId = this.chakanData[0].processLogId;
           }
         });
     },
