@@ -24,20 +24,42 @@ import Layout from '../views/layout/Layout'
     breadcrumb: false            if false, the item will hidden in breadcrumb(default is true)
   }
 **/
+// resolve => require(['../components/hello'], resolve),
 export const constantRouterMap = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
+  // { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  {
+    path: '/login',
+    component: login => require(['@/views/login/index'], login),
+    hidden: true
+  },
 
+  // { path: '/404', component: () => import('@/views/404'), hidden: true },
+  {
+    path: '/404',
+    component: error => require(['@/views/login/index'], error),
+    hidden: true
+  },
+  // 平台入口模块
+  {
+     path:'/platform',
+     name:'platform',
+     component: platform=>require(['@/views/platform/index'],platform),
+     hidden: true
+  },
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
     hidden: true,
-    meta: { title: '首页', icon: 'table' },
+    meta: {
+      title: '首页',
+      icon: 'table'
+    },
     children: [{
       path: 'dashboard',
-      component: () => import('@/views/dashboard/index'),
+      // component: () => import('@/views/dashboard/index'),
+      component: dashboard => require(['@/views/dashboard/index'], dashboard)
     }]
   },
   {
@@ -45,53 +67,78 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/tree',
     name: 'Example',
-    meta: { title: '日志管理', icon: 'check' },
-    children: [
-      {
-        path: 'trees',
-        name: 'Trees',
-        component: () => import('@/views/trees/index'),
-        meta: { title: '日志查看', icon: 'check' }
+    meta: {
+      title: '日志管理',
+      icon: 'check'
+    },
+    children: [{
+      path: 'trees',
+      name: 'Trees',
+      // component: () => import('@/views/trees/index'),
+      component: trees => require(['@/views/trees/index'], trees),
+      meta: {
+        title: '日志查看',
+        icon: 'check'
       }
-    ]
+    }]
   },
 
   {
     path: '/walkaroundInspection',
     component: Layout,
-    meta: { title: '巡视管理', icon: 'example' },
-    children: [
-      {
-        path: 'PatrolCheck',
-        name: 'PatrolCheck',
-        component: () => import('@/views/walkaroundInspection/PatrolCheck'),
-        meta: { title: '巡视查看', icon: 'form' }
+    meta: {
+      title: '巡视管理',
+      icon: 'example'
+    },
+    children: [{
+      path: 'PatrolCheck',
+      name: 'PatrolCheck',
+      // component: () => import('@/views/walkaroundInspection/PatrolCheck'),
+      component: PatrolCheck => require(['@/views/walkaroundInspection/PatrolCheck'], PatrolCheck),
+      meta: {
+        title: '巡视查看',
+        icon: 'form'
       }
-    ]
+    }]
   },
 
   {
     path: '/instruct',
     component: Layout,
-    meta: { title: '指令管理', icon: 'instruct' },
-    children: [
-      {
+    meta: {
+      title: '指令管理',
+      icon: 'instruct'
+    },
+    children: [{
         path: 'instructCheck',
         name: 'instructCheck',
-        component: () => import('@/views/instruct/instructCheck'),
-        meta: { title: '指令查看', icon: 'instructCheck' }
+        // component: () => import('@/views/instruct/instructCheck'),
+        component: instructCheck => require(['@/views/instruct/instructCheck'], instructCheck),
+        meta: {
+          title: '指令查看',
+          icon: 'instructCheck'
+        }
       },
       {
         path: 'instructReceive',
         name: 'instructReceive',
-        component: () => import('@/views/instruct/instructReceive'),
-        meta: { title: '指令接受', icon: 'instructReceive' }
+        // component: () => import('@/views/instruct/instructReceive'),
+        component: instructReceive => require(['@/views/instruct/instructReceive'], instructReceive),
+        meta: {
+          title: '指令接受',
+          icon: 'instructReceive'
+        }
       },
       {
         path: 'instructSend',
         name: 'instructSend',
-        component: () => import('@/views/instruct/instructSend'),
-        meta: { title: '指令发送', icon: 'instructSend', show: true }
+        // component: () => import('@/views/instruct/instructSend'),
+        component: instructSend => require(['@/views/instruct/instructSend'], instructSend),
+        meta: {
+          title: '指令发送',
+          icon: 'instructSend',
+          show: true
+        }
       },
     ]
   },
@@ -99,30 +146,45 @@ export const constantRouterMap = [
   {
     path: '/accept',
     component: Layout,
-    meta: { title: '工序验收', icon: 'example' },
-    children: [
-      {
+    meta: {
+      title: '工序验收',
+      icon: 'example'
+    },
+    children: [{
         path: 'accept',
         name: 'SelectTree',
-        component: () => import('@/views/process/accept'),
-        meta: { title: '工序验收', icon: 'acceptance' }
+        // component: () => import('@/views/process/accept'),
+        component: accept => require(['@/views/process/accept'], accept),
+        meta: {
+          title: '工序验收',
+          icon: 'acceptance'
+        }
       },
       {
         path: 'acceptjh',
         name: 'acceptjh',
-        component: () => import('@/views/process/acceptjihua'),
-        meta: { title: '验收计划查询', icon: 'acceptance' }
+        // component: () => import('@/views/process/acceptjihua'),
+        component: acceptjh => require(['@/views/process/acceptjihua'], acceptjh),
+        meta: {
+          title: '验收计划查询',
+          icon: 'acceptance'
+        }
       },
       {
         path: 'accepthj',
         name: 'accepthj',
-        component: () => import('@/views/process/accepthenji'),
-        meta: { title: '验收痕迹查询', icon: 'acceptance' }
+        // component: () => import('@/views/process/accepthenji'),
+        component: accepthj => require(['@/views/process/accepthenji'], accepthj),
+        meta: {
+          title: '验收痕迹查询',
+          icon: 'acceptance'
+        }
       },
       {
         path: "traceManage",
         name: "TraceManage",
-        component: () => import('@/views/process/traceManage/traceManage'),
+        // component: () => import('@/views/process/traceManage/traceManage'),
+        component: traceManage => require(['@/views/process/traceManage/traceManage'], traceManage),
         meta: {
           title: "痕迹管理",
           icon: "acceptance"
@@ -134,19 +196,29 @@ export const constantRouterMap = [
   {
     path: '/basicsData',
     component: Layout,
-    meta: { title: '基础数据', icon: 'example' },
-    children: [
-      {
+    meta: {
+      title: '基础数据',
+      icon: 'example'
+    },
+    children: [{
         path: 'engineering',
         name: 'basicsData',
-        component: () => import('@/views/basicsData/engineering'),
-        meta: { title: '工程管理', icon: 'engineering' }
+        // component: () => import('@/views/basicsData/engineering'),
+        component: engineering => require(['@/views/basicsData/engineering'], engineering),
+        meta: {
+          title: '工程管理',
+          icon: 'engineering'
+        }
       },
       {
         path: 'processing',
         name: 'processing',
-        component: () => import('@/views/basicManage/processManage'),
-        meta: { title: '工序管理', icon: 'acceptance' }
+        // component: () => import('@/views/basicManage/processManage'),
+        component: processing => require(['@/views/basicManage/processManage'], processing),
+        meta: {
+          title: '工序管理',
+          icon: 'acceptance'
+        }
       },
       // {
       //   path: 'recharge',
@@ -167,59 +239,93 @@ export const constantRouterMap = [
   {
     path: '/system',
     component: Layout,
-    meta: { title: '系统管理', icon: 'system' },
-    children: [
-      {
+    meta: {
+      title: '系统管理',
+      icon: 'system'
+    },
+    children: [{
         path: 'role',
         name: 'role',
-        component: () => import('@/views/system/role'),
-        meta: { title: '角色管理', icon: 'role' }
+        // component: () => import('@/views/system/role'),
+        component: role => require(['@/views/system/role'], role),
+        meta: {
+          title: '角色管理',
+          icon: 'role'
+        }
       },
       {
         path: 'user',
         name: 'user',
-        component: () => import('@/views/system/user'),
-        meta: { title: '用户信息', icon: 'information' }
+        // component: () => import('@/views/system/user'),
+        component: user => require(['@/views/system/user'], user),
+        meta: {
+          title: '用户信息',
+          icon: 'information'
+        }
       },
       {
         path: 'resource',
         name: 'resource',
-        component: () => import('@/views/system/resource'),
-        meta: { title: '资源管理', icon: 'resource' }
+        // component: () => import('@/views/system/resource'),
+        component: resource => require(['@/views/system/resource'], resource),
+        meta: {
+          title: '资源管理',
+          icon: 'resource'
+        }
       },
       {
         path: 'userDictionaries',
         name: 'userDictionaries',
-        component: () => import('@/views/system/userDictionaries'),
-        meta: { title: '组织机构', icon: 'dictionaries' }
+        // component: () => import('@/views/system/userDictionaries'),
+        component: userDictionaries => require(['@/views/system/userDictionaries'], userDictionaries),
+        meta: {
+          title: '组织机构',
+          icon: 'dictionaries'
+        }
       },
     ]
   },
   {
     path: '/synchronization',
     component: Layout,
-    meta: { title: '数据同步', icon: 'example' },
-    children: [
-    {
-    path: 'department',
-    name: 'department',
-    component: () => import('@/views/synchronization/department'),
-    meta: { title: '同步部门', icon: 'example' }
+    meta: {
+      title: '数据同步',
+      icon: 'example'
     },
-    {
-    path: 'subscriber',
-    name: 'subscriber',
-    component: () => import('@/views/synchronization/subscriber'),
-    meta: { title: '用户同步', icon: 'information' }
-    }
+    children: [{
+        path: 'department',
+        name: 'department',
+        // component: () => import('@/views/synchronization/department'),
+        component: department => require(['@/views/synchronization/department'], department),
+        meta: {
+          title: '同步部门',
+          icon: 'example'
+        }
+      },
+      {
+        path: 'subscriber',
+        name: 'subscriber',
+        // component: () => import('@/views/synchronization/subscriber'),
+        component: subscriber => require(['@/views/synchronization/subscriber'], subscriber),
+        meta: {
+          title: '用户同步',
+          icon: 'information'
+        }
+      }
     ]
-    },
+  },
 
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 export default new Router({
   // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: constantRouterMap
 })

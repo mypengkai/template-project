@@ -229,6 +229,9 @@ export default {
     height: 45vh;
     line-height: 45vh;
   }
+  .zjimg{
+      border-right: 1px solid #666;
+  }
 }
 .reverseBox {
   height: 68vh;

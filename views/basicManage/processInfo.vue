@@ -8,8 +8,9 @@
       </div>
       <div class="operator">
         <el-button type="primary" size="small" icon="el-icon-search" @click="initTable">查询</el-button>
-        <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
         <el-button type="primary" size="small" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
+       
       </div>
     </div>
 
@@ -68,17 +69,14 @@
     <!--新增、编辑弹框-->
     <el-dialog
       :visible.sync="dialogVisible"
-      title="修改工序信息"
+      title="新增工序信息"
       width="30%"
       append-to-body
       class="dialogBox"
     >
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="工序名">
+      <el-form :model="form" label-width="80px" :rules="rules">
+        <el-form-item label="工序名" prop="process">
           <el-input v-model="form.process"/>
-        </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="form.remark"/>
         </el-form-item>
         <el-form-item label="序号">
           <el-input v-model.number="form.seq"/>
@@ -121,7 +119,12 @@ export default {
       // 分页
       total: 0,
       currentPage: 1,
-      pageSize: 10
+      pageSize: 10,
+       rules: {
+        process: [
+          { required: true, message: "请输入工序", trigger: "blur" }
+        ]
+      }
     };
   },
   watch: {
@@ -195,7 +198,7 @@ export default {
       this.initTable();
     },
     reset() {
-      this.reload();
+       this.searchText = ''
     }
   }
 };

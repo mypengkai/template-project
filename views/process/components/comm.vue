@@ -150,25 +150,25 @@ export default {
       // 参考图标
       activities2: [
         {
-          content: "发出指令的人",
+          content: "发出指令",
           timestamp: "",
           type: "primary",
           icon: "el-icon-location-outline"
         },
         {
-          content: "转发指令的人",
+          content: "转发指令",
           timestamp: "",
           type: "info",
           icon: "el-icon-refresh"
         },
         {
-          content: "正在处理指令",
+          content: "处理指令",
           timestamp: "",
           type: "primary",
           icon: "el-icon-loading"
         },
         {
-          content: "完成指令的人",
+          content: "完成指令",
           timestamp: "",
           type: "success",
           icon: "el-icon-check"

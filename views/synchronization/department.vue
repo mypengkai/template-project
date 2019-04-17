@@ -3,7 +3,7 @@
        <div class="tongbu" style="">
             <div class="rl" style="margin-bottom:10px">
               <el-button type="primary" icon="el-icon-refresh"   @click="tongbu()">从物质平台同步</el-button>
-             
+              <el-button type="primary" icon="el-icon-refresh"   @click="tongData()">同步数据</el-button>
             </div>
        </div>
      <!-- syncId -->
@@ -59,7 +59,7 @@ export default {
           (res.data.message = "成功"), (res.data.data = "同步到中间表成功");
           res.data.ok = true;
         }
-        this.getTreeData();
+        
       });
     },
     getTreeData() {
@@ -68,6 +68,9 @@ export default {
     
         this.treeData = res.data.data;
       });
+    },
+    tongData(){
+     this.getTreeData();
     },
     departData(data){
         var syncId = data.syncId

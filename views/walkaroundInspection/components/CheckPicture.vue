@@ -4,27 +4,27 @@
     <el-form class="reverseBox" :model="form">
       <div class="fl pth" style="width:43.6%">
         <el-form-item label="工程分部分项" label-width="120px">
-          <el-input type="textarea" autosize readonly v-model="form.projectItem"></el-input>
+          <el-input type="textarea" autosize readonly v-model="form.projectItem" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="桩号" label-width="120px">
-          <el-input readonly v-model="form.zhuanghao"></el-input>
+          <el-input readonly v-model="form.zhuanghao" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="巡视人" label-width="120px">
-          <el-input readonly v-model="form.createName"></el-input>
+          <el-input readonly v-model="form.createName" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="创建时间" label-width="120px">
-          <el-input readonly v-model="form.createTime"></el-input>
+          <el-input readonly v-model="form.createTime" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="拍照地点" label-width="120px">
-          <el-input readonly type="textarea" autosize v-model="photoLocation"></el-input>
+          <el-input readonly type="textarea" autosize v-model="photoLocation" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="描述" label-width="120px">
-          <el-input readonly v-model="form.describe"></el-input>
+          <el-input readonly  type="textarea" v-model="form.describe" :disabled="true"></el-input>
         </el-form-item>
       </div>
 
@@ -38,15 +38,8 @@
 
         <!-- 轮播信息 -->
         <div class="condition" v-if="nowType==0">
-          <!-- <el-form-item class="">
-            <el-carousel :interval="3000" arrow="always" height="45vh">
-              <el-carousel-item v-for="(item,index) in filePathImg" :key="index">
-                <img :src="item.picture" alt="">
-              </el-carousel-item>
-            </el-carousel>
-          </el-form-item>-->
           <ul>
-            <li v-for="(item,index) in filePathImg" :key="index">
+            <li v-for="(item,index) in filePathImg" :key="index" @click="pictureShow(item)">
               <img :src="item.picture" alt>
             </li>
           </ul>
@@ -58,15 +51,21 @@
       </div>
       <!-- 导航切换 -->
     </el-form>
+       <!-- 图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="dialogpicture"  fullscreen append-to-body >
+      <viewer :photo="pollList"></viewer>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import api from "@/api/Patrol.js";
+import viewer from "@/components/viewer";
 import Map from "./Map";
 export default {
   components: {
-    Map
+    Map,
+    viewer
   },
   props: ["nowItem"],
   data() {
@@ -83,14 +82,16 @@ export default {
         describe: "", // 表述
         photoDescribe: "", // 照片描述
         photoLocation: "", // 拍照地点
-        projectItem: "" // 资料表述
+        projectItem: "", // 资料表述
       },
+       pollList:[],
       filePathImg: [],
       nowType: 0,
       photoLocation: "",
       activeIndex: "1",
       activeIndex2: "1",
-      innerVisible: false
+      innerVisible: false,
+      dialogpicture:false
     };
   },
   created() {
@@ -118,6 +119,14 @@ export default {
         api.PatrolList(this.form).then(res => {
           this.$emit("comfirm");
         });
+    },
+    //图片预览
+    pictureShow(item){
+      console.log(item,'item')
+        let array = []
+        array.push(item)
+        this.pollList = array
+        this.dialogpicture = true
     }
   }
 };
