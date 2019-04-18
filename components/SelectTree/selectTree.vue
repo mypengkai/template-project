@@ -111,13 +111,15 @@ export default {
     // 获取输入框宽度同步至树状菜单宽度
     this.$nextTick(() => {
       this.treeWidth = `${(this.width || this.$refs.input.$refs.input.clientWidth) - 24}px`;
+      
     });
   },
   methods: {
     // 单击节点
-    onClickNode(node) {
+    onClickNode(node) {     
       this.$emit('noDe',node)
       this.labelModel = node[this.props.label];
+      console.log(node[this.props])
       this.valueModel = node[this.props.value];
       this.onCloseTree();
     },

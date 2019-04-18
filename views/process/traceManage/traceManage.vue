@@ -233,7 +233,7 @@ export default {
         })
         .then(res => {
           this.conentOptions = res.data.data.data;
-          console.log(this.conentOptions);
+      
         });
     },
     peopleQuery() {
