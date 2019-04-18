@@ -2,7 +2,7 @@
   <div>
     <el-form class="reverseBox" :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
-        <el-form-item label="所属机构1" :label-width="formLabelWidth" v-if="this.flag1">
+        <el-form-item label="所属机构" :label-width="formLabelWidth" v-if="this.flag1">
           <select-tree v-model="form.name" :options="orgTree" v-on:noDe="handleCheckChange" :props="defaultProps" ref="projectItemSelectTree" />
         </el-form-item>
         <el-form-item  label="所属机构" :label-width="formLabelWidth" prop="projectItem" v-if="!this.flag1" >
