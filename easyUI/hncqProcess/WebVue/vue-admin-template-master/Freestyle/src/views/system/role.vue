@@ -9,17 +9,10 @@
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="chaxun()">搜索</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="dialogFormVisible=true">新增</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="dialogFormVisible=true">新增</el-button>
       </div>
     </div>
-    <!-- <div class="fl">
-          <span class="fl" style="padding-top: 1vh;">角色名称:</span>
-          <span class="fl" style="padding-left: 0.5vw;">
-            <el-input v-model="input" placeholder="请输入内容"></el-input>
-          </span>
-        </div> -->
-
-    <!-- table表 -->
+    
 
     <el-table class="textList" :data="tableData" height="74vh">
       <el-table-column prop="rolecode" label="角色编码">
@@ -29,16 +22,16 @@
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-tooltip content="编译" placement="top">
-              <el-button type="primary" icon="el-icon-edit" circle @click="bianTan(scope.row)" v-if="tableData.length!=0"></el-button>
+              <el-button type="primary" icon="el-icon-edit" circle  @click="bianTan(scope.row)" v-if="tableData.length!=0"></el-button>
           </el-tooltip>
           <el-tooltip content="删除" placement="top">
-            <el-button type="danger" icon="el-icon-delete" circle @click="open2(scope.row.id)" v-if="tableData.length!=0"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle  @click="open2(scope.row.id)" v-if="tableData.length!=0"></el-button>
           </el-tooltip>
-          <el-tooltip content="查询" placement="top">
-            <el-button type="primary" icon="el-icon-search" @click="sxlb(scope.row.id,'1')" v-if="tableData.length!=0">PC端</el-button>
+          <el-tooltip content="PC端查询" placement="top">
+            <el-button type="success" icon="el-icon-zoom-out" circle  @click="sxlb(scope.row.id,'1')" v-if="tableData.length!=0"></el-button>
           </el-tooltip>
-          <el-tooltip content="查询" placement="top">
-            <el-button type="primary" icon="el-icon-search" @click="sxlb(scope.row.id,'2')" v-if="tableData.length!=0">移动端</el-button>
+          <el-tooltip content="移动端查询" placement="top">
+            <el-button type="primary" icon="el-icon-search" circle  @click="sxlb(scope.row.id,'2')" v-if="tableData.length!=0"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>

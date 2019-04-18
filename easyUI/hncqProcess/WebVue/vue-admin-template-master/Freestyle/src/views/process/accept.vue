@@ -11,26 +11,13 @@
           v-on:noDe="noDe"
         />
       </div>
-
-      <!-- <div class="topBar" v-show="isShowProjectItem">
-        <span>分部分项：</span>
-        <div
-        style="border:1px solid #ccc;
-              height:300px;
-              width:300px;
-               display: inline-block;
-               overflow:hidden
-        "
-      ><el-tree :data="data" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree></div>-->
-      <!-- <el-tree style="margin-left:74px;margin-top:-15px" :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
-      <!-- </div> -->
-      <div class="topBar" v-show="isShowProjectItem" >
-        <!-- <span>分部分项：</span> -->
-        <!-- <select-tree :options="data" v-on:noDe="handleNodeClick" :props="defaultProps"/> -->
+      <div class="topBar" v-show="isShowProjectItem">
         <el-form :inline="true" class="grid-content">
-          <span>组织机构：</span>
-          <el-form-item >
-            <div style="height:150px;overflow-y:auto;border:1px solid #ccc;width:290px;height:490px;border-radius: 5px">
+          <span>分部分项： </span>
+          <el-form-item>
+            <div
+              style="height:66vh;overflow-y:auto;border:1px solid #ccc; max-width: 400px; min-width:230px; width:19vw;border-radius: 5px"
+            >
               <el-tree
                 :data="data"
                 highlight-current
@@ -155,17 +142,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <!-- <div class="block">
-              <el-pagination 
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage4"
-                  :page-sizes="[15, 30, 60, 100]"
-                  :page-size="15"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="tableData.length+1">
-              </el-pagination>
-      </div>-->
+    
     </div>
     <!-- 添加工序弹框 -->
     <el-dialog title="指定工序" :visible.sync="dialogFormVisible">
@@ -343,6 +320,7 @@ export default {
       }
     };
     return {
+     
       //默认工程分部分项不线上
       isShowProjectItem: false,
       // 组织机构树
@@ -508,6 +486,9 @@ export default {
       currentPage4: 1
     };
   },
+  created() {
+    
+  },
   mounted() {
     this.fn();
   },
@@ -552,7 +533,7 @@ export default {
     },
     // 根据input ID获取树形结构
     noDe(data) {
-      console.log(data)
+      console.log(data);
       if (data.children.length === 0) {
         // this.isShowProjectItem = false;
         this.value = data.description;
@@ -573,7 +554,7 @@ export default {
           type: "warning"
         });
       }
-        if (data.children.length > 0) {
+      if (data.children.length > 0) {
         this.$message({
           message: "施工单位下才有工程分部分项"
         });
@@ -627,7 +608,6 @@ export default {
         });
     },
     handleNodeClick(data) {
-      debugger;
       this.childrenId = "";
       console.log(data);
       this.treeId = data.id;
@@ -899,37 +879,6 @@ export default {
             let array = [];
             array.push(res.data.data);
             this.chakanData = array;
-            //   this.chakanData.push(res.data.data);
-            //   this.chakanData.forEach(i => {
-            //     i.projectType =
-            //       i.projectType == "1"
-            //         ? "单位工程"
-            //         : i.projectType == "2"
-            //         ? "子单位工程"
-            //         : i.projectType == "3"
-            //         ? "分部工程"
-            //         : i.projectType == "4"
-            //         ? "子分部工程"
-            //         : i.projectType == "5"
-            //         ? "分部项程"
-            //         : i.projectType == "6"
-            //         ? "子分项工程"
-            //         : "";
-            //     i.state1 = i.state1 == 1 ? "已指定验收" : "未指定验收";
-
-            //     i.state2 == 0
-            //       ? (i.state2 = "指定工序")
-            //       : i.state2 == 1
-            //       ? (i.state2 = "已指定验收计划")
-            //       : i.state2 == 2
-            //       ? (i.state2 = "自检完成")
-            //       : (i.state2 = "验收完成");
-            //   });
-            // this.zijian = this.chakanData.selfCheckDescribe;
-            // this.yanshou = this.chakanData.checkDescribe;
-            // this.imgData = res.data.data.selfFilePath;
-            // this.imgData2 = res.data.data.filePath;
-            // this.imgId = this.chakanData[0].processLogId;
           }
         });
     },
@@ -1014,7 +963,7 @@ export default {
     .Cztab {
       margin-top: 10px;
       height: 60vh;
-      
+
       // border: 1px solid #ccc;
       // border-radius: 10px;
       overflow: hidden;
