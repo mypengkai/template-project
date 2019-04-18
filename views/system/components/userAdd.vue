@@ -249,9 +249,10 @@ export default {
       }
       // console.log(this.$refs.selecetedRole.selected)
       let array = this.$refs.selecetedRole.selected;
-      let id;
+      let id = '';
       array.forEach(element => {
-        id += element.currentValue + "," ;
+        id  += element.currentValue + "," ;
+        // id =  element.currentValue + "," + id
       });
       console.log(id,'id')
 
