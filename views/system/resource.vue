@@ -121,7 +121,10 @@ export default {
             component: "",
             path: "",
             pId: val.id,
-            pName: val.name
+            pName: val.name,
+            type: "",
+            Mark: "",
+            icon: ""
 
             // id:'',
             // title: '',
@@ -140,10 +143,11 @@ export default {
             pId: val.name,
             component: val.component,
             path: val.path,
-            Mark: "1",
+            Mark: val.mark,
             name: val.name,
             icon: val.meta.icon,
-            pName: val.name
+            pName: val.name,
+            type: val.type
           }),
           (this.flag = true));
       }

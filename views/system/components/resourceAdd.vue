@@ -9,11 +9,9 @@
     <el-form-item label="菜单名称" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
-    <el-form-item label="类型" prop="type">
-      <el-radio-group v-model="ruleForm.type">
-        <el-radio label="menu">菜单</el-radio>
-        <el-radio label="button">按钮</el-radio>
-      </el-radio-group>
+    <el-form-item label="类型" >
+        <el-radio v-model="ruleForm.type" label="menu">菜单</el-radio>
+        <el-radio v-model="ruleForm.type" label="button">按钮</el-radio>
     </el-form-item>
     <el-form-item label="父菜单名称" prop="ID" v-if="this.flag">
       <el-input :disabled="this.flag" :placeholder="this.parent"></el-input>
@@ -48,7 +46,9 @@ export default {
   props: ["nowItem", "flag"],
   data() {
     return {
+      
       ruleForm: {
+       
         name: "", // 菜单名称
         pId: "", //父菜单id
         title: "", //菜单标题
@@ -57,10 +57,10 @@ export default {
         path: "", //菜单路径
         Mark: "", //设备标识
         id: "",
-        type:"",
-        pName:""
+        type: "",
+        pName: ""
       },
-      parent:'',
+      parent: "",
       // 菜单树显示
       menuTree: {
         children: "children",
@@ -83,13 +83,13 @@ export default {
     };
   },
   methods: {
+
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.resourceTree();
           // 新增
           this.nowItem == "add" &&
-          
             api.menuAdd(this.ruleForm).then(res => {
               this.$emit("comfirm");
               this.$message({
@@ -118,14 +118,15 @@ export default {
     },
 
     initForm() {
-      console.log(this.flag);
       if (this.nowItem == "add") {
         this.pId && (this.form.pId = this.pId || 0);
         return;
       }
-      this.ruleForm = this.$tool.ObCopy(this.nowItem) //处理复杂类型
+      this.ruleForm = this.$tool.ObCopy(this.nowItem); //处理复杂类型
+      console.log(this.ruleForm)
+
       // 树形列表
-      this.parent=this.ruleForm.pName
+      this.parent = this.ruleForm.pName;
     },
     resourceTree() {
       api.menuList(this.ruleForm.type).then(res => {
