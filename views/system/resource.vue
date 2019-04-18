@@ -2,56 +2,82 @@
   <div class="p20">
     <!-- 新增 -->
     <div class="btncalss">
-       <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>
+
+      <el-button type="primary" plain @click="resourceList(1)"  class="pan-btn light-blue-btn"
+>移动端</el-button>
+      <el-button type="primary" plain @click="resourceList(2)"  class="pan-btn light-blue-btn"
+>PC端</el-button>
+      <el-button
+        type="primary"
+        icon="el-icon-circle-plus-outline"
+        class="pan-btn light-blue-btn"
+        @click="action('add')"
+      >新增</el-button>
     </div>
-   
+
     <!-- 列表 -->
     <div class="pt20">
-      <!-- <el-scrollbar style="height: 68vh;overflow-x: none;"> -->
-        <tree-table class="textList" :data="menuList" border row-key>
-          <el-table-column label="菜单名称">
-            <template slot-scope="scope">
-              <span style="">{{ scope.row.functionName }}</span>
-            </template>
-          </el-table-column>
+      <!-- <el-scrollbar style="height: 68vh;overflow-y: none;"> -->
+      <tree-table class="textList" :data="menuList" border row-key>
+        <el-table-column label="菜单名称" height="250">
+          <template slot-scope="scope">
+            <span style>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
 
-          <el-table-column label="菜单排序">
-            <template slot-scope="scope">
-              <span style="">{{ scope.row.functionOrder }}</span>
-            </template>
-          </el-table-column>
+        <el-table-column label="分支名称">
+          <template slot-scope="scope">
+            <span style>{{ scope.row.component }}</span>
+          </template>
+        </el-table-column>
 
-          <el-table-column label="菜单地址">
-            <template slot-scope="scope">
-              <span style="">{{ scope.row.functionUrl }}</span>
-            </template>
-          </el-table-column>
+        <el-table-column label="菜单地址">
+          <template slot-scope="scope">
+            <span style>{{ scope.row.path }}</span>
+          </template>
+        </el-table-column>
 
-          <el-table-column label="操作" width="180">
-            <template slot-scope="scope">
-               <el-tooltip class="item" effect="dark" content="修改" placement="top">
-                 <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-              </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="新增" placement="top">
-                 <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
-              </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                 <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
-              </el-tooltip>
-              
-            </template>
-          </el-table-column>
-        </tree-table>
+        <el-table-column label="操作" width="180">
+          <template slot-scope="scope" type="scope.row">
+            <el-tooltip class="item" effect="dark" content="修改" placement="top">
+              <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="新增" placement="top">
+              <el-button
+                type="primary"
+                icon="el-icon-plus"
+                circle
+                @click="action(scope.row,true)"
+                :disabled="scope.row.type==='button'?true:false"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="删除" placement="top">
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                @click="Delete(scope.row)"
+                :disabled="scope.row.children.length>0?true:false"
+              ></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </tree-table>
       <!-- </el-scrollbar> -->
-
     </div>
     <!-- 弹框 -->
     <el-dialog class="dialogBox" :title="newTitle" :visible.sync="dialogFormVisible">
-      <resourceAdd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="resourceList"></resourceAdd>
+      <resourceAdd
+        :flag="flag"
+        :nopId="nopId"
+        :nowItem="nowItem"
+        v-if="nowItem"
+        @cancel="dialogFormVisible=false"
+        @comfirm="resourceList"
+      ></resourceAdd>
     </el-dialog>
   </div>
 </template>
-
 <script>
 import treeTable from "@/components/TreeTable";
 import api from "@/api/resource.js";
@@ -69,37 +95,57 @@ export default {
       pId: "",
       nopId: "",
       dialogFormVisible: false,
-      menuList: []
+      menuList: [],
+      flag: true
     };
   },
   created() {
-    this.resourceList();
+    this.resourceList(1);
   },
   methods: {
+    isMobile() {
+      return localStorage.getItem("ismobile");
+    },
     action(val, son) {
-      if (val == "add") this.nowItem = val;
+      if (val == "add") {
+        this.nowItem = val;
+        this.flag = false;
+        console.log(this.flag);
+      }
       if (val != "add") {
         son &&
-          (this.nowItem = {
+          ((this.nowItem = {
             childcount: "",
             functionLevel: "",
-            functionName: "",
-            functionOrder: "",
-            functionUrl: "",
+            name: "",
+            component: "",
+            path: "",
             pId: val.id,
-            pName: val.functionName
-          });
+            pName: val.name
+
+            // id:'',
+            // title: '',
+            // pId: '',
+            // component:'',
+            // path:'',
+            // Mark:'1',
+            // name:val.name,
+            // icon:''
+          }),
+          (this.flag = true));
         !son &&
-          (this.nowItem = {
-            childcount: val.childcount,
-            functionLevel: val.functionLevel,
-            functionName: val.functionName,
-            functionOrder: val.functionOrder,
-            functionUrl: val.functionUrl,
-            pName: val.pname,
+          ((this.nowItem = {
             id: val.id,
-            pId: val.pId
-          });
+            title: val.meta.title,
+            pId: val.name,
+            component: val.component,
+            path: val.path,
+            Mark: "1",
+            name: val.name,
+            icon: val.meta.icon,
+            pName: val.name
+          }),
+          (this.flag = true));
       }
 
       this.dialogFormVisible = true;
@@ -110,9 +156,10 @@ export default {
       }
     },
     // 树形列表
-    resourceList() {
-      api.menuList().then(res => {
+    resourceList(num) {
+      api.menuList({ Mark: num, type: "menu" }).then(res => {
         this.menuList = res.data.data;
+        console.log(this.menuList);
       });
     },
     // 删除按钮
@@ -165,7 +212,7 @@ export default {
 .inner-container::-webkit-scrollbar {
   display: none;
 }
-.btncalss{
+.btncalss {
   position: absolute;
   top: 0.1vw;
   right: 1vw;
