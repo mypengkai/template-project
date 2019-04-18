@@ -3,15 +3,17 @@
     <el-form class="reverseBox" ref="userFrom" :model="user" label-width="120px" :rules="rules">
       <div style="width:50%">
         <el-form-item label="名称" prop="userName">
-          <el-input v-model="user.userName"></el-input>
-        </el-form-item>
-        <el-form-item v-if="nowItem=='add'" label="用户帐号" prop="realName">
           <el-input v-model="user.realName"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem!='add'" label="用户帐号" prop="realName">
-          <el-input v-model="user.realName" :disabled="true"></el-input>
+        <el-form-item v-if="nowItem=='add'" label="用户帐号" prop="realName">
+          <el-input v-model="user.userName"></el-input>
         </el-form-item>
+
+        <el-form-item v-if="nowItem!='add'" label="用户帐号" prop="realName">
+          <el-input v-model="user.userName" :disabled="true"></el-input>
+        </el-form-item>
+
         <el-form-item v-if="nowItem=='add'" label="密码" prop="password">
           <el-input show-password v-model="user.password"></el-input>
         </el-form-item>
@@ -22,17 +24,18 @@
             :options="orgTree"
             :props="defaultProps"
             v-on:noDe="handleCheckChange"
+            ref="userInfo_userGroup"
             v-model="value"
           />
         </el-form-item>
 
         <el-form-item label="角色" prop="userKey">
-          <el-select v-model="user.userKey"  placeholder="请选择角色" >
+          <el-select v-model="user.userKey" multiple placeholder="请选择角色" ref="selecetedRole">
             <el-option
               v-for="item in roleList"
               :key="item.id"
               :label="item.rolename"
-              :value="item.rolename"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -95,7 +98,7 @@ import Organization from "@/api/Organization.js";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   inject: ["reload"],
-  props: ["nowItem"],
+  props: ["nowItem",'conentList'],
   components: {
     SelectTree
   },
@@ -162,45 +165,55 @@ export default {
       dialogImageUrl: ""
     };
   },
+  watch:{
+       conentList(){
+           console.log(this.conentList,'conentList')
+       }   
+  },
   created() {
-    this.initForm();
     this._roleList();
     this._orgTree();
+    this.initForm();
   },
   mounted() {},
   methods: {
     handleAvatarSuccess(res, file) {
       this.form.files = URL.createObjectURL(file.raw); // res
     },
-    initForm() {
+    async initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //复制
-      this.name = this.user.name;
+      let { data } = await api1.sysuserCheck(this.nowItem.id); //异步执行取id
+      let formData = data.data[data.data.length - 1];
+      this.user.mobilePhone = formData.mobilePhone;
+      this.user.userKey = formData.userKey;
+      this.user.departName = formData.orgNames[0]; // 组织机构
+      //给角色和组织机构赋值
+      console.log(this.$refs.userInfo_userGroup.$refs.input);
+      this.$refs.userInfo_userGroup.$refs.input.labelModel=this.user.departName;
     },
     fileChange(file) {
       this.files = file.raw;
     },
     // 新增用户
     _comfirm(user) {
-      // console.log(this.user.userKey,'userKey')
+       const reg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
+      if (this.user.realName == "") {
+        this.$message({
+          message: "请输入用户名称"
+        });
+        return false;
+      }
 
-      // 表单校验
-      // this.$refs[file].validate(valid => {
-      //   if (valid) {
-      //     // 新增
-      //     if (this.$refs.userFrom.validate()) {
-      //       this.$refs.upload.submit();
-      //     }
-      //     this.$emit("cancel");
-      //     this.reload();
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
       if (this.user.userName == "") {
         this.$message({
-          message: "请输入用户账户"
+          message: "请输入用户账号"
+        });
+        return false;
+      }
+      if (this.user.password == "") {
+        this.$message({
+          message: "请输入密码"
         });
         return false;
       }
@@ -222,22 +235,33 @@ export default {
         });
         return false;
       }
-
-      let name = this.user.userKey;
-      let roleList = this.roleList;
-      let juseId;
-      for (var key in roleList) {
-        if (roleList[key].rolename == name) {
-          juseId = roleList[key].id;
-        }
+      if(this.user.mobilePhone == ''){
+           this.$message({
+          message: "请输入电话号码"
+        });
+        return false;
       }
+       if(!reg.test(this.user.mobilePhone)){
+           this.$message({
+          message: "请输入正确的电话号码"
+        });
+        return false;
+      }
+      // console.log(this.$refs.selecetedRole.selected)
+      let array = this.$refs.selecetedRole.selected;
+      let id;
+      array.forEach(element => {
+        id += element.currentValue + "," ;
+      });
+      console.log(id,'id')
+
       api1
         .sysuserAdd({
           realName: this.user.realName,
           departid: this.user.departid,
           userName: this.user.userName,
           password: this.user.password,
-          userKey: juseId,
+          userKey: id,
           zhiwei: this.user.zhiwei,
           mobilePhone: this.user.mobilePhone
         })
@@ -256,14 +280,48 @@ export default {
     _execute() {
       // 查看单个 修改
       if (this.nowItem != "add") {
-        let name = this.user.userKey;
-        let roleList = this.roleList;
-        let juseId;
-        for (var key in roleList) {
-          if (roleList[key].rolename == name) {
-            juseId = roleList[key].id;
-          }
-        }
+        const reg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
+      if (this.user.realName == "") {
+        this.$message({
+          message: "请输入用户名称"
+        });
+        return false;
+      }
+      if (this.user.departName == "") {
+        this.$message({
+          message: "请选择组织机构"
+        });
+        return false;
+      }
+      if (this.user.userKey == "") {
+        this.$message({
+          message: "请选择角色"
+        });
+        return false;
+      }
+      if (this.user.zhiwei == "") {
+        this.$message({
+          message: "请输入职位"
+        });
+        return false;
+      }
+      if(this.user.mobilePhone == ''){
+           this.$message({
+          message: "请输入电话号码"
+        });
+        return false;
+      }
+       if(!reg.test(this.user.mobilePhone)){
+           this.$message({
+          message: "请输入正确的电话号码"
+        });
+        return false;
+      }
+        let array = this.$refs.selecetedRole.selected;
+        let id;
+        array.forEach(element => {
+          id += element.currentValue + "," + "";
+        });
         user
           .sysuserAdd({
             id: this.user.id,
@@ -271,7 +329,7 @@ export default {
             departid: this.user.departid,
             userName: this.user.userName,
             password: this.user.password,
-            userKey: juseId,
+            userKey: id,
             zhiwei: this.user.zhiwei,
             mobilePhone: this.user.mobilePhone
           })
@@ -281,10 +339,9 @@ export default {
                 message: "修改成功"
               });
             }
-             this.$emit("cancel");
-             this.$emit("execute"); 
+            this.$emit("cancel");
+            this.$emit("execute");
           });
-       
       }
     },
     // 传图片
