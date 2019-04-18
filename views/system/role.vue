@@ -7,31 +7,67 @@
       <el-input v-model="input" placeholder="请输入内容"></el-input>
 
       <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="chaxun()">搜索</el-button>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="dialogFormVisible=true">新增</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          class="pan-btn light-blue-btn"
+          @click="chaxun()"
+        >搜索</el-button>
+        <el-button
+          type="primary"
+          class="pan-btn light-blue-btn"
+          icon="el-icon-refresh"
+          @click="reset()"
+        >重置</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-circle-plus-outline"
+          class="pan-btn light-blue-btn"
+          @click="dialogFormVisible=true"
+        >新增</el-button>
       </div>
     </div>
-    
 
     <el-table class="textList" :data="tableData" height="74vh">
-      <el-table-column prop="rolecode" label="角色编码">
-      </el-table-column>
-      <el-table-column prop="rolename" label="角色名称">
-      </el-table-column>
+      <el-table-column prop="rolecode" label="角色编码"></el-table-column>
+      <el-table-column prop="rolename" label="角色名称"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-tooltip content="编译" placement="top">
-              <el-button type="primary" icon="el-icon-edit" circle  @click="bianTan(scope.row)" v-if="tableData.length!=0"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              @click="bianTan(scope.row)"
+              v-if="tableData.length!=0"
+            ></el-button>
           </el-tooltip>
           <el-tooltip content="删除" placement="top">
-            <el-button type="danger" icon="el-icon-delete" circle  @click="open2(scope.row.id)" v-if="tableData.length!=0"></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click="open2(scope.row.id)"
+              v-if="tableData.length!=0"
+            ></el-button>
           </el-tooltip>
           <el-tooltip content="PC端查询" placement="top">
-            <el-button type="success" icon="el-icon-zoom-out" circle  @click="sxlb(scope.row.id,'1')" v-if="tableData.length!=0"></el-button>
+            <el-button
+              type="success"
+              icon="el-icon-zoom-out"
+              circle
+              @click="sxlb(scope.row.id,'1')"
+              v-if="tableData.length!=0"
+            ></el-button>
           </el-tooltip>
           <el-tooltip content="移动端查询" placement="top">
-            <el-button type="primary" icon="el-icon-search" circle  @click="sxlb(scope.row.id,'2')" v-if="tableData.length!=0"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              circle
+              @click="sxlb(scope.row.id,'2')"
+              v-if="tableData.length!=0"
+            ></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -49,7 +85,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
         </el-pagination>
-      </div> -->
+    </div>-->
 
     <!-- 新增弹框 -->
     <el-dialog title="新增详情" :visible.sync="dialogFormVisible">
@@ -82,18 +118,25 @@
       </div>
     </el-dialog>
     <!-- 树形列表弹框 -->
-    <el-dialog title="树形菜单" :visible.sync="dialogSxlbVisible">
+    <el-dialog title="树形菜单" :visible.sync="dialogSxlbVisible" class="dialogBox">
       <!-- zreet -->
       <div class="shu">
-        <el-tree :data="shuData" show-checkbox default-expand-all node-key="id" ref="tree" :default-checked-keys="shuMo" highlight-current :props="defaultProps">
-        </el-tree>
+        <el-tree
+          :data="shuData"
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          ref="tree"
+          :default-checked-keys="shuMo"
+          highlight-current
+          :props="defaultProps"
+        ></el-tree>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogSxlbVisible = false">取 消</el-button>
         <el-button type="primary" @click="addZre()">保 存</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -101,7 +144,7 @@
 import request from "@/utils/request";
 import api from "@/api/resource.js";
 export default {
-   inject: ["reload"],
+  inject: ["reload"],
   data() {
     return {
       dialogSxlbVisible: false,
@@ -212,21 +255,18 @@ export default {
       });
     },
     // 查看树形列表接口
-    sxlb(id,Mark) {
-      
+    sxlb(id, Mark) {
       this.dialogSxlbVisible = true;
       this.shuId = id;
       // console.log(id,Mark)
-      request.post("/rest/role/functionList",{id,Mark}).then(res => {
-        
+      request.post("/rest/role/functionList", { id, Mark }).then(res => {
         this.shuData = res.data.data;
-        
       });
-     
+
       // api.getTree({Mark,id}).then(res => {
-        
+
       //   this.shuData = res.data.data;
-        
+
       // });
     },
     // 查询接口
@@ -260,7 +300,7 @@ export default {
       });
       this.dialogSxlbVisible = false;
     },
-      // 重置按钮
+    // 重置按钮
     reset() {
       this.reload();
     }
@@ -269,7 +309,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.roleLayout {
+
   .roleList {
     float: left;
     width: 100%;
@@ -283,5 +323,9 @@ export default {
     overflow-y: scroll;
     height: 500px;
   }
-}
+  // /deep/.el-dialog__body {
+  //   height: 60vh;
+  //   overflow-x: hidden;
+  // }
+
 </style>
