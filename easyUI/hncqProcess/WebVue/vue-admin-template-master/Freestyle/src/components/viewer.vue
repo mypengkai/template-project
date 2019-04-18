@@ -9,6 +9,7 @@
             <li>图片大小：{{item.fileSize}}</li>
             <li>经度：{{item.lgt}}</li>
             <li>纬度：{{item.lat}}</li>
+            <li>拍照位置：{{item.photoLocation}}</li>
           </ul>
         </div>
       </el-col>

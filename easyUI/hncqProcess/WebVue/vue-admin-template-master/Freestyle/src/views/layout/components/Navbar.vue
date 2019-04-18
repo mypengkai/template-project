@@ -8,7 +8,7 @@
       />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="../../../../static/home.png" alt class="user-avatar">
+          <img src="../../../../static/timg.jpg" alt class="user-avatar">
           <i class="el-icon-caret-bottom"/>
         </div>
 
@@ -81,7 +81,7 @@ import { mapGetters } from "vuex";
 import Hamburger from "@/components/Hamburger";
 import request from "@/utils/request";
 import Mallki from "@/components/TextHoverEffect/Mallki";
-import qs from 'qs'
+import qs from "qs";
 export default {
   components: {
     // Breadcrumb,
@@ -103,7 +103,8 @@ export default {
         userName: "",
         realName: "",
         mobilePhone: "",
-        email: ""
+        email: "",
+        id:'',
       },
       ruleses: {
         passWord: [
@@ -114,8 +115,7 @@ export default {
           { min: 6, message: "请输入打入6位以上的密码", trigger: "blur" }
         ]
       },
-      uesrList: [], // 登陆用户信息
-     
+      uesrList: [] // 登陆用户信息
     };
   },
   mounted() {
@@ -190,19 +190,20 @@ export default {
       this.$store.dispatch("LogOut").then(() => {
         Cookies.remove("names");
         location.reload(); // 为了重新实例化vue-router对象 避免bug
-        
       });
     },
-    // 请求接口
+    // 请求接口(登录人信息)
     fn() {
-      return request.post("/rest/sysuser/chakan").then(res => {
+      return request.post("/rest/sysuser/searchSelfMsg").then(res => {
         if (res.data.respCode == 0) {
           this.uesrList = res.data.data;
+          console.log(this.uesrList,'this.uesrList')
         }
         this.form.userName = this.uesrList.username;
         this.form.realName = this.uesrList.realname;
         this.form.mobilePhone = this.uesrList.mobilePhone;
         this.form.email = this.uesrList.email;
+        this.form.id = this.uesrList.id
       });
     },
     // 验证
@@ -226,28 +227,23 @@ export default {
         });
         return false;
       }
-    //  JSON.stringify
-      //  console.log(qs.stringify(this.form),'qs.stringify(this.form)')
-      //  {headers:{
-      //       'Content-Type':'multipart/form-data'}
-      //   }
-      let formData= new FormData();
-      formData.append('userName', this.form.userName);
-      formData.append('realName', this.form.realName);
-      formData.append('mobilePhone', this.form.mobilePhone);
-      formData.append('email', this.form.email);
-      request.post("/rest/sysuser/modify",
-        this.form,
-    //  {userName:this.form.userName,
-    //  realName:this.form.userName,
-    //  mobilePhone:this.form.userName,
-    //  email:this.form.email},
-      {headers:{
-            'Content-Type':'application/json'}
-        }
-       ).then(res => {
-        console.log(res.data, "res.data");
-      });
+      request
+        .post("/rest/sysuser/add", {
+          id:this.form.id,
+          userName: this.form.userName,
+          realName: this.form.userName,
+          mobilePhone: this.form.userName,
+          email: this.form.email
+        })
+        .then(res => {
+          console.log(res.data, "res.data");
+          if(res.data.respCode == '0'){
+               this.$message({
+                    message:'恭喜你,修改成功'
+               })
+          }
+          this.dialogFormVisible = false
+        });
     }
   }
 };

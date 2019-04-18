@@ -2,18 +2,16 @@
   <div>
     <el-form class="reverseBox" ref="userFrom" :model="user" label-width="120px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="用户账号" v-if="nowItem=='add'" prop="userName">
+        <el-form-item label="名称" prop="userName">
           <el-input v-model="user.userName"></el-input>
         </el-form-item>
-
-        <el-form-item label="用户账号" v-if="nowItem!=='add'" prop="userName">
-          <el-input v-model="user.userName" :disabled="true"></el-input>
-        </el-form-item>
-
-        <el-form-item label="名称" prop="realName">
+        <el-form-item v-if="nowItem=='add'" label="用户帐号" prop="realName">
           <el-input v-model="user.realName"></el-input>
         </el-form-item>
 
+        <el-form-item v-if="nowItem!='add'" label="用户帐号" prop="realName">
+          <el-input v-model="user.realName" :disabled="true"></el-input>
+        </el-form-item>
         <el-form-item v-if="nowItem=='add'" label="密码" prop="password">
           <el-input show-password v-model="user.password"></el-input>
         </el-form-item>
@@ -26,18 +24,15 @@
             v-on:noDe="handleCheckChange"
             v-model="value"
           />
-          <!-- <el-input v-model="user.departName" :disabled="true">
-            <el-button slot="append" icon="el-icon-edit" @click="innerVisible = true"></el-button>
-          </el-input>-->
         </el-form-item>
 
         <el-form-item label="角色" prop="userKey">
-          <el-select v-model="user.userKey" multiple placeholder="请选择角色">
+          <el-select v-model="user.userKey"  placeholder="请选择角色" >
             <el-option
-              v-for="(item,index) in roleList"
-              :key="index.id"
+              v-for="item in roleList"
+              :key="item.id"
               :label="item.rolename"
-              :value="item.id"
+              :value="item.rolename"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -55,7 +50,7 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="上传头像" v-if="nowItem=='add'">
+        <!-- <el-form-item label="上传头像" v-if="nowItem=='add'">
           <el-upload
             class="avatar-uploader"
             ref="upload"
@@ -80,13 +75,13 @@
 
         <el-form-item label="头像查看" v-if="nowItem!=='add'">
           <img :src="user.picture" alt class="avatar">
-        </el-form-item>
+        </el-form-item>-->
       </div>
     </el-form>
     <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
       <el-button type="primary" v-if="nowItem!=='add'" @click="_execute">修 改</el-button>
-      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">保 存</el-button>
+      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('user')">保 存</el-button>
     </div>
   </div>
 </template>
@@ -94,6 +89,7 @@
 <script>
 import { getToken } from "@/utils/auth";
 import user from "@/api/user.js";
+import api1 from "@/api/user.js";
 import api from "@/api/role.js";
 import Organization from "@/api/Organization.js";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
@@ -108,7 +104,7 @@ export default {
       if (!value) {
         return callback(new Error("手机号不能为空"));
       } else {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        const reg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
         console.log(reg.test(value));
         if (reg.test(value)) {
           callback();
@@ -125,15 +121,14 @@ export default {
         label: "name"
       },
       rules: {
+        realName: [{ required: true, message: "必填项", trigger: "blur" }],
         userName: { required: true, message: "必填项", trigger: "blur" },
         password: [
           { required: true, message: "必填项", trigger: "blur" },
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
         ],
-        realName: [{ required: true, message: "必填项", trigger: "blur" }],
-        name: [{ required: true, message: "必填项", trigger: "blur" }],
         userKey: [{ required: true, message: "必填项", trigger: "blur" }],
-        mobilePhone: { required: true,validator: checkPhone, trigger: "blur" },
+        mobilePhone: { required: true, validator: checkPhone, trigger: "blur" },
         portrait: [{ required: true, message: "必填项", trigger: "blur" }]
       }, //表单校验规则
       user: {
@@ -149,6 +144,7 @@ export default {
         departid: "",
         type: []
       },
+      flag: false,
       headers: {
         "X-AUTH-TOKEN": getToken()
       },
@@ -171,7 +167,7 @@ export default {
     this._roleList();
     this._orgTree();
   },
-
+  mounted() {},
   methods: {
     handleAvatarSuccess(res, file) {
       this.form.files = URL.createObjectURL(file.raw); // res
@@ -184,29 +180,112 @@ export default {
     fileChange(file) {
       this.files = file.raw;
     },
-    _comfirm(file) {
+    // 新增用户
+    _comfirm(user) {
+      // console.log(this.user.userKey,'userKey')
+
       // 表单校验
-      this.$refs[file].validate(valid => {
-        if (valid) {
-          // 新增
-          if (this.$refs.userFrom.validate()) {
-            this.$refs.upload.submit();
+      // this.$refs[file].validate(valid => {
+      //   if (valid) {
+      //     // 新增
+      //     if (this.$refs.userFrom.validate()) {
+      //       this.$refs.upload.submit();
+      //     }
+      //     this.$emit("cancel");
+      //     this.reload();
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
+      if (this.user.userName == "") {
+        this.$message({
+          message: "请输入用户账户"
+        });
+        return false;
+      }
+      if (this.user.departName == "") {
+        this.$message({
+          message: "请选择组织机构"
+        });
+        return false;
+      }
+      if (this.user.userKey == "") {
+        this.$message({
+          message: "请选择角色"
+        });
+        return false;
+      }
+      if (this.user.zhiwei == "") {
+        this.$message({
+          message: "请输入职位"
+        });
+        return false;
+      }
+
+      let name = this.user.userKey;
+      let roleList = this.roleList;
+      let juseId;
+      for (var key in roleList) {
+        if (roleList[key].rolename == name) {
+          juseId = roleList[key].id;
+        }
+      }
+      api1
+        .sysuserAdd({
+          realName: this.user.realName,
+          departid: this.user.departid,
+          userName: this.user.userName,
+          password: this.user.password,
+          userKey: juseId,
+          zhiwei: this.user.zhiwei,
+          mobilePhone: this.user.mobilePhone
+        })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.respCode == "") {
+            this.$message({
+              message: "添加用户成功"
+            });
           }
           this.$emit("cancel");
-          this.reload();
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+          this.$emit("execute");
+        });
     },
     //查看
     _execute() {
       // 查看单个 修改
-      this.nowItem != "add" &&
-        user.sysusermodify(this.user).then(res => {
-          this.$emit("execute");
-        });
+      if (this.nowItem != "add") {
+        let name = this.user.userKey;
+        let roleList = this.roleList;
+        let juseId;
+        for (var key in roleList) {
+          if (roleList[key].rolename == name) {
+            juseId = roleList[key].id;
+          }
+        }
+        user
+          .sysuserAdd({
+            id: this.user.id,
+            realName: this.user.realName,
+            departid: this.user.departid,
+            userName: this.user.userName,
+            password: this.user.password,
+            userKey: juseId,
+            zhiwei: this.user.zhiwei,
+            mobilePhone: this.user.mobilePhone
+          })
+          .then(res => {
+            if (res.data.respCode == "0") {
+              this.$message({
+                message: "修改成功"
+              });
+            }
+             this.$emit("cancel");
+             this.$emit("execute"); 
+          });
+       
+      }
     },
     // 传图片
     handleRemove(file, fileList) {
