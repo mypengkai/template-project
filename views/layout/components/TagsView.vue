@@ -239,7 +239,7 @@ export default {
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0);
   #deteilButton {
     float: right;
-    padding: 0.7vw 1.2vw;
+    padding: 0.5vw 1vw;
     font-size: 0.1vw;
   }
 }

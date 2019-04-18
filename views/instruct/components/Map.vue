@@ -18,9 +18,6 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值
-
-       console.log(this.form.data.finishPictureOfCommand,'finishPictureOfCommand');
-
       if (this.form.data.finishPictureOfCommand.length > 0) {
        
         let formData = this.form.data.finishPictureOfCommand[0];

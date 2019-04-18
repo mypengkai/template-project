@@ -170,19 +170,23 @@
           <!--    style="width:50%" class="rl"-->
           <div>
             <!-- <div v-if="nowItem !=='add'&& states == '未处理'"> -->
-            <div style="overflow:hidden;position:relative">
-              <div class="fl  faqi">
+            <!-- 指令查看 -->
+            <div
+              style="overflow:hidden;position:relative"
+              v-if="nowItem !=='add'&& states == '已处理'"
+            >
+              <div class="fl faqi">
                 <span class="accomplish">发起指令</span>
 
-                <el-tabs v-model="activeName" @tab-click="handleClick" >
-                  <el-tab-pane label="影像资料" name="first" >
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                  <el-tab-pane label="影像资料" name="first">
                     <ul>
                       <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
-                        <img :src="item.picture" style="cursor:pointer" >
+                        <img :src="item.picture" style="cursor:pointer">
                       </li>
                     </ul>
                   </el-tab-pane>
-                  <el-tab-pane label="拍照地点" name="second" >
+                  <el-tab-pane label="拍照地点" name="second">
                     <div style="height:45vh">
                       <instructMap :nowItem="nowItem"></instructMap>
                     </div>
@@ -192,21 +196,40 @@
               <div class="elhr"></div>
               <div class="rl wanchen">
                 <span class="accomplish">完成指令</span>
-                <el-tabs v-model="activeName1" @tab-click="handleClick" >
-                  <el-tab-pane label="影像资料" name="first" >
+                <el-tabs v-model="activeName1" @tab-click="handleClick">
+                  <el-tab-pane label="影像资料" name="first">
                     <ul>
                       <li v-for="(item,index) in pictures" :key="index" @click="actionImg(item)">
                         <img :src="item.picture" style="cursor:pointer">
                       </li>
                     </ul>
                   </el-tab-pane>
-                  <el-tab-pane label="拍照地点" name="second" >
+                  <el-tab-pane label="拍照地点" name="second">
                     <div style="height:45vh">
                       <Map :nowItem="nowItem"></Map>
                     </div>
                   </el-tab-pane>
                 </el-tabs>
               </div>
+            </div>
+            <!-- 指令发送 -->
+            <div v-if="nowItem !=='add'&& states == '未处理'" class="pictureContent">
+              <el-tabs type="border-card" v-model="tabPosition">
+                <el-tab-pane label="影像资料" name="first">
+                  <div class="imgContation">
+                    <ul>
+                      <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
+                        <img :src="item.picture" alt style="width:100%;height:100%">
+                      </li>
+                    </ul>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="所在位置" name="second">
+                  <div style="height:45vh">
+                     <instructMap :nowItem="nowItem"></instructMap>
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
             </div>
           </div>
         </div>
@@ -297,9 +320,9 @@
         <el-button type="primary" @click="_delivery">确 定</el-button>
       </div>
     </el-dialog>
-   
-     <!-- 图片预览 -->
-    <el-dialog title="图片预览" :visible.sync="dialogcommcheck"  fullscreen append-to-body >
+
+    <!-- 图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="dialogcommcheck" fullscreen append-to-body>
       <viewer :photo="commcheckList"></viewer>
     </el-dialog>
   </div>
@@ -331,7 +354,8 @@ export default {
       activeName: "second",
       activeName1: "second",
       inData: {},
-      dialogcommcheck:false,
+      dialogcommcheck: false,
+      tabPosition: 'first',
       activities: [
         {
           name: "",
@@ -402,7 +426,7 @@ export default {
       uploadUrl: process.env.BASE_API + "/rest/command/addCommand",
       dialogImageUrl: "",
       value: "",
-      commcheckList:[],   // 预览图片信息
+      commcheckList: [], // 预览图片信息
       planTime: "",
       headers: {
         "X-AUTH-TOKEN": getToken()
@@ -538,7 +562,7 @@ export default {
       this.transpondForm.commanduserId = ObCopyData.data.commanduserId; // 转发指令
       this.commandUser = ObCopyData.data.commandUser; //指令内容
       this.activities = ObCopyData.data.commandUser;
-      console.log(this.activities);
+      // console.log(this.activities);
       this.activities.forEach(v => {
         v.commandStagePeople == 1 && (v.commandStagePeople1 = "发出指令的人");
         v.commandStagePeople == 2 && (v.commandStagePeople1 = "转发指令的人");
@@ -783,12 +807,12 @@ export default {
       // console.log(fileList);
     },
     //图片预览
-    actionImg(item){
-        console.log(item,'item')
-        let array = []
-        array.push(item)
-        this.commcheckList = array
-        this.dialogcommcheck = true
+    actionImg(item) {
+      console.log(item, "item");
+      let array = [];
+      array.push(item);
+      this.commcheckList = array;
+      this.dialogcommcheck = true;
     }
   }
 };
@@ -907,11 +931,12 @@ export default {
     font-size: 0.7vw;
   }
 }
-.faqi,.wanchen{
-    width:50%;
-    padding:10px;
-    
-     ul {
+.faqi,
+.wanchen {
+  width: 50%;
+  padding: 10px;
+
+  ul {
     padding: 0;
     margin: 0;
     height: 45vh;
@@ -929,12 +954,32 @@ export default {
     }
   }
 }
-.elhr{
-    position: absolute;
-    width:1px;
-    height:50vh;
-    bottom: 0;
-    left:50%;
-    background: #ccc;
+.pictureContent {
+  padding: 10px;
+  ul {
+    padding: 0;
+    margin: 0;
+    height: 45vh;
+    li {
+      list-style: none;
+      float: left;
+      width: 33%;
+      height: 15vh;
+      padding: 1%;
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
+  }
+}
+.elhr {
+  position: absolute;
+  width: 1px;
+  height: 50vh;
+  bottom: 0;
+  left: 50%;
+  background: #ccc;
 }
 </style>
