@@ -78,8 +78,8 @@
         <el-form-item label="工序名" prop="process">
           <el-input v-model="form.process"/>
         </el-form-item>
-        <el-form-item label="序号">
-          <el-input v-model.number="form.seq"/>
+        <el-form-item label="备注">
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

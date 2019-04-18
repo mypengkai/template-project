@@ -107,8 +107,8 @@
 
         <!-- 查看 -->
         <div :class="{reverseBox:nowItem!=='add'}">
-          <!-- 左边信息 -->
-          <div style="width:47%" class="fl">
+          <!-- 左边信息   style="width:47%" class="fl"-->
+          <div>
             <el-form-item
               style="width:22vw"
               label="分部分项"
@@ -167,96 +167,45 @@
               </div>
             </el-form-item>
           </div>
-          <!-- 右边图像 -->
-          <div style="width:50%" class="rl">
+          <!--    style="width:50%" class="rl"-->
+          <div>
             <!-- <div v-if="nowItem !=='add'&& states == '未处理'"> -->
-            <div v-if="nowItem !=='add'&& states == '已处理'">
-              <div class="fl w50">
-                <span class="accomplish">发起</span>
-                <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <el-tab-pane label="影像资料" name="first">
-                    <!-- <el-carousel :interval="3000" arrow="always" height="45vh">
-                      <el-carousel-item v-for="(item,index) in picture" :key="index">
-                        <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg('0')">
-                      </el-carousel-item>
-                    </el-carousel>-->
+            <div style="overflow:hidden;position:relative">
+              <div class="fl  faqi">
+                <span class="accomplish">发起指令</span>
+
+                <el-tabs v-model="activeName" @tab-click="handleClick" >
+                  <el-tab-pane label="影像资料" name="first" >
                     <ul>
                       <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
                         <img :src="item.picture" style="cursor:pointer" >
                       </li>
                     </ul>
                   </el-tab-pane>
-                  <el-tab-pane label="拍照地点" name="second">
+                  <el-tab-pane label="拍照地点" name="second" >
                     <div style="height:45vh">
                       <instructMap :nowItem="nowItem"></instructMap>
                     </div>
                   </el-tab-pane>
                 </el-tabs>
               </div>
-
-              <div class="rl w50">
-                <span class="accomplish">完成</span>
-                <el-tabs v-model="activeName1" @tab-click="handleClick">
-                  <el-tab-pane label="影像资料" name="first">
-                    <!-- <el-carousel :interval="3000" arrow="always" height="45vh">
-                      <el-carousel-item v-for="(item,index) in pictures" :key="index">
-                        <img
-                          :src="item.picture"
-                          alt
-                          style="cursor:pointer"
-                          class="avatar"
-                          @click="actionImg('1')"
-                        >
-                      </el-carousel-item>
-                    </el-carousel> -->
+              <div class="elhr"></div>
+              <div class="rl wanchen">
+                <span class="accomplish">完成指令</span>
+                <el-tabs v-model="activeName1" @tab-click="handleClick" >
+                  <el-tab-pane label="影像资料" name="first" >
                     <ul>
                       <li v-for="(item,index) in pictures" :key="index" @click="actionImg(item)">
                         <img :src="item.picture" style="cursor:pointer">
                       </li>
                     </ul>
                   </el-tab-pane>
-                  <el-tab-pane label="拍照地点" name="second">
+                  <el-tab-pane label="拍照地点" name="second" >
                     <div style="height:45vh">
                       <Map :nowItem="nowItem"></Map>
                     </div>
                   </el-tab-pane>
                 </el-tabs>
-              </div>
-            </div>
-
-            <!-- 完成的 -->
-            <div v-if="nowItem !=='add'&& states == '未处理'">
-              <!-- 导航切换 -->
-              <div class="navb" label-width="120px">
-                <el-menu
-                  :default-active="activeIndex2"
-                  mode="horizontal"
-                  @select="handleSelect"
-                  text-color="#ccc"
-                  active-text-color="#409EFF"
-                >
-                  <el-menu-item index="1" @click="nowType=0">影像资料</el-menu-item>
-                  <el-menu-item index="2" @click="nowType=1">所在位置</el-menu-item>
-                </el-menu>
-              </div>
-              <!-- 轮播信息 -->
-              <div class="condition" v-if="nowType==0">
-                <!-- <el-form-item label="" v-if="nowItem !=='add'" class="intervalBox">
-                  <el-carousel :interval="3000" arrow="always" height="45vh">
-                    <el-carousel-item v-for="(item,index) in picture" :key="index">
-                      <img :src="item.picture" alt="" style="cursor:pointer" class="avatar" @click="actionImg()">
-                    </el-carousel-item>
-                  </el-carousel>
-                </el-form-item>-->
-                <ul>
-                  <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
-                    <img :src="item.picture" style="cursor:pointer" >
-                  </li>
-                </ul>
-              </div>
-              <!-- 地图 -->
-              <div style="height:45vh" v-if="nowType==1">
-                <instructMap :nowItem="nowItem"></instructMap>
               </div>
             </div>
           </div>
@@ -353,47 +302,6 @@
     <el-dialog title="图片预览" :visible.sync="dialogcommcheck"  fullscreen append-to-body >
       <viewer :photo="commcheckList"></viewer>
     </el-dialog>
-    
-
-    <!-- <el-dialog
-      class="dialogBox"
-      width="60%"
-      title="详情查看"
-      :visible.sync="innerVisibleSon"
-      append-to-body
-    >
-      <el-form :model="formSon" label-width="200px">
-        <div style="width:80%">
-          <el-form-item label="指令描述">
-            <el-input v-model="formSon.describe"></el-input>
-          </el-form-item>
-
-          <el-form-item label="拍摄时间">
-            <el-input v-model="formSon.createTime"></el-input>
-          </el-form-item>
-
-          <el-form-item label="经度">
-            <el-input v-model="formSon.lat"></el-input>
-          </el-form-item>
-
-          <el-form-item label="纬度">
-            <el-input v-model="formSon.lgt"></el-input>
-          </el-form-item>
-
-          <el-form-item label="拍摄地点">
-            <el-input v-model="formSon.photoLocation"></el-input>
-          </el-form-item>
-
-          <el-form-item label="照片">
-            <el-carousel :interval="3000" arrow="always" height="20vh">
-              <el-carousel-item v-for="(item,index) in imgData" :key="index">
-                <img :src="item.filePath" alt>
-              </el-carousel-item>
-            </el-carousel>
-          </el-form-item>
-        </div>
-      </el-form>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -985,7 +893,8 @@ export default {
 .accomplish {
   display: block;
   text-align: center;
-  font-size: 1vw;
+  font-size: 1.2vw;
+  color: #00000b;
 }
 .reverseAddBox {
   width: 100%;
@@ -998,10 +907,14 @@ export default {
     font-size: 0.7vw;
   }
 }
-.condition {
-  ul {
+.faqi,.wanchen{
+    width:50%;
+    padding:10px;
+    
+     ul {
     padding: 0;
     margin: 0;
+    height: 45vh;
     li {
       list-style: none;
       float: left;
@@ -1015,5 +928,13 @@ export default {
       }
     }
   }
+}
+.elhr{
+    position: absolute;
+    width:1px;
+    height:50vh;
+    bottom: 0;
+    left:50%;
+    background: #ccc;
 }
 </style>

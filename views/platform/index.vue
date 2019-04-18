@@ -1,7 +1,7 @@
 <template>
-     <dir>
+     <div>
            我是平台转换模块
-     </dir>
+     </div>
 </template>
 
 <script>
@@ -17,8 +17,8 @@ export default {
         let time = new Date().getTime();
         console.log(time,'time')
         //时间戳加密
-        let pd = md5('time')
-        console.log( pd,' pd')
+        let password = md5('time')
+        console.log( password,'password')
     }
 }
 </script>
