@@ -552,7 +552,7 @@ export default {
     },
     // 根据input ID获取树形结构
     noDe(data) {
-      console.log(data.children)
+      console.log(data)
       if (data.children.length === 0) {
         // this.isShowProjectItem = false;
         this.value = data.description;

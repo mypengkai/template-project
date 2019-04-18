@@ -2,14 +2,17 @@
   <div>
     <el-form class="reverseBox" :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
-        <el-form-item label="所属机构" :label-width="formLabelWidth">
-          <select-tree :options="orgTree" v-on:noDe="handleCheckChange" :props="defaultProps"/>
+        <el-form-item label="所属机构1" :label-width="formLabelWidth" v-if="this.flag1">
+          <select-tree v-model="form.name" :options="orgTree" v-on:noDe="handleCheckChange" :props="defaultProps" ref="projectItemSelectTree" />
+        </el-form-item>
+        <el-form-item  label="所属机构" :label-width="formLabelWidth" prop="projectItem" v-if="!this.flag1" >
+         <el-input v-model="fenbu" size="small" disabled="true"></el-input>
         </el-form-item>
          <!-- 父级 -->
-        <el-form-item  label="工程分部分项" :label-width="formLabelWidth" prop="projectItem">
-          <select-tree :options="projectList" v-on:noDe="projectChange" :props="projectTree"/>
+        <el-form-item  label="工程分部分项" :label-width="formLabelWidth" prop="projectItem" >
+         <el-input v-model="form.projectItem" size="small"></el-input>
         </el-form-item>
-        <el-form-item v-if="nowItem!=='add'" label="父工程分部分项" :label-width="formLabelWidth">
+        <el-form-item v-if="nowItem!=='add'" label="父工程分部分项" :label-width="formLabelWidth" v-show="this.flag">
           <el-input v-model="form.pName" :disabled="true" size="small">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
@@ -72,12 +75,13 @@ import api from "@/api/project.js";
 import Organization from "@/api/Organization.js";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
-  props: ["nowItem"],
+  props: ["nowItem","flag","flag1"],
   components: {
     SelectTree
   },
   data() {
     return {
+      fenbu:'',
       orgTree: [], // 组织机构树
       projectList: [], // 分部分项树
       //组织机构树
@@ -100,7 +104,8 @@ export default {
         lat: "",
         projectItem: "",
         projectType: "",
-        pName: ""
+        pName: "",
+        departname:''
       },
       rules: {
         userGroupId: {
@@ -108,7 +113,7 @@ export default {
           message: "请输入所属机构",
           trigger: "blur"
         },
-        projectItem: { required: true, message: "请选择", trigger: "blur" },
+        projectItem: { required: true, message: "请输入", trigger: "blur" },
         startStation: {
           required: true,
           message: "请输入起始桩号",
@@ -133,18 +138,19 @@ export default {
   methods: {
     initForm() {
       if (this.nowItem != "add") this.form = this.$tool.ObCopy(this.nowItem);
+      console.log(this.form.projectItem)
+      this.fenbu=this.form.projectItem
     },
     _comfirm() {
       if (this.nowItem == "add") {
         this.form.fuid = ''
-        console.log(this.form, "this.form");
         if (this.form.name == "") {
           this.$message({
             message: "请选择组织机构"
           });
           return false;
         }
-        if (this.form.projectItem == "") {
+        if (this.form.userGroupId == "") {
           this.$message({
             message: "请选择分部分项"
           });
@@ -169,6 +175,7 @@ export default {
           return false;
         }
         api.projectAdd(this.form).then(res => {
+          console.log(this.form)
           this.$emit("comfirm");
           this.$message({
             type: "success",
@@ -180,7 +187,6 @@ export default {
 
       // 查看单个 修改
       if (this.nowItem != "add") {
-        console.log(this.form.fuid,'fuid')
         if (this.form.name == "") {
           this.$message({
             message: "请选择组织机构"
@@ -212,6 +218,7 @@ export default {
           return false;
         }
         api.projectAdd(this.form).then(res => {
+          console.log(this.form,121)
           this.$emit("comfirm");
           this.$message({
             type: "success",
@@ -229,19 +236,20 @@ export default {
      
     },
     // 组织机构选择后的数据
-    handleCheckChange(data, checked, indeterminate) {
+    handleCheckChange(data) {
+      console.log(data)
       if (data.children.length > 0) {
         this.$message({
           message: "组织机构只能选标段"
         });
-        return false;
-      }
-      this.form.userGroupId = data.id;
-      this.form.name = data.name;
+      }else{
+        this.form.userGroupId = data.id;
        // 分部分项树
       api.projectList({orgId: this.form.userGroupId}).then(res => {
         this.projectList = res.data.data;
       });
+      }
+      
     },
     // 分部分项选择后的数据
     projectChange(data, checked, indeterminate) {
