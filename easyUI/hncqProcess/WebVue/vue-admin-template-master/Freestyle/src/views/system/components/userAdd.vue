@@ -2,15 +2,15 @@
   <div>
     <el-form class="reverseBox" ref="userFrom" :model="user" label-width="120px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="名称" prop="userName">
+        <el-form-item label="名称" prop="realName">
           <el-input v-model="user.realName"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="用户帐号" prop="realName">
+        <el-form-item v-if="nowItem=='add'" label="用户帐号" prop="userName">
           <el-input v-model="user.userName"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem!='add'" label="用户帐号" prop="realName">
+        <el-form-item v-if="nowItem!='add'" label="用户帐号" prop="userName">
           <el-input v-model="user.userName" :disabled="true"></el-input>
         </el-form-item>
 
@@ -53,32 +53,6 @@
           ></el-input>
         </el-form-item>
 
-        <!-- <el-form-item label="上传头像" v-if="nowItem=='add'">
-          <el-upload
-            class="avatar-uploader"
-            ref="upload"
-            :action="uploadUrl"
-            :multiple="false"
-            name="files"
-            :headers="headers"
-            list-type="picture-card"
-            :limit="1"
-            :auto-upload="false"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :on-exceed="handleExceed"
-            :data="user"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="50%" :src="dialogImageUrl" alt="图片">
-          </el-dialog>
-        </el-form-item>
-
-        <el-form-item label="头像查看" v-if="nowItem!=='add'">
-          <img :src="user.picture" alt class="avatar">
-        </el-form-item>-->
       </div>
     </el-form>
     <div class="tar">
@@ -167,7 +141,13 @@ export default {
   },
   watch:{
        conentList(){
-           console.log(this.conentList,'conentList')
+          //  console.log(this.conentList,'conentList')
+           this.user.userName = this.conentList.userName
+           this.user.realName = this.conentList.realName;
+           this.user.userKey = this.conentList.userKey;
+           this.user.mobilePhone = this.conentList.mobilePhone;
+           this.user.zhiwei = this.conentList.zhiwei;
+           this.user.departName = this.conentList.orgNames[0]
        }   
   },
   created() {
@@ -180,17 +160,24 @@ export default {
     handleAvatarSuccess(res, file) {
       this.form.files = URL.createObjectURL(file.raw); // res
     },
-    async initForm() {
+    initForm() {
       if (this.nowItem == "add") return;
       this.user = this.$tool.ObCopy(this.nowItem); //复制
-      let { data } = await api1.sysuserCheck(this.nowItem.id); //异步执行取id
-      let formData = data.data[data.data.length - 1];
-      this.user.mobilePhone = formData.mobilePhone;
-      this.user.userKey = formData.userKey;
-      this.user.departName = formData.orgNames[0]; // 组织机构
-      //给角色和组织机构赋值
-      console.log(this.$refs.userInfo_userGroup.$refs.input);
-      this.$refs.userInfo_userGroup.$refs.input.labelModel=this.user.departName;
+      let userInfo=this.user;
+      api1.sysuserCheck({id: this.nowItem.id}).then(res=>{
+        let formData = res.data.data[res.data.data.length - 1];
+        userInfo.mobilePhone = formData.mobilePhone;
+        this.$refs.userInfo_userGroup.placeholder=this.user.departName;
+        userInfo.departName = formData.orgNames[0]; // 组织机构
+        let userkeys=[];
+        if(formData.userkey!=null && formData.userkey!=""){
+          let temp=formData.userkey.substring(0, (formData.userkey.length-1))
+          for(let v of temp.split(",")){
+            userkeys.push(v);
+          }
+        }
+        userInfo.userKey=userkeys;
+      })
     },
     fileChange(file) {
       this.files = file.raw;
@@ -252,9 +239,7 @@ export default {
       let id = '';
       array.forEach(element => {
         id  += element.currentValue + "," ;
-        // id =  element.currentValue + "," + id
       });
-      console.log(id,'id')
 
       api1
         .sysuserAdd({
@@ -319,9 +304,9 @@ export default {
         return false;
       }
         let array = this.$refs.selecetedRole.selected;
-        let id;
+        let id = '';
         array.forEach(element => {
-          id += element.currentValue + "," + "";
+          id += element.currentValue + "," ;
         });
         user
           .sysuserAdd({

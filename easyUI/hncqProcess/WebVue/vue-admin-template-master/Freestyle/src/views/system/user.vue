@@ -155,9 +155,8 @@ export default {
     },
     
     // 查询单个请求
-    async actionItem(val) {
-      this.nowItem = val;
-
+    async actionItem(row) {
+      this.nowItem = row
       this.dialogFormVisible = true;
     },
 
