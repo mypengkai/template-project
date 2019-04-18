@@ -3,9 +3,9 @@
     <!-- 新增 -->
     <div class="btncalss">
 
-      <el-button type="primary" plain @click="resourceList(1)"  class="pan-btn light-blue-btn"
->移动端</el-button>
       <el-button type="primary" plain @click="resourceList(2)"  class="pan-btn light-blue-btn"
+>移动端</el-button>
+      <el-button type="primary" plain @click="resourceList(1)"  class="pan-btn light-blue-btn"
 >PC端</el-button>
       <el-button
         type="primary"
@@ -161,6 +161,7 @@ export default {
     },
     // 树形列表
     resourceList(num) {
+      this.menuList=[]
       api.menuList({ Mark: num, type: "menu" }).then(res => {
         this.menuList = res.data.data;
         console.log(this.menuList);
