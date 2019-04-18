@@ -589,6 +589,7 @@ export default {
     // 点击树形节点展示右边详情列表
     handleNodeClick(data) {
       this.childrenId = "";
+      console.log(data)
       this.treeId = data.id;
       this.ztrrFrom();
       if (data.children.length > 0) {

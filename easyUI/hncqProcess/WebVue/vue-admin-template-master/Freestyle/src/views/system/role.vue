@@ -9,7 +9,7 @@
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="chaxun()">搜索</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="dialogFormVisible=true">新增</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn blue-btn" @click="dialogFormVisible=true">新增</el-button>
       </div>
     </div>
     <!-- <div class="fl">
@@ -35,7 +35,10 @@
             <el-button type="danger" icon="el-icon-delete" circle @click="open2(scope.row.id)" v-if="tableData.length!=0"></el-button>
           </el-tooltip>
           <el-tooltip content="查询" placement="top">
-            <el-button type="primary" icon="el-icon-search" circle @click="sxlb(scope.row.id)" v-if="tableData.length!=0"></el-button>
+            <el-button type="primary" icon="el-icon-search" @click="sxlb(scope.row.id,'1')" v-if="tableData.length!=0">PC端</el-button>
+          </el-tooltip>
+          <el-tooltip content="查询" placement="top">
+            <el-button type="primary" icon="el-icon-search" @click="sxlb(scope.row.id,'2')" v-if="tableData.length!=0">移动端</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -103,6 +106,7 @@
 
 <script>
 import request from "@/utils/request";
+import api from "@/api/resource.js";
 export default {
    inject: ["reload"],
   data() {
@@ -132,7 +136,7 @@ export default {
       shuMo: [],
       defaultProps: {
         children: "children",
-        label: "functionName"
+        label: "name"
       }
     };
   },
@@ -215,12 +219,22 @@ export default {
       });
     },
     // 查看树形列表接口
-    sxlb(id) {
+    sxlb(id,Mark) {
+      
       this.dialogSxlbVisible = true;
       this.shuId = id;
-      request.post("/rest/menu/getList").then(res => {
+      // console.log(id,Mark)
+      request.post("/rest/role/functionList",{id,Mark}).then(res => {
+        
         this.shuData = res.data.data;
+        
       });
+     
+      // api.getTree({Mark,id}).then(res => {
+        
+      //   this.shuData = res.data.data;
+        
+      // });
     },
     // 查询接口
     chaxun() {
@@ -249,7 +263,7 @@ export default {
           message: "恭喜你，保存成功",
           type: "success"
         });
-        console.log(res);
+        // console.log(res);
       });
       this.dialogSxlbVisible = false;
     },
