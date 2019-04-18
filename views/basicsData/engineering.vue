@@ -70,7 +70,7 @@
 
     <!-- 新增弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" class="dialogBox">
-      <Xcadd :nopId="nopId" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList"></Xcadd>
+      <Xcadd :nopId="nopId" :flag1="flag1" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList" :flag="this.flag"></Xcadd>
     </el-dialog>
   </div>
 </template>
@@ -98,7 +98,8 @@ export default {
       total: 0,
       nopId: "",
       args: [null, null, "timeLine"],
-
+      flag:true,
+      flag1:true
     };
   },
   mounted() {
@@ -109,7 +110,11 @@ export default {
   },
   methods: {
     action(val, son) {
-      if (val == "add") this.nowItem = val;
+      if (val == "add") {
+        this.nowItem = val
+        this.flag=false,
+        this.flag1=true
+        };
       if (val != "add") {
         son &&
           (this.nowItem = {
@@ -122,22 +127,28 @@ export default {
             lat: "",
             projectItem: "",
             projectType: "",
-            pName: val.projectItem
-          });
+            pName: val.projectItem,
+            departname:val.departname
+          },
+          this.flag=true,
+          this.flag1=true
+          );
         !son &&
           (this.nowItem = {
             userGroupId: val.userGroupId,
             startStation: val.startStation,
             endStation: val.endStation,
             name: val.name,
+             fuid: val.pId,
             lgt: val.lgt,
             lat: val.lat,
             projectItem: val.projectItem,
             projectType: val.projectType,
-            pName: val.pname,
-            fuid: val.pId,
+            pName: val.projectItem,          
             id: val.id
-          });
+          },
+          this.flag1=false
+          );
       }
       this.dialogFormVisible = true;
       if (this.nowItem != "add" && !son) {
