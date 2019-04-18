@@ -55,26 +55,38 @@
         <el-form-item label="组织机构类型" label-width="120px">
           <el-select v-model="value" placeholder="请选择" @change="bblur">
             <el-option
-              v-for="item in option"
+              v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="上级组织机构" label-width="120px">
-          <!-- <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
-          <!-- <select-tree
-            ref="userGroupSelectTree"
-            :options="shuData"
-            v-on:noDe="handleNodeClick" 
-            :props="defaultProps"
-          /> -->
-             <select-tree :options="shuData" v-on:noDe="handleNodeClick" :props="defaultProps"/>
-        </el-form-item>
-        <el-form-item label="描述" label-width="120px">
-          <textarea style="height:100px;width:790px" v-model="formSet.miaoCode"></textarea>
-        </el-form-item>
+        <div style="width:83%">
+          <el-form-item label="上级组织机构" label-width="120px">
+            <!-- <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
+            <!-- <select-tree :options="shuData"  v-on:noDe="handleNodeClick" :props="defaultProps" /> -->
+            <el-input v-model="checkvalue" @focus="zuzhi"></el-input>
+            <el-popover
+              ref="popover4"
+              v-model="flag"
+              placement="bottom-start"
+              width="400"
+              trigger="click"
+            >
+              <el-tree
+                :data="shuData"
+                highlight-current
+                :props="defaultProps"
+                @node-click="handleNodeClick"
+              ></el-tree>
+            </el-popover>
+          </el-form-item>
+          <el-form-item label="描述" label-width="120px">
+            <!-- <textarea  v-model="formSet.miaoCode"></textarea> -->
+            <el-input type="textarea" v-model="formSet.miaoCode"></el-input>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -91,28 +103,32 @@
         <el-form-item label="组织机构类型" label-width="120px">
           <el-select v-model="value" placeholder="请选择" @change="bblur">
             <el-option
-              v-for="item in option"
+              v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="上级组织机构" label-width="120px">
-          <el-tree
-            :data="shuData"
-            highlight-current
-            :props="defaultProps"
-           
-            node-key="id"
-            :default-expanded-keys="shumo"
-            @node-click="dlestleNodeClick"
-          ></el-tree>
-          
-        </el-form-item>
-        <el-form-item label="描述" label-width="120px">
-          <textarea style="height:100px;width:80%" v-model="formSet.miaoCode"></textarea>
-        </el-form-item>
+        <div style="width:83%">
+          <el-form-item label="上级组织机构" label-width="120px">
+            <!-- <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
+            <!-- <select-tree :options="shuData"  v-on:noDe="handleNodeClick" :props="defaultProps" /> -->
+            <el-input v-model="checkvalue1" :disabled="true" @focus="zuzhi"></el-input>
+            <!-- <el-popover
+                  ref="popover4"
+                  v-model="flag1"
+                  placement="bottom-start"
+                  width="400"
+                  trigger="click">
+                  <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="dlestleNodeClick"></el-tree> 
+            </el-popover>-->
+          </el-form-item>
+          <el-form-item label="描述" label-width="120px">
+            <!-- <textarea  v-model="formSet.miaoCode"></textarea> -->
+            <el-input type="textarea" v-model="formSet.miaoCode"></el-input>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="biandialogFormVisible = false">取 消</el-button>
@@ -124,7 +140,7 @@
 
 <script>
 import treeTable from "@/components/TreeTable";
-import SelectTree from "@/components/SelectTree/SelectTree.vue";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 import request from "@/utils/request";
 export default {
   name: "TreeTableDemo",
@@ -143,12 +159,15 @@ export default {
         children: "children",
         label: "name"
       },
-     
       shuData: [],
+      flag: false,
+      flag1: false,
+      checkvalue: "",
+      checkvalue1: "",
       parentdepartid: "",
       departid: "",
       shumo: [],
-      option: [
+      options: [
         {
           value: "1",
           label: "项目"
@@ -170,9 +189,9 @@ export default {
       leiXing: ""
     };
   },
-  created() {this.fn();},
+  created() {},
   mounted() {
-    
+    this.fn();
   },
   methods: {
     bblur(data) {
@@ -190,9 +209,9 @@ export default {
     //   })
     // },
     // 编辑弹框
-
     bianTan(data) {
       console.log(data);
+
       this.biandialogFormVisible = true;
       this.shumo.length = 0;
       this.value =
@@ -208,9 +227,10 @@ export default {
       this.formSet.roleCode = data.name;
       this.formSet.miaoCode = data.description;
       this.departid = data.id;
+      this.checkvalue1 = data.parent.name;
       this.shumo.push(data.parentdepartid);
       // setTimeout(() => {
-      //   this.$refs.vuetree.setCurrentKey(this.shumo.toString());
+      //     this.$refs.vuetree.setCurrentKey(this.shumo.toString())
       // }, 100);
     },
     // 编辑
@@ -222,16 +242,28 @@ export default {
     },
     // 新增弹框
     addtan() {
-      this.fn()
       this.formSet.roleCode = "";
       this.formSet.miaoCode = "";
       this.departid = "";
       this.parentdepartid = "";
-      this.value = "";
+      this.checkvalue = "";
       this.dialogFormVisible = true;
     },
     // 新增
     addJia(data) {
+      if (this.formSet.roleCode == "") {
+        this.$message({
+          message: "请输入组织机构"
+        });
+        return false;
+      }
+      if (data == 0 && this.parentdepartid == "") {
+        this.$message({
+          message: "请选中上级组织机构",
+          type: "warning"
+        });
+        return false;
+      }
       this.addBian(data);
       this.dialogFormVisible = false;
     },
@@ -244,16 +276,9 @@ export default {
         parentdepartid: this.parentdepartid,
         orgtype: this.leiXing
       };
-      console.log(addForm);
-      if (data == 0 && this.parentdepartid == "") {
-        this.$message({
-          message: "请选中上级组织机构",
-          type: "warning"
-        });
-        return false;
-      }
       request.post("/rest/organizate/addDepart", addForm).then(res => {
         if (res.data.respCode == "0") {
+          console.log(res.data, "res.data");
           this.$message({
             message: data == 0 ? "恭喜你，新增成功" : "恭喜你，修改成功",
             type: "success"
@@ -281,22 +306,24 @@ export default {
     },
     // 新增树监听事件
     handleNodeClick(data) {
-      console.log(data);
       this.parentdepartid = data.id;
+      this.checkvalue = data.name;
+      this.flag = false;
     },
     // 编辑树监听事件
     dlestleNodeClick(data) {
       this.parentdepartid = data.id;
-      console.log(data);
+      this.flag1 = false;
     },
     // 初始化树列表
     fn() {
-     
       request.get("/rest/organizate/depart").then(res => {
         this.shuData = res.data.data;
-       
-        console.log(this.shuData);
       });
+    },
+    zuzhi() {
+      this.flag = true;
+      this.flag1 = true;
     }
   }
 };
@@ -316,7 +343,6 @@ export default {
   background-color: #ffff99;
 }
 /deep/.el-dialog__body {
-  max-height: 50vh;
-  overflow-x: hidden;
+  height: 60vh;
 }
 </style>
