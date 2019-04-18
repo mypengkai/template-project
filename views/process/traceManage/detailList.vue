@@ -118,7 +118,7 @@
       width="80%"
       class="dialogBox"
     >
-      <processCheck :realList="selfList"></processCheck>
+      <realcheck :selfList="selfList"></realcheck>
     </el-dialog>
     <!-- 日志查看 -->
     <el-dialog
