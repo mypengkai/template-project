@@ -42,14 +42,14 @@
     <!-- 二维码部分 -->
     <div class="ewmimg1">
       <div class="ewmpicture">
-        <img src="../../../static/adrrr.png" alt>
+        <img src="../../../static/android.png" alt>
       </div>
       <div class="ewm1">[Android]</div>
     </div>
 
     <div class="ewmimg2">
       <div class="ewmpicture">
-        <img src="../../../static/iosss.png" alt>
+        <img src="../../../static/ios.png" alt>
       </div>
       <div class="ewm2">[ios]</div>
     </div>
