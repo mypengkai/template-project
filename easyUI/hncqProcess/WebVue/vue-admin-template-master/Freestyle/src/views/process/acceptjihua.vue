@@ -85,13 +85,13 @@
       height="56vh"
       v-if="tableData.length!=0"
     >
-      <el-table-column prop="name1" label="分部分项"></el-table-column>
-      <el-table-column prop="processName" label="工序名"></el-table-column>
+      <el-table-column prop="name1" label="分部分项" ></el-table-column>
+      <el-table-column prop="processName" label="工序名" align="center"></el-table-column>
       <!-- <el-table-column prop="processType" label="工序过程">
       </el-table-column>-->
-      <el-table-column prop="planCheckTime" label="创建时间"></el-table-column>
-      <el-table-column prop="state" label="状态"></el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column prop="planCheckTime" label="创建时间" align="center"></el-table-column>
+      <el-table-column prop="state" label="状态" align="center"></el-table-column>
+      <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
           <!-- <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button> -->
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
@@ -108,7 +108,7 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination
-      class="pageList pt20"
+      class="pageList mt1"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"

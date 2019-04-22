@@ -8,12 +8,12 @@
        </div>
      <!-- syncId -->
        <tree-table :data="treeData" border style="" height="80vh">
-            <el-table-column label="组织机构">
+            <el-table-column label="组织机构" align="center">
                 <template slot-scope="scope">
                 <span style="">{{scope.row.name}}</span>
                 </template>
             </el-table-column>
-             <el-table-column label="同步状态">
+             <el-table-column label="同步状态" align="center">
                
                 <template slot-scope="scope">
                     
@@ -25,7 +25,7 @@
                     </template>
                 </template>
             </el-table-column>
-             <el-table-column label="操作" width="200">
+             <el-table-column label="操作" width="200" align="center">
                 <template slot-scope="scope">
                    <el-button type="primary" icon="el-icon-refresh" circle @click="departData(scope.row)"></el-button>
                </template>

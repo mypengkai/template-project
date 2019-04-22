@@ -8,22 +8,22 @@
        </div>
      
        <el-table :data="userData" style="width: 100%"  height="60vh" class="textList">
-            <el-table-column label="用户账号">
+            <el-table-column label="用户账号" align="center">
                 <template slot-scope="scope">
                   <span style="">{{scope.row.username}}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="名称">
+            <el-table-column label="名称" align="center">
                 <template slot-scope="scope">
                   <span style>{{scope.row.realname}}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="组织机构">
+            <el-table-column label="组织机构" align="center">
                 <template slot-scope="scope">
                   <span style>{{scope.row.departname}}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="同步状态">
+            <el-table-column label="同步状态" align="center">
                 <template slot-scope="scope">
                   <template v-if="scope.row.sid==='' || scope.row.sid===null">
                     <i class="el-icon-close"></i>
@@ -33,7 +33,7 @@
                   </template>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="200">
+            <el-table-column label="操作" width="200" align="center">
                 <template slot-scope="scope">
                      <el-button type="primary" icon="el-icon-refresh" circle  @click="renew(scope.row)"></el-button>
                 </template>

@@ -11,17 +11,17 @@
       </div>
     </div>
     <tree-table class="textList" :data="shuData" border style row-key="id">
-      <el-table-column label="组织机构">
+      <el-table-column label="组织机构" align="center">
         <template slot-scope="scope">
           <span style>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="组织机构编码">
+      <el-table-column label="组织机构编码" align="center">
         <template slot-scope="scope">
           <span style>{{ scope.row.orgCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="组织机构类型">
+      <el-table-column label="组织机构类型" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.orgTpye==1">项目</span>
           <span v-if="scope.row.orgTpye==2">业主</span>
@@ -29,12 +29,12 @@
           <span v-if="scope.row.orgTpye==4">标段</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注">
+      <el-table-column label="备注" align="center">
         <template slot-scope="scope">
           <span style>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="编辑" placement="top">
             <el-button type="primary" icon="el-icon-edit" circle @click="bianTan(scope.row)"></el-button>
