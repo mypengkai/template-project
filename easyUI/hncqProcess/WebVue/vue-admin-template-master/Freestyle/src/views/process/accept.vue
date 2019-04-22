@@ -32,13 +32,13 @@
     <!-- 右边详情列表 -->
     <div class="particularsList" v-if="treeFrom.projectType!=''&&treeFrom.projectType!=undefined">
       <div class="particulars brotherBar">
-        <div style="left: 2vw;top:.5vw">
+        <div style="left: 2vw;top:.7vw">
           <span>工程名称: {{ treeFrom.projectItem }}</span>
         </div>
-        <div style="left: 21vw;top:.5vw">
+        <div style="left: 21vw;top:.7vw">
           <span>工程类型: {{ treeFrom.projectType }}</span>
         </div>
-        <div style="right: 1vw;top:.5vw">
+        <div style="right: 1vw;top:.7vw">
           <span>代码: {{ treeFrom.projectCode }}</span>
         </div>
         <div style="left: 2vw;bottom: 0">
@@ -272,7 +272,7 @@
       </div>
     </el-dialog>
     <!-- 查看弹框 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%">
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" fullscreen>
       <processCheck :realList="chakanData"></processCheck>
     </el-dialog>
   </div>
