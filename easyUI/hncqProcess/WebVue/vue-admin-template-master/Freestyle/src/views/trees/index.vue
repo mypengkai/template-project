@@ -6,13 +6,26 @@
       <el-input v-model="form.userName" clearable placeholder="请输入内容"></el-input>
       <!-- 时间选择器 -->
       <span>创建日期:</span>
-      <el-date-picker v-model="form.startTime" type="date" placeholder="选择日期时间"  style="min-width:200px">
-      </el-date-picker>
-      <el-date-picker v-model="form.endTime" type="date" placeholder="选择日期时间"  style="min-width:200px">
-      </el-date-picker>
+      <el-date-picker
+        v-model="form.startTime"
+        type="date"
+        placeholder="选择日期时间"
+        style="min-width:200px"
+      ></el-date-picker>
+      <el-date-picker
+        v-model="form.endTime"
+        type="date"
+        placeholder="选择日期时间"
+        style="min-width:200px"
+      ></el-date-picker>
 
       <div class="rl">
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="chaxun">查询</el-button>
+        <el-button
+          type="primary"
+          class="pan-btn light-blue-btn"
+          icon="el-icon-search"
+          @click="chaxun"
+        >查询</el-button>
         <el-button
           type="primary"
           class="pan-btn light-blue-btn"
@@ -22,11 +35,16 @@
       </div>
     </div>
     <!-- 表单 -->
-    <div class="">
-      <el-table class="textList" :data="tableData" height="65vh" style="width: 100%;padding-left:15px">
+    <div class>
+      <el-table
+        class="textList"
+        :data="tableData"
+        height="73vh"
+        style="width: 100%;padding-left:15px"
+      >
         <el-table-column label="图片">
           <template slot-scope="scope">
-            <img :src="scope.row.filePath" alt="" style="height:100px;width:100px">
+            <img :src="scope.row.filePath" alt style="height:100px;width:100px">
           </template>
         </el-table-column>
         <el-table-column prop="realname" label="姓名">
@@ -44,26 +62,32 @@
             <span>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-               <el-tooltip class="item" effect="dark" content="查看详情" placement="top-start">
-      <el-button type="primary" icon="el-icon-search" circle @click="handleEdit(scope.row)"></el-button>
-    </el-tooltip>
-
-              
+            <el-tooltip class="item" effect="dark" content="查看详情" placement="top-start">
+              <el-button type="primary" icon="el-icon-search" circle @click="handleEdit(scope.row)"></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 分页 -->
-    <el-pagination class="pageList mt1" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
-    </el-pagination>
+    <el-pagination
+      class="pageList mt1"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[15,30,60,100]"
+      :page-size="1"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
 
     <!-- 日志查看弹框 -->
     <el-dialog :title="'日志详情'" :visible.sync="dialogFormVisible" class="dialogBox">
       <!-- 照片详情信息查看 -->
       <!-- <chaKanList :formList="formList"></chaKanList> -->
-         <logCheck :targetID="targetID"></logCheck>
+      <logCheck :targetID="targetID"></logCheck>
     </el-dialog>
   </div>
 </template>
@@ -113,7 +137,7 @@ export default {
       tableData: null,
       currentPage4: 1,
       noType: "",
-        targetID:'',   // 查看项id
+      targetID: "" // 查看项id
     };
   },
   methods: {
@@ -125,8 +149,9 @@ export default {
       this.form.pageNo = val;
       this.fn();
     },
-    reset(){              //重置
-        this.reload()
+    reset() {
+      //重置
+      this.reload();
     },
     fn() {
       let objFrom = {
@@ -140,7 +165,7 @@ export default {
         .post("/rest/processInfoLog/everyDayLogPageList", objFrom)
         .then(res => {
           if (res.status == 200) {
-            console.log(res);
+            console.log(res,'res');
             var data = res.data.data.data;
             this.total = res.data.data.totalCount;
             this.tableData = data;
@@ -151,7 +176,7 @@ export default {
       this.formList.pictures.length = 0;
       request.post(`/rest/processInfoLog/findLog/${data.id}`).then(res => {
         console.log(res);
-           this.targetID = data.id
+        this.targetID = data.id;
         this.formList.realname = res.data.data.realname;
         this.formList.createTime = res.data.data.createTime;
         this.formList.describe = res.data.data.describe;
@@ -178,7 +203,7 @@ export default {
 .cx {
   margin-top: 15px;
 }
-.layoutBox{
+.layoutBox {
   height: 100%;
 }
 </style>

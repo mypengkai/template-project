@@ -81,7 +81,7 @@
             <el-tab-pane label="影像资料" name="three">
               <div class="imgContation">
                 <ul>
-                  <li v-for="(item,index) in imgRealList" :key="index" @click="commPicture(item)">
+                  <li v-for="(item,index) in imgRealList" :key="index" @click="commPictures(item)">
                     <img :src="item.picture" alt style="width:100%;height:100%">
                   </li>
                 </ul>
@@ -95,9 +95,13 @@
         </div>
       </div>
     </div>
-    <!-- 图片预览 -->
+    <!-- 图片预览  发起 -->
     <el-dialog title="图片预览" :visible.sync="dialogcomm"  fullscreen append-to-body >
-      <viewer :photo="commPictureList"></viewer>
+      <viewer :photo="commPictureList" :imgList="objlist"></viewer>
+    </el-dialog>
+     <!-- 图片预览 接收-->
+    <el-dialog title="图片预览" :visible.sync="dialogcomms"  fullscreen append-to-body >
+      <viewer :photo="commPictureLists" :imgList="imgRealList"></viewer>
     </el-dialog>
   </div>
 </template>
@@ -187,7 +191,8 @@ export default {
       },
       state: "", // 状态
       remark: "", // 描述
-      dialogcomm: false,
+      dialogcomm: false,          // 发起
+      dialogcomms:false,          // 接收
       commPictureList: [],
       flag: false,
       flags: false,
@@ -352,12 +357,19 @@ export default {
       this.map1 = null;
     },
 
-    // 图片预览(发起人)  (jieshou人)
+    // 图片预览(发起人)  
     commPicture(item) {
       let array = [];
       array.push(item);
       this.commPictureList = array;
       this.dialogcomm = true;
+    },
+     // 图片预览(接收人)  
+    commPictures(item) {
+      let array = [];
+      array.push(item);
+      this.commPictureLists = array;
+      this.dialogcomms = true;
     }
   }
 };

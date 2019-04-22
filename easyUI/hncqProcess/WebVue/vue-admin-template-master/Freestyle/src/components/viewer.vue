@@ -15,9 +15,9 @@
       </el-col>
       <el-col :span="16">
         <div class="viewRight">
-          <viewer :images="photo" class="picBox">
+          <viewer :images="imgList" class="picBox">
             <img
-              v-for="(item,index) in photo"
+              v-for="(item,index) in imgList"
               :key="index"
               :src="item.filePath"
               alt
@@ -52,7 +52,7 @@ Viewer.setDefaults({
     url: "data-source"
 });
 export default {
-  props: ["photo"],
+  props: ["photo",'imgList'],
   data() {
     return {};
   },
