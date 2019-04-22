@@ -39,7 +39,7 @@ export default {
       var xData = testDataX;
       let option = {
         title: {
-          text: "当前用户本月统计",
+          text: "任务统计",
           x: "1%",
           textStyle: {
             color: "#000",
