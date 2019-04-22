@@ -7,7 +7,7 @@
             </div>
        </div>
      <!-- syncId -->
-       <tree-table :data="treeData" border style="" height="80vh">
+       <tree-table :data="treeData" border style="" height="90vh">
             <el-table-column label="组织机构" align="center">
                 <template slot-scope="scope">
                 <span style="">{{scope.row.name}}</span>

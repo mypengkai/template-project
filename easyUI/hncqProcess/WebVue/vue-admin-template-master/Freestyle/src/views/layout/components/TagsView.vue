@@ -251,6 +251,7 @@ export default {
   cursor: pointer;
   -webkit-transition: 0.3s background-color;
   transition: 0.3s background-color;
+  background-color: rgb(255, 255, 255); 
 }
 </style>
 

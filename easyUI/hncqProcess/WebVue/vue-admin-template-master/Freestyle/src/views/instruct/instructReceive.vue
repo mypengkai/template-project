@@ -53,8 +53,8 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table class="textList" :data="getList" style="width: 100%" height="62.5vh">
-        <el-table-column prop="initiator" label="发起人"></el-table-column>
+      <el-table class="textList" :data="getList" style="width: 100%" height="72vh">
+        <el-table-column prop="initiator" label="发起人" width="100"></el-table-column>
         <el-table-column prop="project" label="分部分项"></el-table-column>
 
         <el-table-column prop="commandUserNow" label="完成人" align="center"></el-table-column>
@@ -70,7 +70,7 @@
 
         <el-table-column prop="status1" label="状态" align="center"></el-table-column>
 
-        <el-table-column fixed="right" label="操作" align="center">
+        <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button
               type="primary"

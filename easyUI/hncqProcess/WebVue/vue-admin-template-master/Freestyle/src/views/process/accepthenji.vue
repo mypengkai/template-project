@@ -77,7 +77,7 @@
       </el-row>
     </div>
 
-    <el-table class="textList" :data="tableData" border style="width: 100%;" height="55vh">
+    <el-table class="textList" :data="tableData" border style="width: 100%;" height="68vh">
       <el-table-column prop="name1" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
       <el-table-column prop="processName" label="工序名"></el-table-column>
@@ -113,7 +113,7 @@
     ></el-pagination>
 
     <!-- 查看弹框 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%"  class="dialogBox">
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible"  fullscreen  class="dialogBox">
       <processCheck :realList="chakanData"></processCheck>
     </el-dialog>
   </div>

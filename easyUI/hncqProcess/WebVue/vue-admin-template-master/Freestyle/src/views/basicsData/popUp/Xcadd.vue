@@ -6,11 +6,11 @@
           <select-tree v-model="form.name" :options="orgTree" v-on:noDe="handleCheckChange" :props="defaultProps" ref="projectItemSelectTree" />
         </el-form-item>
         <el-form-item  label="所属机构" :label-width="formLabelWidth" prop="projectItem" v-if="!this.flag1" >
-         <el-input v-model="fenbu" size="small" disabled="true"></el-input>
+         <el-input v-model="fenbu" size="small" :disabled="true"></el-input>
         </el-form-item>
          <!-- 父级 -->
         <el-form-item  label="工程分部分项" :label-width="formLabelWidth" prop="projectItem" >
-         <el-input v-model="form.projectItem" size="small"></el-input>
+         <el-input v-model="form.projectItem" size="small" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item v-if="nowItem!=='add'" label="父工程分部分项" :label-width="formLabelWidth" v-show="this.flag">
           <el-input v-model="form.pName" :disabled="true" size="small">

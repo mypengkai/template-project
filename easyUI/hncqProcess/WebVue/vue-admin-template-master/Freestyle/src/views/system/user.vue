@@ -38,7 +38,7 @@
     </div>
     <!-- 列表 -->
     <div>
-      <el-table class="textList" :data="userList" style="width: 100%" height="65vh">
+      <el-table class="textList" :data="userList" style="width: 100%" height="72vh">
         <el-table-column prop="userName" label="用户账号" ></el-table-column>
 
         <el-table-column prop="realName" label="名称" align="center"></el-table-column>
@@ -65,7 +65,7 @@
     </div>
     <!-- 分页 -->
     <el-pagination
-      class="pageList pt20"
+      class="pageList pt20 mt1"
       background
       :page-sizes="[15,30,60,100]"
       :page-size="1"

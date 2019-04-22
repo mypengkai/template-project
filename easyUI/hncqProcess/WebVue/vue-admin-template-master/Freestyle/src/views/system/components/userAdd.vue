@@ -139,17 +139,6 @@ export default {
       dialogImageUrl: ""
     };
   },
-  watch:{
-       conentList(){
-          //  console.log(this.conentList,'conentList')
-           this.user.userName = this.conentList.userName
-           this.user.realName = this.conentList.realName;
-           this.user.userKey = this.conentList.userKey;
-           this.user.mobilePhone = this.conentList.mobilePhone;
-           this.user.zhiwei = this.conentList.zhiwei;
-           this.user.departName = this.conentList.orgNames[0]
-       }   
-  },
   created() {
     this._roleList();
     this._orgTree();
@@ -168,6 +157,8 @@ export default {
         let formData = res.data.data[res.data.data.length - 1];
         userInfo.mobilePhone = formData.mobilePhone;
         this.$refs.userInfo_userGroup.placeholder=this.user.departName;
+        // this.$refs.userInfo_userGroup.$el.textContent = this.user.departName;
+        console.log(this.$refs.userInfo_userGroup,'this.$refs.userInfo_userGroup')
         userInfo.departName = formData.orgNames[0]; // 组织机构
         let userkeys=[];
         if(formData.userkey!=null && formData.userkey!=""){
