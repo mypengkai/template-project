@@ -25,7 +25,7 @@
         <el-tab-pane label="影像资料" name="first">
           <div class="imgContation" >
               <ul>
-                <li v-for="(item,index) in imgList" :key="index" @click="showBigPicture(item)">
+                <li v-for="(item,index) in imgList" :key="index" @click="showBigPicture(item,index)">
                   <img :src="item.filePath" alt style="width:100%;height:100%">
                 </li>
               </ul>
@@ -41,7 +41,7 @@
     </div>
     <!-- 图片详情弹出层 -->
     <el-dialog title="图片详情" fullscreen :visible.sync="dialogImg" append-to-body >
-           <viewer :photo="photo" :imgList="imgList"></viewer>
+           <viewer :photo="photo" :imgList="imgLists"></viewer>
     </el-dialog>
   </div>
 </template>
@@ -67,6 +67,7 @@ export default {
         startStation: "" // 桩号
       },
       imgList: [],
+      imgLists:[],
       imgListOne:[],
       tabPosition: "first",
       dialogImg: false,
@@ -140,13 +141,15 @@ export default {
         });
     },
     //点击图片显示大图片及图片信息
-    showBigPicture(item) {
-      console.log( item);
+    showBigPicture(item,index) {
       let arr = []
       arr.push(item)
       this.photo = arr
       this.dialogImg = true;
+
+        this.imgList.splice(index,1)
      
+      this.imgList.unshift(item);
     }
   }
 };

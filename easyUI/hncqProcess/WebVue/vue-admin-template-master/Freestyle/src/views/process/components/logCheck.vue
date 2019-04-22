@@ -24,7 +24,7 @@
         <el-tab-pane label="影像资料" name="first">
           <div class="imgContation">
               <ul>
-                <li v-for="(item,index) in imgList" :key="index" @click="picturePreve(item)">
+                <li v-for="(item,index) in imgList" :key="index" @click="picturePreve(item,index)">
                     <img :src="item.filePath" alt style="width:100%;height:100%">
                 </li>
               </ul>
@@ -59,6 +59,7 @@ export default {
   data() {
     return {
       imgList: [], //图片
+      imgLists:[],
       form: {
         createname: "", // 创建人
         createTime: "", //时间
@@ -94,7 +95,7 @@ export default {
           if (res.data.respCode == "0") {
             this.logList = res.data.data;
           }
-          console.log(this.logList, "this.logList");
+          // console.log(this.logList, "this.logList");
           this.form.createname = this.logList.createname;
           this.form.createTime = this.logList.createTime;
           this.form.photoLocation = this.logList.picMessage[0].photoLocation; // 默认第一次拍照的位置
@@ -136,11 +137,17 @@ export default {
         });
     },
     //图片预览
-    picturePreve(item) {
+    picturePreve(item,index) {
+      console.log(index,'index')
       let array = [];
       array.push(item)
       this.photo = array;
       this.dialogTableVisible = true;
+
+      this.imgList.splice(index,1)
+     
+      this.imgList.unshift(item);
+      
     }
   }
 };
