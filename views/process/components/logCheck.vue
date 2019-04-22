@@ -1,20 +1,20 @@
 <template>
-  <div class="logCheck">
-    <el-form :inline="true" :model="form" label-width="100px">
+  <div class="logCheck elInputBox">
+    <el-form :inline="true" :model="form" label-width="100px" class="elInputBox">
       <el-form-item label="姓名">
-        <el-input v-model="form.createname" :disabled="true" style="min-width:30vh"></el-input>
+        <el-input v-model="form.createname" readonly style="min-width:30vh"></el-input>
       </el-form-item>
       <el-form-item label="创建时间">
-        <el-input v-model="form.createTime" :disabled="true" style="min-width:30vh"></el-input>
+        <el-input v-model="form.createTime" readonly style="min-width:30vh"></el-input>
       </el-form-item>
     </el-form>
     <el-form :model="form" label-width="100px">
       <div style="width:88%">
         <el-form-item label="日志描述">
-          <el-input type="textarea" v-model="form.describe" :disabled="true" ></el-input>
+          <el-input type="textarea" v-model="form.describe" readonly ></el-input>
         </el-form-item>
         <el-form-item label="所在位置">
-          <el-input  type="textarea"   v-model="form.photoLocation" :disabled="true" ></el-input>
+          <el-input  type="textarea"   v-model="form.photoLocation" readonly ></el-input>
         </el-form-item>
       </div>
     </el-form>
@@ -170,7 +170,7 @@ export default {
       list-style: none;
       float: left;
       width: 33%;
-      height: 15vh;
+      height: 25vh;
       padding: 1%;
       img{
          width: 100%;

@@ -82,18 +82,18 @@
       :data="tableData"
       border
       style="width: 100%;"
-      height="56vh"
+      height="68vh"
       v-if="tableData.length!=0"
     >
       <el-table-column prop="name1" label="分部分项" ></el-table-column>
       <el-table-column prop="processName" label="工序名" align="center"></el-table-column>
       <!-- <el-table-column prop="processType" label="工序过程">
       </el-table-column>-->
-      <el-table-column prop="planCheckTime" label="创建时间" align="center"></el-table-column>
-      <el-table-column prop="state" label="状态" align="center"></el-table-column>
-      <el-table-column fixed="right" label="操作" align="center">
+      <el-table-column prop="planCheckTime" label="创建时间"></el-table-column>
+      <el-table-column prop="state" label="状态"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <!-- <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button> -->
+         
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button
               @click="handleClick(scope.row)"
@@ -108,7 +108,7 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination
-      class="pageList mt1"
+      class="pageList pt20 mt1"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
@@ -119,7 +119,7 @@
     ></el-pagination>
 
     <!-- 查看弹框 -->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="80%" class="dialogBox">
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" fullscreen class="dialogBox">
       <!-- <imgList
         :chakanData="chakanData"
         :imgData="imgData"

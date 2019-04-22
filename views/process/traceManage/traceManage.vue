@@ -2,7 +2,7 @@
   <div class="p20">
     <div class="search">
       <el-row>
-        <el-col :span="9" v-if="tabPosition == 'first'">
+        <el-col :span="10" v-if="tabPosition == 'first'">
           <div>
             <el-form :inline="true" class="grid-content">
               <el-form-item label="组织机构：">
@@ -11,7 +11,7 @@
             </el-form>
           </div>
         </el-col>
-        <el-col :span="9" v-if="tabPosition == 'first'">
+        <el-col :span="10" v-if="tabPosition == 'first'">
           <div>
             <el-form :inline="true" class="grid-content">
               <el-form-item label="分部分项：">
@@ -68,13 +68,13 @@
             </span>
           </div>
         </el-col>
-        <el-col :span="2">
+        <!-- <el-col :span="2">
           <div class="grid-content">
             <span>
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-zoom-out">导出</el-button>
             </span>
           </div>
-        </el-col>
+        </el-col> -->
       </el-row>
       <el-row>
         <div class="grid-content" id="gridAdd">

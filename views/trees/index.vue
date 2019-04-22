@@ -205,6 +205,7 @@ export default {
 }
 .layoutBox {
   height: 100%;
+  position: relative;
 }
 </style>
 

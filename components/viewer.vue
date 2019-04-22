@@ -84,7 +84,7 @@ export default {
   }
   .viewRight {
     width: 100%;
-    height: 80vh;
+    height: 550px;
     .picBox{
         display: none
      }

@@ -1,23 +1,23 @@
 <template>
-  <div class="commandCheck">
+  <div class="commandCheck elInputBox">
     <el-form :model="form" label-width="150px">
         <el-form-item label="工程分部分项：">
-          <el-input type="textarea" style="width:30vw" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.projectItem" :disabled="true"></el-input>
+          <el-input type="textarea" style="width:30vw" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.projectItem" readonly></el-input>
         </el-form-item>
       <div style="width:50%">
         
         <el-form-item label="桩号：">
-          <el-input v-model="form.startStation" :disabled="true"></el-input>
+          <el-input v-model="form.startStation" readonly></el-input>
         </el-form-item>
         <el-form-item label="巡视人：">
-          <el-input v-model="form.createname" :disabled="true"></el-input>
+          <el-input v-model="form.createname" readonly></el-input>
         </el-form-item>
         <el-form-item label="巡视时间：">
-          <el-input v-model="form.createTime" :disabled="true"></el-input>
+          <el-input v-model="form.createTime" readonly></el-input>
         </el-form-item>
       </div>
        <el-form-item label="巡视描述：">
-          <el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 4}" v-model="form.describe" style="width:30vw" :disabled="true"></el-input>
+          <el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 4}" v-model="form.describe" style="width:30vw" readonly></el-input>
         </el-form-item>
     </el-form>
     <div class="content">
@@ -174,7 +174,7 @@ export default {
       list-style: none;
       float: left;
       width: 33%;
-      height: 15vh;
+      height: 25vh;
       padding: 1%;
       img{
          width: 100%;

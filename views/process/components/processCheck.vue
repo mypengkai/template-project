@@ -141,7 +141,7 @@
 
      <!-- // 验收 -->
       <el-dialog title="图片预览" :visible.sync="dialogProcesss" fullscreen append-to-body>
-          <viewer :photo="processPictures" :imgList="imgData2"></viewer>
+          <viewer :photo="processPicture" :imgList="imgData2"></viewer>
     </el-dialog>
   </div>
 </template>
@@ -199,16 +199,18 @@ export default {
   created() {
   },
   methods: {
+    //图片预览(自检)
       pictureShow(item){
         let array = []
         array.push(item)
         this.processPicture= array
         this.dialogProcess = true
     },
+    //验收
      pictureShows(item){
         let array = []
         array.push(item)
-        this.processPictures= array
+        this.processPicture= array
         this.dialogProcesss = true
     }
   }
@@ -333,7 +335,7 @@ export default {
   }
 }
 .describeBox {
-  height: 50vh;
+  min-height: 50vh;
   border: 1px solid #666;
   margin-top: 1vh;
   span {
@@ -361,7 +363,7 @@ export default {
     li {
       list-style: none;
       width: 33%;
-      height: 15vh;
+      height: 20vh;
       padding: 1%;
       float: left;
       img {

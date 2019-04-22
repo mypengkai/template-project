@@ -1,12 +1,12 @@
 <template>
-  <div class="diaMAP">
+  <div class="diaMAP elInputBox">
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item style="width:30vw" label="分部分项" label-width="120px">
-        <el-input v-model="form.projectItem" :disabled="true"></el-input>
+        <el-input v-model="form.projectItem"  readonly></el-input>
       </el-form-item>
 
       <el-form-item style="width:30vw" label="创建时间" label-width="120px">
-        <el-input v-model="form.createTime" :disabled="true"></el-input>
+        <el-input v-model="form.createTime" readonly></el-input>
       </el-form-item>
 
       <el-form-item label="指令时间轴" label-width="120px">
@@ -39,7 +39,7 @@
         </div>
       </el-form-item>
       <el-form-item style="width:30vw" label="状态：" label-width="120px">
-        <el-input v-model="state" :disabled="true"></el-input>
+        <el-input v-model="state" readonly></el-input>
       </el-form-item>
 
       <el-form-item style="width:30vw" label="相关描述:" label-width="120px">
@@ -47,7 +47,7 @@
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4}"
           v-model="remark"
-          :disabled="true"
+          readonly
         ></el-input>
       </el-form-item>
     </el-form>
@@ -101,7 +101,7 @@
     </el-dialog>
      <!-- 图片预览 接收-->
     <el-dialog title="图片预览" :visible.sync="dialogcomms"  fullscreen append-to-body >
-      <viewer :photo="commPictureLists" :imgList="imgRealList"></viewer>
+      <viewer :photo="commPictureList" :imgList="imgRealList"></viewer>
     </el-dialog>
   </div>
 </template>
@@ -390,7 +390,7 @@ export default {
 .content {
   padding: 1vh;
   .imgContation {
-    height: 30vh;
+    min-height: 30vh;
     ul {
       padding: 0;
       margin: 0;
@@ -398,7 +398,7 @@ export default {
         list-style: none;
         float: left;
         width: 33%;
-        height: 10vh;
+        height: 15vh;
         padding: 1%;
         img {
           width: 100%;

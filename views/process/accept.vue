@@ -67,7 +67,7 @@
           <el-table-column prop="processName" label="工序过程"></el-table-column>
           <el-table-column prop="planCheckTime" label="时间"></el-table-column>
           <el-table-column prop="state2" label="状态"></el-table-column>
-          <el-table-column fixed="right" label="操作" min-width="200">
+          <el-table-column fixed="right" label="操作" width="150">
             <template slot-scope="scope">
               <!-- 指定验收 -->
               <el-tooltip

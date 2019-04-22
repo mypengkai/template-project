@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="elInputBox">
     <el-form ref="userFrom" :model="form" :rules="rules">
       <div>
         <!-- 新增 -->
@@ -167,16 +167,16 @@
               </div>-->
             </el-form-item>
 
-            <el-form-item style="width:30vw" label="状态" label-width="120px">
-              <el-input v-model="states" readonly :disabled="true"></el-input>
+            <el-form-item style="width:30vw" label="状态" label-width="100px">
+              <el-input v-model="states" readonly ></el-input>
             </el-form-item>
 
-            <el-form-item style="width:30vw" label="相关描述" label-width="120px">
+            <el-form-item style="width:30vw" label="相关描述" label-width="100px">
               <el-input
                 readonly
                 type="textarea"
                 v-model="remark"
-                :disabled="true"
+                
               ></el-input>
             </el-form-item>
 
@@ -968,12 +968,12 @@ export default {
   ul {
     padding: 0;
     margin: 0;
-    height: 45vh;
+    min-height: 45vh;
     li {
       list-style: none;
       float: left;
       width: 33%;
-      height: 15vh;
+      height: 20vh;
       padding: 1%;
       img {
         width: 100%;
@@ -988,12 +988,12 @@ export default {
   ul {
     padding: 0;
     margin: 0;
-    height: 45vh;
+    min-height: 45vh;
     li {
       list-style: none;
       float: left;
       width: 33%;
-      height: 15vh;
+      height: 25vh;
       padding: 1%;
       img {
         width: 100%;
