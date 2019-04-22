@@ -6,7 +6,7 @@
         <el-row>
           <el-col :span="18">
             <div class="searchinfo">
-              <span>工序类型:</span>
+              <span style="font-size:.8vw">工序类型:</span>
               <el-input v-model="searchText" size="small" placeholder="请输入工序类型"/>
             </div>
           </el-col>

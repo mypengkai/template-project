@@ -224,7 +224,7 @@ export default {
 <style lang="scss" scoped>
 .imgez {
   // height: 80vh;
-  overflow-y: scroll;
+  // overflow-y: scroll;
   .zj,
   .ys {
     text-align: center;

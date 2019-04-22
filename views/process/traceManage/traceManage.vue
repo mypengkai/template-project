@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="10" v-if="tabPosition == 'first'">
           <div>
-            <el-form :inline="true" class="grid-content">
+            <el-form :inline="true" class="grid-content" style="font-size:.8vw">
               <el-form-item label="组织机构：">
                 <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
               </el-form-item>
@@ -288,6 +288,16 @@ export default {
     overflow-y: auto;
     height: 25vw;
   }
+}
+/deep/.el-form-item__label{
+    font-size: .8vw;
+    font-weight: 400;
+    color: #000;
+}
+/deep/.grid-content{
+      font-size: .8vw;
+    font-weight: 400;
+    color: #000;
 }
 // .serchCheck {
 //   ul {
