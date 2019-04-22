@@ -8,19 +8,19 @@
     <!-- <el-scrollbar> -->    
       <!-- :eval-func="func" :eval-args="args" :expand-all="expandAll" -->
       <tree-table class="textList"  :data="dataList" row-key  ref="projectItemTreeTable" border >
-        <el-table-column label="工程分部分项">
+        <el-table-column label="工程分部分项" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.projectItem }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="所属组织机构">
+        <el-table-column label="所属组织机构" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="类型">
+        <el-table-column label="类型" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.projectType==='1'">单位工程</template>
             <template v-else-if="scope.row.projectType==='2'">子单位工程</template>
@@ -31,25 +31,25 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="起始桩号">
+        <el-table-column label="起始桩号" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.startStation }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="终止桩号">
+        <el-table-column label="终止桩号" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.endStation }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="创建时间">
+        <el-table-column label="创建时间" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="180">
+        <el-table-column label="操作" width="180" align="center">
 
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="修改" placement="top">

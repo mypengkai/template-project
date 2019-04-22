@@ -19,25 +19,25 @@
     <div class="pt20">
       <!-- <el-scrollbar style="height: 68vh;overflow-y: none;"> -->
       <tree-table class="textList" :data="menuList" border row-key>
-        <el-table-column label="菜单名称" height="250">
+        <el-table-column label="菜单名称" height="250" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="分支名称">
+        <el-table-column label="分支名称" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.component }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="菜单地址">
+        <el-table-column label="菜单地址" align="center">
           <template slot-scope="scope">
             <span style>{{ scope.row.path }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="180">
+        <el-table-column label="操作" width="180" align="center">
           <template slot-scope="scope" type="scope.row">
             <el-tooltip class="item" effect="dark" content="修改" placement="top">
               <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>

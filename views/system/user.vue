@@ -21,7 +21,7 @@
           class="pan-btn light-blue-btn"
           icon="el-icon-search"
           @click="_userList"
-        >搜索</el-button>
+        >查询</el-button>
         <el-button
           type="primary"
           class="pan-btn light-blue-btn"
@@ -39,19 +39,19 @@
     <!-- 列表 -->
     <div>
       <el-table class="textList" :data="userList" style="width: 100%" height="65vh">
-        <el-table-column prop="userName" label="用户账号"></el-table-column>
+        <el-table-column prop="userName" label="用户账号" ></el-table-column>
 
-        <el-table-column prop="realName" label="名称"></el-table-column>
+        <el-table-column prop="realName" label="名称" align="center"></el-table-column>
 
-        <el-table-column prop="departName" label="组织机构"></el-table-column>
+        <el-table-column prop="departName" label="组织机构" align="center"></el-table-column>
 
         <el-table-column prop="userKey" label="角色"></el-table-column>
 
-        <el-table-column prop="zhiwei" label="职位"></el-table-column>
+        <el-table-column prop="zhiwei" label="职位" align="center"></el-table-column>
 
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
 
-        <el-table-column fixed="right" label="操作">
+        <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="scope">
             <el-tooltip content="修改" placement="top">
               <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>

@@ -84,7 +84,7 @@
       <el-table-column prop="planCheckTime" label="创建时间"></el-table-column>
       <el-table-column prop="shijiyanshouren" label="验收人员"></el-table-column>
       <el-table-column prop="state" label="状态"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button

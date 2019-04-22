@@ -6,18 +6,9 @@
       <div class="b">
         <photograph></photograph>
       </div>
-      <div class="c">
+      <!-- <div class="c">
          <cookie></cookie>
-      </div>
-
-    <!-- 折线图 -->
-    <!-- <div style="width: 70%;">
-         <broken></broken>
-    </div> -->
-    <!-- 饼图统计 -->
-    <!-- <div style="width: 30%;">
-      <cookie></cookie>
-    </div> -->
+      </div> -->
   </div>
 </template>
 
@@ -41,24 +32,19 @@ export default {
   position: relative;
   .a{
     position: absolute;
-    width: 70%;
+    width: 100%;
     height: 50%;
     left: 0;
     top: 0;
   }
   .b{
      position: absolute;
-    width: 70%;
+    width: 90%;
     height: 50%;
     left: 0;
+    
     bottom: 0;
   }
-  .c{
-     position: absolute;
-    width: 30%;
-    height: 100%;
-    right: 0;
-    top: 0;
-  }
+
 }
 </style>

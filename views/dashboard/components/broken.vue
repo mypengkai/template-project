@@ -37,7 +37,6 @@ export default {
     ioi(testDataX, testDataY) {
       let broken = echarts.init(document.getElementById("broken"));
       var xData = testDataX;
-
       let option = {
         title: {
           text: "当前用户本月统计",
@@ -70,15 +69,6 @@ export default {
             color: "#fff"
           }
         },
-        // legend: {
-        //   x: "50%",
-        //   top: "11%",
-        //   textStyle: {
-        //     color: "#90979c"
-        //   },
-        //   data: ["女", "男", "平均"]
-        // },
-
         calculable: true,
         xAxis: [
           {
@@ -128,12 +118,12 @@ export default {
         // X滚动轴
         dataZoom: [
           {
-            show: true,
+            show: false,
             height: 30,
             xAxisIndex: [0],
             bottom: 30,
             start: 10,
-            end: 80,
+            end: 280,
             handleIcon:
               "path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z",
             handleSize: "110%",
@@ -158,6 +148,7 @@ export default {
             name: "次数",
             type: "bar",
             stack: "总量",
+             barWidth:60,
             itemStyle: {
               normal: {
                 color: "rgba(0,191,183,1)",

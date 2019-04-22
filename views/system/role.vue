@@ -12,7 +12,7 @@
           icon="el-icon-search"
           class="pan-btn light-blue-btn"
           @click="chaxun()"
-        >搜索</el-button>
+        >查询</el-button>
         <el-button
           type="primary"
           class="pan-btn light-blue-btn"
@@ -31,7 +31,7 @@
     <el-table class="textList" :data="tableData" height="74vh">
       <el-table-column prop="rolecode" label="角色编码"></el-table-column>
       <el-table-column prop="rolename" label="角色名称"></el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
           <el-tooltip content="编译" placement="top">
             <el-button
