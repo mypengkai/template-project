@@ -45,6 +45,9 @@
   }
   .mt1{
       margin-top: 5vh;
+      position: fixed;
+      bottom: 2%;
+      left:15%;
   }
 .scrollY {
     overflow-y: auto;
@@ -55,9 +58,9 @@
     height: 75vh;
     overflow-y: scroll;
   }
-  .dialogBox {
-    margin-top: -7vh;
-  }
+//   .dialogBox {
+//     margin-top: -7vh;
+//   }
  .textList{
      font-size: 0.7vw;
      th{
@@ -168,12 +171,12 @@
         width: 40%;
     }
 }
-  .dialogBox{
-    .el-dialog{
-        width: 60%;
-    }
-    .el-dialog__header{
-        text-align: center;
-    }
-  }
+//   .dialogBox{
+//     .el-dialog{
+//         width: 60%;
+//     }
+//     .el-dialog__header{
+//         text-align: center;
+//     }
+//   }
   

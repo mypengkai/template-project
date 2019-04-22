@@ -157,17 +157,31 @@
                   </el-timeline-item>
                 </el-timeline>
               </div>
-              <div class="temporary">
+              <!-- <div class="temporary">
                 <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
                 <el-input readonly v-model="states"></el-input>
               </div>
               <div class="textareaBar">
                 <span>相关描述:</span>
                 <el-input type="textarea" readonly style="width:70%" autosize v-model="remark"></el-input>
-              </div>
+              </div>-->
             </el-form-item>
+
+            <el-form-item style="width:30vw" label="状态" label-width="120px">
+              <el-input v-model="states" readonly :disabled="true"></el-input>
+            </el-form-item>
+
+            <el-form-item style="width:30vw" label="相关描述" label-width="120px">
+              <el-input
+                readonly
+                type="textarea"
+                v-model="remark"
+                :disabled="true"
+              ></el-input>
+            </el-form-item>
+
           </div>
-          <!--    style="width:50%" class="rl"-->
+
           <div>
             <!-- <div v-if="nowItem !=='add'&& states == '未处理'"> -->
             <!-- 指令查看 -->
@@ -199,7 +213,7 @@
                 <el-tabs v-model="activeName1" @tab-click="handleClick">
                   <el-tab-pane label="影像资料" name="first">
                     <ul>
-                      <li v-for="(item,index) in pictures" :key="index" @click="actionImg(item)">
+                      <li v-for="(item,index) in pictures" :key="index" @click="actionImgs(item)">
                         <img :src="item.picture" style="cursor:pointer">
                       </li>
                     </ul>
@@ -226,7 +240,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="所在位置" name="second">
                   <div style="height:45vh">
-                     <instructMap :nowItem="nowItem"></instructMap>
+                    <instructMap :nowItem="nowItem"></instructMap>
                   </div>
                 </el-tab-pane>
               </el-tabs>
@@ -321,10 +335,17 @@
       </div>
     </el-dialog>
 
-    <!-- 图片预览 -->
+    <!-- 图片预览 发起人-->
     <el-dialog title="图片预览" :visible.sync="dialogcommcheck" fullscreen append-to-body>
-      <viewer :photo="commcheckList"></viewer>
+      <viewer :photo="commcheckList" :imgList="picture"></viewer>
     </el-dialog>
+
+
+     <!-- 图片预览 接收人-->
+    <el-dialog title="图片预览" :visible.sync="dialogcommchecks" fullscreen append-to-body>
+      <viewer :photo="commcheckList" :imgList="pictures"></viewer>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -355,7 +376,8 @@ export default {
       activeName1: "second",
       inData: {},
       dialogcommcheck: false,
-      tabPosition: 'first',
+      dialogcommchecks:false,
+      tabPosition: "first",
       activities: [
         {
           name: "",
@@ -806,13 +828,20 @@ export default {
       // console.log(files);
       // console.log(fileList);
     },
-    //图片预览
+    //图片预览  (发起人)
     actionImg(item) {
-      console.log(item, "item");
+     
       let array = [];
       array.push(item);
       this.commcheckList = array;
       this.dialogcommcheck = true;
+    },
+     //图片预览(接收人)
+    actionImgs(item) {
+      let array = [];
+      array.push(item);
+      this.commcheckList = array;
+      this.dialogcommchecks = true;
     }
   }
 };

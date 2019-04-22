@@ -81,11 +81,10 @@
       <el-table-column prop="name1" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
       <el-table-column prop="processName" label="工序名"></el-table-column>
-      <!-- <el-table-column prop="processType" label="工序过程"></el-table-column> -->
       <el-table-column prop="planCheckTime" label="创建时间"></el-table-column>
       <el-table-column prop="shijiyanshouren" label="验收人员"></el-table-column>
       <el-table-column prop="state" label="状态"></el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button

@@ -67,7 +67,7 @@
             <p>{{ item.realitySelfCheckTime }}</p>
           </span>
           <span style="width:40%">
-            <div class="bt1">时间</div>
+            <div class="bt1">自检人</div>
             <p>{{ item.realitySelfCheckPerson }}</p>
           </span>
         </div>
@@ -124,7 +124,7 @@
         <div class="first-box">验收描述: {{ item.describe }}</div>
         <div  v-if="imgData2!=null">
           <ul>
-            <li v-for="(item,index) in imgData2" :key="index" @click="pictureShow(item)">
+            <li v-for="(item,index) in imgData2" :key="index" @click="pictureShows(item)">
               <img :src="item.filePath" alt>
             </li>
           </ul>
@@ -134,8 +134,14 @@
         </div>
       </span>
     </div>
+      <!-- // 自检 -->
       <el-dialog title="图片预览" :visible.sync="dialogProcess" fullscreen append-to-body>
-          <viewer :photo="processPicture"></viewer>
+          <viewer :photo="processPicture" :imgList="imgData"></viewer>
+    </el-dialog>
+
+     <!-- // 验收 -->
+      <el-dialog title="图片预览" :visible.sync="dialogProcesss" fullscreen append-to-body>
+          <viewer :photo="processPictures" :imgList="imgData2"></viewer>
     </el-dialog>
   </div>
 </template>
@@ -154,7 +160,8 @@ export default {
       datac: [],
       imgData: [],
       imgData2: [],
-      dialogProcess:false,
+      dialogProcess:false,    // 自检
+      dialogProcesss:false,  // y验收
       processPicture:[],
     };
   },
@@ -197,6 +204,12 @@ export default {
         array.push(item)
         this.processPicture= array
         this.dialogProcess = true
+    },
+     pictureShows(item){
+        let array = []
+        array.push(item)
+        this.processPictures= array
+        this.dialogProcesss = true
     }
   }
 };
@@ -204,7 +217,7 @@ export default {
 
 <style lang="scss" scoped>
 .imgez {
-  height: 60vh;
+  // height: 80vh;
   overflow-y: scroll;
   .zj,
   .ys {

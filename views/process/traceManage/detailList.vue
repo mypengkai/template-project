@@ -104,21 +104,23 @@
     </el-dialog>
     <!--验收查看-->
     <el-dialog
+      fullscreen
       title="查看详情"
       :visible.sync="dialogTableVisibleRealcheck"
-      width="80%"
-      class="dialogBox"
+     
+     
     >
       <processCheck :realList="realList"></processCheck>
     </el-dialog>
     <!-- 自检查看 -->
     <el-dialog
+      fullscreen
       title="查看详情"
       :visible.sync="dialogTableVisibleSelfcheck"
-      width="80%"
-      class="dialogBox"
+    
+     
     >
-      <realcheck :selfList="selfList"></realcheck>
+      <processCheck :realList="selfList"></processCheck>
     </el-dialog>
     <!-- 日志查看 -->
     <el-dialog

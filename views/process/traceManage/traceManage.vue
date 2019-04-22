@@ -278,8 +278,9 @@ export default {
   height: 40px;
   line-height: 40px;
   width: 100%;
-  font-size: 1vw;
-  // font-weight: normal;
+  font-size: 14px;
+  font-weight: bold ;
+  color: #606266;
 }
 .content {
   margin-top: 10px;

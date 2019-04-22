@@ -23,8 +23,8 @@
     </div>
 
     <!-- 查询列表 -->
-    <el-table class="textList" :data="everyDayLogPageList" style="width: 100%" height="62vh">
-      <el-table-column prop="realname" label="巡视人"></el-table-column>
+    <el-table class="textList" :data="everyDayLogPageList" style="width: 100%" height="72vh">
+      <el-table-column prop="realname" label="巡视人" width="100"></el-table-column>
 
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
 
@@ -36,10 +36,10 @@
 
       <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
-      <el-table-column fixed="right" label="照片">
+      <el-table-column fixed="right" label="照片" width="100">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看详情" placement="top">
-            <el-button type="primary" icon="el-icon-picture" circle @click="action(scope.row)"></el-button>
+            <el-button type="primary" icon="el-icon-search" circle @click="action(scope.row)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>

@@ -41,7 +41,7 @@
     </div>
     <!-- 图片详情弹出层 -->
     <el-dialog title="图片详情" fullscreen :visible.sync="dialogImg" append-to-body >
-           <viewer :photo="photo"></viewer>
+           <viewer :photo="photo" :imgList="imgList"></viewer>
     </el-dialog>
   </div>
 </template>
