@@ -366,8 +366,8 @@ export default {
     margin: 0;
     li {
       list-style: none;
-      width: 33%;
-      height: 20vh;
+      width: 18vh;
+      height: 18vh;
       padding: 1%;
       float: left;
       img {

@@ -1,5 +1,5 @@
 <template>
-  <div class="elInputBox">
+  <div class=" checkBox">
     <el-form ref="userFrom" :model="form" :rules="rules">
       <div>
         <!-- 新增 -->
@@ -106,7 +106,7 @@
         </div>
 
         <!-- 查看 -->
-        <div :class="{reverseBox:nowItem!=='add'}">
+        <div :class="{reverseBox:nowItem!=='add'}" class="elInputBox">
           <!-- 左边信息   style="width:47%" class="fl"-->
           <div>
             <el-form-item
@@ -157,21 +157,13 @@
                   </el-timeline-item>
                 </el-timeline>
               </div>
-              <!-- <div class="temporary">
-                <span>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</span>
-                <el-input readonly v-model="states"></el-input>
-              </div>
-              <div class="textareaBar">
-                <span>相关描述:</span>
-                <el-input type="textarea" readonly style="width:70%" autosize v-model="remark"></el-input>
-              </div>-->
             </el-form-item>
 
-            <el-form-item style="width:30vw" label="状态" label-width="100px">
+            <el-form-item style="width:30vw" label="状态"   v-if="nowItem !=='add'" label-width="100px">
               <el-input v-model="states" readonly ></el-input>
             </el-form-item>
 
-            <el-form-item style="width:30vw" label="相关描述" label-width="100px">
+            <el-form-item style="width:30vw" label="相关描述"  v-if="nowItem !=='add'"   label-width="100px">
               <el-input
                 readonly
                 type="textarea"
@@ -852,6 +844,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.checkBox{
+    height:60vh;
+    overflow-x: hidden;
+}
 .avatar {
   width: 178px;
   height: 178px;
@@ -900,8 +896,8 @@ export default {
 }
 
 .reverseBox {
-  height: 62vh;
-  overflow-y: scroll;
+  // height: 62vh;
+  // overflow-y: scroll;
   position: relative;
   /deep/.el-form-item__label {
     font-size: 0.7vw;
@@ -955,8 +951,8 @@ export default {
 }
 .reverseAddBox {
   width: 100%;
-  height: 65vh;
-  overflow-y: scroll;
+  // height: 65vh;
+  // overflow-y: scroll;
   /deep/.el-form-item__label {
     font-size: 0.7vw;
   }
@@ -976,8 +972,8 @@ export default {
     li {
       list-style: none;
       float: left;
-      width: 33%;
-      height: 20vh;
+      width: 15vh;
+      height: 15vh;
       padding: 1%;
       img {
         width: 100%;
@@ -996,8 +992,8 @@ export default {
     li {
       list-style: none;
       float: left;
-      width: 33%;
-      height: 25vh;
+      width: 20vh;
+      height: 20vh;
       padding: 1%;
       img {
         width: 100%;
