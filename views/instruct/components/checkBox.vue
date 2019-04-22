@@ -195,7 +195,7 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                   <el-tab-pane label="影像资料" name="first">
                     <ul>
-                      <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
+                      <li v-for="(item,index) in picture" :key="index" @click="actionImg(item,index)">
                         <img :src="item.picture" style="cursor:pointer">
                       </li>
                     </ul>
@@ -213,7 +213,7 @@
                 <el-tabs v-model="activeName1" @tab-click="handleClick">
                   <el-tab-pane label="影像资料" name="first">
                     <ul>
-                      <li v-for="(item,index) in pictures" :key="index" @click="actionImgs(item)">
+                      <li v-for="(item,index) in pictures" :key="index" @click="actionImgs(item,index)">
                         <img :src="item.picture" style="cursor:pointer">
                       </li>
                     </ul>
@@ -232,7 +232,7 @@
                 <el-tab-pane label="影像资料" name="first">
                   <div class="imgContation">
                     <ul>
-                      <li v-for="(item,index) in picture" :key="index" @click="actionImg(item)">
+                      <li v-for="(item,index) in picture" :key="index" @click="actionImg(item,index)">
                         <img :src="item.picture" alt style="width:100%;height:100%">
                       </li>
                     </ul>
@@ -829,19 +829,23 @@ export default {
       // console.log(fileList);
     },
     //图片预览  (发起人)
-    actionImg(item) {
+    actionImg(item,index) {
      
       let array = [];
       array.push(item);
       this.commcheckList = array;
       this.dialogcommcheck = true;
+      this.picture.splice(index,1)
+      this.picture.unshift(item)
     },
      //图片预览(接收人)
-    actionImgs(item) {
+    actionImgs(item,index) {
       let array = [];
       array.push(item);
       this.commcheckList = array;
       this.dialogcommchecks = true;
+      this.pictures.splice(index,1)
+      this.pictures.unshift(item)
     }
   }
 };

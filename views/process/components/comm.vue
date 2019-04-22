@@ -59,7 +59,7 @@
             <el-tab-pane label="影像资料" name="first">
               <div class="imgContation">
                 <ul>
-                  <li v-for="(item,index) in objlist" :key="index" @click="commPicture(item)">
+                  <li v-for="(item,index) in objlist" :key="index" @click="commPicture(item,index)">
                     <img :src="item.picture" alt style="width:100%;height:100%">
                   </li>
                 </ul>
@@ -81,7 +81,7 @@
             <el-tab-pane label="影像资料" name="three">
               <div class="imgContation">
                 <ul>
-                  <li v-for="(item,index) in imgRealList" :key="index" @click="commPictures(item)">
+                  <li v-for="(item,index) in imgRealList" :key="index" @click="commPictures(item,index)">
                     <img :src="item.picture" alt style="width:100%;height:100%">
                   </li>
                 </ul>
@@ -358,18 +358,23 @@ export default {
     },
 
     // 图片预览(发起人)  
-    commPicture(item) {
+    commPicture(item,index) {
       let array = [];
       array.push(item);
       this.commPictureList = array;
       this.dialogcomm = true;
+      this.objlist.splice(index,1)
+      this.objlist.unshift(item)
     },
      // 图片预览(接收人)  
-    commPictures(item) {
+    commPictures(item,index) {
       let array = [];
       array.push(item);
       this.commPictureLists = array;
       this.dialogcomms = true;
+
+      this.imgRealList.splice(index,1)
+      this.imgRealList.unshift(item)
     }
   }
 };

@@ -111,7 +111,7 @@
         <div class="br1 first-box">自检描述: {{ item.selfCheckDescribe }}</div>
         <div class="second-box" v-if="imgData!=null">
           <ul>
-            <li v-for="(item,index) in imgData" :key="index" @click="pictureShow(item)">
+            <li v-for="(item,index) in imgData" :key="index" @click="pictureShow(item,index)">
               <img :src="item.filePath" alt>
             </li>
           </ul>
@@ -124,7 +124,7 @@
         <div class="first-box">验收描述: {{ item.describe }}</div>
         <div  v-if="imgData2!=null">
           <ul>
-            <li v-for="(item,index) in imgData2" :key="index" @click="pictureShows(item)">
+            <li v-for="(item,index) in imgData2" :key="index" @click="pictureShows(item,index)">
               <img :src="item.filePath" alt>
             </li>
           </ul>
@@ -200,18 +200,22 @@ export default {
   },
   methods: {
     //图片预览(自检)
-      pictureShow(item){
+      pictureShow(item,index){
         let array = []
         array.push(item)
         this.processPicture= array
         this.dialogProcess = true
+        this.imgData.splice(index,1)
+        this.imgData.unshift(item)
     },
     //验收
-     pictureShows(item){
+     pictureShows(item,index){
         let array = []
         array.push(item)
         this.processPicture= array
         this.dialogProcesss = true
+        this.imgData2.splice(index,1)
+        this.imgData2.unshift(item)
     }
   }
 };
