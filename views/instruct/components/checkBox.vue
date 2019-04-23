@@ -6,7 +6,7 @@
         <div :class="{reverseAddBox:nowItem=='add'}">
           <el-form-item
             style="width:20vw"
-            label="组织机构"
+            label="组织机构："
             v-if="nowItem =='add'"
             prop="orgVerify"
             label-width="120px"
@@ -22,7 +22,7 @@
 
           <el-form-item
             style="width:20vw"
-            label="分部分项"
+            label="分部分项："
             v-if="nowItem =='add'"
             prop="projectVerify"
             label-width="120px"
@@ -37,7 +37,7 @@
 
           <el-form-item
             style="width:20vw"
-            label="接收人"
+            label="接收人："
             v-if="nowItem =='add'"
             prop="username"
             label-width="120px"
@@ -50,7 +50,7 @@
           <div class="TimeAndType" v-if="nowItem =='add'">
             <span class="fl">
               <el-form-item
-                label="计划检查时间"
+                label="计划检查时间："
                 v-if="nowItem =='add'"
                 prop="planTime"
                 label-width="120px"
@@ -59,14 +59,14 @@
                   v-model="form.planTime"
                   type="datetime"
                   @change="planDataRange"
-                  placeholder="选择日期时间"
+                  placeholder="选择日期时间："
                   value-format="yyyy-MM-dd HH:mm:ss"
                 ></el-date-picker>
               </el-form-item>
             </span>
 
             <span class="rl mr">
-              <el-form-item label="指令类型" v-if="nowItem =='add'" label-width="120px">
+              <el-form-item label="指令类型：" v-if="nowItem =='add'" label-width="120px">
                 <el-select v-model="value" placeholder="请选择" @change="commandTypeList">
                   <el-option
                     v-for="(item,index) in TypeList"
@@ -79,11 +79,11 @@
             </span>
           </div>
 
-          <el-form-item style="width:28vw" label="指令内容" v-if="nowItem =='add'" label-width="120px">
+          <el-form-item style="width:28vw" label="指令内容：" v-if="nowItem =='add'" label-width="120px">
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
 
-          <el-form-item label="图片选择" v-if="nowItem =='add'" prop label-width="120px">
+          <el-form-item label="图片选择：" v-if="nowItem =='add'" prop label-width="120px">
             <el-upload
               class="avatar-uploader"
               ref="upload"
@@ -111,7 +111,7 @@
           <div>
             <el-form-item
               style="width:22vw"
-              label="分部分项"
+              label="分部分项："
               v-if="nowItem !=='add'"
               label-width="100px"
             >
@@ -120,14 +120,14 @@
 
             <el-form-item
               style="width:22vw"
-              label="创建时间"
+              label="创建时间："
               v-if="nowItem !=='add'"
               label-width="100px"
             >
               <el-input readonly v-model="form.createTime"></el-input>
             </el-form-item>
 
-            <el-form-item label="指令时间轴" v-if="nowItem !=='add'" label-width="100px">
+            <el-form-item label="指令时间轴：" v-if="nowItem !=='add'" label-width="100px">
               <!-- 参考图标 -->
               <div class="reference">
                 <el-timeline>
@@ -159,11 +159,11 @@
               </div>
             </el-form-item>
 
-            <el-form-item style="width:28vw" label="状态"   v-if="nowItem !=='add'" label-width="100px">
+            <el-form-item style="width:28vw" label="状态："   v-if="nowItem !=='add'" label-width="100px">
               <el-input v-model="states" readonly ></el-input>
             </el-form-item>
 
-            <el-form-item style="width:30vw" label="相关描述"  v-if="nowItem !=='add'"   label-width="100px">
+            <el-form-item style="width:30vw" label="相关描述："  v-if="nowItem !=='add'"   label-width="100px">
               <el-input
                 readonly
                 type="textarea"
@@ -307,13 +307,13 @@
       append-to-body
     >
       <el-form :model="transpondForm" :rules="rulesform" label-width="80px">
-        <el-form-item label="指定人" prop="transpondName">
+        <el-form-item label="指定人：" prop="transpondName">
           <el-input v-model="transpondForm.transpondName">
             <el-button slot="append" icon="el-icon-search" @click="acceptUser = true"></el-button>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="备注">
+        <el-form-item label="备注：">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"

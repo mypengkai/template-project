@@ -1,19 +1,19 @@
 <template>
   <div class="logCheck elInputBox">
     <el-form :inline="true" :model="form" label-width="100px" class="elInputBox">
-      <el-form-item label="姓名">
+      <el-form-item label="姓名:">
         <el-input v-model="form.createname" readonly style="min-width:30vh"></el-input>
       </el-form-item>
-      <el-form-item label="创建时间">
+      <el-form-item label="创建时间:">
         <el-input v-model="form.createTime" readonly style="min-width:30vh"></el-input>
       </el-form-item>
     </el-form>
     <el-form :model="form" label-width="100px">
       <div style="width:88%">
-        <el-form-item label="日志描述">
+        <el-form-item label="日志描述:">
           <el-input type="textarea" v-model="form.describe" readonly ></el-input>
         </el-form-item>
-        <el-form-item label="所在位置">
+        <el-form-item label="所在位置:">
           <el-input  type="textarea"   v-model="form.photoLocation" readonly ></el-input>
         </el-form-item>
       </div>

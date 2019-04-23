@@ -90,10 +90,10 @@
     <!-- 新增弹框 -->
     <el-dialog title="新增详情" :visible.sync="dialogFormVisible">
       <el-form :model="formSet">
-        <el-form-item label="角色编码" label-width="120px">
+        <el-form-item label="角色编码:" label-width="120px">
           <el-input v-model="formSet.rolecode" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="角色名称" label-width="120px">
+        <el-form-item label="角色名称:" label-width="120px">
           <el-input v-model="formSet.rolename" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -105,10 +105,10 @@
     <!-- 编辑弹框 -->
     <el-dialog title="编辑详情" :visible.sync="xiudialogSxlbVisible">
       <el-form :model="formGet">
-        <el-form-item label="角色编码" label-width="120px">
+        <el-form-item label="角色编码:" label-width="120px">
           <el-input v-model="formGet.rolecode" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="角色名称" label-width="120px">
+        <el-form-item label="角色名称:" label-width="120px">
           <el-input v-model="formGet.rolename" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>

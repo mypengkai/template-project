@@ -3,27 +3,27 @@
     <!-- 照片详情信息查看 -->
     <el-form class="reverseBox" :model="form">
       <div class="fl pth" style="width:43.6%">
-        <el-form-item label="工程分部分项" label-width="120px">
+        <el-form-item label="工程分部分项：" label-width="120px">
           <el-input type="textarea" autosize readonly v-model="form.projectItem" ></el-input>
         </el-form-item>
 
-        <el-form-item label="桩号" label-width="120px">
+        <el-form-item label="桩号：" label-width="120px">
           <el-input readonly v-model="form.zhuanghao" ></el-input>
         </el-form-item>
 
-        <el-form-item label="巡视人" label-width="120px">
+        <el-form-item label="巡视人：" label-width="120px">
           <el-input readonly v-model="form.createName" ></el-input>
         </el-form-item>
 
-        <el-form-item label="创建时间" label-width="120px">
+        <el-form-item label="创建时间：" label-width="120px">
           <el-input readonly v-model="form.createTime" ></el-input>
         </el-form-item>
 
-        <el-form-item label="拍照地点" label-width="120px">
+        <el-form-item label="拍照地点：" label-width="120px">
           <el-input readonly v-model="form.photoLocation" ></el-input>
         </el-form-item>
 
-        <el-form-item label="描述" label-width="120px">
+        <el-form-item label="描述：" label-width="120px">
           <el-input readonly v-model="form.describe" ></el-input>
         </el-form-item>
       </div>

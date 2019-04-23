@@ -2,39 +2,39 @@
   <div>
     <el-form class="reverseBox" :model="form" :rules="rules" ref="addForm">
       <div style="width:50%">
-        <el-form-item label="所属机构" :label-width="formLabelWidth" v-if="this.flag1">
+        <el-form-item label="所属机构：" :label-width="formLabelWidth" v-if="this.flag1">
           <select-tree v-model="form.name" :options="orgTree" v-on:noDe="handleCheckChange" :props="defaultProps" ref="projectItemSelectTree" />
         </el-form-item>
-        <el-form-item  label="所属机构" :label-width="formLabelWidth" prop="projectItem" v-if="!this.flag1" >
+        <el-form-item  label="所属机构：" :label-width="formLabelWidth" prop="projectItem" v-if="!this.flag1" >
          <el-input v-model="fenbu" size="small" :disabled="true"></el-input>
         </el-form-item>
          <!-- 父级 -->
-        <el-form-item  label="工程分部分项" :label-width="formLabelWidth" prop="projectItem" >
+        <el-form-item  label="工程分部分项：" :label-width="formLabelWidth" prop="projectItem" >
          <el-input v-model="form.projectItem" size="small" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item v-if="nowItem!=='add'" label="父工程分部分项" :label-width="formLabelWidth" v-show="this.flag">
+        <el-form-item v-if="nowItem!=='add'" label="父工程分部分项：" :label-width="formLabelWidth" v-show="this.flag">
           <el-input v-model="form.pName" :disabled="true" size="small">
             <el-button slot="append" icon="el-icon-search" @click="projectVisible = true"></el-button>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="起始桩号" :label-width="formLabelWidth" prop="startStation">
+        <el-form-item label="起始桩号：" :label-width="formLabelWidth" prop="startStation">
           <el-input v-model="form.startStation" size="small"></el-input>
         </el-form-item>
 
-        <el-form-item label="终止桩号" :label-width="formLabelWidth" prop="endStation">
+        <el-form-item label="终止桩号：" :label-width="formLabelWidth" prop="endStation">
           <el-input v-model="form.endStation" size="small"></el-input>
         </el-form-item>
 
-        <el-form-item label="经度" :label-width="formLabelWidth">
+        <el-form-item label="经度：" :label-width="formLabelWidth">
           <el-input v-model="form.lgt" size="small"></el-input>
         </el-form-item>
 
-        <el-form-item label="纬度" :label-width="formLabelWidth">
+        <el-form-item label="纬度：" :label-width="formLabelWidth">
           <el-input v-model="form.lat" size="small"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="工程类型" :label-width="formLabelWidth">
+        <el-form-item v-if="nowItem=='add'" label="工程类型：" :label-width="formLabelWidth">
           <el-select v-model="form.projectType" placeholder="请选择" size="small">
             <el-option label="单位工程" value="1"></el-option>
           </el-select>

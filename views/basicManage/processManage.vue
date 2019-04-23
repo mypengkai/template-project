@@ -110,13 +110,13 @@
         :title="type + '工序类型'"
         width="30%"
         append-to-body
-        class="dialogBox"
+      
       >
         <el-form :model="form" label-width="80px" :rules="rules">
-          <el-form-item label="工序类型"  prop="processType">
-            <el-input v-model="form.processType"/>
+          <el-form-item label="工序类型:" prop="processType">
+            <el-input v-model="form.processType" />
           </el-form-item>
-          <el-form-item label="备注">
+          <el-form-item label="备注：">
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"/>
           </el-form-item>
         </el-form>

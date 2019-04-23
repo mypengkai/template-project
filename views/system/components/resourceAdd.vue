@@ -6,29 +6,29 @@
     label-width="100px"
     class="demo-ruleForm"
   >
-    <el-form-item label="菜单名称" prop="name">
+    <el-form-item label="菜单名称：" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
-    <el-form-item label="类型" >
+    <el-form-item label="类型：" >
         <el-radio v-model="ruleForm.type" label="menu">菜单</el-radio>
         <el-radio v-model="ruleForm.type" label="button">按钮</el-radio>
     </el-form-item>
-    <el-form-item label="父菜单名称" prop="ID" v-if="this.flag">
+    <el-form-item label="父菜单名称：" prop="ID" v-if="this.flag">
       <el-input :disabled="this.flag" :placeholder="this.parent"></el-input>
     </el-form-item>
-    <el-form-item label="菜单标题" prop="title">
+    <el-form-item label="菜单标题：" prop="title">
       <el-input v-model="ruleForm.title"></el-input>
     </el-form-item>
-    <el-form-item label="icon图标" prop="icon">
+    <el-form-item label="icon图标：" prop="icon">
       <el-input v-model="ruleForm.icon"></el-input>
     </el-form-item>
-    <el-form-item label="菜单分支" prop="component">
+    <el-form-item label="菜单分支：" prop="component">
       <el-input v-model="ruleForm.component"></el-input>
     </el-form-item>
-    <el-form-item label="菜单路径" prop="path">
+    <el-form-item label="菜单路径：" prop="path">
       <el-input v-model="ruleForm.path"></el-input>
     </el-form-item>
-    <el-form-item label="设备类型" prop="Mark">
+    <el-form-item label="设备类型：" prop="Mark">
       <el-radio-group v-model="ruleForm.Mark">
         <el-radio label="1">电脑端</el-radio>
         <el-radio label="2">移动端</el-radio>
