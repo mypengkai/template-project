@@ -295,6 +295,9 @@ html,
   padding-right: 5px;
   width: auto;
 }
+.pan-btn{
+  font-size: .8vw;
+}
 // .processtable{
 //     margin: 10px 0;
 // }

@@ -108,3 +108,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .pan-btn{
+    font-size: .8vw;
+  }
+</style>

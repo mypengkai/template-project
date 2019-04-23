@@ -290,14 +290,17 @@ export default {
   }
 }
 /deep/.el-form-item__label{
-    font-size: .8vw;
+    font-size:14px;
     font-weight: 400;
     color: #000;
 }
 /deep/.grid-content{
-      font-size: .8vw;
+      font-size: 14px;
     font-weight: 400;
     color: #000;
+}
+/deep/.pan-btn{
+  font-size: .8vw;
 }
 // .serchCheck {
 //   ul {
