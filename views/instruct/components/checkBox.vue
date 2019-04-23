@@ -159,7 +159,7 @@
               </div>
             </el-form-item>
 
-            <el-form-item style="width:30vw" label="状态"   v-if="nowItem !=='add'" label-width="100px">
+            <el-form-item style="width:28vw" label="状态"   v-if="nowItem !=='add'" label-width="100px">
               <el-input v-model="states" readonly ></el-input>
             </el-form-item>
 

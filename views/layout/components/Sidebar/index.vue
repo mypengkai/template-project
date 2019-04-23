@@ -30,7 +30,7 @@ export default {
 <style lang="scss" scoped>
 .a1 {
   height: 8.5vh;
-  background-color: #3a71a8;
+  // background-color: #3a71a8;
   img {
     width: 100%;
     height: 100%;

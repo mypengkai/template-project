@@ -188,16 +188,16 @@ export default {
     },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
-        Cookies.remove("names");
+         Cookies.remove("names");
         location.reload(); // 为了重新实例化vue-router对象 避免bug
       });
+      
     },
     // 请求接口(登录人信息)
     fn() {
       return request.post("/rest/sysuser/searchSelfMsg").then(res => {
         if (res.data.respCode == 0) {
           this.uesrList = res.data.data;
-          console.log(this.uesrList,'this.uesrList')
         }
         this.form.userName = this.uesrList.username;
         this.form.realName = this.uesrList.realname;
