@@ -1,16 +1,11 @@
 <template>
-  <div class="tags-view-container" style="width:80%">
+  <div class="tags-view-container" style="width:100%">
     <scroll-pane ref="scrollPane" class="tags-view-wrapper">
-      <div class="fhBox">
-        <el-button
-          type="primary"
-          class="light-blue-btn"
-          size="mini"
-          id="deteilButton"
-          icon="el-icon-arrow-left"
-          @click="detileLog"
-          v-if="flag"
-        >返回首页</el-button>
+      <div class="fhBox" @click="$router.push('/')"  v-if="flag" >
+        <i class="el-icon-d-arrow-left"></i>
+        首页
+        <span class="el-icon-close" @click.prevent.stop="flag = false" />  
+        
       </div>
       <router-link
         v-for="tag in Array.from(visitedViews)"
@@ -49,7 +44,7 @@ export default {
       top: 0,
       left: 0,
       selectedTag: {},
-      flag: false
+      flag: false,
     };
   },
   computed: {
@@ -151,10 +146,6 @@ export default {
     closeMenu() {
       this.visible = false;
     },
-    detileLog() {
-      this.$router.push("/");
-      this.flag = false;
-    }
   }
 };
 </script>
@@ -162,11 +153,17 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped type="text/scss">
 .tags-view-container {
   height: 4vh;
-  width: 100%;
   background: #fff;
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  position: relative;
   .tags-view-wrapper {
+    width: 90%;
+    display: inline-block;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+
     .tags-view-item {
       display: inline-block;
       position: relative;
@@ -181,7 +178,7 @@ export default {
       margin-left: 5px;
       margin-top: 4px;
       &:first-of-type {
-        margin-left: 15px;
+        margin-left: 5px;
       }
       &:last-of-type {
         margin-right: 15px;
@@ -226,22 +223,33 @@ export default {
   }
 }
 .fhBox {
-  width: 20%;
-  padding: 0;
-  margin: 0;
-  height: 4vh;
-  line-height: 4vh;
-  position: fixed;
-  top: 8.5vh;
-  right: 0;
-  background: #fff;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  height: 3vh;
+  line-height: 3vh;
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0);
-  #deteilButton {
-    float: right;
-    padding: 0.5vw 1vw;
-    font-size: 0.1vw;
-  }
+  background-color: #3a71a8;
+  color: #fff;
+  padding: 0 8px;
+  font-size: 0.5vw;
+  margin-left: 15px;
+  margin-top: 4px;
+     .el-icon-close {
+      width: 16px;
+      height: 16px;
+      vertical-align: 2px;
+      border-radius: 50%;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transform-origin: 100% 50%;
+      &:before {
+        transform: scale(0.6);
+        display: inline-block;
+        vertical-align: -3px;
+      }
+    }
 }
 /deep/.el-scrollbar__thumb {
   position: relative;
@@ -251,7 +259,7 @@ export default {
   cursor: pointer;
   -webkit-transition: 0.3s background-color;
   transition: 0.3s background-color;
-  background-color: rgb(255, 255, 255); 
+  background-color: rgb(255, 255, 255);
 }
 </style>
 
