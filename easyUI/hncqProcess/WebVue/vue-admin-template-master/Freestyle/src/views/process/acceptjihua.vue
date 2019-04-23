@@ -85,13 +85,13 @@
       height="68vh"
       v-if="tableData.length!=0"
     >
-      <el-table-column prop="name1" label="分部分项" ></el-table-column>
-      <el-table-column prop="processName" label="工序名" align="center"></el-table-column>
+      <el-table-column prop="name1" label="分部分项" align="center"></el-table-column>
+      <el-table-column prop="processName" label="工序名" align="center"  width="200"></el-table-column>
       <!-- <el-table-column prop="processType" label="工序过程">
       </el-table-column>-->
-      <el-table-column prop="planCheckTime" label="创建时间"></el-table-column>
-      <el-table-column prop="state" label="状态"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column prop="planCheckTime" label="创建时间"  width="150" align="center"></el-table-column>
+      <el-table-column prop="state" label="状态"  width="100" align="center"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
          
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">

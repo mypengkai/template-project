@@ -57,18 +57,18 @@
         <el-table-column prop="initiator" label="发起人" width="100"></el-table-column>
         <el-table-column prop="project" label="分部分项"></el-table-column>
 
-        <el-table-column prop="commandUserNow" label="完成人" align="center"></el-table-column>
+        <el-table-column prop="commandUserNow" label="完成人" align="center" width="100"></el-table-column>
 
         <!-- <el-table-column prop="createTime" label="发起时间">
         </el-table-column>-->
 
-        <el-table-column prop="planTime" label="创建时间"></el-table-column>
+        <el-table-column prop="planTime" label="创建时间" width="110" align="center"></el-table-column>
 
-        <el-table-column prop="commandType1" label="指令类型" align="center"></el-table-column>
+        <el-table-column prop="commandType1" label="指令类型" align="center" width="100"></el-table-column>
 
-        <el-table-column prop="issolve1" label="能否处理" align="center"></el-table-column>
+        <el-table-column prop="issolve1" label="能否处理" align="center" width="100"></el-table-column>
 
-        <el-table-column prop="status1" label="状态" align="center"></el-table-column>
+        <el-table-column prop="status1" label="状态" align="center" width="100"></el-table-column>
 
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
