@@ -291,6 +291,10 @@ html,
 .el-table thead {
   background-color: #ccc;
 }
+/deep/.el-form-item__label{
+  padding-right: 5px;
+  width: auto;
+}
 // .processtable{
 //     margin: 10px 0;
 // }
