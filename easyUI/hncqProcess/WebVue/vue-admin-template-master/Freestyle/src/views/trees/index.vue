@@ -142,7 +142,6 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      alert(val)
       this.form.pageSize = val;
       this.fn();
     },
@@ -166,7 +165,7 @@ export default {
         .post("/rest/processInfoLog/everyDayLogPageList", objFrom)
         .then(res => {
           if (res.status == 200) {
-            console.log(res,'res');
+           
             var data = res.data.data.data;
             this.total = res.data.data.totalCount;
             this.tableData = data;
@@ -176,7 +175,7 @@ export default {
     handleEdit(data) {
       this.formList.pictures.length = 0;
       request.post(`/rest/processInfoLog/findLog/${data.id}`).then(res => {
-        console.log(res);
+       
         this.targetID = data.id;
         this.formList.realname = res.data.data.realname;
         this.formList.createTime = res.data.data.createTime;
@@ -185,7 +184,7 @@ export default {
         this.formList.lgt = res.data.data.lgt;
         this.formList.photoLocation = res.data.data.photoLocation;
         this.formList.pictures.push(res.data.data.pictures);
-        console.log(this.formList.pictures);
+       
       });
       this.dialogFormVisible = true;
     },

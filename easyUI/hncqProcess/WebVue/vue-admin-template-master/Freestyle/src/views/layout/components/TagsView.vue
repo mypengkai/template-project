@@ -4,7 +4,7 @@
       <div class="fhBox" @click="$router.push('/')"  v-if="flag" >
         <i class="el-icon-d-arrow-left"></i>
         首页
-        <span class="el-icon-close" @click.prevent.stop="flag = false" />  
+        <span class="el-icon-close"  />  
         
       </div>
       <router-link
@@ -44,7 +44,7 @@ export default {
       top: 0,
       left: 0,
       selectedTag: {},
-      flag: false,
+      flag: true,
     };
   },
   computed: {
@@ -56,12 +56,12 @@ export default {
     $route() {
       this.addViewTags();
       this.moveToCurrentTag();
-      if (this.$route.path == "/dashboard") {
-        this.flag = false;
-      }
-      if (this.$route.path != "/dashboard") {
-        this.flag = true;
-      }
+      // if (this.$route.path == "/dashboard") {
+      //   this.flag = false;
+      // }
+      // if (this.$route.path != "/dashboard") {
+      //   this.flag = true;
+      // }
     },
     visible(value) {
       if (value) {
@@ -158,7 +158,7 @@ export default {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   position: relative;
   .tags-view-wrapper {
-    width: 90%;
+    width: 100%;
     display: inline-block;
     white-space: nowrap;
     position: relative;
