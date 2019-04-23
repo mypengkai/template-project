@@ -2,23 +2,23 @@
   <div>
     <el-form class="reverseBox" ref="userFrom" :model="user" label-width="120px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="名称" prop="realName">
+        <el-form-item label="名称：" prop="realName">
           <el-input v-model="user.realName"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="用户帐号" prop="userName">
+        <el-form-item v-if="nowItem=='add'" label="用户帐号：" prop="userName">
           <el-input v-model="user.userName"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem!='add'" label="用户帐号" prop="userName">
+        <el-form-item v-if="nowItem!='add'" label="用户帐号：" prop="userName">
           <el-input v-model="user.userName" :disabled="true"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="密码" prop="password">
+        <el-form-item v-if="nowItem=='add'" label="密码：" prop="password">
           <el-input show-password v-model="user.password"></el-input>
         </el-form-item>
 
-        <el-form-item label="组织机构">
+        <el-form-item label="组织机构：">
           <select-tree
             clearable
             :options="orgTree"
@@ -29,7 +29,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="角色" prop="userKey">
+        <el-form-item label="角色：" prop="userKey">
           <el-select v-model="user.userKey" multiple placeholder="请选择角色" ref="selecetedRole">
             <el-option
               v-for="item in roleList"
@@ -40,11 +40,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="职位">
+        <el-form-item label="职位：">
           <el-input v-model="user.zhiwei"></el-input>
         </el-form-item>
 
-        <el-form-item label="手机号码" prop="mobilePhone">
+        <el-form-item label="手机号码：" prop="mobilePhone">
           <el-input
             class="numInput"
             type="number"

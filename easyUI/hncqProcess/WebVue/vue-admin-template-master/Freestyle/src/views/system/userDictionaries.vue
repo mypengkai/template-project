@@ -49,10 +49,10 @@
     <!-- 新增弹框 -->
     <el-dialog title="新增详情" :visible.sync="dialogFormVisible">
       <el-form :model="formSet">
-        <el-form-item label="组织机构" label-width="120px">
+        <el-form-item label="组织机构:" label-width="120px">
           <el-input v-model="formSet.roleCode" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="组织机构类型" label-width="120px">
+        <el-form-item label="组织机构类型:" label-width="120px">
           <el-select v-model="value" placeholder="请选择" @change="bblur">
             <el-option
               v-for="item in options"
@@ -63,7 +63,7 @@
           </el-select>
         </el-form-item>
         <div style="width:83%">
-          <el-form-item label="上级组织机构" label-width="120px">
+          <el-form-item label="上级组织机构:" label-width="120px">
             <!-- <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
             <!-- <select-tree :options="shuData"  v-on:noDe="handleNodeClick" :props="defaultProps" /> -->
             <el-input v-model="checkvalue" @focus="zuzhi"></el-input>
@@ -82,7 +82,7 @@
               ></el-tree>
             </el-popover>
           </el-form-item>
-          <el-form-item label="描述" label-width="120px">
+          <el-form-item label="描述:" label-width="120px">
             <!-- <textarea  v-model="formSet.miaoCode"></textarea> -->
             <el-input type="textarea" v-model="formSet.miaoCode"></el-input>
           </el-form-item>
@@ -97,10 +97,10 @@
     <!-- 编辑弹框 -->
     <el-dialog title="编辑详情" :visible.sync="biandialogFormVisible">
       <el-form :model="formSet">
-        <el-form-item label="组织机构" label-width="120px">
+        <el-form-item label="组织机构:" label-width="120px">
           <el-input v-model="formSet.roleCode" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="组织机构类型" label-width="120px">
+        <el-form-item label="组织机构类型:" label-width="120px">
           <el-select v-model="value" placeholder="请选择" @change="bblur">
             <el-option
               v-for="item in options"
@@ -111,7 +111,7 @@
           </el-select>
         </el-form-item>
         <div style="width:83%">
-          <el-form-item label="上级组织机构" label-width="120px">
+          <el-form-item label="上级组织机构:" label-width="120px">
             <!-- <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
             <!-- <select-tree :options="shuData"  v-on:noDe="handleNodeClick" :props="defaultProps" /> -->
             <el-input v-model="checkvalue1" :disabled="true" @focus="zuzhi"></el-input>
@@ -124,7 +124,7 @@
                   <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="dlestleNodeClick"></el-tree> 
             </el-popover>-->
           </el-form-item>
-          <el-form-item label="描述" label-width="120px">
+          <el-form-item label="描述:" label-width="120px">
             <!-- <textarea  v-model="formSet.miaoCode"></textarea> -->
             <el-input type="textarea" v-model="formSet.miaoCode"></el-input>
           </el-form-item>

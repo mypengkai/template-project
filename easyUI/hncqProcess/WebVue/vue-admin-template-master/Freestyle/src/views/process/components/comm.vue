@@ -1,15 +1,15 @@
 <template>
   <div class="diaMAP elInputBox">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item style="width:30vw" label="分部分项" label-width="120px">
+      <el-form-item style="width:30vw" label="分部分项：" label-width="120px">
         <el-input v-model="form.projectItem"  readonly></el-input>
       </el-form-item>
 
-      <el-form-item style="width:30vw" label="创建时间" label-width="120px">
+      <el-form-item style="width:30vw" label="创建时间：" label-width="120px">
         <el-input v-model="form.createTime" readonly></el-input>
       </el-form-item>
 
-      <el-form-item label="指令时间轴" label-width="120px">
+      <el-form-item label="指令时间轴：" label-width="120px">
         <!-- 参考图标 -->
         <div class="reference">
           <el-timeline>
