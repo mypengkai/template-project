@@ -79,7 +79,7 @@
             </span>
           </div>
 
-          <el-form-item style="width:32vw" label="指令内容" v-if="nowItem =='add'" label-width="120px">
+          <el-form-item style="width:28vw" label="指令内容" v-if="nowItem =='add'" label-width="120px">
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
 
@@ -139,7 +139,7 @@
                     :color="activity.color"
                     :size="activity.size"
                     :timestamp="activity.timestamp"
-                  >{{activity.content}}</el-timeline-item>
+                  >{{activity.content}}1</el-timeline-item>
                 </el-timeline>
               </div>
               <div class="pta">
@@ -894,16 +894,31 @@ export default {
     margin-left: transparent;
   }
 }
-
 .reverseBox {
   // height: 62vh;
   // overflow-y: scroll;
   position: relative;
   /deep/.el-form-item__label {
-    font-size: 0.7vw;
+    font-size: 14px;
   }
   /deep/.el-input {
     font-size: 0.7vw;
+  }
+  /deep/.el-textarea{
+    margin-bottom: 5px;
+  }
+  /deep/.el-input__inner{
+    font-size: 14px;
+  }
+   /deep/.el-timeline{
+
+     line-height: 30px;
+   }
+  /deep/.reference .el-timeline-item{
+    font-size: 12px;
+  }
+  /deep/.el-textarea__inner{
+    height: 30px;
   }
 }
 //时间轴图标描述

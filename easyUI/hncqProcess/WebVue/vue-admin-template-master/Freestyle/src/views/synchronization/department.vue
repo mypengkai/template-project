@@ -2,8 +2,8 @@
     <div class="p20">
        <div class="tongbu" style="">
             <div class="rl" style="margin-bottom:10px">
-              <el-button type="primary" icon="el-icon-refresh"   @click="tongbu()">从物质平台同步</el-button>
-              <el-button type="primary" icon="el-icon-refresh"   @click="tongData()">同步数据</el-button>
+              <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"  @click="tongbu()">从物质平台同步</el-button>
+              <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"  @click="tongData()">同步数据</el-button>
             </div>
        </div>
      <!-- syncId -->

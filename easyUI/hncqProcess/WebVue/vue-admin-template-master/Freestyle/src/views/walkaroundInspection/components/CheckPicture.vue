@@ -20,11 +20,11 @@
         </el-form-item>
 
         <el-form-item label="拍照地点" label-width="120px">
-          <el-input readonly type="textarea" autosize v-model="photoLocation" ></el-input>
+          <el-input readonly v-model="form.photoLocation" ></el-input>
         </el-form-item>
 
         <el-form-item label="描述" label-width="120px">
-          <el-input readonly  type="textarea" v-model="form.describe" ></el-input>
+          <el-input readonly v-model="form.describe" ></el-input>
         </el-form-item>
       </div>
 
@@ -138,15 +138,17 @@ export default {
   overflow-y: scroll;
   /deep/.el-input__inner {
     padding: 0 0.5vw;
+    font-size: 14px;
   }
   .el-form-item {
     margin-bottom: 4vh;
   }
   /deep/.el-form-item__label {
-    font-size: 0.7vw;
+    font-size: 14px;
   }
-  /deep/.el-input {
-    font-size: 0.7vw;
+
+  /deep/.el-textarea__inner{
+     font-size: 14px;
   }
 }
 .avatar {

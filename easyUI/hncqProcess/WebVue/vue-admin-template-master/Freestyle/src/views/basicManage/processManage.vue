@@ -94,7 +94,7 @@
       <el-pagination
         class="pageList mt1"
         :current-page="currentPage"
-        :page-sizes="[15, 30, 60,100]"
+        :page-sizes="[7,15,20,30]"
         :page-size="pageSize"
         :total="total"
         background
@@ -154,7 +154,7 @@ export default {
       dialogVisibleProcess: false,
       searchText: "",
       currentPage: 1, // 当前页
-      pageSize: 15, // 每页显示数
+      pageSize: 7, // 每页显示数
       total: 0, // 总数
       processTypeId: "",
       processTypeName: "",

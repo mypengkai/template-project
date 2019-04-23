@@ -88,11 +88,12 @@
       class="pageList mt1"
       background
       :current-page.sync="sendData.pageNo"
-      :page-sizes="[15,30,60,100]"
+      :page-sizes="[6,10,15,30]"
       :page-size="1"
       layout="total, sizes, prev, pager, next, jumper"
       @current-change="_searchList()"
       :total="total"
+      @size-change="handleSizeChange"
     ></el-pagination>
 
     <!-- 编辑弹框 -->
@@ -129,6 +130,7 @@
         node-key="id"
         @node-click="projectChange"
         :props="projectTree"
+        
       ></el-tree>
     </el-dialog>
   </div>
@@ -170,7 +172,7 @@ export default {
         starttime: "", // 开始时间
         endtime: "", // 结束时间
         pageNo: 1, // 当前页
-        pageSize: 15, // 每页条数
+        pageSize: 6, // 每页条数
         orgId: "",
         Mark: 2 //  标记：1：发送、2：接收
       },
@@ -193,7 +195,10 @@ export default {
       this.nowItem = val;
       this.dialogFormVisible = true;
     },
-
+    handleSizeChange(val) {
+      this.sendData.pageSize = val;
+      this._searchList();
+    },
     // 查询单个请求
     async actionItem(id) {
       let { data } = await api.searchOne({ id });
