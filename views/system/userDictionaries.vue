@@ -345,4 +345,7 @@ export default {
 /deep/.el-dialog__body {
   height: 60vh;
 }
+.pan-btn{
+  font-size: .8vw;
+}
 </style>

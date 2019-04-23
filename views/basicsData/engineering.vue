@@ -215,6 +215,7 @@ export default {
   overflow: hidden;
   .pan-btn {
     float: right;
+    font-size: .8vw;
   }
 }
 </style>

@@ -219,4 +219,7 @@ export default {
   top: 0.1vw;
   right: 1vw;
 }
+.pan-btn{
+  font-size: .8vw;
+}
 </style>
