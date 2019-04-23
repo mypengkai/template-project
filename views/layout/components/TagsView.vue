@@ -237,6 +237,7 @@ export default {
   margin-left: 15px;
   margin-top: 4px;
      .el-icon-close {
+      opacity: 0; 
       width: 16px;
       height: 16px;
       vertical-align: 2px;
