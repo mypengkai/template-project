@@ -67,7 +67,7 @@
     <el-pagination
       class="pageList pt20 mt1"
       background
-      :page-sizes="[15,30,60,100]"
+      :page-sizes="[7,15,20,30]"
       :page-size="1"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -140,7 +140,7 @@ export default {
         SQLrealname: "", //用户真实姓名
         SQLorgid: "", //部门id
         pageNo: 1,
-        pageSize: 15
+        pageSize: 7
       }
     };
   },
@@ -173,7 +173,11 @@ export default {
         });
       });
     },
-    handleSizeChange(val) {},
+    handleSizeChange(val) {
+
+      this.sendData.pageSize=val
+      this._userList()
+    },
     // 删除按钮
     Delete(data) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {

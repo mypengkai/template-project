@@ -85,11 +85,12 @@
     <el-pagination
       class="pageList mt1"
       background
-      :current-page.sync="sendData.pageNo"
-      :page-sizes="[15,30,60,100]"
+      :current-page="sendData.pageNo"
+      :page-sizes="[6,10,15,30]"
       :page-size="1"
       layout="total, sizes, prev, pager, next, jumper"
       @current-change="_searchList()"
+      @size-change="handleSizeChange"
       :total="total"
     ></el-pagination>
     <!-- 编辑弹框 -->
@@ -108,7 +109,6 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 import checkBox from "./components/checkBox";
 import api from "@/api/instruct.js";
@@ -147,9 +147,8 @@ export default {
         endtime: "", // 结束时间
         orgId: "",
         pageNo: 1, // 当前页
-        pageSize: 15 // 每页条数
+        pageSize: 6 // 每页条数
       },
-
       nowItem: "",
       timeRange: "", // 时间日期范围
       name: "", // 组织机构回填显示
@@ -174,7 +173,11 @@ export default {
       this.nowItem = data;
       this.dialogFormVisible = true;
     },
-
+    handleSizeChange(val){
+ 
+      this.sendData.pageSize=val
+      this._searchList()
+    },
     _searchList() {
       // 列表请求
       api.getList(this.sendData).then(res => {

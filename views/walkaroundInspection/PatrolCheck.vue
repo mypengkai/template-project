@@ -5,20 +5,54 @@
       <div>
         <!-- 姓名选择 -->
         <span>组织机构:</span>
-       <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value1" />
+        <select-tree
+          clearable
+          :options="orgTree"
+          :props="defaultProps"
+          v-on:noDe="handleCheckChange"
+          v-model="value1"
+        />
         <!-- 工程分部分项 -->
         <span>工程选择:</span>
-        <select-tree clearable :options="projectList" :props="projectTree" v-on:noDe="projectChange" v-model="value" />
+        <select-tree
+          clearable
+          :options="projectList"
+          :props="projectTree"
+          v-on:noDe="projectChange"
+          v-model="value"
+        />
 
         <span>创建日期:</span>
-        <el-date-picker v-model="sendData.startTime" type="date" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>-
+        <el-date-picker
+          v-model="sendData.startTime"
+          type="date"
+          placeholder="选择日期时间"
+          size="small"
+          style="min-width:200px"
+        ></el-date-picker>-
         <!-- <span>至</span>    -->
-        <el-date-picker v-model="sendData.endTime" type="date" placeholder="选择日期时间" size="small" style="min-width:200px"></el-date-picker>
+        <el-date-picker
+          v-model="sendData.endTime"
+          type="date"
+          placeholder="选择日期时间"
+          size="small"
+          style="min-width:200px"
+        ></el-date-picker>
       </div>
 
       <div>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_chackList()">查询</el-button>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button
+          type="primary"
+          class="pan-btn light-blue-btn"
+          icon="el-icon-search"
+          @click="_chackList()"
+        >查询</el-button>
+        <el-button
+          type="primary"
+          class="pan-btn light-blue-btn"
+          icon="el-icon-refresh"
+          @click="reset()"
+        >重置</el-button>
       </div>
     </div>
 
@@ -46,9 +80,24 @@
     </el-table>
 
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_chackList()"></el-pagination>
+    <el-pagination
+      class="pageList mt1"
+      background
+      :page-sizes="[6,10,15,30]"
+      :page-size="1"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      :current-page.sync="sendData.pageNo"
+      @size-change="handleSizeChange"
+      @current-change="_chackList()"
+    ></el-pagination>
     <!-- 查看照片弹框 -->
-    <el-dialog width="70%" :title="nowItem=='add'?'上传':'巡视查看'" :visible.sync="dialogFormVisible" class="dialogBox">
+    <el-dialog
+      width="70%"
+      :title="nowItem=='add'?'上传':'巡视查看'"
+      :visible.sync="dialogFormVisible"
+      class="dialogBox"
+    >
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
   </div>
@@ -71,23 +120,23 @@ export default {
     return {
       nowItem: "",
       value: "",
-      value1:"",
-      orgTree:[],
+      value1: "",
+      orgTree: [],
       getListByUser: [], // 用户列表
       everyDayLogPageList: [], // 当前列表
       total: 0,
       timeRange: "", // 时间日期范围
       sendData: {
-         departId: "", //部门id
+        departId: "", //部门id
         userId: "", // 用户名参数
         projectCode: "", // 分部分项Code
-        orgId:"",
+        orgId: "",
         pageNo: 1, //当前页
-        pageSize: 15, // 每页条数
+        pageSize: 6, // 每页条数
         startTime: "", // 开始时间
         endTime: "" // 结束时间
       },
-       // 组织机构树显示
+      // 组织机构树显示
       defaultProps: {
         children: "children",
         label: "name"
@@ -125,17 +174,19 @@ export default {
     },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
+      this.sendData.pageNo=val;
+      this._chackList();
     },
 
     // 获取用户列表数据
     _getListByUser() {
       // 组织机构
       Organization.organizateTree().then(res => {
-         this.orgTree = res.data.data;
-      })
+        this.orgTree = res.data.data;
+      });
     },
 
-     // 组织机构下拉树
+    // 组织机构下拉树
     handleCheckChange(data) {
       this.projectList = [];
       this.sendData.orgId = data.id;
@@ -160,9 +211,9 @@ export default {
       [this.sendData.startTime, this.sendData.endTime] = val; // 给开始和结束时间赋值
     },
     // 重置按钮
-   reset() {
+    reset() {
       this.reload();
-    },
+    }
   },
   watch: {
     dialogFormVisible(val) {

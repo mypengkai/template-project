@@ -270,5 +270,8 @@ export default {
   /deep/.el-input {
     font-size: 0.7vw;
   }
+  /deep/.el-form-item__label{
+    font-size: 14px;
+  }
 }
 </style>

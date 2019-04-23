@@ -112,7 +112,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
-      :page-sizes="[15,30,60,100]"
+      :page-sizes="[6,15,30,50]"
       :page-size="15"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -168,7 +168,7 @@ export default {
         // 当前页
         pageNo: 1,
         // 每页条数
-        pageSize: 15
+        pageSize: 6
       },
       imgForm: {
         describe: "",
@@ -229,6 +229,11 @@ export default {
     this.fn();
   },
   methods: {
+        handleSizeChange(val) {
+      alert(val)
+      this.form.pageSize = val;
+      this.chaxun();
+    },
     // 初始化组织机构input框数据
     fn() {
       request.get("/rest/organizate/depart").then(res => {

@@ -2,8 +2,8 @@
     <div class="p20">
        <div class="tongbu" style="">
             <div class="rl" style="margin-bottom:10px">
-              <el-button type="primary" icon="el-icon-refresh"   @click="tongbu()">从物质平台同步</el-button>
-               <el-button type="primary" icon="el-icon-refresh"   @click="tongData()">同步数据</el-button>
+              <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongbu()">从物质平台同步</el-button>
+               <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongData()">同步数据</el-button>
             </div>
        </div>
      
@@ -41,7 +41,7 @@
         
         </el-table>
         <!-- 分页 -->
-        <el-pagination class="mt1" background :page-sizes="[15,30,60,100]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="getUserList()">
+        <el-pagination class="mt1" background :page-sizes="[6,15,20,30]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="getUserList()">
         </el-pagination>
     </div>
 </template>
@@ -60,7 +60,7 @@ export default {
       total: 0,
       sendData: {
         pageNo: 1,
-        pageSize: 15
+        pageSize: 6
       }
     };
   },
@@ -86,7 +86,10 @@ export default {
         let userData = this.userData;
       });
     },
-    handleSizeChange(val) {},
+    handleSizeChange(val) {
+      this.sendData.pageSize=val
+      this.getUserList()
+    },
     tongData() {
       this.getUserList();
     },
