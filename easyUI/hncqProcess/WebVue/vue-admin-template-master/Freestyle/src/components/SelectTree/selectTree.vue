@@ -119,7 +119,6 @@ export default {
     onClickNode(node) {     
       this.$emit('noDe',node)
       this.labelModel = node[this.props.label];
-      console.log(node[this.props])
       this.valueModel = node[this.props.value];
       this.onCloseTree();
     },

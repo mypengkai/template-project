@@ -85,7 +85,7 @@
       height="68vh"
       v-if="tableData.length!=0"
     >
-      <el-table-column prop="name1" label="分部分项" align="center"></el-table-column>
+      <el-table-column prop="name1" label="分部分项" ></el-table-column>
       <el-table-column prop="processName" label="工序名" align="center"  width="200"></el-table-column>
       <!-- <el-table-column prop="processType" label="工序过程">
       </el-table-column>-->

@@ -10,7 +10,6 @@
         v-on:noDe="handleCheckChange"
         v-model="value"
       />
-
       <span>分部分项:</span>
       <select-tree
         :options="projectList"
@@ -18,7 +17,6 @@
         v-on:noDe="projectChange"
         v-model="value1"
       />
-
       <div class="rl">
         <el-button
           type="primary"

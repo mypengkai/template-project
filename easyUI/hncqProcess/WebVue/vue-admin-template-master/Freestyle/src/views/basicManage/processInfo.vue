@@ -55,7 +55,7 @@
     <!--分页-->
 
     <el-pagination
-      class="pageList mt1"
+      class="pageList  "
       :current-page="currentPage"
       :page-sizes="[15, 30, 60,100]"
       :page-size="pageSize"

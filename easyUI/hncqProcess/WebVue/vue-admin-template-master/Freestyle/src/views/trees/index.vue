@@ -77,7 +77,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
-      :page-sizes="[3,5,15,30]"
+      :page-sizes="[5,10,15,30]"
       :page-size="1"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -107,7 +107,7 @@ export default {
         // 当前页
         pageNo: 1,
         // 每页条数
-        pageSize: 3,
+        pageSize: 5,
         // 姓名值
         userName: "",
         // 开始时间
