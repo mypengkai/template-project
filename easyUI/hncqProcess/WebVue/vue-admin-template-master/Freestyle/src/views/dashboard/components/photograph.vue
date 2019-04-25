@@ -1,15 +1,17 @@
 <template>
   <div id="photograph">
-    <span class="trackTitle ">本周轨迹</span>
-    <el-timeline>
-      <el-timeline-item v-for="(item, index) in weekData" :key="index">
-        <h4>桩号: {{ item.commandzhuanghao }}</h4>
-        <h4>工程类型:{{ item.projectItem }}</h4>
-        <h4>拍摄地点: {{ item.commandphotoLocation }}</h4>
-        <p>时间: {{ item.commandcreateTime }}</p>
-        <img :src="item.commandfilePath" alt="">
-      </el-timeline-item>
-    </el-timeline>
+    <span class="trackTitle">本周轨迹</span>
+    <div class="templateBox">
+      <el-timeline>
+        <el-timeline-item v-for="(item, index) in weekData" :key="index">
+          <h4>桩号: {{ item.commandzhuanghao }}</h4>
+          <h4>工程类型:{{ item.projectItem }}</h4>
+          <h4>拍摄地点: {{ item.commandphotoLocation }}</h4>
+          <p>时间: {{ item.commandcreateTime }}</p>
+          <img :src="item.commandfilePath" alt>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
   </div>
 </template>
 
@@ -41,17 +43,22 @@ export default {
   margin-top: 2vw;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  position: relative;
   img {
     width: 20vw;
     height: 10vw;
+  }
+  .templateBox{
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
   }
 }
 .trackTitle {
   font-size: 18px;
   font-weight: 600;
-  position: fixed;
-   left:12vw; 
-   top:24vw;
+  position: absolute;
+  left: 0.5vw;
+  top: -2vw;
 }
 </style>
