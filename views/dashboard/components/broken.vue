@@ -40,7 +40,7 @@ export default {
       let option = {
         title: {
           text: "任务统计",
-          x: "1%",
+          x: "2%",
           textStyle: {
             color: "#000",
             fontSize: "18"

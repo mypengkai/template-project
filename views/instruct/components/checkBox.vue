@@ -559,7 +559,8 @@ export default {
       projectVisible: false, // 工程分项弹框
       acceptUser: false, // 接受人id弹框
       innerTranspond: false, // 转发指令信息
-      dialogVisible: false // 上传图片
+      dialogVisible: false, // 上传图片
+  
     };
   },
   created() {
@@ -684,16 +685,19 @@ export default {
       this.projectList = [];
       this.form.userGroupId = data.id;
       this.sendData.orgId = data.id;
+       this.form.orgVerify = data.name
       project.projectList(this.sendData).then(res => {
         if (res.data.data == null) {
           res.data.data = [];
         }
         this.projectList = res.data.data;
+         
       });
     },
     // 分部分项选择后的数据
     projectChange(data) {
       this.form.projectItemId = data.id;
+      this.form.projectVerify =data.name  
     },
     // 计划时间
     planDataRange(val) {

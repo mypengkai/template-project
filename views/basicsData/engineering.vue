@@ -1,89 +1,140 @@
 <template>
   <div class="p20">
     <!-- 选择区域 -->
-    <div class="elButton">
-      <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"  @click="action('add')">新增</el-button>
+    <div>
+      <el-row>
+        <el-col :span="17">
+          <div style="opacity: 0;">0</div>
+        </el-col>
+        <el-col :span="2">
+          <el-button
+            type="primary"
+            icon="el-icon-loading"
+            class="pan-btn light-blue-btn"
+            @click="downLod"
+          >下载</el-button>
+        </el-col>
+        <el-col :span="2">
+          <el-button
+            type="primary"
+            icon="el-icon-zoom-out"
+            class="pan-btn light-blue-btn"
+            @click="showDialog"
+          >导入</el-button>
+        </el-col>
+        <el-col :span="2">
+          <el-button
+            type="primary"
+            icon="el-icon-circle-plus-outline"
+            class="pan-btn light-blue-btn"
+            @click="action('add')"
+          >新增</el-button>
+        </el-col>
+      </el-row>
     </div>
     <!-- 操作列表 -->
-    <!-- <el-scrollbar> -->    
-      <!-- :eval-func="func" :eval-args="args" :expand-all="expandAll" -->
-      <tree-table class="textList"  :data="dataList" row-key  ref="projectItemTreeTable" border >
-        <el-table-column label="工程分部分项" align="center">
-          <template slot-scope="scope">
-            <span style>{{ scope.row.projectItem }}</span>
-          </template>
-        </el-table-column>
+    <!-- <el-scrollbar> -->
+    <!-- :eval-func="func" :eval-args="args" :expand-all="expandAll" -->
+    <tree-table class="textList" :data="dataList" row-key ref="projectItemTreeTable" border>
+      <el-table-column label="工程分部分项" align="center">
+        <template slot-scope="scope">
+          <span style>{{ scope.row.projectItem }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="所属组织机构" align="center">
-          <template slot-scope="scope">
-            <span style>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="所属组织机构" align="center">
+        <template slot-scope="scope">
+          <span style>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="类型" align="center">
-          <template slot-scope="scope">
-            <template v-if="scope.row.projectType==='1'">单位工程</template>
-            <template v-else-if="scope.row.projectType==='2'">子单位工程</template>
-            <template v-else-if="scope.row.projectType==='3'">分部工程</template>
-            <template v-else-if="scope.row.projectType==='4'">子分部工程</template>
-            <template v-else-if="scope.row.projectType==='5'">分项工程</template>
-            <template v-else-if="scope.row.projectType==='6'">子分项工程</template>
-          </template>
-        </el-table-column>
+      <el-table-column label="类型" align="center">
+        <template slot-scope="scope">
+          <template v-if="scope.row.projectType==='1'">单位工程</template>
+          <template v-else-if="scope.row.projectType==='2'">子单位工程</template>
+          <template v-else-if="scope.row.projectType==='3'">分部工程</template>
+          <template v-else-if="scope.row.projectType==='4'">子分部工程</template>
+          <template v-else-if="scope.row.projectType==='5'">分项工程</template>
+          <template v-else-if="scope.row.projectType==='6'">子分项工程</template>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="起始桩号" align="center">
-          <template slot-scope="scope">
-            <span style>{{ scope.row.startStation }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="起始桩号" align="center">
+        <template slot-scope="scope">
+          <span style>{{ scope.row.startStation }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="终止桩号" align="center">
-          <template slot-scope="scope">
-            <span style>{{ scope.row.endStation }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="终止桩号" align="center">
+        <template slot-scope="scope">
+          <span style>{{ scope.row.endStation }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="创建时间" align="center">
-          <template slot-scope="scope">
-            <span style>{{ scope.row.createTime }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="创建时间" align="center">
+        <template slot-scope="scope">
+          <span style>{{ scope.row.createTime }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="操作" width="180" align="center">
+      <el-table-column label="操作" width="180" align="center">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="修改" placement="top">
+            <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="新增" placement="top">
+            <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
+          </el-tooltip>
 
-          <template slot-scope="scope">
-            <el-tooltip class="item" effect="dark" content="修改" placement="top">
-              <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="新增" placement="top">
-              <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"></el-button>
-            </el-tooltip>
-
-            <el-tooltip class="item" effect="dark" content="删除" placement="top">
-              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
-            </el-tooltip>
-
-          </template>
-        </el-table-column>
-      </tree-table>
+          <el-tooltip class="item" effect="dark" content="删除" placement="top">
+            <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+    </tree-table>
     <!-- </el-scrollbar> -->
 
     <!-- 新增弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" class="dialogBox">
-      <Xcadd :nopId="nopId" :flag1="flag1" :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_projectList" :flag="this.flag"></Xcadd>
+      <Xcadd
+        :nopId="nopId"
+        :flag1="flag1"
+        :nowItem="nowItem"
+        v-if="nowItem"
+        @cancel="dialogFormVisible=false"
+        @comfirm="_projectList"
+        :flag="this.flag"
+      ></Xcadd>
+    </el-dialog>
+    <el-dialog title="导入数据" :visible.sync="dialogFormVisiblechannel" width="30%">
+      <el-form label-width="80px" :model="from">
+        <el-form-item label="组织机构:">
+          <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
+        </el-form-item>
+        <el-form-item label="备注:">
+          <el-input type="textarea" v-model="from.remark"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="buttomBox">
+        <el-button type="primary" @click="dialogFormVisiblechannel = false">取消</el-button>
+        <el-button type="primary" @click="channel">确认</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import treeTable from "@/components/TreeTable";
+import request from "@/utils/request";
 import treeToArray from "./customEval.js";
 import Xcadd from "./popUp/Xcadd";
 import api from "@/api/project.js";
+import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   components: {
     treeTable,
-    Xcadd
+    Xcadd,
+    SelectTree
   },
   name: "TreeTable",
   data() {
@@ -95,11 +146,22 @@ export default {
       answer: "", // 删除的响应变量
       nowItem: "",
       dialogFormVisible: false,
+      dialogFormVisiblechannel: false,
       total: 0,
       nopId: "",
       args: [null, null, "timeLine"],
-      flag:true,
-      flag1:true
+      flag: true,
+      flag1: true,
+      options: [],
+      from: {
+        projectName: "",
+        remark: ""
+      },
+      defaultProp: {
+        // 组织机构
+        children: "children",
+        label: "name"
+      }
     };
   },
   mounted() {
@@ -107,17 +169,17 @@ export default {
   },
   created() {
     this._projectList();
+    this.projectInit();
   },
   methods: {
     action(val, son) {
       if (val == "add") {
-        this.nowItem = val
-        this.flag=false,
-        this.flag1=true
-        };
+        this.nowItem = val;
+        (this.flag = false), (this.flag1 = true);
+      }
       if (val != "add") {
         son &&
-          (this.nowItem = {
+          ((this.nowItem = {
             userGroupId: "",
             startStation: "",
             endStation: "",
@@ -128,27 +190,25 @@ export default {
             projectItem: "",
             projectType: "",
             pName: val.projectItem,
-            departname:val.departname
-          },
-          this.flag=true,
-          this.flag1=true
-          );
+            departname: val.departname
+          }),
+          (this.flag = true),
+          (this.flag1 = true));
         !son &&
-          (this.nowItem = {
+          ((this.nowItem = {
             userGroupId: val.userGroupId,
             startStation: val.startStation,
             endStation: val.endStation,
             name: val.name,
-             fuid: val.pId,
+            fuid: val.pId,
             lgt: val.lgt,
             lat: val.lat,
             projectItem: val.projectItem,
             projectType: val.projectType,
-            pName: val.projectItem,          
+            pName: val.projectItem,
             id: val.id
-          },
-          this.flag1=false
-          );
+          }),
+          (this.flag1 = false));
       }
       this.dialogFormVisible = true;
       if (this.nowItem != "add" && !son) {
@@ -160,7 +220,7 @@ export default {
     _projectList() {
       api.projectList().then(res => {
         this.dataList = res.data.data;
-        console.log(this.dataList,'this.dataList')
+        console.log(this.dataList, "this.dataList");
         let dataList = this.dataList;
       });
     },
@@ -189,6 +249,66 @@ export default {
           message: _message
         });
       });
+    },
+
+    //  组织机构查询
+    projectInit() {
+      request.get("/rest/organizate/depart").then(res => {
+        if (res.data.respCode == 0) {
+          this.options = res.data.data;
+        }
+      });
+    },
+
+    //组织机构
+    noDe(data, checked, indeterminate) {
+      this.from.projectName = data.name;
+    },
+    //导入
+    showDialog() {
+      this.dialogFormVisiblechannel = true;
+      this.from.projectName = "";
+      this.from.remark = "";
+
+    },
+    //
+    channel() {
+      if (this.from.projectName == "") {
+        this.$message({
+          message: "请选择组织机构"
+        });
+        return false;
+      }
+    },
+    //下载文件(本地)
+    downLod() {                                    
+      request.get("http://localhost:9528/static/template/分部分项模板.xlsx", {responseType: "blob"}
+      )
+        .then(res => {          
+          let blob = new Blob([res.data], { type:"application/vnd.ms-excel"});   
+          let url = window.URL.createObjectURL(blob);
+          window.location.href = url;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      // request.get("http://localhost:9528/static/template/project.xlsx", {responseType: "blob"}
+      // ).then((res) => {
+      //     if (!res) {
+      //       return
+      //     }
+      //     let url = window.URL.createObjectURL(res.data)
+      //     let link = document.createElement('a')
+      //     link.style.display = 'none'
+      //     link.href = url
+      //     document.body.appendChild(link)
+      //     link.click()
+      //   })
+      //    .catch(err => {
+      //     console.log(err);
+      //   }); 
+        
     }
   },
   watch: {
@@ -200,7 +320,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .Treebox {
   // height: 60vh;
   overflow-x: hidden;
@@ -211,11 +330,15 @@ export default {
 .Treebox::-webkit-scrollbar {
   // display: none;
 }
-.elButton {
-  overflow: hidden;
-  .pan-btn {
-    float: right;
-    font-size: .8vw;
-  }
+// .elButton {
+//   overflow: hidden;
+//   .pan-btn {
+//     float: right;
+//     font-size: 0.8vw;
+
+//   }
+// }
+.buttomBox {
+  text-align: right;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="photograph">
-    <span class="trackTitle p20">本周轨迹</span>
+    <span class="trackTitle ">本周轨迹</span>
     <el-timeline>
       <el-timeline-item v-for="(item, index) in weekData" :key="index">
         <h4>桩号: {{ item.commandzhuanghao }}</h4>
