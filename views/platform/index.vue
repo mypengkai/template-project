@@ -10,10 +10,8 @@ import test from '@/views/test/test.vue'
 export default {
   data() {
     return {
-      columns: [{
-        //   text: '名称',
-        //   dataIndex: 'event'
-        },
+      columns: [
+
         {
           text: '编号',
           dataIndex: 'id'

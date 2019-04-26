@@ -7,7 +7,7 @@
             </div>
        </div>
      <!-- syncId -->
-       <tree-table :data="treeData" border style="" height="90vh">
+       <tree-table :data="treeData" border >
             <el-table-column label="组织机构" align="center">
                 <template slot-scope="scope">
                 <span style="">{{scope.row.name}}</span>
@@ -55,9 +55,12 @@ export default {
     tongbu() {
       //同步部门到中间件
       api.depart().then(res => {
-        if (res.request.status === 200) {
+        if (res.data.respCode == 0) {
           (res.data.message = "成功"), (res.data.data = "同步到中间表成功");
           res.data.ok = true;
+           this.$message({
+               message:'同步成功'
+           })
         }
         
       });

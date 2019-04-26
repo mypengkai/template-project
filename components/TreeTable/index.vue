@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs" height="68vh"  ref="refTable">
+  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs" max-height="600"  ref="refTable">
     <el-table-column v-if="columns.length===0" width="100">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />

@@ -174,10 +174,13 @@ export default {
     },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
-      this.sendData.pageNo=val;
+      this.sendData.pageSize=val;
       this._chackList();
     },
-
+    handleCurrentChange(val) {
+      this.sendData.pageNo = val;
+      this._chackList();
+    },
     // 获取用户列表数据
     _getListByUser() {
       // 组织机构

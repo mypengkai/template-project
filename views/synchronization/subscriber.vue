@@ -7,7 +7,7 @@
             </div>
        </div>
      
-       <el-table :data="userData" style="width: 100%"  height="72vh" class="textList">
+       <el-table :data="userData" style="width: 100%"   class="textList">
             <el-table-column label="用户账号" align="center">
                 <template slot-scope="scope">
                   <span style="">{{scope.row.username}}</span>
@@ -71,10 +71,13 @@ export default {
     tongbu() {
       //同步用户到用户中间件
       api.user().then(res => {
-        if (res.request.status === 200) {
+        if (res.data.respCode == 0) {
           (res.data.message = "成功"), (res.data.data = "同步到中间表成功");
           res.data.ok = true;
           res.data.respCode = -1;
+          this.$message({
+              message:'同步成功'
+          })
         }
       });
     },
