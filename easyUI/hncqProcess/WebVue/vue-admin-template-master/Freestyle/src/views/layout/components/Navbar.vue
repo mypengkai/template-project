@@ -254,7 +254,7 @@ export default {
   height: 8.5vh;
   line-height: 80px;
   border-radius: 0px !important;
-  background-color: rgb(48, 65, 86);
+  background-color: #F3F3F4;
   position: relative;
   .headline {
     position: absolute;
@@ -262,7 +262,7 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 2vw;
-    color: #cccccc;
+    color: #676A6C;
     letter-spacing: 10px;
   }
   .hamburger-container {

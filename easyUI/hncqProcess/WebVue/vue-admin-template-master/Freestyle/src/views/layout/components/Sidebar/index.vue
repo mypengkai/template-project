@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar wrap-class="scrollbar-wrapper">
-    <el-menu unique-opened :show-timeout="200" :default-active="$route.path" :collapse="isCollapse" mode="vertical" background-color="#304156" text-color="#bfcbd9" active-text-color="#409EFF">
+    <el-menu unique-opened :show-timeout="200" :default-active="$route.path" :collapse="isCollapse" mode="vertical" background-color="#1465BF" text-color="#ffff" active-text-color="#1465BF">
       <div class="a1">
         <img src="../../../../../static/logo.png" alt="" style=" cursor:pointer" @click="$router.push('/')">
       </div>
@@ -30,6 +30,7 @@ export default {
 <style lang="scss" scoped>
 .a1 {
   height: 8.5vh;
+ 
   // background-color: #3a71a8;
   img {
     width: 100%;
