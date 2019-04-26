@@ -9,7 +9,7 @@
         <el-col :span="2">
           <el-button
             type="primary"
-            icon="el-icon-loading"
+            icon="el-icon-download"
             class="pan-btn light-blue-btn"
             @click="downLod"
           >下载</el-button>
@@ -111,8 +111,9 @@
         <el-form-item label="组织机构:">
           <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
         </el-form-item>
-        <el-form-item label="备注:">
-          <el-input type="textarea" v-model="from.remark"></el-input>
+        <el-form-item label="文件上传:">
+          <!-- <el-input type="file" v-model="from.remark"></el-input> -->
+          <input type="file" accept=".xls">
         </el-form-item>
       </el-form>
       <div class="buttomBox">
@@ -124,6 +125,8 @@
 </template>
 
 <script>
+import test from '@/views/test/test.vue'
+
 import treeTable from "@/components/TreeTable";
 import request from "@/utils/request";
 import treeToArray from "./customEval.js";
@@ -134,7 +137,8 @@ export default {
   components: {
     treeTable,
     Xcadd,
-    SelectTree
+    SelectTree,
+    test
   },
   name: "TreeTable",
   data() {
@@ -165,7 +169,7 @@ export default {
     };
   },
   mounted() {
-    // this.$refs.projectItemTreeTable.$el.classList.add("el-table--scrollable-x");
+    this.$refs.projectItemTreeTable.$el.classList.add("el-table--scrollable-y");
   },
   created() {
     this._projectList();
