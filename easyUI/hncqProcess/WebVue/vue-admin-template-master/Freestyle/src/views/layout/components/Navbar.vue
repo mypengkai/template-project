@@ -258,10 +258,10 @@ export default {
   position: relative;
   .headline {
     position: absolute;
-    left: 50%;
+    left: 20%;
     top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2vw;
+    font-size: 1.5vw;
     color: #676A6C;
     letter-spacing: 10px;
   }
