@@ -112,8 +112,24 @@
           <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
         </el-form-item>
         <el-form-item label="文件上传:">
-          <!-- <el-input type="file" v-model="from.remark"></el-input> -->
-          <input type="file" accept=".xls">
+          <!-- <input type="file" accept=".xls"> -->
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            accept="xls"
+            :action="url"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :auto-upload="false"
+            :data="{departid:idd}"
+            name="fileMaps"
+            :headers="headers"
+          >
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+
+            <div slot="tip" class="el-upload__tip">只能上传.xls文件</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div class="buttomBox">
@@ -125,13 +141,14 @@
 </template>
 
 <script>
-import test from '@/views/test/test.vue'
+import test from "@/views/test/test.vue";
 
 import treeTable from "@/components/TreeTable";
 import request from "@/utils/request";
 import treeToArray from "./customEval.js";
 import Xcadd from "./popUp/Xcadd";
 import api from "@/api/project.js";
+import { getToken } from "@/utils/auth";
 import SelectTree from "@/components/SelectTree/selectTree.vue";
 export default {
   components: {
@@ -143,6 +160,11 @@ export default {
   name: "TreeTable",
   data() {
     return {
+      headers: {
+        "X-AUTH-TOKEN": getToken()
+      },
+      idd:'',
+      url:process.env.BASE_API +'/rest/projectItemInfo/addbyList',
       func: treeToArray,
       expandAll: false,
       dataList: [],
@@ -267,13 +289,13 @@ export default {
     //组织机构
     noDe(data, checked, indeterminate) {
       this.from.projectName = data.name;
+      this.idd=data.id
     },
     //导入
     showDialog() {
       this.dialogFormVisiblechannel = true;
       this.from.projectName = "";
       this.from.remark = "";
-
     },
     //
     channel() {
@@ -283,13 +305,16 @@ export default {
         });
         return false;
       }
+       this.$refs.upload.submit();
     },
     //下载文件(本地)
-    downLod() {                                    
-      request.get("http://localhost:9528/static/template/分部分项模板.xlsx", {responseType: "blob"}
-      )
-        .then(res => {          
-          let blob = new Blob([res.data], { type:"application/vnd.ms-excel"});   
+    downLod() {
+      request
+        .get("http://localhost:9528/static/template/分部分项模板.xlsx", {
+          responseType: "blob"
+        })
+        .then(res => {
+          let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
           let url = window.URL.createObjectURL(blob);
           window.location.href = url;
         })
@@ -311,8 +336,7 @@ export default {
       //   })
       //    .catch(err => {
       //     console.log(err);
-      //   }); 
-        
+      //   });
     }
   },
   watch: {
