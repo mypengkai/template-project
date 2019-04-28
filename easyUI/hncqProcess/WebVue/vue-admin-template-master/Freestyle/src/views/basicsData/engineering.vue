@@ -116,7 +116,6 @@
           <el-upload
             class="upload-demo"
             ref="upload"
-            accept="xls"
             :action="url"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
@@ -125,6 +124,8 @@
             :data="{departid:idd}"
             name="fileMaps"
             :headers="headers"
+            :before-upload="beforeAvatarUpload"
+            :on-success="handleAvatarSuccess"
           >
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
 
@@ -163,8 +164,8 @@ export default {
       headers: {
         "X-AUTH-TOKEN": getToken()
       },
-      idd:'',
-      url:process.env.BASE_API +'/rest/projectItemInfo/addbyList',
+      idd: "",
+      url: process.env.BASE_API + "/rest/projectItemInfo/addbyList",
       func: treeToArray,
       expandAll: false,
       dataList: [],
@@ -198,6 +199,23 @@ export default {
     this.projectInit();
   },
   methods: {
+    handleAvatarSuccess(response) {
+      const flag = response.message === "成功";
+      if (flag) {
+        this.$message({
+          message: "上传成功",
+          type: "success"
+        });
+      }
+    },
+    beforeAvatarUpload(file) {
+      var testmsg = file.name.substring(file.name.lastIndexOf(".") + 1);
+      const isXLS = testmsg === "xls";
+      if (!isXLS) {
+        this.$message.error("上传文件只能是 xls 格式!");
+      }
+      return isXLS;
+    },
     action(val, son) {
       if (val == "add") {
         this.nowItem = val;
@@ -289,7 +307,7 @@ export default {
     //组织机构
     noDe(data, checked, indeterminate) {
       this.from.projectName = data.name;
-      this.idd=data.id
+      this.idd = data.id;
     },
     //导入
     showDialog() {
@@ -305,7 +323,7 @@ export default {
         });
         return false;
       }
-       this.$refs.upload.submit();
+      this.$refs.upload.submit();
     },
     //下载文件(本地)
     downLod() {
@@ -321,22 +339,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
-
-      // request.get("http://localhost:9528/static/template/project.xlsx", {responseType: "blob"}
-      // ).then((res) => {
-      //     if (!res) {
-      //       return
-      //     }
-      //     let url = window.URL.createObjectURL(res.data)
-      //     let link = document.createElement('a')
-      //     link.style.display = 'none'
-      //     link.href = url
-      //     document.body.appendChild(link)
-      //     link.click()
-      //   })
-      //    .catch(err => {
-      //     console.log(err);
-      //   });
     }
   },
   watch: {
