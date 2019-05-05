@@ -66,6 +66,8 @@
 
 <script>
 import Cookies from "js-cookie";
+import request from "@/utils/request";
+import { getToken, setToken, removeToken, getinit } from '@/utils/auth';
 
 export default {
   name: "Login",
@@ -90,6 +92,12 @@ export default {
         username: "admin",
         password: "123456"
       },
+      loading: true,
+      form:{
+          username: "",
+          timestamp: "",
+          pwd: "",
+      },
       loginRules: {
         username: [
           { required: true, trigger: "blur", validator: validateUsername }
@@ -108,6 +116,9 @@ export default {
       },
       immediate: true
     }
+  },
+   created() {
+    this.getinit();
   },
   methods: {
     handleLogin() {
@@ -131,9 +142,25 @@ export default {
           return false;
         }
       });
-    }
+    },
+    // 跨平台接口方法
+     getinit(){
+          this.form.username = this.$route.query.username;
+          this.form.timestamp = this.$route.query.timestamp;
+          this.form.pwd = this.$route.query.pwd;
+          this.$store
+            .dispatch("getinit", this.form)
+            .then(() => {
+              Cookies.set("names", this.form.username);
+              setToken(token)
+              localStorage.setItem("pass", this.form.pwd);
+              this.$router.push({ path: this.redirect || "/" });
+            })
+      }
   }
 };
+
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
