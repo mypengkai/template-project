@@ -11,4 +11,8 @@ export function getUser(params) {
 export function logout(data) {
   return request.delete('/rest/tokens/'+data)
 }
+//单点登录
+export function getinit(data) {
+  return request.post('/rest/tokens/loginFromWZ',data)
+}
 
