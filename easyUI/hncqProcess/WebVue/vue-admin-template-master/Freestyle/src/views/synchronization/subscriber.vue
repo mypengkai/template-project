@@ -7,7 +7,7 @@
             </div>
        </div>
      
-       <el-table :data="userData" style="width: 100%"   class="textList">
+       <el-table :data="userData" style="width: 100%" border height="600" class="textList">
             <el-table-column label="用户账号" align="center">
                 <template slot-scope="scope">
                   <span style="">{{scope.row.username}}</span>
@@ -76,8 +76,8 @@ export default {
           res.data.ok = true;
           res.data.respCode = -1;
           this.$message({
-              message:'同步成功'
-          })
+            message: "同步成功"
+          });
         }
       });
     },
@@ -90,8 +90,8 @@ export default {
       });
     },
     handleSizeChange(val) {
-      this.sendData.pageSize=val
-      this.getUserList()
+      this.sendData.pageSize = val;
+      this.getUserList();
     },
     tongData() {
       this.getUserList();
@@ -112,7 +112,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .pan-btn{
-    font-size: .8vw;
-  }
+.pan-btn {
+  font-size: 0.8vw;
+}
 </style>
