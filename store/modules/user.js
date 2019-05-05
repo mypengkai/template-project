@@ -1,4 +1,4 @@
-import { login, getUser, logout } from '@/api/login';
+import { login, getUser, logout, getinit } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 import Cookies from 'js-cookie'
 
@@ -76,7 +76,26 @@ const user = {
         location.reload();
         resolve();
       })
-    }
+    },
+
+
+
+    //单点登录
+    getinit({ commit }, userInfo) {
+      return new Promise((resolve, reject) => {
+        getinit(userInfo).then(res => {
+          let token = res.data;
+          localStorage.setItem("myToken",token)
+          setToken(token);
+          commit('SET_TOKEN', token);//token
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+
   }
 }
 
