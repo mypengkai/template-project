@@ -7,12 +7,13 @@
           <div style="opacity: 0;">0</div>
         </el-col>
         <el-col :span="2">
-          <el-button
+          <a :href="downloadTemplate">
+               <el-button
             type="primary"
             icon="el-icon-download"
             class="pan-btn light-blue-btn"
-            @click="downLod"
           >下载</el-button>
+          </a>
         </el-col>
         <el-col :span="2">
           <el-button
@@ -112,25 +113,7 @@
           <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
         </el-form-item>
         <el-form-item label="文件上传:">
-          <!-- <input type="file" accept=".xls"> -->
-          <el-upload
-            class="upload-demo"
-            ref="upload"
-            :action="url"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :file-list="fileList"
-            :auto-upload="false"
-            :data="{departid:idd}"
-            name="fileMaps"
-            :headers="headers"
-            :before-upload="beforeAvatarUpload"
-            :on-success="handleAvatarSuccess"
-          >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-
-            <div slot="tip" class="el-upload__tip">只能上传.xls文件</div>
-          </el-upload>
+          <input type="file" accept=".xls">
         </el-form-item>
       </el-form>
       <div class="buttomBox">
@@ -142,8 +125,6 @@
 </template>
 
 <script>
-import test from "@/views/test/test.vue";
-
 import treeTable from "@/components/TreeTable";
 import request from "@/utils/request";
 import treeToArray from "./customEval.js";
@@ -156,7 +137,6 @@ export default {
     treeTable,
     Xcadd,
     SelectTree,
-    test
   },
   name: "TreeTable",
   data() {
@@ -180,6 +160,7 @@ export default {
       flag: true,
       flag1: true,
       options: [],
+      downloadTemplate: 'static/template/分部,分项工程导入模板.xls',   //下载路径
       from: {
         projectName: "",
         remark: ""
@@ -326,20 +307,7 @@ export default {
       this.$refs.upload.submit();
     },
     //下载文件(本地)
-    downLod() {
-      request
-        .get("http://localhost:9528/static/template/分部分项模板.xlsx", {
-          responseType: "blob"
-        })
-        .then(res => {
-          let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
-          let url = window.URL.createObjectURL(blob);
-          window.location.href = url;
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
+  
   },
   watch: {
     dialogFormVisible(val) {
@@ -360,14 +328,6 @@ export default {
 .Treebox::-webkit-scrollbar {
   // display: none;
 }
-// .elButton {
-//   overflow: hidden;
-//   .pan-btn {
-//     float: right;
-//     font-size: 0.8vw;
-
-//   }
-// }
 .buttomBox {
   text-align: right;
 }
