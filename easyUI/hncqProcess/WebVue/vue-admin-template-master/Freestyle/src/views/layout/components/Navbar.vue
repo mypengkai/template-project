@@ -22,9 +22,9 @@
             <span style="display:block;" @click="xiuPass">修改密码</span>
           </el-dropdown-item>
           <!-- </router-link> -->
-          <!-- <el-dropdown-item divided>
+          <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出</span>
-          </el-dropdown-item> -->
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <div class="headline">
@@ -178,10 +178,10 @@ export default {
             })
             .then(() => {
               // 密码修改成功跳转到登陆页
-              // this.logout();
-                this.$router.push({path:'/login'})
-                localStorage.clear();
-                Cookies.clear(); 
+                this.logout();
+                //this.$router.push({path:'/login'})
+                //localStorage.clear();
+                //Cookies.clear();
             });
         } else {
           console.log("error submit!!");
@@ -189,15 +189,15 @@ export default {
         }
       });
     },
-    // logout() {
-    //   this.$store.dispatch("LogOut").then(() => {
-    //      Cookies.remove("names");
-    //      localStorage.clear();
-    //      Cookies.clear();
-    //      location.reload(); // 为了重新实例化vue-router对象 避免bug
-    //   });
-      
-    // },
+    logout() {
+      this.$store.dispatch("LogOut").then(() => {
+        Cookies.remove("names");
+        localStorage.clear();
+        Cookies.clear();
+        location.reload(); // 为了重新实例化vue-router对象 避免bug
+      });
+
+    },
     // 请求接口(登录人信息)
     fn() {
       return request.post("/rest/sysuser/searchSelfMsg").then(res => {

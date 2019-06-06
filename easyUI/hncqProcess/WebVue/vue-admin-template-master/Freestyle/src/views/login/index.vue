@@ -39,20 +39,6 @@
         <div class="jy">*建议使用谷歌浏览器阅览*</div>
       </el-form-item>
     </el-form>
-    <!-- 二维码部分 -->
-    <div class="ewmimg1">
-      <div class="ewmpicture">
-        <img src="../../../static/android.png" alt>
-      </div>
-      <div class="ewm1">[Android]</div>
-    </div>
-
-    <div class="ewmimg2">
-      <div class="ewmpicture">
-        <img src="../../../static/ios.png" alt>
-      </div>
-      <div class="ewm2">[ios]</div>
-    </div>
     <!-- 表尾部分 -->
     <div class="bq">
       <a href="#">
@@ -125,18 +111,15 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          this.$store
-            .dispatch("Login", this.loginForm)
-            .then(() => {
-              Cookies.set("names", this.loginForm.username);
-              localStorage.setItem("pass", this.loginForm.password);
-              this.loading = false;
-              this.$router.push({ path: this.redirect || "/" });
-            })
-            .catch(() => {
-              this.$message.error("请输入正确的用户名或密码");
-              this.loading = false;
-            });
+          this.$store.dispatch("Login", this.loginForm).then(() => {
+            Cookies.set("names", this.loginForm.username);
+            localStorage.setItem("pass", this.loginForm.password);
+            this.loading = false;
+            this.$router.push({ path: this.redirect || "/" });
+          }).catch(() => {
+            this.$message.error("请输入正确的用户名或密码");
+            this.loading = false;
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -210,7 +193,7 @@ $light_gray: #eee;
     text-align: center;
     padding-top: 4vh;
     font-size: 2.5vw;
-    color: #0000ff;
+    color: #FFFFFF;
     font-weight: bold;
   }
   position: fixed;
@@ -263,7 +246,7 @@ $light_gray: #eee;
     width: 10vw;
     img {
       width: 100%;
-    
+
     }
   }
   .bq {

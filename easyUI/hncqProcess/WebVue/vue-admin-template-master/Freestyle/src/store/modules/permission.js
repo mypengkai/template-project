@@ -1,4 +1,4 @@
-import { asyncRouterMap, constantRouterMap } from '@/router'
+import {constantRouterMap } from '@/router'
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -57,6 +57,15 @@ const permission = {
         }
         console.log('accessedRouters', accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
+        resolve()
+      })
+    },
+    // 动态添加主界面路由，需要缓存
+    UpdateAppRouter({ commit }, routes) {
+      return new Promise(resolve => {
+        //const [ roles ] = routes.constRoutes
+        let routelist = routes.constRoutes;
+        commit('SET_ROUTERS', routelist)
         resolve()
       })
     }

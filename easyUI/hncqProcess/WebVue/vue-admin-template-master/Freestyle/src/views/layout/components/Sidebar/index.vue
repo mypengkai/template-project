@@ -4,8 +4,7 @@
       <div class="a1">
         <img src="../../../../../static/logo.png" alt="" style=" cursor:pointer" @click="$router.push('/')">
       </div>
-     
-      <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
+      <sidebar-item v-for="route in this.routes" :key="route.path" :item="route" :base-path="route.path" />
     </el-menu>
   </el-scrollbar>
 </template>
@@ -19,18 +18,18 @@ export default {
   computed: {
     ...mapGetters(["sidebar"]),
     routes() {
-      return this.$router.options.routes;
+      return this.$store.state.permission.routers;
     },
     isCollapse() {
       return !this.sidebar.opened;
     }
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
 .a1 {
   height: 8.5vh;
- 
+
   // background-color: #3a71a8;
   img {
     width: 100%;

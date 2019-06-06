@@ -1,49 +1,42 @@
-<template lang="">
-    <div class="p20">
-       <div class="tongbu" style="">
-            <div class="rl" style="margin-bottom:10px">
-              <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongbu()">从物质平台同步</el-button>
-               <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongData()">同步数据</el-button>
-            </div>
-       </div>
-     
-       <el-table :data="userData" style="width: 100%" border height="600" class="textList">
-            <el-table-column label="用户账号" align="center">
-                <template slot-scope="scope">
-                  <span style="">{{scope.row.username}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="名称" align="center">
-                <template slot-scope="scope">
-  <span style>{{scope.row.realname}}</span>
-</template>
-            </el-table-column>
-            <el-table-column label="组织机构" align="center">
-                <template slot-scope="scope">
-  <span style>{{scope.row.departname}}</span>
-</template>
-            </el-table-column>
-            <el-table-column label="同步状态" align="center">
-                <template slot-scope="scope">
-  <template v-if="scope.row.sid==='' || scope.row.sid===null">
-    <i class="el-icon-close"></i>
-  </template>
-  <template v-else>
-    <i class="el-icon-check"></i>
-  </template>
-</template>
-            </el-table-column>
-            <el-table-column label="操作" width="200" align="center">
-                <template slot-scope="scope">
-  <el-button type="primary" icon="el-icon-refresh" circle @click="renew(scope.row)"></el-button>
-</template>
-            </el-table-column>
-        
-        </el-table>
-        <!-- 分页 -->
-        <el-pagination class="mt1" background :page-sizes="[6,15,20,30]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="getUserList()">
-        </el-pagination>
+<template>
+  <div class="p20">
+    <div class="tongbu" style="">
+      <div class="rl" style="margin-bottom:10px">
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongbu()">从物质平台同步</el-button>
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongData()">同步数据</el-button>
+      </div>
     </div>
+    <el-table :data="userData" style="width: 100%" border height="600" class="textList">
+      <el-table-column label="用户账号" align="center">
+        <template slot-scope="scope">
+          <span style="">{{scope.row.username}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="名称" align="center">
+        <template slot-scope="scope"><span style>{{scope.row.realname}}</span></template>
+      </el-table-column>
+      <el-table-column label="组织机构" align="center">
+        <template slot-scope="scope"><span style>{{scope.row.departname}}</span></template>
+      </el-table-column>
+      <el-table-column label="同步状态" align="center">
+        <template slot-scope="scope">
+          <template v-if="scope.row.sid==='' || scope.row.sid===null">
+            <i class="el-icon-close"></i>
+          </template>
+          <template v-else>
+            <i class="el-icon-check"></i>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="200" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-refresh" circle @click="renew(scope.row)"></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+        <!-- 分页 -->
+    <el-pagination class="mt1" background :page-sizes="[6,15,20,30]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="getUserList()"></el-pagination>
+  </div>
 </template>
 
 <script>

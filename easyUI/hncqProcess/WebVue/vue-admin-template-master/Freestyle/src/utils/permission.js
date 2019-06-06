@@ -1,13 +1,22 @@
 import Vue from 'vue'
+import {queryButtonPermissionsByUser} from '@/api/login'
 
-Vue.directive('has', {
+/**
+ * 权限指令
+ */
+const ltx=Vue.directive('ltx', {
   bind(el, binding, vnode) {
-    let btnPerObj = vnode.context.$route.meta.btnPermission;
-    let btnPermission = [];
-    for (var key in btnPerObj) {
-      btnPerObj[key] && btnPermission.push(key)
-    }
-    let isPermission = btnPermission.includes(binding.value);
-    !isPermission && (vnode.context[`dis${binding.value}`] = true);
+    let btnName=binding.value;
+    //this.nextTick(callback)，当数据发生变化，更新后执行回调。
+    // this.$nextTick(callback)，当dom发生变化，更新后执行的回调。
+    Vue.nextTick(function(btnName){
+      queryButtonPermissionsByUser(binding.value).then(res=> {
+        if (!res.data.data) {
+          el.parentNode.removeChild(el);
+        }
+      });
+    });
   }
 });
+
+export {ltx}
