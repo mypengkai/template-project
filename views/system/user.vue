@@ -7,88 +7,40 @@
       <span>用户名称:</span>
       <el-input size="small" v-model="sendData.SQLrealname" clearable placeholder="请输入名称"></el-input>
       <span>选择部门:</span>
-      <select-tree
-        clearable
-        :options="orgTree"
-        :props="defaultProps"
-        v-on:noDe="handleCheckChange"
-        v-model="value"
-      />
-    
+      <select-tree clearable :options="orgTree" :props="defaultProps" v-on:noDe="handleCheckChange" v-model="value"/>
+
       <div class="rl">
-        <el-button
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-search"
-          @click="_userList"
-        >查询</el-button>
-        <el-button
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-refresh"
-          @click="reset()"
-        >重置</el-button>
-        <el-button
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-circle-plus-outline"
-          @click="action('add')"
-        >新增</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">查询</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-circle-plus-outline" @click="action('add')" v-ltx="'userAdd'">新增</el-button>
       </div>
     </div>
     <!-- 列表 -->
     <div>
       <el-table class="textList" :data="userList" style="width: 100%" height="72vh">
         <el-table-column prop="userName" label="用户账号" ></el-table-column>
-
         <el-table-column prop="realName" label="名称" align="center"></el-table-column>
-
         <el-table-column prop="departName" label="组织机构" align="center"></el-table-column>
-
         <el-table-column prop="userKey" label="角色"></el-table-column>
-
         <el-table-column prop="zhiwei" label="职位" align="center"></el-table-column>
-
         <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
-
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="scope">
             <el-tooltip content="修改" placement="top">
-              <el-button type="primary" icon="el-icon-edit" circle @click="actionItem(scope.row)"></el-button>
+              <el-button type="primary" icon="el-icon-edit" circle v-ltx="'userUpdate'" @click="actionItem(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" circle v-ltx="'userDelete'" @click="Delete(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 分页 -->
-    <el-pagination
-      class="pageList pt20 mt1"
-      background
-      :page-sizes="[7,15,20,30]"
-      :page-size="1"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      :current-page.sync="sendData.pageNo"
-      @size-change="handleSizeChange"
-      @current-change="_userList()"
-    ></el-pagination>
+    <el-pagination class="pageList pt20 mt1" background :page-sizes="[7,15,20,30]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="_userList()"></el-pagination>
     <!-- 弹框 -->
-    <el-dialog
-      class="dialogBox"
-      :title="nowItem=='add'?'新增':'修改'"
-      :visible.sync="dialogFormVisible"
-    >
-      <userAdd
-        :nowItem="nowItem"
-        v-if="nowItem"
-        @cancel="dialogFormVisible=false"
-        @execute="_userList"
-        @comfirm="_userList"
-        :conentList="conentList"
-      ></userAdd>
+    <el-dialog class="dialogBox" :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible">
+      <userAdd :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @execute="_userList" @comfirm="_userList" :conentList="conentList"></userAdd>
     </el-dialog>
 
     <!-- 组织机构树形表单搜素 -->
@@ -102,7 +54,7 @@
         :props="defaultProps"
       ></el-tree>
     </el-dialog>
-   
+
   </div>
 </template>
 
@@ -153,7 +105,7 @@ export default {
       this.nowItem = val;
       this.dialogFormVisible = true;
     },
-    
+
     // 查询单个请求
     async actionItem(row) {
       this.nowItem = row
@@ -163,7 +115,6 @@ export default {
     _userList() {
       // 获取查询列表
       api.sysuserList(this.sendData).then(res => {
-        console.log(res);
         this.total = res.data.data.totalCount;
         this.userList = res.data.data.data;
         let userList = this.userList;

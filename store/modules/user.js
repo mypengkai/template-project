@@ -1,4 +1,4 @@
-import { login, getUser, logout, getinit } from '@/api/login';
+import { login, getUser, logout, getinit, queryPermissionsByUser } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 import Cookies from 'js-cookie'
 
@@ -8,7 +8,8 @@ const user = {
     userInfo: '',
     avatar: '',//废弃
     roles: [],
-    name:Cookies.get('names')
+    name:Cookies.get('names'),
+    permissionList: []
   },
 
   mutations: {
@@ -20,9 +21,11 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
-    }
+    },
+    SET_PERMISSIONLIST: (state, permissionList) => {
+      state.permissionList = permissionList
+    },
   },
-
   actions: {
     // 登录
     Login({ commit }, userInfo) {
@@ -51,7 +54,7 @@ const user = {
         })
       })
     },
-   
+
 
     // 登出
     LogOut({ commit, state }) {
@@ -95,6 +98,22 @@ const user = {
       })
     },
 
+    // 获取用户信息
+    GetPermissionList({ commit }) {
+      return new Promise((resolve, reject) => {
+        queryPermissionsByUser({Mark: '1'}).then(response => {
+          const menuData = response.data.data;
+          if (menuData && menuData.length > 0) {
+            commit('SET_PERMISSIONLIST', menuData)
+          } else {
+            reject('getPermissionList: 权限列表不是一个空的数组 !')
+          }
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    }
 
   }
 }

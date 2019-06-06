@@ -28,3 +28,17 @@
     }
   }
 }
+
+//模块中查询数据列表控制
+.huixin-content{
+  padding: 4px;
+}
+
+.filter-container {
+  padding-bottom: 4px;
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 4px;
+  }
+}
