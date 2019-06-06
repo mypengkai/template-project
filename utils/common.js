@@ -2,6 +2,8 @@ import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import Vue from 'vue'
 import { getToken } from '@/utils/auth'
+import {queryButtonPermissionsByUser} from '@/api/login'
+
 const tool = {
   //环境自动切换 适应域名
   baseURL: process.env.BASE_API,
@@ -84,6 +86,13 @@ tool.fullscreen = (callback) => {
 tool.openView = (url) => {
   let { href } = router.resolve({ path: url });
   window.open(href, '_blank');
+}
+tool.Ltx=(btnName)=>{
+  Vue.nextTick(function(btnName){
+    queryButtonPermissionsByUser(binding.value).then(res=> {
+      return res.data.data;
+    });
+  });
 }
 Vue.prototype.$tool = tool
 export default tool;

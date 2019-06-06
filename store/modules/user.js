@@ -1,4 +1,4 @@
-import { login, getUser, logout, getinit, queryPermissionsByUser } from '@/api/login';
+import { login, getUser, logout, getinit, queryPermissionsByUser, queryButtonPermissionsByUser } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 import Cookies from 'js-cookie'
 
@@ -9,7 +9,8 @@ const user = {
     avatar: '',//废弃
     roles: [],
     name:Cookies.get('names'),
-    permissionList: []
+    permissionList: [],
+    buttonList:[]
   },
 
   mutations: {
@@ -25,6 +26,9 @@ const user = {
     SET_PERMISSIONLIST: (state, permissionList) => {
       state.permissionList = permissionList
     },
+    SET_BUTTONLIST: (state, buttonList) =>{
+      state.buttonList=buttonList;
+    }
   },
   actions: {
     // 登录
@@ -113,8 +117,22 @@ const user = {
           reject(error)
         })
       })
-    }
+    },
 
+    //获取权限按钮
+    getButtonList({ commit }) {
+      queryButtonPermissionsByUser({Mark: '1'}).then(response => {
+        const buttonData = response.data.data;
+        if (buttonData && buttonData.length > 0) {
+          commit('SET_BUTTONLIST', buttonData);
+        } else {
+          reject('buttonList: button列表不是一个空的数组 !')
+        }
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    }
   }
 }
 

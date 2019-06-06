@@ -22,7 +22,7 @@ export function queryPermissionsByUser(data) {
 }
 
 //根据token获取当前登录用户下所有的按钮权限
-export function queryButtonPermissionsByUser(buttonName) {
-  return request.post('/rest/role/getButtonShiroByUserId', {Mark: '1', btnName: buttonName});
+export function queryButtonPermissionsByUser(data) {
+  return request.post('/rest/role/getButtonShiroByUserId', data);
 }
 
