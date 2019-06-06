@@ -98,6 +98,7 @@ function  generateChildRouters (data) {
       component(resolve){
         require(['@/' + component + '.vue'], resolve)
       },
+      component: ()=> import('@/'+component+'.vue'),
       hidden: false,  //这里必须是false
       meta: {
         title:item.meta.title ,

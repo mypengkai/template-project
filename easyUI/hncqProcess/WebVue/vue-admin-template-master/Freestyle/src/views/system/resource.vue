@@ -24,6 +24,10 @@
       <el-table-column label="菜单地址" align="center">
         <template slot-scope="scope">{{ scope.row.path }}</template>
       </el-table-column>
+      <el-table-column label="类型" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.type==='0' ? '按钮': '菜单' }}</template>
+      </el-table-column>
       <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope" type="scope.row">
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
@@ -101,6 +105,13 @@
           </el-row>
           <el-row>
             <el-col :span="24">
+              <el-form-item label="菜单排序：" prop="functionLevel">
+                <el-input-number v-model="ruleForm.functionLevel" controls-position="right" :min="1" :max="100" label="菜单排序"></el-input-number>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
               <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -122,6 +133,18 @@ export default {
   },
   name: "TreeTable",
   data() {
+    //判断是否为正整数
+    let checkFunctionLevel = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("菜单排序不能为空"));
+      } else {
+        if (Number.isInteger(Number(value)) && Number(value) > 0 && Number(value) < 999) {
+          callback();
+        } else {
+          return callback(new Error("请输入正整数"));
+        }
+      }
+    };
     return {
       newTitle: "",
       dialogFormVisible: false,
@@ -139,14 +162,16 @@ export default {
         isVueFunction: '1', //设备标识
         id: "",
         type: '1',
-        parentName: ""
+        parentName: "",
+        functionLevel: 1 //菜单排序
       },
       rules: {
         name: [{ required: true, message: "请输入资源名称", trigger: "blur" }],
         type: [{ required: true, message: "请选择资源类型", trigger: "blur" }],
         ID: [{ required: false, message: "请输入父级资源ID", trigger: "blur" }],
         title: [{ required: true, message: "请输入资源标题", trigger: "blur" }],
-        Mark: [{ required: true, message: "请选择设备类型", trigger: "blur" }]
+        Mark: [{ required: true, message: "请选择设备类型", trigger: "blur" }],
+        functionLevel: [{ required: true, message: "请输入菜单排序", validator: checkFunctionLevel, trigger: "blur" }]
       }
     };
   },

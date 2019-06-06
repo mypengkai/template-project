@@ -16,7 +16,7 @@ router.beforeEach((to, from, next) => {
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.permissionList.length ===0) {
-        store.dispatch('GetPermissionList').then(res => { // 拉取用户信息
+        store.dispatch('GetPermissionList').then(res => { // 根据用户token 拿到资源资源信息
           const menuData=res.data.data;
           if (menuData === null || menuData === "" || menuData === undefined) {
             return;
@@ -26,18 +26,19 @@ router.beforeEach((to, from, next) => {
           store.dispatch('UpdateAppRouter',  { constRoutes }).then(() => {
             // 根据roles权限生成可访问的路由表
             // 动态添加可访问路由表
-            router.addRoutes(store.getters.addRouters)
-            //debugger;
-            const redirect = decodeURIComponent(from.query.redirect || to.path)
-            if (to.path === redirect) {
-              // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-              next({ ...to, replace: true })
-              //next({ path: redirect })
-            } else {
-              // 跳转到目的路由
-              next({ path: redirect })
-            }
-          })
+            router.addRoutes(store.getters.addRouters);
+            //得到按钮列表
+            store.dispatch('getButtonList').then(res=>{
+              const redirect = decodeURIComponent(from.query.redirect || to.path)
+              if (to.path === redirect) {
+                // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+                next({ ...to, replace: true })
+              } else {
+                // 跳转到目的路由
+                next({ path: redirect })
+              }
+            });
+          });
           next()
         }).catch((err) => {
           Message({
