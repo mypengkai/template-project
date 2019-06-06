@@ -4,14 +4,14 @@
       <el-row>
         <el-col :span="24">
           <div style="text-align: right">
-            <el-button type="primary" plain @click="resourceList(2)" class="pan-btn light-blue-btn">移动端</el-button>
-            <el-button type="primary" plain @click="resourceList(1)" class="pan-btn light-blue-btn">PC端</el-button>
+            <el-button type="primary" plain class="pan-btn light-blue-btn" @click="resourceList(2)">移动端</el-button>
+            <el-button type="primary" plain class="pan-btn light-blue-btn" @click="resourceList(1)">PC端</el-button>
             <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>
           </div>
         </el-col>
       </el-row>
     </div>
-    <tree-table class="textList" :data="menuList" border row-key>
+    <tree-table :data="menuList" class="textList" border row-key>
       <el-table-column label="菜单标题" height="250" align="center">
         <template slot-scope="scope">{{ scope.row.meta.title }}</template>
       </el-table-column>
@@ -31,82 +31,99 @@
       <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope" type="scope.row">
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
-            <el-button type="primary" icon="el-icon-edit" circle @click="action(scope.row)"></el-button>
+            <el-button
+              v-ltx="'resourceUpdate'"
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              @click="action(scope.row)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="新增" placement="top">
-            <el-button type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)" :disabled="scope.row.type==='button'?true:false"></el-button>
+            <el-button
+              v-ltx="'resourceAdd'"
+              :disabled="scope.row.type==='button'?true:false"
+              type="primary"
+              icon="el-icon-plus"
+              circle
+              @click="action(scope.row,true)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)" :disabled="scope.row.children.length>0?true:false"></el-button>
+            <el-button
+              v-ltx="'resourceDelete'"
+              :disabled="scope.row.children.length>0?true:false"
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click="Delete(scope.row)"/>
           </el-tooltip>
         </template>
       </el-table-column>
     </tree-table>
 
     <!-- 新增/修改弹框 -->
-    <el-dialog class="dialogBox" :title="newTitle" :visible.sync="dialogFormVisible" :before-close="closeResourceDialog" :append-to-body="true" :lock-scroll="false">
+    <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" :before-close="closeResourceDialog" :append-to-body="true" :lock-scroll="false" class="dialogBox">
       <template>
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
           <el-row>
             <el-col :span="24">
               <el-form-item label="资源名称：" prop="name">
-                <el-input v-model="ruleForm.name"></el-input>
+                <el-input v-model="ruleForm.name"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="资源类型：">
-                <el-switch v-model="ruleForm.type" active-color="#13ce66" active-value="1" inactive-value="0" inactive-color="#ff4949" ></el-switch>
+                <el-switch v-model="ruleForm.type" active-color="#13ce66" active-value="1" inactive-value="0" inactive-color="#ff4949" />
                 <span ref="el_switch_type">菜单</span>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="使用设备：">
-                <el-switch v-model="ruleForm.isVueFunction" active-color="#13ce66" active-value="1" inactive-value="2" inactive-color="#ff4949"></el-switch>
+                <el-switch v-model="ruleForm.isVueFunction" active-color="#13ce66" active-value="1" inactive-value="2" inactive-color="#ff4949"/>
                 <span ref="el_switch_Mark">PC端</span>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="父资源名称：" prop="ID" v-if="flag">
-                <el-input :disabled="flag" :placeholder="ruleForm.parentName"></el-input>
+              <el-form-item v-if="flag" label="父资源名称：" prop="ID">
+                <el-input :disabled="flag" :placeholder="ruleForm.parentName"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="资源标题：" prop="title">
-                <el-input v-model="ruleForm.title"></el-input>
+                <el-input v-model="ruleForm.title"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="资源图标：" prop="icon">
-                <el-input v-model="ruleForm.icon"></el-input>
+                <el-input v-model="ruleForm.icon"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="资源组件：" prop="component">
-                <el-input v-model="ruleForm.component"></el-input>
+                <el-input v-model="ruleForm.component"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="菜单路径：" prop="path">
-                <el-input v-model="ruleForm.path"></el-input>
+                <el-input v-model="ruleForm.path"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="菜单排序：" prop="functionLevel">
-                <el-input-number v-model="ruleForm.functionLevel" controls-position="right" :min="1" :max="100" label="菜单排序"></el-input-number>
+                <el-input-number v-model="ruleForm.functionLevel" :min="1" :max="100" controls-position="right" label="菜单排序"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -125,173 +142,171 @@
 
 </template>
 <script>
-import treeTable from "@/components/TreeTable";
-import api from "@/api/resource.js";
+import treeTable from '@/components/TreeTable'
+import api from '@/api/resource.js'
 export default {
+  name: 'TreeTable',
   components: {
     treeTable
   },
-  name: "TreeTable",
   data() {
-    //判断是否为正整数
-    let checkFunctionLevel = (rule, value, callback) => {
+    // 判断是否为正整数
+    const checkFunctionLevel = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("菜单排序不能为空"));
+        return callback(new Error('菜单排序不能为空'))
       } else {
         if (Number.isInteger(Number(value)) && Number(value) > 0 && Number(value) < 999) {
-          callback();
+          callback()
         } else {
-          return callback(new Error("请输入正整数"));
+          return callback(new Error('请输入正整数'))
         }
       }
-    };
+    }
     return {
-      newTitle: "",
+      newTitle: '',
       dialogFormVisible: false,
       menuList: [],
       flag: true,
       mark: 1,
-      //新增修改时发生
+      // 新增修改时发生
       ruleForm: {
-        name: "", // 菜单名称
-        pId: "", //父菜单id
-        title: "", //菜单标题
-        icon: "", //icon图标
-        component: "", //组件
-        path: "", //菜单路径
-        isVueFunction: '1', //设备标识
-        id: "",
+        name: '', // 菜单名称
+        pId: '', // 父菜单id
+        title: '', // 菜单标题
+        icon: '', // icon图标
+        component: '', // 组件
+        path: '', // 菜单路径
+        isVueFunction: '1', // 设备标识
+        id: '',
         type: '1',
-        parentName: "",
-        functionLevel: 1 //菜单排序
+        parentName: '',
+        functionLevel: 1 // 菜单排序
       },
       rules: {
-        name: [{ required: true, message: "请输入资源名称", trigger: "blur" }],
-        type: [{ required: true, message: "请选择资源类型", trigger: "blur" }],
-        ID: [{ required: false, message: "请输入父级资源ID", trigger: "blur" }],
-        title: [{ required: true, message: "请输入资源标题", trigger: "blur" }],
-        Mark: [{ required: true, message: "请选择设备类型", trigger: "blur" }],
-        functionLevel: [{ required: true, message: "请输入菜单排序", validator: checkFunctionLevel, trigger: "blur" }]
+        name: [{ required: true, message: '请输入资源名称', trigger: 'blur' }],
+        type: [{ required: true, message: '请选择资源类型', trigger: 'blur' }],
+        ID: [{ required: false, message: '请输入父级资源ID', trigger: 'blur' }],
+        title: [{ required: true, message: '请输入资源标题', trigger: 'blur' }],
+        Mark: [{ required: true, message: '请选择设备类型', trigger: 'blur' }],
+        functionLevel: [{ required: true, message: '请输入菜单排序', validator: checkFunctionLevel, trigger: 'blur' }]
       }
-    };
-  },
-  created() {
-    this.resourceList(this.ruleForm.isVueFunction);
+    }
   },
   watch: {
-    //监听 type的变化
+    // 监听 type的变化
     ruleForm: {
       handler(val, oldVal) {
-        //资源类型
+        // 资源类型
         switch (val.type) {
           case '1':
-            this.$refs.el_switch_type.innerHTML = '菜单';
-            break;
+            this.$refs.el_switch_type.innerHTML = '菜单'
+            break
           case '0':
-            this.$refs.el_switch_type.innerHTML = '按钮';
-            break;
-        };
-        //使用设备
+            this.$refs.el_switch_type.innerHTML = '按钮'
+            break
+        }
+        // 使用设备
         switch (val.isVueFunction) {
           case '1':
-            this.$refs.el_switch_Mark.innerHTML = 'PC端';
-            break;
+            this.$refs.el_switch_Mark.innerHTML = 'PC端'
+            break
           case '2':
-            this.$refs.el_switch_Mark.innerHTML = '移动端';
-            break;
-        };
+            this.$refs.el_switch_Mark.innerHTML = '移动端'
+            break
+        }
       },
       deep: true
-    },
+    }
+  },
+  created() {
+    this.resourceList(this.ruleForm.isVueFunction)
   },
   methods: {
     action(val, son) {
-      if(val==='add'){
-        this.newTitle='新增';
-        this.flag=false;
-        this.ruleForm={};
-      }else if(son){
-        this.newTitle=val.meta.title+'~新增';
-        this.flag=true;
-        this.ruleForm.pId=val.id;
-        this.ruleForm.parentName=val.meta.title;
-      }else{
-        this.newTitle='修改';
-        this.flag=true;
-        this.getmenuObj(val.id);
+      if (val === 'add') {
+        this.newTitle = '新增'
+        this.flag = false
+        this.ruleForm = {}
+      } else if (son) {
+        this.newTitle = val.meta.title + '~新增'
+        this.flag = true
+        this.ruleForm.pId = val.id
+        this.ruleForm.parentName = val.meta.title
+      } else {
+        this.newTitle = '修改'
+        this.flag = true
+        this.getmenuObj(val.id)
       }
-      this.dialogFormVisible=true;
+      this.dialogFormVisible = true
     },
     // 树形列表
     resourceList(num) {
-      this.menuList = [];
-      api.menuList({ Mark: num, type: "menu" }).then(res => {
-        this.menuList = res.data.data;
-      });
+      this.menuList = []
+      api.menuList({ Mark: num, type: 'menu' }).then(res => {
+        this.menuList = res.data.data
+      })
     },
     // 删除按钮
     Delete(data) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(() => {
-        this._menuDelete(data);
+        this._menuDelete(data)
         this.$message({
-          type: "success",
-          message: "删除成功!"
-        });
-      });
+          type: 'success',
+          message: '删除成功!'
+        })
+      })
     },
     // 删除请求
     _menuDelete(data) {
       api.menuDelete(data.id).then(res => {
-        this.resourceList();
-      });
+        this.resourceList()
+      })
     },
-    //关闭dialog
-    closeResourceDialog(data){
-      this.ruleForm={};
-      this.flag=false;
-      this.newTitle='';
-      this.dialogFormVisible=false;
+    // 关闭dialog
+    closeResourceDialog(data) {
+      this.ruleForm = {}
+      this.flag = false
+      this.newTitle = ''
+      this.dialogFormVisible = false
     },
-    //根据id获取单个菜单对象
-    getmenuObj:function(id){
-      let that=this;
-      api.menuCheck(id).then(res=>{
-        that.ruleForm=res.data.data;
-      });
+    // 根据id获取单个菜单对象
+    getmenuObj: function(id) {
+      const that = this
+      api.menuCheck(id).then(res => {
+        that.ruleForm = res.data.data
+      })
     },
-    //提交对象
+    // 提交对象
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // 新增
           api.menuAdd(this.ruleForm).then(res => {
-            this.$emit("comfirm");
+            this.$emit('comfirm')
             this.$message({
-              type: "success",
-              message: "已完成!"
-            });
-            this.$emit("cancel");
-
-          });
+              type: 'success',
+              message: '已完成!'
+            })
+            this.$emit('cancel')
+          })
         } else {
-          return false;
+          return false
         }
-      });
-      //刷新当前列表
-      this.closeResourceDialog('');
-      this.resourceList(this.ruleForm.isVueFunction);
-      this.dialogFormVisible = false;
-
+      })
+      // 刷新当前列表
+      this.closeResourceDialog('')
+      this.resourceList(this.ruleForm.isVueFunction)
+      this.dialogFormVisible = false
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
