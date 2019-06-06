@@ -6,17 +6,21 @@ import {queryButtonPermissionsByUser} from '@/api/login'
  */
 const ltx=Vue.directive('ltx', {
   bind(el, binding, vnode) {
-    console.log(vnode.context.$store.state.user.buttonList);
-    /*let btnName=binding.value;
-    //this.nextTick(callback)，当数据发生变化，更新后执行回调。
-    // this.$nextTick(callback)，当dom发生变化，更新后执行的回调。
-    Vue.nextTick(function(btnName){
-      queryButtonPermissionsByUser(binding.value).then(res=> {
-        if (!res.data.data) {
-          el.parentNode.removeChild(el);
+    if (!permissionJudge(binding.value)) {
+      el.parentNode.removeChild(el);
+    }
+
+    function permissionJudge(value) {
+      let list = vnode.context.$store.state.user.buttonList;
+      console.log(list);
+      for (let item of list) {
+        if (item === value) {
+          return true;
         }
-      });
-    });*/
+      }
+      return false;
+    }
+
   }
 });
 

@@ -121,17 +121,19 @@ const user = {
 
     //获取权限按钮
     getButtonList({ commit }) {
-      queryButtonPermissionsByUser({Mark: '1'}).then(response => {
-        const buttonData = response.data.data;
-        if (buttonData && buttonData.length > 0) {
-          commit('SET_BUTTONLIST', buttonData);
-        } else {
-          reject('buttonList: button列表不是一个空的数组 !')
-        }
-        resolve(response)
-      }).catch(error => {
-        reject(error)
-      })
+      return new Promise((resolve, reject) => {
+        queryButtonPermissionsByUser({Mark: '1'}).then(response => {
+          const buttonData = response.data.data;
+          if (buttonData && buttonData.length > 0) {
+            commit('SET_BUTTONLIST', buttonData);
+          } else {
+            reject('buttonList: button列表不是一个空的数组 !')
+          }
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      });
     }
   }
 }
