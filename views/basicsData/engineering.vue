@@ -3,7 +3,7 @@
     <!-- 选择区域 -->
     <div>
       <el-row>
-        <el-col :span="17">
+        <el-col :span="18">
           <div style="opacity: 0;">
             0
           </div>
