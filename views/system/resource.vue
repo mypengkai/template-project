@@ -6,7 +6,7 @@
           <div style="text-align: right">
             <el-button type="primary" plain class="pan-btn light-blue-btn" @click="resourceList(2)">移动端</el-button>
             <el-button type="primary" plain class="pan-btn light-blue-btn" @click="resourceList(1)">PC端</el-button>
-            <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>
+            <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" v-ltx="'resourceAdd'" @click="action('add')">新增</el-button>
           </div>
         </el-col>
       </el-row>
@@ -31,30 +31,13 @@
       <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope" type="scope.row">
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
-            <el-button
-              v-ltx="'resourceUpdate'"
-              type="primary"
-              icon="el-icon-edit"
-              circle
-              @click="action(scope.row)"/>
+            <el-button v-ltx="'resourceUpdate'" type="primary" icon="el-icon-edit" circle @click="action(scope.row)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="新增" placement="top">
-            <el-button
-              v-ltx="'resourceAdd'"
-              :disabled="scope.row.type==='button'?true:false"
-              type="primary"
-              icon="el-icon-plus"
-              circle
-              @click="action(scope.row,true)"/>
+            <el-button v-ltx="'resourceAdd'" :disabled="scope.row.type==='button' ? true:false" type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button
-              v-ltx="'resourceDelete'"
-              :disabled="scope.row.children.length>0?true:false"
-              type="danger"
-              icon="el-icon-delete"
-              circle
-              @click="Delete(scope.row)"/>
+            <el-button v-ltx="'resourceDelete'" :disabled="scope.row.children.length>0?true:false" type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"/>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -75,13 +58,13 @@
             <el-col :span="12">
               <el-form-item label="资源类型：">
                 <el-switch v-model="ruleForm.type" active-color="#13ce66" active-value="1" inactive-value="0" inactive-color="#ff4949" />
-                <span ref="el_switch_type">菜单</span>
+                <span v-html="swithTypeTxt"></span>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="使用设备：">
                 <el-switch v-model="ruleForm.isVueFunction" active-color="#13ce66" active-value="1" inactive-value="2" inactive-color="#ff4949"/>
-                <span ref="el_switch_Mark">PC端</span>
+                <span v-html="swithMarkTxt"></span>
               </el-form-item>
             </el-col>
           </el-row>
@@ -168,6 +151,8 @@ export default {
       menuList: [],
       flag: true,
       mark: 1,
+      swithTypeTxt: '',
+      swithMarkTxt: '',
       // 新增修改时发生
       ruleForm: {
         name: '', // 菜单名称
@@ -199,19 +184,19 @@ export default {
         // 资源类型
         switch (val.type) {
           case '1':
-            this.$refs.el_switch_type.innerHTML = '菜单'
+            this.swithTypeTxt = '菜单'
             break
           case '0':
-            this.$refs.el_switch_type.innerHTML = '按钮'
+            this.swithTypeTxt = '按钮'
             break
         }
         // 使用设备
         switch (val.isVueFunction) {
           case '1':
-            this.$refs.el_switch_Mark.innerHTML = 'PC端'
+            this.swithMarkTxt = 'PC端'
             break
           case '2':
-            this.$refs.el_switch_Mark.innerHTML = '移动端'
+            this.swithMarkTxt = '移动端'
             break
         }
       },
@@ -284,6 +269,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          console.log(JSON.stringify(this.ruleForm))
           // 新增
           api.menuAdd(this.ruleForm).then(res => {
             this.$emit('comfirm')
