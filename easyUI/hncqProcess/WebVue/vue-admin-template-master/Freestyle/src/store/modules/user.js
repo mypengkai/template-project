@@ -91,6 +91,7 @@ const user = {
     getinit({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         getinit(userInfo).then(res => {
+          debugger
           let token = res.data;
           localStorage.setItem("myToken",token)
           setToken(token);
