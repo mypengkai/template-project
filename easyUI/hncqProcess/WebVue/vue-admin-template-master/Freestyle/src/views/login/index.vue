@@ -72,17 +72,11 @@ export default {
       }
     };
     return {
-      input: "",
       loginForm: {
-        username: "",
-        password: ""
+        username: "shtoone",
+        password: "shtoone2008-2018"
       },
       loading: true,
-      form:{
-          username: "",
-          timestamp: "",
-          pwd: "",
-      },
       loginRules: {
         username: [
           { required: true, trigger: "blur", validator: validateUsername }

@@ -1,12 +1,12 @@
 <template>
   <div class="p20">
-    <div class="tongbu" style="">
-      <div class="rl" style="margin-bottom:10px">
-        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongbu()">从物质平台同步</el-button>
-        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="tongData()">同步数据</el-button>
-      </div>
-    </div>
-    <el-table :data="userData" style="width: 100%" border height="600" class="textList">
+    <el-row>
+      <el-col :span="21">&nbsp;</el-col>
+      <el-col :span="3">
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"   @click="fromMaterialsUser()">从物质平台同步</el-button>
+      </el-col>
+    </el-row>
+    <el-table :data="userData" style="width: 100%" border height="480" class="textList">
       <el-table-column label="用户账号" align="center">
         <template slot-scope="scope">
           <span style="">{{scope.row.username}}</span>
@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-refresh" circle @click="renew(scope.row)"></el-button>
+          <el-button type="primary" icon="el-icon-refresh" circle @click="synchronizationUser(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,11 +41,11 @@
 
 <script>
 import treeTable from "@/components/TreeTable";
-import SelectTree from "@/components/SelectTree/selectTree.vue";
-import request from "@/utils/request";
+import SelectTree from "@/components/SelectTree/selectTree";
 import api from "../../api/tongUser";
 export default {
   name: "TreeTableDemo",
+  describe: "用户同步",
   components: { treeTable, SelectTree },
   data() {
     return {
@@ -61,35 +61,30 @@ export default {
     this.getUserList();
   },
   methods: {
-    tongbu() {
+    fromMaterialsUser() {  //从物资平台系统用户同步
       //同步用户到用户中间件
       api.user().then(res => {
-        if (res.data.respCode == 0) {
-          (res.data.message = "成功"), (res.data.data = "同步到中间表成功");
-          res.data.ok = true;
-          res.data.respCode = -1;
+        if (res.data.ok) {
+          this.getUserList();
           this.$message({
+            type: "success",
             message: "同步成功"
           });
         }
       });
     },
-    getUserList() {
+    getUserList() {  //数据列表
       //展示用户中间表信息
       api.userData(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
         this.userData = res.data.data.data;
-        let userData = this.userData;
       });
     },
-    handleSizeChange(val) {
+    handleSizeChange(val) {  //分页的方法
       this.sendData.pageSize = val;
       this.getUserList();
     },
-    tongData() {
-      this.getUserList();
-    },
-    renew(data) {
+    synchronizationUser(data) {  //同步用户
       var sid = data.sid;
       // 同步用户到用户表
       api.updateUserData({ id: data.id }).then(res => {

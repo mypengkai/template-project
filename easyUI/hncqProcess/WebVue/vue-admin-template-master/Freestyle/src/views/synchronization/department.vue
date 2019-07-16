@@ -32,11 +32,11 @@
 
 <script>
 import treeTable from "@/components/TreeTable";
-import SelectTree from "@/components/SelectTree/selectTree.vue";
-import request from "@/utils/request";
+import SelectTree from "@/components/SelectTree/selectTree";
 import api from "../../api/tongbu";
 export default {
   name: "TreeTableDemo",
+  describe: "部门同步",
   components: { treeTable, SelectTree },
   data() {
     return {
@@ -50,12 +50,10 @@ export default {
     tongbu() {
       //同步部门到中间件
       api.depart().then(res => {
-        if (res.data.respCode == 0) {
-          (res.data.message = "成功"), (res.data.data = "同步到中间表成功");
-          res.data.ok = true;
-           this.$message({
-             message:'同步成功'
-           })
+        if (res.data.ok) {
+          this.$message({
+            message:'同步成功'
+          });
         }
       });
     },
