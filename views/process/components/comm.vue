@@ -203,20 +203,20 @@ export default {
   watch: {
     commandId(val) {
       this.flag = true;
-      this.flags = true; 
+      this.flags = true;
       this.$nextTick(() => {
         this.commInit();
         this.flag = false;
         this.flags = false;
       });
     },
-  
+
   },
   created() {
     this.commInit();
   },
   mounted() {
-    
+
   },
   methods: {
     commInit() {
@@ -357,7 +357,7 @@ export default {
       this.map1 = null;
     },
 
-    // 图片预览(发起人)  
+    // 图片预览(发起人)
     commPicture(item,index) {
       let array = [];
       array.push(item);
@@ -366,7 +366,7 @@ export default {
       this.objlist.splice(index,1)
       this.objlist.unshift(item)
     },
-     // 图片预览(接收人)  
+     // 图片预览(接收人)
     commPictures(item,index) {
       let array = [];
       array.push(item);
@@ -523,7 +523,7 @@ export default {
 }
 /deep/ .dialogBox {
   .el-dialog {
-    width: 60%;
+    width: 40%;
   }
   .el-dialog__header {
     text-align: center;

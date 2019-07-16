@@ -2,7 +2,7 @@
   <el-scrollbar wrap-class="scrollbar-wrapper">
     <el-menu unique-opened :show-timeout="200" :default-active="$route.path" :collapse="isCollapse" mode="vertical" background-color="#1465BF" text-color="#ffff" active-text-color="#1465BF">
       <div class="a1">
-        <img src="../../../../../static/logo.png" alt="" style=" cursor:pointer" @click="$router.push('/')">
+        <img src="../../../../../static/logo.png" alt="" style=" cursor:pointer;width: 50px; height: 50px; margin-left: 15px;" @click="$router.push('/')">
       </div>
       <sidebar-item v-for="route in this.routes" :key="route.path" :item="route" :base-path="route.path" />
     </el-menu>
