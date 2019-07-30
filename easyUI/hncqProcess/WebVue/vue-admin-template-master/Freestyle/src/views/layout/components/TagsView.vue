@@ -8,11 +8,11 @@
       class="tags-view-wrapper"
     >
       <span class="fhBox"
-           @click="$router.push('/')"
-           v-if="flag">
-<!--        <i class="el-icon-d-arrow-left"></i>-->
+            @click="$router.push('/')"
+            v-if="flag">
+<!--        <i class="el-icon-s-home"></i>-->
         首页
-<!--        <span class="el-icon-close"/>-->
+        <!--        <span class="el-icon-close"/>-->
 
       </span>
       <router-link
@@ -250,8 +250,8 @@
     line-height: 4vh;
     /*border-bottom: 1px solid #d8dce5;*/
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0);
-    background-color: #1465bf;
-    color: #fff;
+    /*background-color: #1465bf;*/
+    color: #495060;
     padding: 0 8px;
     font-size: 0.5vw;
     margin-left: 15px;

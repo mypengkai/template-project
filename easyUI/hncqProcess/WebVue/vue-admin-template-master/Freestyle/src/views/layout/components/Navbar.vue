@@ -265,12 +265,12 @@
 
     .headline {
       position: absolute;
-      left: 20%;
+      left: 17%;
       top: 50%;
       transform: translate(-50%, -50%);
       font-weight: bolder;
       font-size: 1.5vw;
-      color: #676A6C;
+      color: #000;
       letter-spacing: 10px;
     }
 
