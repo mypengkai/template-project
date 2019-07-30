@@ -1,129 +1,65 @@
 <template>
   <div class="p20">
-    <!-- 选项栏 -->
     <div class="topBar">
       <span>组织机构:</span>
-      <select-tree
-        clearable
-        :options="orgTree"
-        :props="defaultProps"
-        v-on:noDe="handleCheckChange"
-        v-model="value"
-      />
+      <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>
       <span>分部分项:</span>
-      <select-tree
-        :options="projectList"
-        :props="projectTree"
-        v-on:noDe="projectChange"
-        v-model="value1"
-      />
+      <select-tree :options="projectItemTree" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>
       <div class="rl">
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          class="pan-btn light-blue-btn"
-          @click="_searchList"
-        >查询</el-button>
-        <el-button
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-refresh"
-          @click="reset()"
-        >重置</el-button>
-        <el-button
-          type="primary"
-          icon="el-icon-circle-plus-outline"
-          class="pan-btn light-blue-btn"
-          @click="action('add')"
-        >新增</el-button>
+        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>
       </div>
     </div>
 
     <div class="topBar">
       <span>创建日期:</span>
-      <el-date-picker
-        v-model="sendData.starttime"
-        type="datetime"
-        placeholder="选择日期时间"
-        size="small"
-        style="min-width:200px"
-      ></el-date-picker>-
-      <!-- <span>至</span>    -->
-      <el-date-picker
-        v-model="sendData.endtime"
-        type="datetime"
-        placeholder="选择日期时间"
-        size="small"
-        style="min-width:200px"
-      ></el-date-picker>
-      <!-- <el-date-picker class="mybox" v-model="timeRange" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="changeDataRange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-      </el-date-picker>-->
+      <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small"
+                      style="min-width:200px" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
+      <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small"
+                      style="min-width:200px" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table class="textList" :data="getList" style="width: 100%" height="68vh">
+      <el-table class="textList" :data="sendCommandList" style="width: 100%" height="68vh">
         <el-table-column prop="initiator" label="发起人" width="100"></el-table-column>
         <el-table-column prop="project" label="分部分项" ></el-table-column>
-        <el-table-column prop="commandUserNow" label="完成人"  align="center" width="100px"></el-table-column>
-        <!-- <el-table-column prop="createTime" label="发起时间">
-        </el-table-column>-->
-
+        <el-table-column prop="commandUserNow" label="处理人"  align="center" width="100px"></el-table-column>
         <el-table-column prop="planTime" label="创建时间"  align="center" width="110px"></el-table-column>
-
-        <el-table-column prop="commandType1" label="指令类型"  align="center" width="100px"></el-table-column>
-
-        <el-table-column prop="issolve1" label="能否处理"  align="center" width="100px"></el-table-column>
-
-        <el-table-column prop="status1" label="状态"  align="center" width="100px"></el-table-column>
-
+        <el-table-column label="状态" align="center">
+          <template slot-scope="scope">
+            <template v-if="scope.row.issolve==='1'">
+              <template v-if="scope.row.status==='0'">已下达,待他人处理</template>
+            </template>
+            <template v-else-if="scope.row.issolve==='0'">
+              <template v-if="scope.row.status==='0'">已下达,待自己处理</template>
+            </template>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="100px" align="center">
           <template slot-scope="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              circle
-              @click="actionItem(scope.row.id)"
-            ></el-button>
+            <el-button type="primary" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 分页条 -->
-    <el-pagination
-      class="pageList mt1"
-      background
-      :current-page.sync="sendData.pageNo"
-      :page-sizes="[5,10,15,30]"
-      :page-size="1"
-      layout="total, sizes, prev, pager, next, jumper"
-      @current-change="_searchList()"
-      :total="total"
-      @size-change="handleSizeChange"
-    ></el-pagination>
+    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[5,10,15,30]" :page-size="sendData.pageSize"
+      layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total" @size-change="handleSizeChange"></el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog
-      width="70%"
-      class="dialogBox"
-      :title="nowItem=='add'?'新增':'查看'"
-      :visible.sync="dialogFormVisible"
-    >
-      <checkBox
-        :nowItem="nowItem"
-        v-if="nowItem"
-        @cancel="dialogFormVisible=false"
-        @comfirm="_searchList"
-      ></checkBox>
+    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import checkBox from "./components/checkBox";
-import api from "@/api/instruct.js";
-import Organization from "@/api/Organization.js";
-import SelectTree from "@/components/SelectTree/selectTree.vue";
-import project from "@/api/project.js";
+import api from "@/api/instruct";
+import Organization from "@/api/Organization";
+import SelectTree from "@/components/SelectTree/selectTree";
+import project from "@/api/project";
 export default {
   inject: ["reload"],
   components: {
@@ -132,21 +68,17 @@ export default {
   },
   data() {
     return {
-      value: "",
-      value1: "",
-      getList: [], // 当前列表
-      // 组织机构树显示
-      defaultProps: {
+      sendCommandList: [], //  发送指令集合
+      userGroupDefaultProps: {   // 组织机构树显示
         children: "children",
         label: "name"
       },
-      // 工程分项树显示
-      projectTree: {
+      projectItemDefaultProps: {  // 工程分项树显示
         children: "children",
         label: "projectItem"
       },
-      orgTree: [], // 组织机构树
-      projectList: [], // 分部分项树
+      userGroupTree: [], // 组织机构树
+      projectItemTree: [], // 分部分项树
       total: 0,
       sendData: {
         departId: "", //部门id
@@ -154,8 +86,7 @@ export default {
         starttime: "", // 开始时间
         endtime: "", // 结束时间
         pageNo: 1, // 当前页
-        orgId: "",
-        pageSize: 6, // 每页条数
+        pageSize: 15, // 每页条数
         Mark: 1 //  标记：1：发送、2：接收
       },
 
@@ -169,101 +100,48 @@ export default {
     };
   },
   created() {
-    this.instructList();
+    this._searchList();
+    this.initUserGrouptTree();
   },
   methods: {
-    action(val) {
-      this.nowItem = val;
+    initUserGrouptTree() {  // 组织机构树
+      Organization.organizateTree().then(res => {
+        this.userGroupTree = res.data.data;
+      });
+    },
+    async actionItem(id) {  // 查询单个请求
+      let { data } = await api.searchOne({ id });
+      this.nowItem = data.data;
       this.dialogFormVisible = true;
     },
+    _searchList() {  // 列表请求
+      api.getList(this.sendData).then(res => {
+        this.total = res.data.data.totalCount;
+        this.sendCommandList = res.data.data.data;
+      });
+    },
     handleSizeChange(val) {
-      alert(val)
       this.sendData.pageSize = val;
       this._searchList();
     },
-    // 查询单个请求
-    async actionItem(id) {
-      let { data } = await api.searchOne({ id });
-      this.nowItem = data;
-      this.dialogFormVisible = true;
-    },
-
-    _searchList() {
-      // 列表请求
-      api.getList(this.sendData).then(res => {
-        this.total = res.data.data.totalCount;
-        this.getList = res.data.data.data;
-        let getList = this.getList;
-        getList.forEach(v => {
-          v.status == 0 && (v.status1 = "未处理");
-          v.status == 1 && (v.status1 = "已处理");
-          v.issolve == 0 && (v.issolve1 = "是");
-          v.issolve == 1 && (v.issolve1 = "否");
-          v.commandType == 1 && (v.commandType1 = "安全指令");
-          v.commandType == 2 && (v.commandType1 = "口头指令");
-          v.commandType == 3 && (v.commandType1 = "纸质指令");
+    handleUserGroupChange(data) {  // 组织机构树点击事件
+      this.projectItemTree=[];  //清空数据
+      if (data.children.length === 0) {
+        this.sendData.departId = data.id
+        project.projectList({orgId: data.id}).then(res => {
+          this.projectItemTree = res.data.data
         });
-      });
+      } else {
+        this.$message({
+          message: '施工单位下才有工程分部分项'
+        })
+        return false
+      }
     },
-    instructList() {
-      // 组织机构树
-      Organization.organizateTree().then(res => {
-        this.orgTree = res.data.data;
-        this.sendData.departId = this.orgTree[0].id;
-        //默认请求
-        api.getList(this.sendData).then(res => {
-          this.total = res.data.data.totalCount;
-          this.getList = res.data.data.data;
-          let getList = this.getList;
-          getList.forEach(v => {
-            v.status == 0 && (v.status1 = "未处理");
-            v.status == 1 && (v.status1 = "已处理");
-            v.issolve == 0 && (v.issolve1 = "是");
-            v.issolve == 1 && (v.issolve1 = "否");
-            v.commandType == 1 && (v.commandType1 = "安全指令");
-            v.commandType == 2 && (v.commandType1 = "口头指令");
-            v.commandType == 3 && (v.commandType1 = "纸质指令");
-          });
-        });
-      });
-    },
-    // 组织机构下拉树
-    handleCheckChange(data) {
-      this.projectList = [];
-      this.sendData.orgId = data.id;
-      this.sendData.departId = data.id;
-      project.projectList(this.sendData).then(res => {
-        if (res.data.data == null) {
-          res.data.data = [];
-        }
-        this.projectList = res.data.data;
-      });
-    },
-    // 工程分部分项树
-    projectChange(data) {
+    projectItemOnClick(data) {   // 工程分部分项id
       this.sendData.projectItemId = data.id;
     },
-    // 组织机构选择后的数据
-    // handleCheckChange(data, checked, indeterminate) {
-    //   this.sendData.departId = data.id;
-    //   this.name = data.name;
-    //   this.innerVisible = false;
-    // },
-    // 分部分项选择后的数据
-    // projectChange(data, checked, indeterminate) {
-    //   this.sendData.projectItemId = data.id;
-    //   this.projectItem = data.projectItem;
-    //   this.projectVisible = false;
-    // },
-    // 给开始和结束时间赋值
-    changeDataRange(val) {
-      if (!val) {
-        return ([this.sendData.starttime, this.sendData.endtime] = []);
-      }
-      [this.sendData.starttime, this.sendData.endtime] = val;
-    },
-    // 重置按钮
-    reset() {
+    reset() {  // 重置按钮
       this.reload();
     }
   },

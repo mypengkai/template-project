@@ -155,15 +155,13 @@ export default {
         startTime: this.form.startTime,
         endTime: this.form.endTime
       }
-      return request
-        .post('/rest/processInfoLog/everyDayLogPageList', objFrom)
-        .then(res => {
-          if (res.status == 200) {
-            var data = res.data.data.data
-            this.total = res.data.data.totalCount
-            this.tableData = data
-          }
-        })
+      return request.post('/rest/processInfoLog/everyDayLogPageList', objFrom).then(res => {
+        if (res.status == 200) {
+          var data = res.data.data.data
+          this.total = res.data.data.totalCount
+          this.tableData = data
+        }
+      })
     },
     handleEdit(data) {
       this.formList.pictures.length = 0

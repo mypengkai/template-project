@@ -1,9 +1,21 @@
 <template>
   <div class="viewer">
+    <!--<el-row>
+      <el-col :span="24">
+        <ul class="viewLeft" v-for="(item,index) in imgList" :key="index">
+            <li>图片名称：{{item.filename}}</li>
+            <li>图片格式：{{item.fileType}}</li>
+            <li>图片大小：{{item.fileSize}}</li>
+            <li>经度：{{item.lgt}}</li>
+            <li>纬度：{{item.lat}}</li>
+            <li>拍照位置：{{item.photoLocation}}</li>
+        </ul>
+      </el-col>
+    </el-row>-->
     <el-row>
-      <el-col :span="8">
-        <div class="viewLeft" v-for="(item,index) in photo" :key="index">
-          <ul>
+      <el-col :span="24">
+        <div class="viewLeft">
+          <ul v-for="(item,index) in imgList" :key="index">
             <li>图片名称：{{item.fileName}}</li>
             <li>图片格式：{{item.fileType}}</li>
             <li>图片大小：{{item.fileSize}}</li>
@@ -12,17 +24,9 @@
             <li>拍照位置：{{item.photoLocation}}</li>
           </ul>
         </div>
-      </el-col>
-      <el-col :span="16">
         <div class="viewRight">
           <viewer :images="imgList" class="picBox">
-            <img
-              v-for="(item,index) in imgList"
-              :key="index"
-              :src="item.filePath"
-              alt
-              style="width:100%;height:100%"
-            >
+            <img v-for="(item,index) in imgList" :src="item.filePath" :key="index" style="width:100%;height:100%"/>
           </viewer>
         </div>
       </el-col>
@@ -39,7 +43,7 @@ Viewer.setDefaults({
     inline: true,
     button: true,
     navbar: true,
-    title: false,
+    title: true,
     toolbar: true,
     tooltip: true,
     movable: true,
@@ -52,7 +56,7 @@ Viewer.setDefaults({
     url: "data-source"
 });
 export default {
-  props: ["photo",'imgList'],
+  props: ['imgList'],
   data() {
     return {};
   },
@@ -70,20 +74,22 @@ export default {
 <style lang="scss" scoped>
 .viewer {
   .viewLeft {
+    width: 30%;
+    float: left;
+    height: 550px;
     ul {
       padding: 0;
       margin: 0;
       li {
         list-style-type: none;
-        height: 10vh;
         line-height: 3vh;
         color: black;
-        font-size: 1vw;
       }
     }
   }
   .viewRight {
-    width: 100%;
+    width: 70%;
+    float: right;
     height: 550px;
     .picBox{
         display: none

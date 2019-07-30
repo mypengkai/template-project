@@ -2,12 +2,7 @@
   <div class="app-container">
     <div class="inquire" style>
       <div class="rl" style="margin-bottom:10px">
-        <el-button
-          type="primary"
-          icon="el-icon-circle-plus-outline"
-          class="pan-btn light-blue-btn"
-          @click="addtan()"
-        >新增</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addtan()">新增</el-button>
       </div>
     </div>
     <tree-table :data="shuData" class="textList" border style row-key="id">
@@ -39,7 +34,6 @@
           <el-tooltip class="item" effect="dark" content="编辑" placement="top">
             <el-button v-ltx="'dicUpdate'" type="primary" icon="el-icon-edit" circle @click="bianTan(scope.row)"/>
           </el-tooltip>
-
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
             <el-button v-ltx="'dicDelete'" type="danger" icon="el-icon-delete" circle @click="dlelTan(scope.row)"/>
           </el-tooltip>
@@ -64,26 +58,12 @@
         </el-form-item>
         <div style="width:83%">
           <el-form-item label="上级组织机构:" label-width="120px">
-            <!-- <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
-            <!-- <select-tree :options="shuData"  v-on:noDe="handleNodeClick" :props="defaultProps" /> -->
             <el-input v-model="checkvalue" @focus="zuzhi"/>
-            <el-popover
-              ref="popover4"
-              v-model="flag"
-              placement="bottom-start"
-              width="400"
-              trigger="click"
-            >
-              <el-tree
-                :data="shuData"
-                :props="defaultProps"
-                highlight-current
-                @node-click="handleNodeClick"
-              />
+            <el-popover ref="popover4" v-model="flag" placement="bottom-start" width="400" trigger="click">
+              <el-tree :data="shuData" :props="defaultProps" highlight-current @node-click="handleNodeClick"/>
             </el-popover>
           </el-form-item>
           <el-form-item label="描述:" label-width="120px">
-            <!-- <textarea  v-model="formSet.miaoCode"></textarea> -->
             <el-input v-model="formSet.miaoCode" type="textarea"/>
           </el-form-item>
         </div>
@@ -112,20 +92,9 @@
         </el-form-item>
         <div style="width:83%">
           <el-form-item label="上级组织机构:" label-width="120px">
-            <!-- <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
-            <!-- <select-tree :options="shuData"  v-on:noDe="handleNodeClick" :props="defaultProps" /> -->
             <el-input v-model="checkvalue1" :disabled="true" @focus="zuzhi"/>
-            <!-- <el-popover
-                  ref="popover4"
-                  v-model="flag1"
-                  placement="bottom-start"
-                  width="400"
-                  trigger="click">
-                  <el-tree :data="shuData" highlight-current :props="defaultProps" @node-click="dlestleNodeClick"></el-tree>
-            </el-popover>-->
           </el-form-item>
           <el-form-item label="描述:" label-width="120px">
-            <!-- <textarea  v-model="formSet.miaoCode"></textarea> -->
             <el-input v-model="formSet.miaoCode" type="textarea"/>
           </el-form-item>
         </div>
@@ -167,24 +136,19 @@ export default {
       parentdepartid: '',
       departid: '',
       shumo: [],
-      options: [
-        {
-          value: '1',
-          label: '项目'
-        },
-        {
-          value: '2',
-          label: '业主'
-        },
-        {
-          value: '3',
-          label: '监理'
-        },
-        {
-          value: '4',
-          label: '标段'
-        }
-      ],
+      options: [{
+        value: '1',
+        label: '项目'
+      }, {
+        value: '2',
+        label: '业主'
+      }, {
+        value: '3',
+        label: '监理'
+      }, {
+        value: '4',
+        label: '标段'
+      }],
       value: '',
       leiXing: ''
     }
@@ -197,41 +161,29 @@ export default {
     bblur(data) {
       this.leiXing = data
     },
-    // 查询接口
-    // chaxun(){
-    //   if(this.input==''){
-    //     this.fn();
-    //     return false
-    //   }
-    //   request.get('/rest/organizate/depart/'+this.input).then((res)=>{
-    //     this.shuData=[];
-    //     this.shuData=res.data.data
-    //   })
-    // },
     // 编辑弹框
     bianTan(data) {
-      console.log(data)
-
       this.biandialogFormVisible = true
       this.shumo.length = 0
-      this.value =
-        data.orgTpye == '1'
-          ? '项目'
-          : data.orgTpye == '2'
-            ? '业主'
-            : data.orgTpye == '3'
-              ? '监理'
-              : data.orgTpye == '4'
-                ? '标段'
-                : ''
+      switch (data.orgTpye) {
+        case '1':
+          this.value='项目';
+          break;
+        case '2':
+          this.value='业主';
+          break;
+        case '3':
+          this.value='监理';
+          break;
+        case '4':
+          this.value='标段';
+          break;
+      }
       this.formSet.roleCode = data.name
       this.formSet.miaoCode = data.description
       this.departid = data.id
       this.checkvalue1 = data.parent.name
       this.shumo.push(data.parentdepartid)
-      // setTimeout(() => {
-      //     this.$refs.vuetree.setCurrentKey(this.shumo.toString())
-      // }, 100);
     },
     // 编辑
     bianJia(data) {

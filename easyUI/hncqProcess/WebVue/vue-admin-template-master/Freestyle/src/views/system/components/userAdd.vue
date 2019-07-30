@@ -1,36 +1,38 @@
 <template>
   <div>
-    <el-form class="reverseBox" ref="userFrom" :model="user" label-width="120px" :rules="rules">
+    <el-form class="reverseBox" ref="userFrom" :model="user" label-width="130px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="名称：" prop="realName">
-          <el-input v-model="user.realName"></el-input>
+        <el-form-item label="名称:" prop="realname">
+          <el-input v-model="user.realname"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="用户帐号：" prop="userName">
-          <el-input v-model="user.userName"></el-input>
+        <el-form-item v-if="nowItem=='add'" label="用户帐号:" prop="username">
+          <el-input v-model="user.username"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem!='add'" label="用户帐号：" prop="userName">
-          <el-input v-model="user.userName" :disabled="true"></el-input>
+        <el-form-item v-if="nowItem!='add'" label="用户帐号:" prop="username">
+          <el-input v-model="user.username" :disabled="true"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="密码：" prop="password">
+        <el-form-item v-if="nowItem=='add'" label="密码:" prop="password">
           <el-input show-password v-model="user.password"></el-input>
         </el-form-item>
 
-        <el-form-item label="组织机构：">
+        <el-form-item label="组织机构:">
           <select-tree
             clearable
             :options="orgTree"
             :props="defaultProps"
+            node-key="id"
+            :default-expand-all="true"
             v-on:noDe="handleCheckChange"
+            v-model="userGroupName"
             ref="userInfo_userGroup"
-            v-model="value"
           />
         </el-form-item>
 
-        <el-form-item label="角色：" prop="userKey">
-          <el-select v-model="user.userKey" multiple placeholder="请选择角色" ref="selecetedRole">
+        <el-form-item label="角色:" prop="userkey">
+          <el-select v-model="user.userkey" multiple placeholder="请选择角色">
             <el-option
               v-for="item in roleList"
               :key="item.id"
@@ -40,36 +42,60 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="职位：">
-          <el-input v-model="user.zhiwei"></el-input>
+        <el-form-item label="用户类型:" prop="personType">
+          <el-select v-model="user.personType" placeholder="请选择用户类型">
+            <el-option
+              v-for="item in personTypeList"
+              :key="item.id"
+              :label="item.value"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
 
+        <el-form-item label="职位：" prop="zhiwei">
+          <el-select v-model="user.zhiwei" placeholder="请选择职位">
+            <el-option
+              v-for="item in positionList"
+              :key="item.id"
+              :label="item.job_name_cn"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="是否授权手机：" prop="peopleOnPhone">
+          <el-switch
+            v-model="user.peopleOnPhone"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-value="1"
+            inactive-value="0">
+          </el-switch>
+        </el-form-item>
+
+
         <el-form-item label="手机号码：" prop="mobilePhone">
-          <el-input
-            class="numInput"
-            type="number"
+          <el-input class="numInput" type="number"
             onkeypress="return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )"
-            v-model="user.mobilePhone"
-          ></el-input>
+            v-model="user.mobilePhone"></el-input>
         </el-form-item>
 
       </div>
     </el-form>
     <div class="tar">
       <el-button @click="$emit('cancel')">取 消</el-button>
-      <el-button type="primary" v-if="nowItem!=='add'" @click="_execute">修 改</el-button>
-      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('user')">保 存</el-button>
+      <el-button type="primary" @click="_comfirm">保 存</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { getToken } from "@/utils/auth";
-import user from "@/api/user.js";
-import api1 from "@/api/user.js";
-import api from "@/api/role.js";
-import Organization from "@/api/Organization.js";
-import SelectTree from "@/components/SelectTree/selectTree.vue";
+import user from "@/api/user";
+import position from '@/api/position'
+import api from "@/api/role";
+import Organization from "@/api/Organization";
+import SelectTree from "@/components/SelectTree/selectTree";
 export default {
   inject: ["reload"],
   props: ["nowItem",'conentList'],
@@ -82,7 +108,6 @@ export default {
         return callback(new Error("手机号不能为空"));
       } else {
         const reg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
-        console.log(reg.test(value));
         if (reg.test(value)) {
           callback();
         } else {
@@ -91,253 +116,121 @@ export default {
       }
     };
     return {
-      uploadUrl: process.env.BASE_API + "/rest/sysuser/add",
       orgTree: [],
+      userGroupName: '',   //用于组织机构回选
       defaultProps: {
         children: "children",
-        label: "name"
+        label: "name",
+        value: "id",
+        parent: "parentdepartid",
       },
       rules: {
-        realName: [{ required: true, message: "必填项", trigger: "blur" }],
-        userName: { required: true, message: "必填项", trigger: "blur" },
+        username: [{ required: true, message: "必填项", trigger: "blur" }],
+        realname: { required: true, message: "必填项", trigger: "blur" },
         password: [
           { required: true, message: "必填项", trigger: "blur" },
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
         ],
-        userKey: [{ required: true, message: "必填项", trigger: "blur" }],
+        userkey: [{ required: true, message: "必填项", trigger: "blur" }],
         mobilePhone: { required: true, validator: checkPhone, trigger: "blur" },
-        portrait: [{ required: true, message: "必填项", trigger: "blur" }]
+        departid: [{ required: true, message: "必填项", trigger: "blur" }]
       }, //表单校验规则
       user: {
         id: "",
         password: "",
-        userName: "",
-        realName: "",
-        userKey: "",
+        realname: "",
+        username: "",
+        userkey: [],
         zhiwei: "",
         departName: "",
         mobilePhone: "",
-        picture: "",
+        personType: '',  //用户类型
         departid: "",
-        type: []
+        peopleOnPhone: "0"  //默认不是一人一机
       },
-      flag: false,
-      headers: {
-        "X-AUTH-TOKEN": getToken()
-      },
-      id: "",
-      name: "",
-      value: "",
-      uploadFileParams: {},
-      files: null,
-      dialogFormVisible: true,
-      innerVisible: false,
-      imageUrl: "",
       roleList: [],
-      orgTree: [],
-      dialogVisible: false,
-      dialogImageUrl: ""
+      positionList: [],  //职位列表
+      personTypeList: [{
+        id: '1',
+        value: '业主'
+      },{
+        id: '2',
+        value: '监理'
+      },{
+        id: '3',
+        value: '施工单位'
+      }]
     };
   },
   created() {
     this._roleList();
     this._orgTree();
     this.initForm();
+    this.initPositionList();
   },
   mounted() {},
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.form.files = URL.createObjectURL(file.raw); // res
-    },
     initForm() {
-      if (this.nowItem == "add") return;
-      this.user = this.$tool.ObCopy(this.nowItem); //复制
-      let userInfo=this.user;
-      api1.sysuserCheck({id: this.nowItem.id}).then(res=>{
-        let formData = res.data.data[res.data.data.length - 1];
-        userInfo.mobilePhone = formData.mobilePhone;
-        this.$refs.userInfo_userGroup.placeholder=this.user.departName;
-        // this.$refs.userInfo_userGroup.$el.textContent = this.user.departName;
-        console.log(this.$refs.userInfo_userGroup,'this.$refs.userInfo_userGroup')
-        userInfo.departName = formData.orgNames[0]; // 组织机构
-        let userkeys=[];
-        if(formData.userkey!=null && formData.userkey!=""){
-          let temp=formData.userkey.substring(0, (formData.userkey.length-1))
-          for(let v of temp.split(",")){
-            userkeys.push(v);
+      if (this.nowItem == "add"){   //添加时不需要初始化
+        return;
+      }else {
+        this.user={};  //清空内容
+        user.sysuserCheck({id: this.nowItem.id}).then(res => {
+          this.user = res.data.data;
+          //赋值角色
+          let userkeys = [];
+          for (let key of res.data.data.userkey) {
+            userkeys.push(key.id);
           }
-        }
-        userInfo.userKey=userkeys;
-      })
-    },
-    fileChange(file) {
-      this.files = file.raw;
+          this.user.userkey = userkeys;
+          this.$refs.userInfo_userGroup.labelModel=res.data.data.departName;
+        })
+      }
     },
     // 新增用户
-    _comfirm(user) {
-       const reg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
-      if (this.user.realName == "") {
-        this.$message({
-          message: "请输入用户名称"
-        });
-        return false;
-      }
-
-      if (this.user.userName == "") {
-        this.$message({
-          message: "请输入用户账号"
-        });
-        return false;
-      }
-      if (this.user.password == "") {
-        this.$message({
-          message: "请输入密码"
-        });
-        return false;
-      }
-      if (this.user.departName == "") {
-        this.$message({
-          message: "请选择组织机构"
-        });
-        return false;
-      }
-      if (this.user.userKey == "") {
-        this.$message({
-          message: "请选择角色"
-        });
-        return false;
-      }
-      if (this.user.zhiwei == "") {
-        this.$message({
-          message: "请输入职位"
-        });
-        return false;
-      }
-      if(this.user.mobilePhone == ''){
-           this.$message({
-          message: "请输入电话号码"
-        });
-        return false;
-      }
-       if(!reg.test(this.user.mobilePhone)){
-           this.$message({
-          message: "请输入正确的电话号码"
-        });
-        return false;
-      }
-      // console.log(this.$refs.selecetedRole.selected)
-      let array = this.$refs.selecetedRole.selected;
-      let id = '';
-      array.forEach(element => {
-        id  += element.currentValue + "," ;
-      });
-
-      api1
-        .sysuserAdd({
-          realName: this.user.realName,
-          departid: this.user.departid,
-          userName: this.user.userName,
-          password: this.user.password,
-          userKey: id,
-          zhiwei: this.user.zhiwei,
-          mobilePhone: this.user.mobilePhone
-        })
-        .then(res => {
-          console.log(res.data);
-          if (res.data.respCode == "") {
-            this.$message({
-              message: "添加用户成功"
-            });
-          }
-          this.$emit("cancel");
-          this.$emit("execute");
-        });
-    },
-    //查看
-    _execute() {
-      // 查看单个 修改
-      if (this.nowItem != "add") {
-        const reg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
-      if (this.user.realName == "") {
-        this.$message({
-          message: "请输入用户名称"
-        });
-        return false;
-      }
-      if (this.user.departName == "") {
-        this.$message({
-          message: "请选择组织机构"
-        });
-        return false;
-      }
-      if (this.user.userKey == "") {
-        this.$message({
-          message: "请选择角色"
-        });
-        return false;
-      }
-      if (this.user.zhiwei == "") {
-        this.$message({
-          message: "请输入职位"
-        });
-        return false;
-      }
-      if(this.user.mobilePhone == ''){
-           this.$message({
-          message: "请输入电话号码"
-        });
-        return false;
-      }
-       if(!reg.test(this.user.mobilePhone)){
-           this.$message({
-          message: "请输入正确的电话号码"
-        });
-        return false;
-      }
-        let array = this.$refs.selecetedRole.selected;
-        let id = '';
-        array.forEach(element => {
-          id += element.currentValue + "," ;
-        });
-        user
-          .sysuserAdd({
-            id: this.user.id,
-            realName: this.user.realName,
-            departid: this.user.departid,
-            userName: this.user.userName,
-            password: this.user.password,
-            userKey: id,
-            zhiwei: this.user.zhiwei,
-            mobilePhone: this.user.mobilePhone
-          })
-          .then(res => {
-            if (res.data.respCode == "0") {
-              this.$message({
-                message: "修改成功"
-              });
-            }
-            this.$emit("cancel");
-            this.$emit("execute");
+    _comfirm() {
+      this.$refs['userFrom'].validate((valid) => {
+        if(this.user.departid==="" || this.user.departid===undefined){
+          this.$message({
+            message: "所属组织机构未选择",
+            type: 'warning'
           });
-      }
-    },
-    // 传图片
-    handleRemove(file, fileList) {
-      // console.log(file, fileList);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    handleExceed: function(files, fileList) {
-      // console.log(files)
-      // console.log(fileList)
+          return;
+        }
+        if(valid){
+          let userkeys='';
+          for(let key of this.user.userkey){
+            userkeys+=key+',';
+          }
+          //处理一下
+          userkeys=userkeys.substring(0, userkeys.length-1);
+          user.sysuserAdd({
+            id: this.user.id,
+            userName: this.user.username,
+            realName: this.user.realname,
+            password: this.user.password,
+            departid: this.user.departid,
+            userKey: userkeys,
+            zhiwei: this.user.zhiwei,
+            email: '',
+            personType: this.user.personType,
+            mobilePhone: this.user.mobilePhone,
+            peopleOnPhone: this.user.peopleOnPhone
+          }).then(res=>{
+            this.$message({
+              message: "添加用户成功",
+              type: "success"
+            });
+            this.$emit("cancel");   //关闭弹框
+            this.$emit("comfirm");   //确认
+          })
+        }
+      });
     },
     // 角色请求列表
     _roleList() {
       api.roleList().then(res => {
         this.roleList = res.data.data;
-        // console.log(this.roleList)
       });
     },
     // 组织机构树
@@ -351,6 +244,11 @@ export default {
       this.user.departid = data.id;
       this.user.departName = data.name;
       this.innerVisible = false;
+    },
+    initPositionList(){
+      position.getList(null).then(res=>{
+        this.positionList=res.data.data;
+      })
     }
   }
 };
