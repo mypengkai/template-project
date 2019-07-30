@@ -2,23 +2,35 @@
   <div class="acceptzh">
     <div class="topBar">
       <el-row>
-        <el-col :span="6">
+        <el-col :span="5">
           <span>组织机构:</span>
           <select-tree :options="userGroupTreeOption" :props="userGroupDefaultProp" v-on:noDe="userGroupOnClick"/>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5">
           <span>分部分项:</span>
           <select-tree :options="projectItemTreeOption" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick"/>
         </el-col>
-        <el-col :span="6">
+       <!-- <el-col :span="6">
           <span>姓名:</span>
           <el-input v-model="queryData.userName" placeholder="请输入内容" size="small"></el-input>
-        </el-col>
-        <el-col :span="6">
+        </el-col>-->
+        <el-col :span="5">
           <span>验收类型:</span>
           <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
             <el-option
               v-for="item in checkTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+
+        <el-col :span="5">
+          <span>工序状态:</span>
+          <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
+            <el-option
+              v-for="item in checkStateOption"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -30,8 +42,8 @@
 
     <div class="topBar">
       <el-row>
-        <el-col :span="6">
-          <span>工序状态</span>
+        <!--<el-col :span="5">
+          <span>工序状态:</span>
           <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
             <el-option
               v-for="item in checkStateOption"
@@ -40,8 +52,8 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </el-col>
-        <el-col :span="14">
+        </el-col>-->
+        <el-col :span="20">
           <span>创建日期:</span>
           <el-date-picker
             v-model="queryData.starttime"
@@ -115,10 +127,11 @@
 </template>
 
 <script>
-import SelectTree from "@/components/SelectTree/selectTree.vue";
-import request from "@/utils/request";
-import processCheck from "@/views/process/components/processCheck";
-export default {
+    import SelectTree from "@/components/SelectTree/selectTree.vue";
+    import request from "@/utils/request";
+    import processCheck from "@/views/process/components/processCheck";
+
+    export default {
    inject: ["reload"],
   components: {
     SelectTree,

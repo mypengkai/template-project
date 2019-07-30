@@ -3,7 +3,7 @@
         <el-table class="textList" :data="chakanData" border>
             <el-row>
                 <el-col :span="5">
-                    <el-table-column property="projectCode" label="代码"></el-table-column>
+                    <el-table-column property="projectCode" label="编码"></el-table-column>
                 </el-col>
                 <el-col :span="5">
                     <el-table-column property="projectItem" label="工程名称"></el-table-column>
@@ -79,7 +79,7 @@
                 </div>
                 <!-- 计划盒子 -->
                 <div class="selfPlanBox">
-                  
+
                     <span style="width:50%" class="br1">
                         <p class="bt1">时间</p>
                         <p>{{ item.planCheckTime }}</p>
@@ -91,7 +91,7 @@
                 </div>
                 <!-- 实际盒子 -->
                 <div class="selfRealityBox">
-                  
+
                     <span style="width:50%" class="br1">
                         <p>{{ item.realityCheckTime }}</p>
                     </span>

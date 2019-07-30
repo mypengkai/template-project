@@ -2,23 +2,34 @@
   <div class="acceptzh">
     <div class="topBar">
       <el-row>
-        <el-col :span="6">
+        <el-col :span="5">
           <span>组织机构:</span>
           <select-tree :options="userGroupOptions" :props="userGroupDefaultProps" v-on:noDe="userGroupOnclick"/>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5">
           <span>分部分项:</span>
           <select-tree :options="projectItemOptions" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>
         </el-col>
-        <el-col :span="6">
+      <!--  <el-col :span="6">
           <span>姓名:</span>
           <el-input v-model="queryData.userName" placeholder="请输入内容" size="small"></el-input>
-        </el-col>
-        <el-col :span="6">
+        </el-col>-->
+        <el-col :span="5">
           <span>验收类型:</span>
           <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
             <el-option
               v-for="item in checkTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="5">
+          <span>工序状态:</span>
+          <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
+            <el-option
+              v-for="item in checkStateOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -30,18 +41,7 @@
 
     <div class="topBar">
       <el-row>
-        <el-col :span="6">
-          <span>工序状态</span>
-          <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
-            <el-option
-              v-for="item in checkStateOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="14">
+        <el-col :span="20">
           <span>创建日期:</span>
           <el-date-picker
             v-model="queryData.starttime"
@@ -70,10 +70,10 @@
     </div>
 
     <el-table class="textList" :data="tableData" border style="width: 100%;" height="68vh" v-if="tableData.length!=0">
-      <el-table-column prop="name1" label="分部分项" ></el-table-column>
-      <el-table-column prop="processName" label="工序名" align="center"  width="200"></el-table-column>
-      <el-table-column prop="planCheckTime" label="创建时间"  width="150" align="center"></el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column prop="name1" align="center" label="分部分项" ></el-table-column>
+      <el-table-column prop="processName" label="工序名" align="center"  ></el-table-column>
+      <el-table-column prop="planCheckTime" label="创建时间"  width="200" align="center"></el-table-column>
+      <el-table-column label="状态" align="center"  width="200">
         <template slot-scope="scope">
           <template v-if="scope.row.adopt===null || scope.row.adopt==='' || scope.row.adopt===undefined">
             <template v-if="scope.row.state===0">已指定工序,待指定计划</template>
