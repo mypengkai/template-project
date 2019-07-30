@@ -25,11 +25,11 @@
         <el-table-column label="状态" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.issolve==='1'">
-              <template v-if="scope.row.status==='0'">已下达,待他人处理</template>
+              <template v-if="scope.row.status==='0'">待处理</template>
               <template v-if="scope.row.status==='1'">完成</template>
             </template>
             <template v-else-if="scope.row.issolve==='0'">
-              <template v-if="scope.row.status==='0'">已下达,待自己处理</template>
+              <template v-if="scope.row.status==='0'">待处理</template>
             </template>
           </template>
         </el-table-column>
