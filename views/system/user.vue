@@ -1,3 +1,6 @@
+<!--
+用户管理
+-->
 <template>
   <div class="p20">
     <!-- 查询 -->
@@ -7,8 +10,7 @@
       <span>用户名称:</span>
       <el-input v-model="sendData.SQLrealname" size="small" clearable placeholder="请输入名称"/>
       <span>选择部门:</span>
-      <select-tree :options="orgTree" :props="defaultProps" v-model="value" clearable @noDe="handleCheckChange"/>
-
+      <select-tree :options="orgTree" :props="defaultProps" clearable @noDe="handleCheckChange"/>
       <div class="rl">
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">查询</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
@@ -42,27 +44,14 @@
     <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible" class="dialogBox">
       <userAdd v-if="nowItem" :now-item="nowItem" :conent-list="conentList" @cancel="dialogFormVisible=false" @execute="_userList" @comfirm="_userList"/>
     </el-dialog>
-
-    <!-- 组织机构树形表单搜素 -->
-    <el-dialog :visible.sync="innerVisible" width="30%" title="所属机构" append-to-body>
-      <el-tree
-        :data="orgTree"
-        :highlight-current="true"
-        :render-after-expand="false"
-        :props="defaultProps"
-        node-key="id"
-        @node-click="handleCheckChange"
-      />
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
 import userAdd from './components/userAdd'
-import api from '@/api/user.js'
-import Organization from '@/api/Organization.js'
-import SelectTree from '@/components/SelectTree/selectTree.vue'
+import api from '@/api/user'
+import Organization from '@/api/Organization'
+import SelectTree from '@/components/SelectTree/selectTree'
 export default {
   inject: ['reload'],
   components: {
@@ -71,7 +60,6 @@ export default {
   },
   data() {
     return {
-      value: '',
       userList: [], // 用户列表数组
       orgTree: [], // 组织机构数组
       defaultProps: {
@@ -81,11 +69,7 @@ export default {
       },
       conentList: [], // 修改单个信息
       nowItem: '',
-      SQLorgid: '',
-      name: '',
       dialogFormVisible: false,
-      innerVisible: false,
-      innerVisiblexiugai: false,
       total: 0,
       sendData: {
         SQLusername: '', //	用户账号username
@@ -103,33 +87,26 @@ export default {
   },
   created() {
     this._userList()
-    this._orgTree()
+    this.userGroupTree()
   },
   methods: {
     action(val) {
       this.nowItem = val
       this.dialogFormVisible = true
     },
-
     // 查询单个请求
     async actionItem(row) {
       this.nowItem = row
       this.dialogFormVisible = true
     },
-
     _userList() {
       // 获取查询列表
       api.sysuserList(this.sendData).then(res => {
         this.total = res.data.data.totalCount
         this.userList = res.data.data.data
-        const userList = this.userList
-        userList.forEach(v => {
-          v.status == 0 && (v.status1 = '未激活')
-          v.status == 1 && (v.status1 = '激活')
-        })
       })
     },
-    handleSizeChange(val) {
+    handleSizeChange(val) {   //分页
       this.sendData.pageSize = val
       this._userList()
     },
@@ -140,21 +117,17 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this._sysuserDelete(data)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        api.sysuserDelete(data.id).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this._userList()
         })
       })
     },
-    // 删除请求
-    _sysuserDelete(data) {
-      api.sysuserDelete(data.id).then(res => {
-        this._userList()
-      })
-    },
     // 组织机构树
-    _orgTree() {
+    userGroupTree() {
       Organization.organizateTree().then(res => {
         this.orgTree = res.data.data
       })
@@ -162,8 +135,7 @@ export default {
     // 组织机构选择后的数据
     handleCheckChange(data) {
       this.sendData.SQLorgid = data.id
-      this.name = data.name
-      this.innerVisible = false
+      this.labelModel = data.name
     },
     // 重置按钮
     reset() {

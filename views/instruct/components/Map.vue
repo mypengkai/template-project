@@ -18,20 +18,9 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值
-      if (this.form.data.finishPictureOfCommand.length > 0) {
-       
-        let formData = this.form.data.finishPictureOfCommand[0];
-        if (formData.lat == null) {
-          formData.lat = 112.376609;
-        } return;
-        if (formData.lgt == null) {
-          formData.lat = 26.405528;
-        } return;
-        let locationData = this.form.data;
-        if (locationData.photoLocation == null) {
-          locationData.photoLocation = "湖南常祁";
-        } return;
-        
+      if (this.form.finishPictureOfCommand.length > 0) {
+        let formData = this.form.finishPictureOfCommand[0];
+
         var map = new BMap.Map("newallmap"); //创建地图实例
         var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
         map.centerAndZoom(point, 14); //初始化地图,设置中心点坐标和地图级别
@@ -52,7 +41,7 @@ export default {
         var opts = {
           width: 180, // 信息窗口宽度
           height: 50, // 信息窗口高度
-          title: locationData.photoLocation // 信息窗口标题
+          title: formData.photoLocation // 信息窗口标题
         };
         var infoWindow = new BMap.InfoWindow("", opts); // 创建信息窗口对象
         map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口

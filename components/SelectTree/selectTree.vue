@@ -9,7 +9,7 @@
     @hide="onHidePopover">
     <el-tree
       ref="tree"
-      highlight-current
+      :highlight-current="true"
       :style="`min-width: ${treeWidth}`"
       :data="data"
       :props="props"
@@ -73,7 +73,11 @@ export default {
     // 是否为树状结构数据
     dataType() {
       const jsonStr = JSON.stringify(this.options);
-      return jsonStr.indexOf(this.props.children) !== -1;
+      if(jsonStr===null){
+        return false;
+      }else{
+        return true;
+      }
     },
     // 若非树状结构，则转化为树状结构数据
     data() {
@@ -111,18 +115,18 @@ export default {
     // 获取输入框宽度同步至树状菜单宽度
     this.$nextTick(() => {
       this.treeWidth = `${(this.width || this.$refs.input.$refs.input.clientWidth) - 24}px`;
-      
+
     });
   },
   methods: {
     // 单击节点
-    onClickNode(node) {     
+    onClickNode(node) {
       this.$emit('noDe',node)
       this.labelModel = node[this.props.label];
       this.valueModel = node[this.props.value];
       this.onCloseTree();
     },
-   
+
 
     // 偏平数组转化为树状层级结构
     switchTree() {
@@ -166,11 +170,13 @@ export default {
     buildTree(data, id = '0') {
       const fa = (parentId) => {
         const temp = [];
-        for (let i = 0; i < data.length; i++) {
-          const n = data[i];
-          if (n[this.props.parent] === parentId) {
-            n.children = fa(n.rowGuid);
-            temp.push(n);
+        if(data!==null) {
+          for (let i = 0; i < data.length; i++) {
+            const n = data[i];
+            if (n[this.props.parent] === parentId) {
+              n.children = fa(n.rowGuid);
+              temp.push(n);
+            }
           }
         }
         return temp;
