@@ -126,7 +126,7 @@ export default {
             end: 280,
             handleIcon:
               "path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z",
-            handleSize: "110%",
+            handleSize: "100%",
             handleStyle: {
               color: "#d3dee5"
             },
@@ -148,7 +148,7 @@ export default {
             name: "次数",
             type: "bar",
             stack: "总量",
-             barWidth:60,
+             barWidth:20,
             itemStyle: {
               normal: {
                 color: "rgba(0,191,183,1)",
@@ -174,7 +174,7 @@ export default {
 
 <style lang="scss" scoped>
 #broken {
-  width: 100%;
+  width: 50%;
   height: 100%;
 }
 </style>
