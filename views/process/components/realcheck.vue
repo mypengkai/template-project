@@ -3,7 +3,7 @@
     <el-table class="textList" :data="selfList" border>
       <el-row>
         <el-col :span="6">
-          <el-table-column property="projectCode" label="代码"></el-table-column>
+          <el-table-column property="projectCode" label="编码"></el-table-column>
         </el-col>
         <el-col :span="6">
           <el-table-column property="projectItem" label="工程名称"></el-table-column>
@@ -188,7 +188,7 @@ export default {
           : (i.state2 = "验收完成");
       });
     },
-    
+
   },
   created() {},
   methods: {
@@ -294,7 +294,7 @@ export default {
         &:first-child {
           line-height: 8vh;
           background-color: rgba(190, 195, 195, 0.5) !important;
-          
+
         }
         &:nth-child(2),
         &:nth-child(3) {
@@ -338,7 +338,7 @@ export default {
       padding: transparent !important;
     }
   }
- 
+
   ul {
     padding: 0;
     margin: 0;

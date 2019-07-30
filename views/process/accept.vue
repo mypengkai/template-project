@@ -26,13 +26,13 @@
         <div style="left: 21vw;top:.7vw">
           <span>工程类型: {{ treeFrom.projectType }}</span>
         </div>
+      <!--  <div style="right: 1vw;top:.7vw">
+          <span>编码: {{ treeFrom.projectCode }}</span>
+        </div>-->
         <div style="right: 1vw;top:.7vw">
-          <span>代码: {{ treeFrom.projectCode }}</span>
-        </div>
-        <div style="left: 2vw;bottom: 0">
           <span>桩号: {{ treeFrom.zhuanghao }}</span>
         </div>
-        <div style="right: 1vw;bottom: 1vh">
+        <div style="right: 0vw;bottom: 1vh">
           <el-button v-if="projectItemId!==''" type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addProcess()">添加工序</el-button>
           <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="backupProcess()">补录工序</el-button>
         </div>
@@ -41,11 +41,11 @@
       <div v-if="projectItemId !==''" class="Cztab">
         <el-table :data="tableData" border height="57vh" class="textList">
           <!-- height="65vh" -->
-          <el-table-column prop="processName" label="工序过程"/>
-          <el-table-column prop="planSelfCheckTime" label="自检时间"/>
-          <el-table-column prop="planCheckTime" label="验收时间"/>
+          <el-table-column prop="processName" label="工序过程" align="center"/>
+          <el-table-column prop="planSelfCheckTime" label="自检时间" align="center"/>
+          <el-table-column prop="planCheckTime" label="验收时间" align="center"/>
           <el-table-column label="状态" align="center">
-            <template slot-scope="scope">
+            <template slot-scope="scope" >
               <template v-if="scope.row.adopt===null || scope.row.adopt==='' || scope.row.adopt===undefined">
                 <template v-if="scope.row.state2===0">已指定工序,待指定计划</template>
                 <template v-else-if="scope.row.state2===1">已指定计划,待自检</template>
@@ -58,7 +58,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column fixed="right" label="操作" width="150">
+            <el-table-column fixed="right" label="操作" width="150" align="center">
             <template slot-scope="scope">
               <!-- 指定验收 -->
               <el-tooltip v-if="scope.row.state2===0" class="item" effect="dark" content="指定验收计划" placement="top">
@@ -100,7 +100,7 @@
           <el-input-number v-model="seq" controls-position="right" :min="1" :max="100"></el-input-number>
         </el-form-item>
         <el-form-item label="工序验收次数" prop="checkNum">
-          <el-input-number v-model="checkNum" controls-position="right" :min="1" :max="100"></el-input-number>
+          <el-input-number v-model="checkNum"  controls-position="right" :min="1" :max="100"></el-input-number>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input :rows="4" v-model="form.remark" type="textarea" placeholder="请输入内容"/>
@@ -219,7 +219,7 @@ export default {
       treeFrom: {
         projectItem: '',  // 工程名称
         zhuanghao: '',  // 桩号
-        projectCode: '',  // 代码
+        projectCode: '',  // 编码
         projectType: '',  // 工程类型
         state1: ''  // 上面状态值
       },
@@ -243,9 +243,7 @@ export default {
       // 新增校验
       acceptRule: {
         processMDictId: [{ required: true, message: '请选择工序类型', trigger: 'change' }],
-        processSDictId: [{ required: true, message: '请选择工序', trigger: 'change' }],
-        seq: [{ required: true, message: '请输入工序序号', trigger: 'blur', validator: validateSeq }],
-        checkNum: [{ required: true, message: '请输入工序次数', trigger: 'blur' }]
+        processSDictId: [{ required: true, message: '请选择工序', trigger: 'change' }]
       },
       // 指定验收校验
       apponitCheckFromRules: {
