@@ -60,5 +60,6 @@ export default {
   position: absolute;
   left: 0.5vw;
   top: -2vw;
+  font-family: 雅黑;
 }
 </style>
