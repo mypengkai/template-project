@@ -5,23 +5,23 @@
   <div class="p20">
     <!-- 查询 -->
     <div class="topBar">
-      <span>用户账号:</span>
+      <span>用户名:</span>
       <el-input v-model="queryParam.name" size="small" clearable placeholder="请输入账号"/>
       <div class="rl">
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="bindPhoneList()">查询</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
-    <el-table :data="userBindMobileList" class="textList" style="width: 100%" height="72vh">
-      <el-table-column prop="username" label="用户账号" />
-      <el-table-column prop="realname" label="名称" align="center"/>
-      <el-table-column prop="imei" label="设备身份码" align="center"/>
-      <el-table-column prop="clientId" label="个推id" align="center"/>
-      <el-table-column prop="vendor" label="厂商" align="center"/>
-      <el-table-column prop="model" label="型号" align="center"/>
-      <el-table-column prop="phoneType" label="操作系统" align="center"/>
-      <el-table-column prop="createDate" label="创建时间" align="center"/>
-      <el-table-column fixed="right" label="操作">
+    <el-table border :data="userBindMobileList" class="textList" style="width: 100%" height="72vh">
+      <el-table-column prop="realname" label="姓名" align="center" width="150"/>
+      <el-table-column prop="username" label="用户名" align="center" width="150" />
+      <el-table-column prop="imei" label="设备身份码" align="center" />
+      <el-table-column prop="clientId" label="个推id" align="center"  />
+      <el-table-column prop="vendor" label="厂商" align="center" width="100"/>
+      <el-table-column prop="model" label="型号" align="center" width="100"/>
+      <el-table-column prop="phoneType" label="操作系统" align="center" width="100"/>
+      <el-table-column prop="createDate" label="创建时间" align="center" width="200"/>
+      <el-table-column fixed="right" label="操作" align="center"  width="150">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle @click="registerImei(scope.row)"/>
         </template>

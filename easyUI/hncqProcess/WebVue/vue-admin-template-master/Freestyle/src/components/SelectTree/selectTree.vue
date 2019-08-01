@@ -205,7 +205,7 @@ export default {
 <style lang="scss">
 
   .scrollbar {
-    overflow-y: scroll;
+    overflow-y: auto;
     &::-webkit-scrollbar {
       z-index: 11;
       width: 6px;

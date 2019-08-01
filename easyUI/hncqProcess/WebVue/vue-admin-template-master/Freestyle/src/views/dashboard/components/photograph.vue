@@ -46,12 +46,13 @@ export default {
   position: relative;
   img {
     width: 20vw;
-    height: 10vw;
+    max-width: 300px;
+    height: 100%;
   }
   .templateBox{
       width: 100%;
       height: 100%;
-      overflow-y: scroll;
+      overflow-y: auto;
   }
 }
 .trackTitle {

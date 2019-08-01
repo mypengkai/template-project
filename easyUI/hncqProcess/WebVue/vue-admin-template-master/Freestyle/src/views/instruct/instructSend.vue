@@ -10,9 +10,6 @@
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
         <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>
       </div>
-    </div>
-
-    <div class="topBar">
       <span>创建日期:</span>
       <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small"
                       style="min-width:200px" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
@@ -21,7 +18,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table class="textList" :data="sendCommandList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="68vh">
         <el-table-column prop="initiator" label="发起人" width="100"></el-table-column>
         <el-table-column prop="project" label="分部分项" ></el-table-column>
         <el-table-column prop="commandUserNow" label="处理人"  align="center" width="100px"></el-table-column>

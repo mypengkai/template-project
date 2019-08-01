@@ -11,17 +11,10 @@
       </div>
     </div>
     <!-- 列表  -->
-    <el-table :data="positionList" style="width: 100%" height="67vh" class="textList">
+    <el-table border :data="positionList" style="width: 100%" height="67vh" class="textList">
       <el-table-column prop="job_id" label="编号"/>
       <el-table-column prop="job_name_cn" label="岗位中文名"/>
       <el-table-column prop="job_name_en" label="岗位英文名"/>
-      <el-table-column label="岗位类型" align="center">
-        <template slot-scope="scope">
-          <template v-if="scope.row.job_type==='1'">业主</template>
-          <template v-else-if="scope.row.job_type==='2'">监理</template>
-          <template v-else-if="scope.row.job_type==='3'">施工单位</template>
-        </template>
-      </el-table-column>
       <el-table-column prop="create_time" label="创建时间"/>
       <el-table-column prop="realname" label="创建人"/>
       <el-table-column fixed="right" label="操作">
@@ -41,16 +34,6 @@
         </el-form-item>
         <el-form-item label="岗位中文名:" prop="jobNameCn">
           <el-input v-model="positionFrom.jobNameCn" placeholder="请输入岗位中文名"/>
-        </el-form-item>
-        <el-form-item label="岗位类型:" prop="jobType">
-          <el-select v-model="positionFrom.jobType" placeholder="请选择岗位类型">
-            <el-option
-              v-for="item in personTypeList"
-              :key="item.id"
-              :label="item.value"
-              :value="item.id"
-            ></el-option>
-          </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="jobRemark">
           <el-input :rows="4" v-model="positionFrom.jobRemark" type="textarea" placeholder="请输入内容"/>
@@ -79,27 +62,15 @@ export default {
       total: 0, // 分页总条数
       dialogFormTitle: '', // 弹框的名称
       dialogFormVisible: false,
-      personTypeList: [{
-        id: '1',
-        value: '业主'
-      },{
-        id: '2',
-        value: '监理'
-      },{
-        id: '3',
-        value: '施工单位'
-      }],
       positionFrom: {
         id: '',
         jobNameCn: '',
         jobNameEn: '',
-        jobRemark: '',
-        jobType: ""  //  岗位类型
+        jobRemark: ''
       },
       rules: {
         jobNameCn: [{ required: true, message: '请输入岗位中文名', trigger: 'blur' }],
-        jobNameEn: [{ required: true, message: '请输入岗位英文名', trigger: 'blur' }],
-        jobType: [{ required: true, message: '请选择岗位类型', trigger: 'change' }]
+        jobNameEn: [{ required: true, message: '请输入岗位英文名', trigger: 'blur' }]
       }
     }
   },
@@ -122,13 +93,7 @@ export default {
       this.loadPostionList();
     },
     addPosition(data){  //新增岗位
-      this.positionFrom={
-        id: '',
-        jobNameCn: '',
-        jobNameEn: '',
-        jobRemark: '',
-        jobType: ""  //  岗位类型
-      };
+      this.positionFrom={};
       if(data==='add'){
         this.dialogFormTitle='新增';
       }else{

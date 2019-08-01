@@ -4,7 +4,7 @@
 <template>
   <div class="p20" ref="projectContent">
     <!-- 选择区域 -->
-    <el-row>
+    <el-row style="padding: 10px">
       <el-col :span="18">
         <div style="opacity: 0;">&nbsp;</div>
       </el-col>
@@ -494,7 +494,7 @@ export default {
 .Treebox {
   // height: 60vh;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   line-height: 30px;
   text-align: center;
 }

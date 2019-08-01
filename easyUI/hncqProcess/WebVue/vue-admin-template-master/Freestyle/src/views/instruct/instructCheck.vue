@@ -17,7 +17,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table class="textList" :data="getList" style="width: 100%" height="72vh">
+      <el-table border  class="textList" :data="getList" style="width: 100%" height="72vh">
         <el-table-column prop="initiator" label="发起人"  width="100"></el-table-column>
         <el-table-column prop="project" label="分部分项" ></el-table-column>
         <el-table-column prop="commandUserNow" label="完成人"  align="center"></el-table-column>

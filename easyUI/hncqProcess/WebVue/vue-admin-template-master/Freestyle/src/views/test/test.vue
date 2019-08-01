@@ -3,7 +3,7 @@
     <!-- <p v-if="fixedHead" class="header-box">{{fixedHead}}</p> -->
     <el-table :data="data" border fit height="calc(100% - 40px)" style="width: 100%" :row-style="showTr" tooltip-effect="dark" class="tree-table">
       <!-- <el-table-column type="selection" width="40">
-      </el-table-column> -->  
+      </el-table-column> -->
       <!-- :min-width="firstWidth(index)" -->
       <el-table-column v-for="(column, index) in columns" :key="column.dataIndex" :label="column.text"  :min-width="firstWidth(index)" show-overflow-tooltip :align="firstAlign(index)">
         <template slot-scope="scope">

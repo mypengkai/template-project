@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-image__preview" style="overflow-y: scroll; width: 100%; ">
+  <div class="demo-image__preview" style="overflow-y: auto; width: 100%; ">
     <table border="0" cellspacing="0" cellpadding="0" style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;">
       <tr>
         <th style="width: 20%;">编码</th>

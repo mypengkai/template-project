@@ -77,7 +77,7 @@
       </el-row>
     </div>
 
-    <el-table class="textList" :data="tableData" border style="width: 100%;" height="68vh">
+    <el-table border  class="textList" :data="tableData" style="width: 100%;" height="68vh">
       <el-table-column prop="name1" label="分部分项" ></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="150" align="center"></el-table-column>
       <el-table-column prop="processName" label="工序名" width="150" align="center"></el-table-column>

@@ -157,7 +157,7 @@
         <span>接收人组织机构:</span>
         <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleReceiveUserGroupCheckChange"/>
       </div>
-      <el-table :data="receiveUsersList" highlight-current-row style="width: 100%" height="50vh" @current-change="handleCurrentChange">
+      <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="50vh" @current-change="handleCurrentChange">
         <el-table-column prop="username" label="姓名"></el-table-column>
         <el-table-column prop="departname" label="职务"></el-table-column>
         <el-table-column prop="mobilePhone" label="电话"></el-table-column>
@@ -660,7 +660,7 @@ export default {
 }
 .reverseBox {
   // height: 62vh;
-  // overflow-y: scroll;
+  // overflow-y: auto;
   position: relative;
   /deep/.el-form-item__label {
     font-size: 14px;
@@ -731,7 +731,7 @@ export default {
 .reverseAddBox {
   width: 100%;
   // height: 65vh;
-  // overflow-y: scroll;
+  // overflow-y: auto;
   /deep/.el-form-item__label {
     font-size: 0.7vw;
   }

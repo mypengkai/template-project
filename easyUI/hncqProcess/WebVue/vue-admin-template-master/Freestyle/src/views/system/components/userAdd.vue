@@ -2,15 +2,15 @@
   <div>
     <el-form class="reverseBox" ref="userFrom" :model="user" label-width="130px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="名称:" prop="realname">
+        <el-form-item label="姓名:" prop="realname">
           <el-input v-model="user.realname"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="用户帐号:" prop="username">
+        <el-form-item v-if="nowItem=='add'" label="用户名:" prop="username">
           <el-input v-model="user.username"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem!='add'" label="用户帐号:" prop="username">
+        <el-form-item v-if="nowItem!='add'" label="用户名:" prop="username">
           <el-input v-model="user.username" :disabled="true"></el-input>
         </el-form-item>
 
@@ -257,7 +257,7 @@ export default {
 <style lang="scss" scoped>
 .reverseBox {
   height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   /deep/.el-form-item__label {
     font-size: 0.7vw;
   }

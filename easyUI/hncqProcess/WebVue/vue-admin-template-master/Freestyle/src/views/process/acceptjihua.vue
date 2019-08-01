@@ -69,7 +69,7 @@
       </el-row>
     </div>
 
-    <el-table class="textList" :data="tableData" border style="width: 100%;" height="68vh" v-if="tableData.length!=0">
+    <el-table border  class="textList" :data="tableData"  style="width: 100%;" height="68vh" v-if="tableData.length!=0">
       <el-table-column prop="name1" align="center" label="分部分项" ></el-table-column>
       <el-table-column prop="processName" label="工序名" align="center"  ></el-table-column>
       <el-table-column prop="planCheckTime" label="创建时间"  width="200" align="center"></el-table-column>

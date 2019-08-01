@@ -2,20 +2,20 @@
   <div class="acceptzh">
     <div class="topBar">
       <el-row>
-        <el-col :span="12">
+        <el-col :span="5">
           <span>组织机构:</span>
           <select-tree clearable :options="userGroupTreeOptions" :props="userGroupDefaultProps" v-on:noDe="userGroupOnClick" v-model="sendData.orgId"/>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="5">
           <span>分部分项:</span>
           <select-tree clearable :options="projectItemTreeOptions" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick" v-model="sendData.projectCode"/>
         </el-col>
-      </el-row>
+   <!--   </el-row>
     </div>
     <div class="topBar">
-      <el-row>
-        <el-col :span="20">
-          <span>创建日期:</span>
+      <el-row>-->
+        <el-col :span="8">
+          <span>巡视日期:</span>
           <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
                           value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
           <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
@@ -30,14 +30,14 @@
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table class="textList" :data="pollingPageList" style="width: 100%" height="68vh">
-      <el-table-column prop="realname" label="巡视人" width="100"></el-table-column>
+    <el-table class="textList" border :data="pollingPageList" style="width: 100%" height="68vh">
+      <el-table-column prop="realname" label="巡视人" align="center" width="100"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
       <el-table-column prop="describe" label="巡视说明"></el-table-column>
-      <el-table-column prop="photoLocation" label="拍照地点"></el-table-column>
-      <el-table-column prop="createTime" label="创建时间"></el-table-column>
-      <el-table-column fixed="right" label="照片" width="100">
+      <el-table-column prop="photoLocation" label="拍照地点" ></el-table-column>
+      <el-table-column prop="createTime" label="巡视时间" align="center" width="150"></el-table-column>
+      <el-table-column fixed="right" label="详情" align="center" width="100">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看详情" placement="top">
             <el-button type="primary" icon="el-icon-search" circle @click="action(scope.row)"></el-button>

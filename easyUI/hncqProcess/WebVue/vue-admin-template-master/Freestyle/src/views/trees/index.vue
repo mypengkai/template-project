@@ -35,6 +35,7 @@
     </div>
 
     <el-table
+
       :data="tableData"
       :row-style="{height: '0'}"
       class="textList"
@@ -42,7 +43,7 @@
       stripe
       highlight-current-row
       border>
-      <el-table-column label="图片" align="center" >
+      <el-table-column  label="图片" align="center" >
         <template slot-scope="scope">
         <img :src="scope.row.filePath"></template>
       </el-table-column>

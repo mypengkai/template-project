@@ -478,7 +478,7 @@ export default {
 }
 .reverseBox {
   height: 75vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .accomplish {
   display: block;

@@ -1,6 +1,6 @@
 <template>
   <div class="imgez">
-    <el-table class="textList" :data="selfList" border>
+    <el-table border  class="textList" :data="selfList" >
       <el-row>
         <el-col :span="6">
           <el-table-column property="projectCode" label="编码"></el-table-column>
@@ -205,7 +205,7 @@ export default {
 <style lang="scss" scoped>
 .imgez {
   height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   .zj,
   .ys {
     text-align: center;
@@ -232,7 +232,7 @@ export default {
 }
 .reverseBox {
   height: 68vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   /deep/.el-input__inner {
     padding: 0 0.5vw;
   }

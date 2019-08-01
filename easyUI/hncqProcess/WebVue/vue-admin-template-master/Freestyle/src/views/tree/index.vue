@@ -71,7 +71,7 @@ export default {
   position: absolute;
   left: 0;
   // overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 /* for Chrome */
