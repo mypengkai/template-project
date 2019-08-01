@@ -10,10 +10,6 @@
           <span>分部分项:</span>
           <select-tree :options="projectItemTreeOption" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick"/>
         </el-col>
-       <!-- <el-col :span="6">
-          <span>姓名:</span>
-          <el-input v-model="queryData.userName" placeholder="请输入内容" size="small"></el-input>
-        </el-col>-->
         <el-col :span="5">
           <span>验收类型:</span>
           <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
