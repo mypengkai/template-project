@@ -2,19 +2,19 @@
   <div class="acceptzh">
     <div class="topBar">
       <el-row>
-        <el-col :span="12">
+        <el-col :span="5">
           <span>组织机构:</span>
           <select-tree clearable :options="userGroupTreeOptions" :props="userGroupDefaultProps" v-on:noDe="userGroupOnClick" v-model="sendData.orgId"/>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="5">
           <span>分部分项:</span>
           <select-tree clearable :options="projectItemTreeOptions" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick" v-model="sendData.projectCode"/>
         </el-col>
-      </el-row>
+  <!--    </el-row>
     </div>
     <div class="topBar">
-      <el-row>
-        <el-col :span="20">
+      <el-row>-->
+        <el-col :span="8">
           <span>创建日期:</span>
           <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
                           value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
@@ -30,7 +30,7 @@
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table class="textList" :data="sideStationPollingPageList" style="width: 100%" height="68vh">
+    <el-table border borderclass="textList" :data="sideStationPollingPageList" style="width: 100%" height="68vh">
       <el-table-column prop="realname" label="巡视人" width="100"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>

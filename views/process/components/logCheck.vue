@@ -34,7 +34,7 @@
           <div id="logmap" v-show="!flag"></div>
            <div style="height:30vh" v-show="flag">
                     暂无地图
-              </div>    
+              </div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -42,8 +42,8 @@
     <el-dialog title="图片预览" :visible.sync="dialogTableVisible" fullscreen append-to-body>
           <viewer :photo="photo" :imgList="imgList"></viewer>
     </el-dialog>
-        
-          
+
+
 
   </div>
 </template>
@@ -145,9 +145,9 @@ export default {
       this.dialogTableVisible = true;
 
       this.imgList.splice(index,1)
-     
+
       this.imgList.unshift(item);
-      
+
     }
   }
 };
@@ -156,7 +156,7 @@ export default {
 <style lang="scss" scoped>
 .logCheck {
   height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .imgBox {
   width: 100%;
@@ -185,7 +185,7 @@ export default {
          display: block;
       }
     }
-  }  
+  }
   }
 }
 

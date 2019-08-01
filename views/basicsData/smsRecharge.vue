@@ -27,16 +27,16 @@
         <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" v-ltx="'addSmsRecharge'" @click="addSmsRecharge()">添加</el-button>
       </div>
     </div>
-    <el-table :data="rechargeList" style="width: 100%" height="67vh" class="textList">
-      <el-table-column prop="departname" label="组织机构"/>
-      <el-table-column prop="remainSmsNum" label="剩余短信"/>
-      <el-table-column prop="sendSmsSuccessNum" label="发送成功"/>
-      <el-table-column prop="sendAllNum" label="总发送"/>
-      <el-table-column prop="sendSmsFailNum" label="发送失败数量"/>
-      <el-table-column prop="warnMoney" label="提醒余额"/>
-      <el-table-column prop="isWarn" label="是否提醒"/>
-      <el-table-column prop="warnPhone" label="提醒手机号码"/>
-      <el-table-column fixed="right" label="操作">
+    <el-table border :data="rechargeList" style="width: 100%" height="67vh" class="textList">
+      <el-table-column align="center" prop="departname" label="组织机构"/>
+      <el-table-column align="center" prop="remainSmsNum" label="剩余短信"/>
+      <el-table-column align="center" prop="sendSmsSuccessNum" label="发送成功"/>
+      <el-table-column align="center" prop="sendAllNum" label="总发送"/>
+      <el-table-column align="center" prop="sendSmsFailNum" label="发送失败数量"/>
+      <el-table-column align="center" prop="warnMoney" label="提醒余额"/>
+      <el-table-column align="center" prop="isWarn" label="是否提醒"/>
+      <el-table-column align="center" prop="warnPhone" label="提醒手机号码"/>
+      <el-table-column align="center" fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle v-ltx="'editSmsRecharge'" @click="editSmsRecharge(scope.row)"/>
           <el-button type="danger" icon="el-icon-delete" circle v-ltx="'deleteSmsRecharge'" @click="deleteSmsRecharge(scope.row)"/>

@@ -11,7 +11,7 @@
       <el-table-column label="组织机构" align="center">
         <template slot-scope="scope"><span style="">{{scope.row.name}}</span></template>
       </el-table-column>
-      <el-table-column label="同步状态" align="center">
+      <el-table-column label="同步状态" align="center" width="200">
         <template slot-scope="scope">
           <template v-if="scope.row.syncId === 'null'">
             <i class="el-icon-close"></i>
@@ -21,7 +21,7 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="300" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-refresh" circle @click="departData(scope.row)"></el-button>
         </template>
@@ -83,6 +83,6 @@ export default {
 </script>
 <style lang="scss" scoped>
   .pan-btn{
-    font-size: .8vw;
+    font-size: 0.2vw;
   }
 </style>

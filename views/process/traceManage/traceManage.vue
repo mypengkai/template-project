@@ -2,7 +2,7 @@
   <div class="p20">
     <div class="search">
       <el-row>
-        <el-col :span="10" v-if="tabPosition == 'first'">
+        <el-col :span="5" v-if="tabPosition == 'first'">
           <div>
             <el-form :inline="true" class="grid-content" style="font-size:.8vw">
               <el-form-item label="组织机构：">
@@ -11,7 +11,7 @@
             </el-form>
           </div>
         </el-col>
-        <el-col :span="10" v-if="tabPosition == 'first'">
+        <el-col :span="5" v-if="tabPosition == 'first'">
           <div>
             <el-form :inline="true" class="grid-content">
               <el-form-item label="分部分项：">
@@ -44,6 +44,15 @@
           </div>
         </el-col>
         <!-- ===================================== -->
+        <el-col :span="8">
+          <el-row>
+            <div class="grid-content">
+              <span>日期：</span>
+              <el-date-picker v-model="dateFrom" type="date" size="small"/>-
+              <el-date-picker v-model="dateTo" type="date" size="small"/>
+            </div>
+          </el-row>
+        </el-col>
         <el-col :span="2">
           <div class="grid-content">
             <span>
@@ -89,13 +98,7 @@
           </el-radio-group>
         </div>
       </el-row>
-      <el-row>
-        <div class="grid-content">
-          <span>日期：</span>
-          <el-date-picker v-model="dateFrom" type="date" size="small"/>-
-          <el-date-picker v-model="dateTo" type="date" size="small"/>
-        </div>
-      </el-row>
+
     </div>
 
     <div class="content">
@@ -233,7 +236,7 @@ export default {
         })
         .then(res => {
           this.conentOptions = res.data.data.data;
-      
+
         });
     },
     peopleQuery() {

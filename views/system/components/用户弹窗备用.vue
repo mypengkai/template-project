@@ -6,7 +6,7 @@
           <el-input v-model="user.userName"></el-input>
         </el-form-item>
 
-        <el-form-item label="名称" prop="realName">
+        <el-form-item label="姓名" prop="realName">
           <el-input v-model="user.realName"></el-input>
         </el-form-item>
 
@@ -26,7 +26,7 @@
         <el-form-item label="手机号码" prop="mobile">
           <el-input type="number" v-model="user.mobile"></el-input>
         </el-form-item>
-      
+
         <el-form-item label="上传头像">
           <el-upload ref="upload" class="avatar-uploader" :action="uploadUrl" :auto-upload="false" :show-file-list="false"  :on-change="fileChange">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">

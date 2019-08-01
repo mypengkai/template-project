@@ -32,7 +32,6 @@ export default {
   text-align: center;
   vert-align: middle;
 
-  // background-color: #3a71a8;
   img {
     width: 100%;
     height: 100%;

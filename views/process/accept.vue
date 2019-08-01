@@ -39,7 +39,7 @@
       </div>
       <!-- 操作列表 -->
       <div v-if="projectItemId !==''" class="Cztab">
-        <el-table :data="tableData" border height="57vh" class="textList">
+        <el-table border  :data="tableData" height="57vh" class="textList">
           <!-- height="65vh" -->
           <el-table-column prop="processName" label="工序过程" align="center"/>
           <el-table-column prop="planSelfCheckTime" label="自检时间" align="center"/>
@@ -127,7 +127,7 @@
             <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
           </div>
         </div>
-        <el-table :data="checkPersonData" class="textList" height="40vh">
+        <el-table border  :data="checkPersonData" class="textList" height="40vh">
           <el-table-column fixed="left" label width="80">
             <template slot-scope="scope">
               <input type="radio" name="Fruit" @click="listenCheck(scope, $event)">

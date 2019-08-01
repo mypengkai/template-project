@@ -5,7 +5,7 @@
   <div class="p20">
     <!-- 查询 -->
     <div class="topBar">
-      <span>用户账号:</span>
+      <span>用户名:</span>
       <el-input v-model="sendData.SQLusername" size="small" clearable placeholder="请输入账号"/>
       <span>用户名称:</span>
       <el-input v-model="sendData.SQLrealname" size="small" clearable placeholder="请输入名称"/>
@@ -21,7 +21,7 @@
     <div>
       <el-table :data="userList" class="textList" style="width: 100%" height="72vh">
         <el-table-column prop="userName" label="用户账号" />
-        <el-table-column prop="realName" label="名称" align="center"/>
+        <el-table-column prop="realName" label="姓名" align="center"/>
         <el-table-column prop="departName" label="组织机构" align="center"/>
         <el-table-column prop="userKey" label="角色"/>
         <el-table-column prop="zhiwei" label="职位" align="center"/>

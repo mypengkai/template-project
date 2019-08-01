@@ -308,7 +308,7 @@ export default {
 .inner-container {
   position: absolute;
   left: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 /* for Chrome */
@@ -321,6 +321,6 @@ export default {
   right: 1vw;
 }
 .pan-btn{
-  font-size: .8vw;
+  font-size: 0.2vw;
 }
 </style>

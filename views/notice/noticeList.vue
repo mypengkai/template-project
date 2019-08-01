@@ -16,7 +16,7 @@
 
     <!-- 查询列表 -->
     <div>
-      <el-table class="textList" :data="getList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="68vh">
         <el-table-column prop="title" label="通知标题"></el-table-column>
         <el-table-column prop="launchName" label="发起人" width="150"></el-table-column>
         <!--        <el-table-column prop="commandUserNow" label="完成人" align="center" width="100px"></el-table-column>-->
