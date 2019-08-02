@@ -10,10 +10,6 @@
           <span>分部分项:</span>
           <select-tree clearable :options="projectItemTreeOptions" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick" v-model="sendData.projectCode"/>
         </el-col>
-   <!--   </el-row>
-    </div>
-    <div class="topBar">
-      <el-row>-->
         <el-col :span="8">
           <span>巡视日期:</span>
           <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
