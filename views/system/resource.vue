@@ -11,37 +11,30 @@
         </el-col>
       </el-row>
     </div>
-    <tree-table :data="menuList" class="textList" border row-key>
-      <el-table-column label="菜单标题" height="250" align="center">
-        <template slot-scope="scope">{{ scope.row.meta.title }}</template>
+    <el-table class="textList" :data="menuList" style="width: 100%" height="68vh" row-key="id" border
+              :default-expand-all="false" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      <el-table-column prop="meta.title" label="菜单标题" align="center"></el-table-column>
+      <el-table-column prop="name" label="菜单名称" align="center"></el-table-column>
+      <el-table-column prop="component" label="组件名称" align="center"></el-table-column>
+      <el-table-column prop="path" label="菜单地址" align="center"></el-table-column>
+      <el-table-column label="类型">
+        <template slot-scope="scope">{{ scope.row.type==='0' ? '按钮': '菜单' }}
+        </template>
       </el-table-column>
-      <el-table-column label="菜单名称" height="250" align="center">
-        <template slot-scope="scope">{{ scope.row.name }}</template>
-      </el-table-column>
-      <el-table-column label="分支名称" align="center">
-        <template slot-scope="scope">{{ scope.row.component }}</template>
-      </el-table-column>
-      <el-table-column label="菜单地址" align="center">
-        <template slot-scope="scope">{{ scope.row.path }}</template>
-      </el-table-column>
-      <el-table-column label="类型" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.type==='0' ? '按钮': '菜单' }}</template>
-      </el-table-column>
-      <el-table-column label="操作" width="180" align="center">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope" type="scope.row">
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
-            <el-button v-ltx="'resourceUpdate'" type="primary" icon="el-icon-edit" circle @click="action(scope.row)"/>
+            <el-button v-ltx="'resourceUpdate'" size="small" type="primary" icon="el-icon-edit" circle @click="action(scope.row)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="新增" placement="top">
-            <el-button v-ltx="'resourceAdd'" :disabled="scope.row.type==='button' ? true:false" type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"/>
+            <el-button v-ltx="'resourceAdd'" size="small" :disabled="scope.row.type==='button' ? true:false" type="primary" icon="el-icon-plus" circle @click="action(scope.row,true)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button v-ltx="'resourceDelete'" :disabled="scope.row.children.length>0?true:false" type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"/>
+            <el-button v-ltx="'resourceDelete'" size="small" :disabled="scope.row.children.length>0?true:false" type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"/>
           </el-tooltip>
         </template>
       </el-table-column>
-    </tree-table>
+    </el-table>
 
     <!-- 新增/修改弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" :before-close="closeResourceDialog" :append-to-body="true" :lock-scroll="false" class="dialogBox">
