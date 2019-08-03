@@ -110,12 +110,12 @@
         border
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="selection" width="50" align="center"></el-table-column>
         <el-table-column prop="projectName" label="分部分项"></el-table-column>
-        <el-table-column prop="processname" label="工序名称" width="200"></el-table-column>
-        <el-table-column prop="realitychecktime" label="验收时间" width="200"></el-table-column>
-        <el-table-column prop="realname" label="验收人" width="120"></el-table-column>
         <el-table-column prop="Station" label="桩号" width="120"></el-table-column>
+        <el-table-column prop="processname" label="工序名称" width="200" ></el-table-column>
+        <el-table-column prop="realitychecktime" label="验收时间" width="150" align="center"></el-table-column>
+        <el-table-column prop="realname" label="验收人" width="100"  align="center"></el-table-column>
         <el-table-column prop="checkdescribe" label="描述" width="120"></el-table-column>
       </el-table>
     </div>
@@ -199,7 +199,7 @@ export default {
   //     },
   //     deep: true
   //   },
-  // },  
+  // },
   created() {
     this.initProjectGroup();
   },
@@ -280,20 +280,5 @@ export default {
 <style lang="scss" scoped>
 .printer {
   padding: 20px;
-  //   .printerTable {
-  //     .printTop {
-  //       display: -webkit-flex; /* Safari */
-  //       display: flex;
-  //       flex-wrap: nowrap;
-  //       justify-content: space-between;
-  //       span {
-  //         font-size: 18px;
-  //         color: #fff;
-  //         padding: 5px 3px;
-  //         background: #1465bf;
-  //         border-radius: 6px;
-  //       }
-  //     }
-  //   }
 }
 </style>
