@@ -158,7 +158,7 @@ export default {
         station: "", // 桩号
         projectName: "", // 分部分项名称
         projectCode: "", // 分部分项Code
-        type: "", // 打印状态
+        type: 0, // 打印状态
         pageNo: 1, // 当前页
         pageSize: 15 // 每页条数
       },
