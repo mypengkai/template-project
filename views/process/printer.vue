@@ -93,7 +93,7 @@
                 class="pan-btn light-blue-btn"
                 icon="el-icon-loading"
                 @click="printClick"
-                v-if="tableData.length>0 && this.form.type !=1"
+                v-if="tableData.length>0 && form.type !=1"
               >打印验收凭证</el-button>
             </span>
           </div>
@@ -191,6 +191,15 @@ export default {
       dataList: [] // 选中打印
     };
   },
+  // 监听查询参数变化重新获取数据渲染页面
+  // watch: {
+  //   form: {
+  //     handler: function(newval, oldval) {
+  //          this.querySelected();
+  //     },
+  //     deep: true
+  //   },
+  // },  
   created() {
     this.initProjectGroup();
   },
