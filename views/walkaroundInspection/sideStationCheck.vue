@@ -21,25 +21,23 @@
           <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
                           value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="4">
           <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="query()">查询</el-button>
-        </el-col>
-        <el-col :span="2">
           <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
         </el-col>
       </el-row>
     </div>
     <!-- 查询列表 -->
     <el-table border borderclass="textList" :data="sideStationPollingPageList" style="width: 100%" height="68vh">
-      <el-table-column prop="realname" label="巡视人" width="100"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
-      <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
+      <el-table-column prop="zhuanghao" label="桩号"width="100" ></el-table-column>
       <el-table-column prop="describe" label="巡视说明"></el-table-column>
       <el-table-column prop="photoLocation" label="拍照地点"></el-table-column>
-      <el-table-column prop="createTime" label="创建时间"></el-table-column>
-      <el-table-column fixed="right" label="照片" width="100">
+      <el-table-column prop="createTime" align="center"  width="200" label="创建时间"></el-table-column>
+      <el-table-column prop="realname" align="center" label="巡视人" width="100"></el-table-column>
+      <el-table-column fixed="right" align="center" label="操作" width="200">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="查看详情" placement="top">
+          <el-tooltip class="item" effect="dark" content="查看" placement="top">
             <el-button type="primary" icon="el-icon-search" circle @click="action(scope.row)"></el-button>
           </el-tooltip>
         </template>

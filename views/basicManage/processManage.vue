@@ -56,8 +56,8 @@
           border
           @selection-change="selectChange(selection)"
         >
+          <el-table-column min-width="100px" prop="seq" label="序号" sortable width="100px"/>
           <el-table-column min-width="180px" prop="processType" fixed label="工序类型" align="center" />
-          <!-- <el-table-column min-width="120px" prop="seq" label="序号" sortable width="120px"/> -->
           <el-table-column prop="createName" min-width="120px" label="创建人" align="center" />
           <el-table-column prop="createTime" min-width="160px" label="创建时间" align="center" />
           <el-table-column min-width="150px" fixed="right" label="操作" align="center">

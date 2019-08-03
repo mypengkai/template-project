@@ -78,15 +78,13 @@
             format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
             icon="el-icon-search"
             @click="query()"
           >查询</el-button>
-        </el-col>
-        <el-col :span="2">
           <el-button
             type="primary"
             class="pan-btn light-blue-btn"
@@ -97,13 +95,18 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" style="width: 100%;" height="68vh">
-      <el-table-column prop="name1" label="分部分项"></el-table-column>
+    <el-table border   class="textList" :data="tableData"  height="68vh" fit="true">
+      <el-table-column prop="name1" label="分部分项" width="400"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="150" align="center"></el-table-column>
-      <el-table-column prop="processName" label="工序名" width="150" align="center"></el-table-column>
-      <el-table-column prop="planCheckTime" label="创建时间" width="120" align="center"></el-table-column>
-      <el-table-column prop="shijiyanshouren" label="验收人员" width="100" align="center"></el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column prop="processName" label="工序名称" width="200" align="center"></el-table-column>
+      <el-table-column prop="shijizijianren" label="自检人" width="70" align="center"></el-table-column>
+      <el-table-column prop="planSelfCheckTime" label="计划自检时间" width="110" align="center"></el-table-column>
+      <el-table-column prop="realitySelfCheckTime" label="实际自检时间" width="150" align="center"></el-table-column>
+      <el-table-column prop="shijiyanshouren" label="验收人" width="70" align="center"></el-table-column>
+      <el-table-column prop="planCheckTime" label="计划验收时间" width="110" align="center"></el-table-column>
+      <el-table-column prop="realityCheckTime" label="实际验收时间" width="150" align="center"></el-table-column>
+
+      <el-table-column label="状态" align="center" width="160">
         <template slot-scope="scope">
           <template
             v-if="scope.row.adopt===null || scope.row.adopt==='' || scope.row.adopt===undefined"
@@ -153,11 +156,11 @@
 </template>
 
 <script>
-import SelectTree from "@/components/SelectTree/selectTree.vue";
-import request from "@/utils/request";
-import processCheck from "@/views/process/components/processCheck";
+  import SelectTree from '@/components/SelectTree/selectTree.vue'
+  import request from '@/utils/request'
+  import processCheck from '@/views/process/components/processCheck'
 
-export default {
+  export default {
   inject: ["reload"],
   components: {
     SelectTree,

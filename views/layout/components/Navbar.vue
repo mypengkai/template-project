@@ -167,7 +167,7 @@
                                 if (res.status == 200) {
                                     this.$message({
                                         showClose: true,
-                                        message: "恭喜你，修改密码成功",
+                                        message: "恭喜你，密码修改成功",
                                         type: "success"
                                     });
                                     localStorage.setItem("pass", this.formPass.xinpassWoed);
@@ -244,7 +244,7 @@
                         console.log(res.data, "res.data");
                         if (res.data.respCode == '0') {
                             this.$message({
-                                message: '恭喜你,修改成功'
+                                message: '恭喜你，修改成功'
                             })
                         }
                         this.dialogFormVisible = false

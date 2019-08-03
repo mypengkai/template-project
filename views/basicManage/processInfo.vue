@@ -3,8 +3,8 @@
     <!--查询 新增-->
     <div class="search-add">
       <div class="search">
-        <span>工序名:</span>
-        <el-input v-model="searchText" size="small" placeholder="请输入工序名" />
+        <span>工序名称:</span>
+        <el-input v-model="searchText" size="small" placeholder="请输入工序名称" />
       </div>
       <div class="operator">
         <el-button type="primary" size="small" icon="el-icon-search" @click="initTable">
@@ -68,7 +68,7 @@
       class="dialogBox"
     >
       <el-form :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="工序名：" prop="process">
+        <el-form-item label="工序名称：" prop="process">
           <el-input v-model="form.process" />
         </el-form-item>
         <el-form-item label="备注：">
@@ -166,7 +166,7 @@ export default {
       if (this.form.process === '' || this.form.process === undefined) {
         this.$message({
           showClose: true,
-          message: '请输入工序名',
+          message: '请输入工序名称',
           type: 'warning'
         })
         return false

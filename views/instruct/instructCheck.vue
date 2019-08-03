@@ -18,11 +18,20 @@
     <!-- 查询列表 -->
     <div>
       <el-table border  class="textList" :data="getList" style="width: 100%" height="72vh">
-        <el-table-column prop="initiator" label="发起人"  width="100"></el-table-column>
-        <el-table-column prop="project" label="分部分项" ></el-table-column>
-        <el-table-column prop="commandUserNow" label="完成人"  align="center"></el-table-column>
-        <el-table-column prop="planTime" label="创建时间" ></el-table-column>
-        <el-table-column label="状态" align="center">
+        <el-table-column prop="project" label="分部分项"></el-table-column>
+        <el-table-column prop="Station" label="桩号" width="180" align="center"></el-table-column>
+        <el-table-column label="指令类型" width="110" align="center">
+          <template slot-scope="scope">
+            <template v-if="scope.row.commandType==='1'">安全</template>
+            <template v-else-if="scope.row.commandType==='2'">纸质</template>
+            <template v-else-if="scope.row.commandType==='3'">口头</template>
+          </template>
+        </el-table-column>
+        <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
+        <el-table-column prop="planTime" label="发起时间" width="110" align="center"></el-table-column>
+        <el-table-column prop="commandUserNow" label="处理人" width="100" align="center"></el-table-column>
+        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>
+        <el-table-column label="状态" width="100" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.issolve==='1'">
               <template v-if="scope.row.status==='0'">待处理</template>
@@ -33,7 +42,7 @@
             </template>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" align="center">
+        <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
           </template>

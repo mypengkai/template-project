@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export default {
-    // 新增
+  // 新增
   sysuserAdd(data) {
     return request.post('/rest/sysuser/add', data)
   },

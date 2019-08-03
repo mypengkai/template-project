@@ -23,13 +23,13 @@
         <div style="left: 2vw;top:.7vw">
           <span>工程名称: {{ treeFrom.projectItem }}</span>
         </div>
-        <div style="left: 21vw;top:.7vw">
+        <div style="left: 15vw;top:.7vw">
           <span>工程类型: {{ treeFrom.projectType }}</span>
         </div>
-      <!--  <div style="right: 1vw;top:.7vw">
+        <div style="right: 12vw;top:.7vw">
           <span>编码: {{ treeFrom.projectCode }}</span>
-        </div>-->
-        <div style="right: 1vw;top:.7vw">
+        </div>
+        <div style="right: 0.5vw;top:.7vw">
           <span>桩号: {{ treeFrom.zhuanghao }}</span>
         </div>
         <div style="right: 0vw;bottom: 1vh">
@@ -39,9 +39,11 @@
       </div>
       <!-- 操作列表 -->
       <div v-if="projectItemId !==''" class="Cztab">
-        <el-table border  :data="tableData" height="57vh" class="textList">
+        <el-table border  :data="tableData" height="68vh" class="textList">
           <!-- height="65vh" -->
-          <el-table-column prop="processName" label="工序过程" align="center"/>
+          <el-table-column prop="seq" label="序号" align="center" width="50"/>
+          <el-table-column prop="station" label="桩号" align="center"/>
+          <el-table-column prop="processName" label="工序名称" align="center"/>
           <el-table-column prop="planSelfCheckTime" label="自检时间" align="center"/>
           <el-table-column prop="planCheckTime" label="验收时间" align="center"/>
           <el-table-column label="状态" align="center">
@@ -575,7 +577,7 @@ export default {
     }
     .Cztab {
       margin-top: 10px;
-      height: 60vh;
+      height: 73vh;
 
       // border: 1px solid #ccc;
       // border-radius: 10px;

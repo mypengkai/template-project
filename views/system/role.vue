@@ -122,6 +122,7 @@ export default {
     },
     // 编辑弹框
     bianTan(data) {
+      debugger
       if (data != null && data != undefined && data != '') {
         this.formSet.roleName = data.rolename
         this.formSet.roleCode = data.rolecode

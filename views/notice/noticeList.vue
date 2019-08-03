@@ -18,17 +18,8 @@
     <div>
       <el-table border class="textList" :data="getList" style="width: 100%" height="68vh">
         <el-table-column prop="title" label="通知标题"></el-table-column>
-        <el-table-column prop="launchName" label="发起人" width="150"></el-table-column>
-        <!--        <el-table-column prop="commandUserNow" label="完成人" align="center" width="100px"></el-table-column>-->
-        <el-table-column prop="createTime" label="发起时间" width="200"></el-table-column>
-        <!--        <el-table-column prop="planTime" label="创建时间" align="center" width="110px"></el-table-column>
-
-                <el-table-column prop="commandType1" label="指令类型" align="center" width="100px"></el-table-column>
-
-                <el-table-column prop="issolve1" label="能否处理" align="center" width="100px"></el-table-column>-->
-
-        <!--        <el-table-column prop="status1" label="状态" align="center" width="100px"></el-table-column>-->
-
+        <el-table-column prop="launchName" label="发起人" align="center" width="150"></el-table-column>
+        <el-table-column prop="createTime" label="发起时间" align="center" width="200"></el-table-column>
         <el-table-column fixed="right" label="操作" width="200px" align="center">
           <template slot-scope="scope">
             <el-button
@@ -54,14 +45,14 @@
       @size-change="handleSizeChange"
     ></el-pagination>
 
-    <!-- 编辑弹框 -->
+    <!-- 新增弹框 -->
     <el-dialog
       width="70%"
       class="dialogBox"
-      :title="nowItem=='add'?'新增':'查看'"
+      :title="addTitle"
       :visible.sync="dialogFormVisible"
+      :before-close="clearFrom"
     >
-
       <el-form class="reverseBox" ref="noticeData" :model="noticeData" label-width="120px">
         <el-form-item label="通知标题:">
           <el-input placeholder="请输入通知标题" v-model="noticeData.title"/>
@@ -74,175 +65,147 @@
         </el-form-item>
       </el-form>
       <div class="tar">
-        <el-button @click="$emit('cancel')">取 消</el-button>
-        <el-button type="primary" @click="onSubmit()">保 存</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="add()">保 存</el-button>
       </div>
-      <!--      </el-dialog>-->
-
-      <!--  <checkBox
-          :nowItem="nowItem"
-          v-if="nowItem"
-          @cancel="dialogFormVisible=false"
-          @comfirm="_searchList"
-        ></checkBox>-->
     </el-dialog>
   </div>
 </template>
 
 <script>
-    // import checkBox from "../components/checkBox";
-    import api from "@/api/notice.js";
-    // import SelectTree from "@/components/SelectTree/selectTree.vue";
-    // import project from "@/api/project.js";
-    export default {
-        inject: ["reload"],
-        components: {
-            // checkBox
+  // import checkBox from "../components/checkBox";
+  import api from '@/api/notice.js'
+  // import SelectTree from "@/components/SelectTree/selectTree.vue";
+  export default {
+    inject: ['reload'],
+    components: {
+      // checkBox
+    },
+    data() {
+      return {
+        input: '',
+        value: '',
+        value1: '',
+        getList: [], // 当前列表
+        total: 0,
+        noticeData: {
+          title: '',
+          users: '',
+          content: '',
+          pageNo: 1, // 当前页
+          pageSize: 6 // 每页条数
         },
-        data() {
-            return {
-                input: '',
-                value: "",
-                value1: "",
-                getList: [], // 当前列表
-                orgTree: [], // 组织机构树
-                projectList: [], // 分部分项树
-                total: 0,
-                noticeData: {
-                    title: '',
-                    users: '',
-                    content: '',
-                    pageNo: 1, // 当前页
-                    orgId: "",
-                    pageSize: 6, // 每页条数
-                    // Mark: 1 //  标记：1：发送、2：接收
-                },
-                sendData: {
-                    departId: "", //部门id
-                    projectItemId: "", // 分部分项id
-                    starttime: "", // 开始时间
-                    endtime: "", // 结束时间
-                    pageNo: 1, // 当前页
-                    orgId: "",
-                    pageSize: 6, // 每页条数
-                    Mark: 1 //  标记：1：发送、2：接收
-                },
+        nowItem: '新增',
+        addTitle: '新增',
+        timeRange: '', // 时间日期范围
+        name: '', // 组织机构回填显示
+        projectItem: '', // 分部分项回填显示
+        dialogFormVisible: false, // 查看编辑弹框
+        innerVisible: false, // 组织机构弹框
+        projectVisible: false // 工程分项弹框
+      }
+    },
+    created() {
+      this._searchList()
+      this.getListByUser()
 
-                nowItem: "",
-                timeRange: "", // 时间日期范围
-                name: "", // 组织机构回填显示
-                projectItem: "", // 分部分项回填显示
-                dialogFormVisible: false, // 查看编辑弹框
-                innerVisible: false, // 组织机构弹框
-                projectVisible: false // 工程分项弹框
-            };
-        },
-        created() {
-            // this.instructList();
-            this._searchList();
+    },
+    methods: {
+      action(val) {
+        this.nowItem = ''
+        this.dialogFormVisible = true
+      },
+      handleSizeChange(val) {
+        this.noticeData.pageSize = val
+        this._searchList()
+      },
+      // 新增接口
+      add() {
+        api.createNotice(this.noticeData).then(res => {
+          if (res.data.respCode == '0') {
+            this.$message({
+              message: '恭喜你，新增成功',
+              type: 'success'
+            })
+            this.dialogFormVisible = false
+          }
+        })
+      },
+      // 编辑弹框
+      /*      bianTan(data) {
+              if (data != null && data != undefined && data != '') {
+                this.noticeData.roleName = data.rolename
+                this.noticeData.roleCode = data.rolecode
+                this.noticeData.id = data.id
+                this.dialogTitle = '编辑'
+              } else {
+                this.dialogTitle = '新增'
+              }
+              this.dialogFormVisible = true
+            },*/
+      // 查询单个请求
+      async actionItem(id) {
+        let { data } = await api.getNoticeDetail({ id })
+        this.nowItem = data.data
+        this.noticeData = data.data
+        this.dialogFormVisible = true
+      },
 
-        },
-        methods: {
-            action(val) {
-                this.nowItem = val;
-                this.dialogFormVisible = true;
-            },
-            handleSizeChange(val) {
-                this.noticeData.pageSize = val;
-                this._searchList();
-            },
-            // 查询单个请求
-            async actionItem(id) {
-                let {data} = await api.searchOne({id});
-                this.nowItem = data;
-                this.dialogFormVisible = true;
-            },
+      _searchList() {
+        // 列表请求
+        api.getList(this.noticeData).then(res => {
+          this.total = res.data.data.totalCount
+          this.getList = res.data.data.data
+          let getList = this.getList
+        })
+      },
+      getListByUser() {
+        // 用户列表
+        api.getListByUser().then(res => {
+         console.log("res",res)
+        })
+      },
+      //提交数据新增
+      onSubmit() {
+        let that = this
+        this.$refs['noticeData'].validate((valid) => {
+          if (valid) {
+            console.log(that.noticeData)
+            api.projectAdd(that.projectForm).then(res => {
+              this.$message({
+                type: 'success',
+                message: that.dialogFormTitle + '完成!'
+              })
+              //刷新列表
+              that.initProjectList()
+              that.dialogFormVisible = false  //关闭弹框
+            })
+          }
+        })
+      },
 
-            _searchList() {
-                // 列表请求
-                api.getList(this.noticeData).then(res => {
-                    this.total = res.data.data.totalCount;
-                    this.getList = res.data.data.data;
-                    let getList = this.getList;
-                    /*    getList.forEach(v => {
-                            v.status == 0 && (v.status1 = "未处理");
-                            v.status == 1 && (v.status1 = "已处理");
-                            v.issolve == 0 && (v.issolve1 = "是");
-                            v.issolve == 1 && (v.issolve1 = "否");
-                            v.commandType == 1 && (v.commandType1 = "安全指令");
-                            v.commandType == 2 && (v.commandType1 = "口头指令");
-                            v.commandType == 3 && (v.commandType1 = "纸质指令");
-                        });*/
-                });
-            },
-            /*      instructList() {
-                      // 组织机构树
-                      Organization.organizateTree().then(res => {
-                          this.orgTree = res.data.data;
-                          this.sendData.departId = this.orgTree[0].id;
-                          //默认请求
-                          api.getList(this.sendData).then(res => {
-                              this.total = res.data.data.totalCount;
-                              this.getList = res.data.data.data;
-                              let getList = this.getList;
-                              getList.forEach(v => {
-                                  v.status == 0 && (v.status1 = "未处理");
-                                  v.status == 1 && (v.status1 = "已处理");
-                                  v.issolve == 0 && (v.issolve1 = "是");
-                                  v.issolve == 1 && (v.issolve1 = "否");
-                                  v.commandType == 1 && (v.commandType1 = "安全指令");
-                                  v.commandType == 2 && (v.commandType1 = "口头指令");
-                                  v.commandType == 3 && (v.commandType1 = "纸质指令");
-                              });
-                          });
-                      });
-                  },*/
-            // 组织机构下拉树
-            /*     handleCheckChange(data) {
-                     this.projectList = [];
-                     this.sendData.orgId = data.id;
-                     this.sendData.departId = data.id;
-                     project.projectList(this.sendData).then(res => {
-                         if (res.data.data == null) {
-                             res.data.data = [];
-                         }
-                         this.projectList = res.data.data;
-                     });
-                 },*/
-            // 工程分部分项树
-            /*      projectChange(data) {
-                      this.sendData.projectItemId = data.id;
-                  },
-                  // 组织机构选择后的数据
-                  // handleCheckChange(data, checked, indeterminate) {
-                  //   this.sendData.departId = data.id;
-                  //   this.name = data.name;
-                  //   this.innerVisible = false;
-                  // },
-                  // 分部分项选择后的数据
-                  // projectChange(data, checked, indeterminate) {
-                  //   this.sendData.projectItemId = data.id;
-                  //   this.projectItem = data.projectItem;
-                  //   this.projectVisible = false;
-                  // },*/
-            // 给开始和结束时间赋值
-            /*   changeDataRange(val) {
-                   if (!val) {
-                       return ([this.sendData.starttime, this.sendData.endtime] = []);
-                   }
-                   [this.sendData.starttime, this.sendData.endtime] = val;
-               },*/
-            // 重置按钮
-            reset() {
-                this.reload();
-            }
-        },
-        watch: {
-            dialogFormVisible(val) {
-                !val && (this.nowItem = "");
-            }
+      // 重置按钮
+      reset() {
+        this.reload()
+      },
+      // 清空
+      clearFrom(data) {
+        this.noticeData = {
+          id: '',
+          title: '',
+          realnames: '',
+          content: '',
+          orgId: ''
         }
-    };
+        this.dialogFormVisible = false
+      }
+    },
+    watch: {
+      dialogFormVisible(val) {
+        !val && (this.nowItem = '')
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -259,12 +222,14 @@
   }
 
   .mybox {
-    /deep/ .el-range-editor.el-input__inner {
-      padding: 3px 0px;
-    }
 
-    /deep/ .el-date-editor {
-      width: 148px;
-    }
+  /deep/ .el-range-editor.el-input__inner {
+    padding: 3px 0px;
+  }
+
+  /deep/ .el-date-editor {
+    width: 148px;
+  }
+
   }
 </style>

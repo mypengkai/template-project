@@ -17,6 +17,10 @@ export default {
   getUser(data) {
     return request.post('/rest/processCheck/notDeletedUser', data)
   },
+  // 查询用户
+  getListByUser(data) {
+    return request.post('/rest/sysuser/getListByUser', data)
+  }
 }
 
 
