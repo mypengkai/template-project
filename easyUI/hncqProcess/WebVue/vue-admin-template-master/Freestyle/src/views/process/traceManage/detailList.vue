@@ -14,9 +14,9 @@
         <div class="p20-contation">
           <el-row>
             <el-col :span="18">
-              <div class="grid-content bg-purple timeOut" style="color:#8080ff">{{item.createTime}}</div>
+              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
             </el-col>
-            <el-col :span="6" style="color:#8080ff ; margin-top:0.5vw;">
+            <el-col :span="6" style="color:#409eff ; margin-top:0.5vw;">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
@@ -26,7 +26,7 @@
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
-          <p style="color:#8080ff; height:1vw; line-height:1vw; ">{{item.zhuanghao}}</p>
+          <p style="color:#409eff; height:1vw; line-height:1vw; ">{{item.zhuanghao}}</p>
           <el-row>
             <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
@@ -62,9 +62,9 @@
         <div class="p20-contation">
           <el-row>
             <el-col :span="18">
-              <div class="grid-content bg-purple timeOut" style="color:#8080ff">{{item.createTime}}</div>
+              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
             </el-col>
-            <el-col :span="6" style="color:#8080ff ; margin-top:0.5vw;">
+            <el-col :span="6" style="color:#409eff ; margin-top:0.5vw;">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
@@ -74,7 +74,7 @@
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
-          <p style="color:#8080ff; height:1vw; line-height:1vw;">{{item.zhuanghao}}</p>
+          <p style="color:#409eff; height:1vw; line-height:1vw;">{{item.zhuanghao}}</p>
           <el-row>
             <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
@@ -107,8 +107,8 @@
       fullscreen
       title="查看详情"
       :visible.sync="dialogTableVisibleRealcheck"
-     
-     
+
+
     >
       <processCheck :realList="realList"></processCheck>
     </el-dialog>
@@ -117,8 +117,8 @@
       fullscreen
       title="查看详情"
       :visible.sync="dialogTableVisibleSelfcheck"
-    
-     
+
+
     >
       <processCheck :realList="selfList"></processCheck>
     </el-dialog>
@@ -177,7 +177,7 @@ export default {
   },
   created() {},
   mounted() {
-  
+
   },
   computed: {
     title() {
@@ -251,7 +251,7 @@ export default {
     float: left;
     margin: 10px 1%;
     box-sizing: border-box;
-    border: 1px solid transparent; //透明边框占位
+    border: 1px solid transparent;
     .pictureBox {
       width: 100%;
       background: url("./images/bkg007.png") no-repeat;
@@ -315,7 +315,7 @@ export default {
     }
   }
   .conent:hover {
-    border: 1px solid red;
+    border: 1px solid #409eff;
   }
 }
 </style>

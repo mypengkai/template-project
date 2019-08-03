@@ -1,6 +1,6 @@
 /**
  *  用户绑定手机
-**/
+ **/
 import request from '@/utils/request'
 
 export default {
@@ -12,8 +12,8 @@ export default {
   userBindMobileList(data) {
     return request.post('/rest/mobilebind/userList', data)
   },
-  //根据用户id得到这个绑定信息
-  getdBindMobileByUserId(data){
+  // 根据用户id得到这个绑定信息
+  getdBindMobileByUserId(data) {
     return request.post('/rest/mobilebind/userQuery', data)
   }
 }

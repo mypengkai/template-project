@@ -83,10 +83,11 @@
   font-size: 0.7vw;
 
   th {
-    background-color: #f5f5f5 !important;
+    background-color: #e8e8e8 !important;
+    text-align: center !important;
     .cell {
       font-weight: bolder;
-      color: #000;
+      color: #303133;
     }
 
   }
@@ -136,7 +137,7 @@
     font-weight: bolder;
   }
 
-  .el-form-item__content .el-tree-node__label{
+  .el-form-item__content .el-tree-node__label {
 
     font-weight: normal;
   }

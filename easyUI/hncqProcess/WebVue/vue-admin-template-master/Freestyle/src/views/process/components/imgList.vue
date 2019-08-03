@@ -24,7 +24,7 @@
                 <!-- 工序名 -->
                 <div class="fl">
                     <span class="fl processName">
-                        <p>工序名:</p>
+                        <p>工序名称:</p>
                     </span>
                     <span class="rl" style="width:70%">
                         <p>{{ item.processName }}</p>

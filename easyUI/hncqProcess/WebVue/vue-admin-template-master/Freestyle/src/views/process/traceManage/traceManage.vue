@@ -26,7 +26,7 @@
         </el-col>
         <!-- ========================================== -->
         <!-- 人员查询 -->
-        <el-col :span="18" v-if="tabPosition == 'second'">
+        <el-col :span="6" v-if="tabPosition == 'second'">
           <div class="grid-content">
             <!-- <el-form inline>
               <el-form-item label="姓名：">
@@ -40,6 +40,7 @@
               placeholder="请输入姓名"
               v-model="username"
               clearable
+              style="width: 200px"
             ></el-input>
           </div>
         </el-col>
@@ -53,7 +54,7 @@
             </div>
           </el-row>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="4">
           <div class="grid-content">
             <span>
               <el-button
@@ -63,10 +64,6 @@
                 @click="querySelected"
               >查询</el-button>
             </span>
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div class="grid-content">
             <span>
               <el-button
                 type="primary"
