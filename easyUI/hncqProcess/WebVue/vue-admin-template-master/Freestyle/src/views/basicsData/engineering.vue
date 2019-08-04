@@ -30,19 +30,10 @@
       </el-col>
     </el-row>
     <!-- 操作列表 -->
-    <tree-table ref="projectItemTreeTable" :data="dataList" class="textList" row-key border>
-      <el-table-column label="工程分部分项" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.projectItem }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="所属组织机构" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-
+    <el-table ref="projectItemTreeTable" :data="dataList" row-key="id" class="textList" default-expand-all border
+              :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      <el-table-column prop="projectItem" label="工程分部分项" align="center"></el-table-column>
+      <el-table-column prop="name" label="所属组织机构" align="center"></el-table-column>
       <el-table-column label="类型" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.projectType==='1'">
@@ -65,24 +56,9 @@
           </template>
         </template>
       </el-table-column>
-
-      <el-table-column label="起始桩号" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.startStation }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="终止桩号" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.endStation }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="创建时间" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="startStation" label="起始桩号" align="center"></el-table-column>
+      <el-table-column prop="endStation" label="终止桩号" align="center"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
 
       <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope">
@@ -98,7 +74,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-    </tree-table>
+    </el-table>
     <!-- 新增弹框 -->
     <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" class="dialogBox">
       <el-form class="reverseBox" :model="projectForm" :rules="rules" ref="addProjectForm" label-width="120px">

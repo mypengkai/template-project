@@ -5,7 +5,7 @@
         <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addtan()">新增</el-button>
       </div>
     </div>
-    <tree-table :data="shuData" class="textList" border style row-key="id">
+    <el-table :data="shuData" class="textList" border row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column label="组织机构" align="center">
         <template slot-scope="scope">
           <span style>{{ scope.row.name }}</span>
@@ -39,7 +39,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-    </tree-table>
+    </el-table>
     <!-- 新增弹框 -->
     <el-dialog :visible.sync="dialogFormVisible" title="新增详情">
       <el-form :model="formSet">

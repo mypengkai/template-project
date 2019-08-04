@@ -24,6 +24,12 @@ export default {
   // 巡检查询
   getListByUser(data) {
     return request.post('/rest/sysuser/getListByUser', data)
+  },
+  getUserListByDepartId(data){  //根据组织机构获取没有得到的用户
+    return request.post('/rest/processCheck/notDeletedUser', data)
+  },
+  getNextJobUserByCurrentId(data){  //根据当前用户获取下一级审核人
+    return request.post('/rest/change/NextJobUser', data)
   }
 }
 

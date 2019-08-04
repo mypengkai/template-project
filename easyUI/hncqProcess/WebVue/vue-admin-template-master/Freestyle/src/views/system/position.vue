@@ -35,6 +35,16 @@
         <el-form-item label="岗位中文名:" prop="jobNameCn">
           <el-input v-model="positionFrom.jobNameCn" placeholder="请输入岗位中文名"/>
         </el-form-item>
+        <el-form-item label="岗位类型:" prop="jobType">
+          <el-select v-model="positionFrom.jobType" placeholder="请选择用户类型">
+            <el-option
+              v-for="item in jobTypeList"
+              :key="item.id"
+              :label="item.value"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="jobRemark">
           <el-input :rows="4" v-model="positionFrom.jobRemark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
@@ -66,12 +76,24 @@ export default {
         id: '',
         jobNameCn: '',
         jobNameEn: '',
-        jobRemark: ''
+        jobRemark: '',
+        jobType: ""  //岗位类型
       },
       rules: {
         jobNameCn: [{ required: true, message: '请输入岗位中文名', trigger: 'blur' }],
-        jobNameEn: [{ required: true, message: '请输入岗位英文名', trigger: 'blur' }]
-      }
+        jobNameEn: [{ required: true, message: '请输入岗位英文名', trigger: 'blur' }],
+        jobType: [{ required: true, message: '请输入岗位类型', trigger: 'change' }],
+      },
+      jobTypeList: [{
+        id: '1',
+        value: '业主'
+      },{
+        id: '2',
+        value: '监理'
+      },{
+        id: '3',
+        value: '施工单位'
+      }]
     }
   },
   created(){
