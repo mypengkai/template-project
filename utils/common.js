@@ -99,5 +99,18 @@ tool.getUrlKey=(name)=>{
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
 }
 
+/**
+ * 判断字符串不能为空
+ * @param str
+ * @returns {boolean}
+ */
+tool.isNotEmptyStr = function (str) {
+  if ((str !== '') && (str !== null) && (str !== undefined) && str.trim().length > 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
 Vue.prototype.$tool = tool
 export default tool;

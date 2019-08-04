@@ -56,16 +56,9 @@
       </el-table-column>
       <el-table-column fixed="right" label="详情" align="center" >
         <template slot-scope="scope">
-          <template v-if="scope.row.changeToken==='1'">
-            <el-tooltip class="item" effect="dark" content="修改申请" placement="top">
-              <el-button type="primary" size="small" icon="el-icon-edit" circle @click="apply(scope.row.id)"></el-button>
-            </el-tooltip>
-          </template>
-          <template v-else>
-            <el-tooltip class="item" effect="dark" content="查看申请" placement="top">
-              <el-button type="primary" size="small" icon="el-icon-search" circle @click="findApplyDetail(scope.row.id)"></el-button>
-            </el-tooltip>
-          </template>
+          <el-tooltip class="item" effect="dark" content="查看申请" placement="top">
+            <el-button type="primary" size="small" icon="el-icon-search" circle @click="findApplyDetail(scope.row.id)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -77,6 +70,11 @@
     <el-dialog :title="nowItem=='add' ? '申请变更' : '修改变更' " :visible.sync="dialogFormVisible" class="dialogBox">
       <createChange :nowItem="nowItem" @cancel="dialogFormVisible=false" @comfirm="query"/>
     </el-dialog>
+
+    <!-- 查看弹框 -->
+    <el-dialog :visible.sync="dialogChangeDetailVisible" title="查看详情" fullscreen>
+      <changeDetail :changeId="changeId"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -86,6 +84,7 @@ import SelectTree from "@/components/SelectTree/selectTree";
 import project from "@/api/project";
 import change from "@/api/change";
 import createChange from './components/createChange'
+import changeDetail from './changeDetail'
 export default {
   inject: ["reload"],
   name: "sendChange",
@@ -113,11 +112,14 @@ export default {
       myApplyChangePageList: [],  //我申请的变更
       dialogFormVisible: false,   //默认弹框不显示
       nowItem: "",  //当前对象
+      dialogChangeDetailVisible: false,  //查看详情弹框
+      changeId: ""   //详情id
     }
   },
   components:{
     SelectTree,
-    createChange
+    createChange,
+    changeDetail
   },
   created() {
     this.query();
@@ -163,11 +165,9 @@ export default {
       this.nowItem=item;
       this.dialogFormVisible=true;  //显示弹框
     },
-    updateApplyChange(item){  //修改申请
-
-    },
     findApplyDetail(item){  //查看详情
-
+      this.changeId=item;
+      this.dialogChangeDetailVisible=true;
     }
   }
 }
