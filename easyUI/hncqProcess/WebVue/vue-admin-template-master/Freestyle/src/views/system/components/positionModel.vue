@@ -55,7 +55,6 @@ export default {
       });
     },
     initPositionById(){
-      debugger
       console.log(this.nowItem)
       if (this.nowItem =='add'){   //添加时不需要初始化
         this.positionFrom={};

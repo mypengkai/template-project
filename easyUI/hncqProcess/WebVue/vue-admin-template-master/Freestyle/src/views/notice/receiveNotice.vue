@@ -8,9 +8,9 @@
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
+       <!-- <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
                    @click="action('add')">新增
-        </el-button>
+        </el-button>-->
       </div>
     </div>
 
@@ -77,12 +77,14 @@
       </div>
     </el-dialog>
 
+
+<!--//Check-->
     <el-dialog
       width="40%"
       class="dialogBox"
       :title="checkTitle"
       :visible.sync="dialogFormVisibleC"
-     >
+    >
       <el-form class="reverseBox" ref="noticeDataC" :model="noticeDataC" label-width="120px">
         <el-form-item label="通知标题:">
           <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.title"/>
@@ -148,8 +150,6 @@
         userList: [],
         nowItem: '新增',
         addTitle: '新增',
-        checkTitle: '查看',
-
         timeRange: '', // 时间日期范围
         name: '', // 组织机构回填显示
         projectItem: '', // 分部分项回填显示
@@ -176,7 +176,7 @@
       },
       getUserList() {
         api.getUserList(this.userData).then(res => {
-          this.userList = res.data.data.data
+          this.userList = res.data.data.data;
         })
       },
       // 新增接口
@@ -201,7 +201,7 @@
 
       _searchList() {
         // 列表请求
-        api.getList(this.noticeData).then(res => {
+        api.getListReceive(this.noticeData).then(res => {
           if (res.data.data) {
             this.total = res.data.data.totalCount
             this.getList = res.data.data.data

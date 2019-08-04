@@ -382,6 +382,7 @@ export default {
   },
   created() {
     this.initForm();
+    this.receiveUserList();
     this.form.batchNo = this.createUUID();  //生成批处理id
   },
   methods: {

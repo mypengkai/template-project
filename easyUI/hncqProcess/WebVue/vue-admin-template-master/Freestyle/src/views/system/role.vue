@@ -22,10 +22,10 @@
             <el-button v-ltx="'roleDelete'" v-if="isDelete(scope.row.rolecode)" type="danger" icon="el-icon-delete" circle @click="open2(scope.row.id)"/>
           </el-tooltip>
           <el-tooltip content="PC端权限" placement="top">
-            <el-button type="success" icon="el-icon-zoom-out" circle @click="sxlb(scope.row.id,'1')"/>
+            <el-button type="success" icon="el-icon-zoom-in" circle @click="sxlb(scope.row.id,'1')"/>
           </el-tooltip>
           <el-tooltip content="移动端权限" placement="top">
-            <el-button type="primary" icon="el-icon-search" circle @click="sxlb(scope.row.id,'2')"/>
+            <el-button type="primary" icon="el-icon-phone" circle @click="sxlb(scope.row.id,'2')"/>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -122,7 +122,6 @@ export default {
     },
     // 编辑弹框
     bianTan(data) {
-      debugger
       if (data != null && data != undefined && data != '') {
         this.formSet.roleName = data.rolename
         this.formSet.roleCode = data.rolecode

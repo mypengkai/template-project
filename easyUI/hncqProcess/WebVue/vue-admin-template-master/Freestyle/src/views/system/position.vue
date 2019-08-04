@@ -12,12 +12,12 @@
     </div>
     <!-- 列表  -->
     <el-table border :data="positionList" style="width: 100%" height="67vh" class="textList">
-      <el-table-column prop="job_id" label="编号"/>
-      <el-table-column prop="job_name_cn" label="岗位中文名"/>
-      <el-table-column prop="job_name_en" label="岗位英文名"/>
-      <el-table-column prop="create_time" label="创建时间"/>
-      <el-table-column prop="realname" label="创建人"/>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column prop="job_id" label="编号" align="center"/>
+      <el-table-column prop="job_name_cn" label="岗位中文名" align="center"/>
+      <el-table-column prop="job_name_en" label="岗位英文名" align="center"/>
+      <el-table-column prop="create_time" label="创建时间" align="center"/>
+      <el-table-column prop="realname" label="创建人" align="center"/>
+      <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle v-ltx="'editPosition'" @click="addPosition(scope.row)"/>
           <el-button type="danger" icon="el-icon-delete" circle v-ltx="'deletePosition'" @click="deletePosition(scope.row)"/>

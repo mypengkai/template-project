@@ -9,7 +9,9 @@
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <!--        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="action('add')">新增</el-button>-->
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
+                   @click="action('add')">新增
+        </el-button>
       </div>
       <span>发起日期:</span>
       <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small"
@@ -117,6 +119,10 @@
       this.initUserGrouptTree()
     },
     methods: {
+      action(val) {
+        this.nowItem = val
+        this.dialogFormVisible = true
+      },
       initUserGrouptTree() {  // 组织机构树
         Organization.organizateTree().then(res => {
           this.userGroupTree = res.data.data

@@ -5,11 +5,11 @@
   <div class="p20">
     <!-- 查询 -->
     <div class="topBar">
-      <span>用户名:</span>
+      <span>用户帐号:</span>
       <el-input v-model="sendData.SQLusername" size="small" clearable placeholder="请输入账号"/>
-      <span>用户名称:</span>
+      <span>姓名:</span>
       <el-input v-model="sendData.SQLrealname" size="small" clearable placeholder="请输入名称"/>
-      <span>选择部门:</span>
+      <span>部门:</span>
       <select-tree :options="orgTree" :props="defaultProps" clearable @noDe="handleCheckChange"/>
       <div class="rl">
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">查询</el-button>
@@ -19,11 +19,11 @@
     </div>
     <!-- 列表 -->
     <div>
-      <el-table :data="userList" class="textList" style="width: 100%" height="72vh">
+      <el-table border :data="userList" class="textList" style="width: 100%" height="72vh">
         <el-table-column prop="userName" label="用户账号" />
         <el-table-column prop="realName" label="姓名" align="center"/>
         <el-table-column prop="departName" label="组织机构" align="center"/>
-        <el-table-column prop="userKey" label="角色"/>
+        <el-table-column prop="userKey" label="角色" align="center"/>
         <el-table-column prop="zhiwei" label="职位" align="center"/>
         <el-table-column prop="createTime" label="创建时间" align="center"/>
         <el-table-column fixed="right" label="操作" align="center">
