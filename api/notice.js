@@ -3,7 +3,11 @@ import request from '@/utils/request'
 export default {
   // 查询通知列表
   getList(data) {
-    return request.post('/rest/notice/noticeList', data)
+    return request.post('/rest/notice/noticeList?type=0', data)
+  },
+  // 查询通知列表
+  getListReceive(data) {
+    return request.post('/rest/notice/noticeList?type=1', data)
   },
   // 新增通知
   createNotice(data) {
@@ -14,7 +18,7 @@ export default {
     return request.post('/rest/notice/noticeQuery', data)
   },
   // 查询通知用户
-  getUser(data) {
+  getUserList(data) {
     return request.post('/rest/processCheck/notDeletedUser', data)
   },
   // 查询用户
