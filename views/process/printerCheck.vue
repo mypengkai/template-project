@@ -19,22 +19,18 @@
     </div>
     <div class="printCheckConent" v-if="isShow">
       <p>湖南长祁高速验收凭证</p>
-      <!-- <div class="tabletop">
-           <span>承包单位: 湖南路桥建设集团公司(第一合同段)</span>
-           <span>监理单位：湖南省交通建设工程监理有限公司</span>
-      </div>-->
       <el-table :data="tableData" style="width: 100%" max-height="600" border class="textList">
-        <el-table-column label="承包单位: 湖南长祁高速">
+        <!-- <el-table-column label="承包单位: 湖南长祁高速"> -->
           <el-table-column prop="projectName" label="分部分项"></el-table-column>
           <el-table-column prop="processNumber" label="打印编码" width="120"></el-table-column>
           <el-table-column prop="Station" label="桩号" width="120"></el-table-column>
-        </el-table-column>
-        <el-table-column label="监理单位：湖南长祁高速">
+        <!-- </el-table-column> -->
+        <!-- <el-table-column label="监理单位：湖南长祁高速"> -->
           <el-table-column prop="processname" label="工序名称" width="300"></el-table-column>
           <el-table-column prop="realitychecktime" label="验收时间" width="200"></el-table-column>
           <el-table-column prop="realname" label="验收人" width="120"></el-table-column>
           <el-table-column prop="checkdescribe" label="验收说明" width="120"></el-table-column>
-        </el-table-column>
+        <!-- </el-table-column> -->
       </el-table>
     </div>
     <!-- 分页 -->
@@ -111,18 +107,6 @@ export default {
       font-size: 18px;
       font-weight: 700;
     }
-    // .tabletop{
-    //    border: 1px solid #EBEEF5;
-    //    span{
-    //       display: inline-block;
-    //       padding: 15px 0;
-    //       &:nth-child(2){
-    //           width:740px;
-    //           float: right;
-    //           border-left: 1px solid #EBEEF5;
-    //       }
-    //    }
-    // }
   }
 }
 </style>
