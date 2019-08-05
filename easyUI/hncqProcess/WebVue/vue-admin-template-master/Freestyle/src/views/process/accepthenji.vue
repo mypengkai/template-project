@@ -46,17 +46,7 @@
 
     <div class="topBar">
       <el-row>
-        <!--<el-col :span="5">
-          <span>工序状态:</span>
-          <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
-            <el-option
-              v-for="item in checkStateOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>-->
+
         <el-col :span="20">
           <span>创建日期:</span>
           <el-date-picker

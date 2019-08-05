@@ -12,5 +12,5 @@ export default {
   },
   updateData(data) {
     return request.post('/rest/sync/depart/verify',data)
-  },
+  }
 }
