@@ -19,7 +19,7 @@
     </div>
     <div class="printCheckConent" v-if="isShow">
       <p>湖南长祁高速验收凭证</p>
-      <el-table :data="tableData" style="width: 100%" max-height="600" border class="textList">
+      <el-table :data="tableData" style="width: 100%" height="65vh" border class="textList">
         <!-- <el-table-column label="承包单位: 湖南长祁高速"> -->
           <el-table-column prop="projectName" label="分部分项"></el-table-column>
           <el-table-column prop="processNumber" label="打印编码" width="120"></el-table-column>
