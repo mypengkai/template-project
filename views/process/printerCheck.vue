@@ -39,7 +39,7 @@
       @size-change="handleSizeChange"
       @current-change="queryPrint"
       :current-page="form.pageNo"
-      :page-sizes="[15,30,60,100]"
+      :page-sizes="[10,20,30]"
       :page-size="form.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -55,7 +55,7 @@ export default {
       form: {
         processNumber: "", // 验收编码
         pageNo: 1, // 当前页
-        pageSize: 15 // 每页条数
+        pageSize: 10 // 每页条数
       },
       total: 0,
       tableData: []

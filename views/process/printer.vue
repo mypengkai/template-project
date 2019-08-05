@@ -92,7 +92,7 @@
                 class="pan-btn light-blue-btn"
                 icon="el-icon-loading"
                 @click="printClick"
-                v-if="tableData.length>0 && form.type ==0"
+                v-if="form.type ==0 && tableData.length>0"
               >打印验收凭证</el-button>
             </span>
           </div>
@@ -126,7 +126,7 @@
       @size-change="handleSizeChange"
       @current-change="querySelected"
       :current-page="form.pageNo"
-      :page-sizes="[15,30,60,100]"
+      :page-sizes="[10,20,30]"
       :page-size="form.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -159,11 +159,10 @@ export default {
         projectCode: "", // 分部分项Code
         type: 0, // 打印状态
         pageNo: 1, // 当前页
-        pageSize: 15 // 每页条数
+        pageSize: 10 // 每页条数
       },
       total: 0,
       flag: false,
-      isDisabled: true,
       options: [
         {
           type: 0,
