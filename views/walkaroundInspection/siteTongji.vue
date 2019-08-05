@@ -28,7 +28,7 @@
             type="datetime"
             placeholder="选择开始日期时间"
             size="small"
-            style="min-width:200px"
+            style="min-width:180px"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>-
@@ -37,40 +37,40 @@
             type="datetime"
             placeholder="选择结束日期时间"
             size="small"
-            style="min-width:200px"
+            style="min-width:180px"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
             icon="el-icon-search"
             @click="query()"
-          >查询</el-button>
-        </el-col>
-        <el-col :span="2">
+          >查询
+          </el-button>
           <el-button
             type="primary"
             class="pan-btn light-blue-btn"
             icon="el-icon-refresh"
             @click="reset()"
-          >重置</el-button>
+          >重置
+          </el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" border style="width: 100%;margin-top:20px" height="55vh">
-        <el-table-column prop="realname" label="人员" min-width="180"></el-table-column>
-        <el-table-column prop="pollingNumber" label="巡视次数" min-width="180"></el-table-column>
-        <el-table-column prop="sideStationNumber" label="旁站次数" min-width="180"></el-table-column>
-        <el-table-column prop="commandpollingrangeNumber" label="巡视发起指令次数" min-width="180"></el-table-column>
-        <el-table-column prop="commandsideStationNumber" label="旁站发起指令次数" min-width="180"></el-table-column>
+      <el-table :data="tableData" border style="width: 100%;margin-top:20px" height="70vh" fit>
+        <el-table-column prop="realname" label="姓名" align="center" ></el-table-column>
+        <el-table-column prop="pollingNumber" label="巡视次数" align="center" width="300"></el-table-column>
+        <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width="300"></el-table-column>
+        <el-table-column prop="commandpollingrangeNumber" label="巡视发起指令次数" align="center" width="300"></el-table-column>
+        <el-table-column prop="commandsideStationNumber" label="旁站发起指令次数"align="center" width="300"></el-table-column>
       </el-table>
       <!-- 分页条 -->
       <el-pagination
         class="pageList mt1"
         background
-        :page-sizes="[10,20,30,40]"
+        :page-sizes="[10,20,30]"
         :page-size="queryData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -173,7 +173,7 @@ export default {
     // float: right;
   }
   /deep/.el-input__inner {
-    line-height: 30px !important;
+    line-height: 30px;
     // height: 4vh;
   }
 }

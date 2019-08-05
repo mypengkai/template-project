@@ -12,24 +12,20 @@
         </el-col>
         <el-col :span="8">
           <span>创建日期:</span>
-          <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
+          <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:180px"
                           value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
-          <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
+          <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:180px"
                           value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="6">
           <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="query()">查询</el-button>
-        </el-col>
-        <el-col :span="2">
           <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        </el-col>
-        <el-col :span="2">
           <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="apply('add')">申请</el-button>
         </el-col>
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table class="textList" border :data="myApplyChangePageList" style="width: 100%" height="68vh">
+    <el-table class="textList" border :data="myApplyChangePageList" style="width: 100%" height="70vh">
       <el-table-column prop="changeName" label="变更名称" align="center"></el-table-column>
       <el-table-column prop="amountMoney" label="变更金额(万元)" align="center"></el-table-column>
       <el-table-column label="变更等级" align="center">
@@ -42,7 +38,7 @@
       </el-table-column>
       <el-table-column prop="realname" label="申请人" align="center"></el-table-column>
       <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <template v-if="scope.row.changeToken==='1'">申请</template>
           <template v-else-if="scope.row.changeToken==='2'">审核</template>
@@ -54,16 +50,16 @@
           <template v-else-if="scope.row.changeToken==='8'">终止</template>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="详情" align="center" >
+      <el-table-column fixed="right" label="操作" align="center" >
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="查看申请" placement="top">
+          <el-tooltip class="item" effect="dark" content="查看" placement="top">
             <el-button type="primary" size="small" icon="el-icon-search" circle @click="findApplyDetail(scope.row.id)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :page-sizes="[15,30,60,100]" :page-size="sendData.pageSize" layout="total, sizes, prev, pager, next, jumper"
+    <el-pagination class="pageList mt1" background :page-sizes="[10,20,30]" :page-size="sendData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                    :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="query()"></el-pagination>
 
     <!-- 弹框 -->
@@ -107,7 +103,7 @@ export default {
         starttime: "", // 开始时间
         endtime: "", // 结束时间
         pageNo: 1, // 当前页
-        pageSize: 15 // 每页条数
+        pageSize: 10 // 每页条数
       },
       myApplyChangePageList: [],  //我申请的变更
       dialogFormVisible: false,   //默认弹框不显示

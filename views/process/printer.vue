@@ -46,7 +46,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="5">
+        <el-col :span="16">
           <el-form label-width="80px" :model="form">
             <el-form-item label="打印状态:">
               <el-select v-model="form.type" placeholder="请选择" size="small">
@@ -60,7 +60,7 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="8">
           <div class="grid-content">
             <span>
               <el-button
@@ -70,10 +70,6 @@
                 @click="querySelected"
               >查询</el-button>
             </span>
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <div class="grid-content">
             <span>
               <el-button
                 type="primary"
@@ -82,15 +78,11 @@
                 @click="reset()"
               >重置</el-button>
             </span>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div class="grid-content">
             <span>
               <el-button
                 type="primary"
                 class="pan-btn light-blue-btn"
-                icon="el-icon-loading"
+                icon="el-icon-printer"
                 @click="printClick"
                 v-if="form.type ==0 && tableData.length>0"
               >打印验收凭证</el-button>

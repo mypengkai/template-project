@@ -18,18 +18,36 @@
             v-on:noDe="projectItemOnClick"
           />
         </el-col>
-        <el-col :span="5">
-          <span>验收类型:</span>
-          <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
-            <el-option
-              v-for="item in checkTypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+
+
+        <el-col :span="12">
+          <span>创建日期:</span>
+          <el-date-picker
+            v-model="queryData.starttime"
+            type="datetime"
+            placeholder="选择开始日期时间"
+            size="small"
+            style="min-width:180px"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>-
+          <el-date-picker
+            v-model="queryData.endtime"
+            type="datetime"
+            placeholder="选择结束日期时间"
+            size="small"
+            style="min-width:180px"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
         </el-col>
 
+
+      </el-row>
+    </div>
+
+    <div class="topBar">
+      <el-row>
         <el-col :span="5">
           <span>工序状态:</span>
           <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
@@ -41,33 +59,19 @@
             ></el-option>
           </el-select>
         </el-col>
-      </el-row>
-    </div>
 
-    <div class="topBar">
-      <el-row>
-
-        <el-col :span="20">
-          <span>创建日期:</span>
-          <el-date-picker
-            v-model="queryData.starttime"
-            type="datetime"
-            placeholder="选择开始日期时间"
-            size="small"
-            style="min-width:200px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>-
-          <el-date-picker
-            v-model="queryData.endtime"
-            type="datetime"
-            placeholder="选择结束日期时间"
-            size="small"
-            style="min-width:200px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
+        <el-col :span="13">
+          <span>验收类型:</span>
+          <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
+            <el-option
+              v-for="item in checkTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-col>
+
         <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
@@ -85,7 +89,7 @@
       </el-row>
     </div>
 
-    <el-table border   class="textList" :data="tableData"  height="68vh" fit="true">
+    <el-table border   class="textList" :data="tableData"  height="68vh" fit>
       <el-table-column prop="name1" label="分部分项" width="400"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="150" align="center"></el-table-column>
       <el-table-column prop="processName" label="工序名称" width="200" align="center"></el-table-column>
@@ -118,6 +122,7 @@
               @click="handleClick(scope.row)"
               type="primary"
               circle
+              size="small"
               icon="el-icon-search"
               v-if="tableData.length!=0"
             ></el-button>
@@ -132,7 +137,7 @@
       @size-change="handleSizeChange"
       @current-change="query"
       :current-page="queryData.pageNo"
-      :page-sizes="[15,30,60,100]"
+      :page-sizes="[10,20,30]"
       :page-size="queryData.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -172,7 +177,7 @@
         endtime: "", // 结束时间
         userName: "", // 姓名
         pageNo: 1, // 当前页
-        pageSize: 15, // 每页条数
+        pageSize: 10, // 每页条数
         checkType: "", //验收类型
         checkState: "", //验收状态
         orgId: "", //组织机构id

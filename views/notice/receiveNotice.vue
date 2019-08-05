@@ -8,9 +8,9 @@
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-       <!-- <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
-                   @click="action('add')">新增
-        </el-button>-->
+        <!-- <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
+                    @click="action('add')">新增
+         </el-button>-->
       </div>
     </div>
 
@@ -25,6 +25,7 @@
             <el-button
               type="primary"
               icon="el-icon-search"
+              size="small"
               circle
               @click="actionItem(scope.row.id)"
             ></el-button>
@@ -37,8 +38,8 @@
       class="pageList mt1"
       background
       :current-page.sync="noticeData.pageNo"
-      :page-sizes="[5,10,15,30]"
-      :page-size="1"
+      :page-sizes="[10,20,30]"
+      :page-size="10"
       layout="total, sizes, prev, pager, next, jumper"
       @current-change="_searchList()"
       :total="total"
@@ -78,7 +79,7 @@
     </el-dialog>
 
 
-<!--//Check-->
+    <!--//Check-->
     <el-dialog
       width="40%"
       class="dialogBox"
@@ -87,16 +88,16 @@
     >
       <el-form class="reverseBox" ref="noticeDataC" :model="noticeDataC" label-width="120px">
         <el-form-item label="通知标题:">
-          <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.title"/>
+          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.title"/>
         </el-form-item>
         <el-form-item label="发起人:">
-          <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.createName"/>
+          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.createName"/>
         </el-form-item>
-        <el-form-item label="接收人:" >
-          <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.realnames"/>
+        <el-form-item label="接收人:">
+          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.realnames"/>
         </el-form-item>
         <el-form-item label="通知内容:">
-          <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.content"/>
+          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.content"/>
         </el-form-item>
       </el-form>
       <div class="tar">
@@ -129,7 +130,7 @@
           content: '',
           // type: '0',
           pageNo: 1, // 当前页
-          pageSize: 6 // 每页条数
+          pageSize: 10 // 每页条数
         },
         noticeDataC: {
           title: '',
@@ -137,19 +138,19 @@
           realnames: '',
           content: '',
           pageNo: 1, // 当前页
-          pageSize: 6 // 每页条数
+          pageSize: 10 // 每页条数
         },
         userData: {
           userGroupId: '',
           realname: '',
           position: '',
-          // type: '0',
           pageNo: 1, // 当前页
-          pageSize: 99 // 每页条数
+          pageSize: 10// 每页条数
         },
         userList: [],
         nowItem: '新增',
         addTitle: '新增',
+        checkTitle: '查看',
         timeRange: '', // 时间日期范围
         name: '', // 组织机构回填显示
         projectItem: '', // 分部分项回填显示
@@ -176,7 +177,7 @@
       },
       getUserList() {
         api.getUserList(this.userData).then(res => {
-          this.userList = res.data.data.data;
+          this.userList = res.data.data.data
         })
       },
       // 新增接口
@@ -260,9 +261,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .el-select .el-input {
-    width: 130px;
-  }
 
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
@@ -276,6 +274,9 @@
 
   /deep/ .el-range-editor.el-input__inner {
     padding: 3px 0px;
+    border: none !important
+
+
   }
 
   /deep/ .el-date-editor {
@@ -283,4 +284,9 @@
   }
 
   }
+  /deep/ .el-input .el-input__inner {
+          border: none !important
+
+        }
+
 </style>

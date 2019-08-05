@@ -36,8 +36,8 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" icon="el-icon-edit" circle></el-button>
-                        <el-button type="danger" icon="el-icon-delete" @click="open7" circle></el-button>
+                        <el-button type="warning" size="small" icon="el-icon-edit" circle></el-button>
+                        <el-button type="danger" size="small" icon="el-icon-delete" @click="open7" circle></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -207,7 +207,7 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-   
+
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },

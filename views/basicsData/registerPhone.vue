@@ -6,13 +6,13 @@
     <!-- 查询 -->
     <div class="topBar">
       <span>用户名:</span>
-      <el-input v-model="queryParam.name" size="small" clearable placeholder="请输入账号"/>
+      <el-input v-model="queryParam.name" size="small" clearable placeholder="请输入用户名"/>
       <div class="rl">
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="bindPhoneList()">查询</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
-    <el-table border :data="userBindMobileList" class="textList" style="width: 100%" height="72vh">
+    <el-table border :data="userBindMobileList" class="textList" style="width: 100%" height="70vh">
       <el-table-column prop="realname" label="姓名" align="center" width="150"/>
       <el-table-column prop="username" label="用户名" align="center" width="150" />
       <el-table-column prop="imei" label="设备身份码" align="center" />
@@ -23,12 +23,12 @@
       <el-table-column prop="createDate" label="创建时间" align="center" width="200"/>
       <el-table-column fixed="right" label="操作" align="center"  width="150">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="registerImei(scope.row)"/>
+          <el-button type="warning" size="small" title="编辑" icon="el-icon-edit" circle @click="registerImei(scope.row)"/>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination :page-sizes="[7,15,20,30]" :page-size="1" :total="total" :current-page.sync="queryParam.pageNo" class="pageList pt20 mt1" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="bindPhoneList"/>
+    <el-pagination :page-sizes="[10,20,30]" :page-size="10" :total="total" :current-page.sync="queryParam.pageNo" class="pageList pt20 mt1" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="bindPhoneList"/>
     <!-- 注册手机imei -->
     <el-dialog title="手机绑定" :visible.sync="dialogFormVisible" class="dialogBox">
       <el-form ref="bindMobile" :model="bindMobile" label-width="120px" :rules="rules">
@@ -54,7 +54,7 @@ export default {
       queryParam: {
         name: "",  //用户名
         pageNo: 1,
-        pageSize: 7
+        pageSize: 10
       },
       total: 0,
       userBindMobileList: [],  //列表

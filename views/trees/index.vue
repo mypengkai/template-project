@@ -10,12 +10,12 @@
             v-model="form.startTime"
             type="date"
             placeholder="选择日期时间"
-            style="min-width:200px"/>
+            style="min-width:180px"/>
           <el-date-picker
             v-model="form.endTime"
             type="date"
             placeholder="选择日期时间"
-            style="min-width:200px"/>
+            style="min-width:180px"/>
         </el-col>
         <el-col :span="6">
           <div class="rl">
@@ -61,16 +61,16 @@
       </el-table-column>
       <el-table-column label="操作" align="center" >
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="查看详情" placement="top-start">
-            <el-button type="primary" icon="el-icon-search" circle @click="handleEdit(scope.row)"/>
+          <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
+            <el-button type="primary" size="small" icon="el-icon-search" circle @click="handleEdit(scope.row)"/>
         </el-tooltip></template>
       </el-table-column>
     </el-table>
 
     <el-pagination
       :current-page="currentPage4"
-      :page-sizes="[5,10,15,30]"
-      :page-size="1"
+      :page-sizes="[10,20,30]"
+      :page-size="10"
       :total="total"
       class="pageList mt1"
       layout="total, sizes, prev, pager, next, jumper"

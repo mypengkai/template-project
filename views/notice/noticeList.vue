@@ -25,6 +25,7 @@
             <el-button
               type="primary"
               icon="el-icon-search"
+              size="small"
               circle
               @click="actionItem(scope.row.id)"
             ></el-button>
@@ -37,8 +38,8 @@
       class="pageList mt1"
       background
       :current-page.sync="noticeData.pageNo"
-      :page-sizes="[5,10,15,30]"
-      :page-size="1"
+      :page-sizes="[10,20,30]"
+      :page-size="10"
       layout="total, sizes, prev, pager, next, jumper"
       @current-change="_searchList()"
       :total="total"
@@ -82,7 +83,8 @@
       class="dialogBox"
       :title="checkTitle"
       :visible.sync="dialogFormVisibleC"
-     >
+      id="checkDialog"
+    >
       <el-form class="reverseBox" ref="noticeDataC" :model="noticeDataC" label-width="120px">
         <el-form-item label="通知标题:">
           <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.title"/>
@@ -90,7 +92,7 @@
         <el-form-item label="发起人:">
           <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.createName"/>
         </el-form-item>
-        <el-form-item label="接收人:" >
+        <el-form-item label="接收人:">
           <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.realnames"/>
         </el-form-item>
         <el-form-item label="通知内容:">
@@ -143,7 +145,7 @@
           position: '',
           // type: '0',
           pageNo: 1, // 当前页
-          pageSize: 99 // 每页条数
+          pageSize: 10 // 每页条数
         },
         userList: [],
         nowItem: '新增',
@@ -276,11 +278,17 @@
 
   /deep/ .el-range-editor.el-input__inner {
     padding: 3px 0px;
+
   }
 
   /deep/ .el-date-editor {
     width: 148px;
   }
+
+  }
+
+  /deep/ #checkDialog .el-input .el-input__inner {
+    border: none !important
 
   }
 </style>

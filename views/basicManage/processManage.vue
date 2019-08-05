@@ -13,7 +13,6 @@
           <el-col :span="2">
             <el-button
               type="primary"
-              size="small"
               icon="el-icon-search"
               class="pan-btn light-blue-btn"
               @click="initTable()"
@@ -35,7 +34,6 @@
             <el-button
               class="pan-btn light-blue-btn"
               type="primary"
-              size="small"
               icon="el-icon-circle-plus-outline"
               @click="addType"
             >
@@ -50,20 +48,20 @@
           :data="tableData"
           :row-style="{height: '0'}"
           class="textList"
-          height="62vh"
+          height="70vh"
           stripe
           highlight-current-row
           border
           @selection-change="selectChange(selection)"
         >
-          <el-table-column min-width="100px" prop="seq" label="序号" sortable width="100px"/>
+          <el-table-column min-width="100px" prop="seq" label="序号"  width="100" align="center"/>
           <el-table-column min-width="180px" prop="processType" fixed label="工序类型" align="center" />
           <el-table-column prop="createName" min-width="120px" label="创建人" align="center" />
           <el-table-column prop="createTime" min-width="160px" label="创建时间" align="center" />
           <el-table-column min-width="150px" fixed="right" label="操作" align="center">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" content="修改" placement="top">
-                <el-button v-ltx="'processingUpdate'" type="primary" size="small" icon="el-icon-edit" circle @click="editType(scope.row)"/>
+                <el-button v-ltx="'processingUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="editType(scope.row)"/>
               </el-tooltip>
 
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
@@ -71,7 +69,7 @@
               </el-tooltip>
 
               <el-tooltip class="item" effect="dark" content="查询" placement="top">
-                <el-button type="success" size="small" icon="el-icon-search" circle @click="viewMore(scope.row, $event)" />
+                <el-button type="primary" size="small" icon="el-icon-search" circle @click="viewMore(scope.row, $event)" />
               </el-tooltip>
             </template>
           </el-table-column>
@@ -81,7 +79,7 @@
 
       <el-pagination
         :current-page="currentPage"
-        :page-sizes="[7,15,20,30]"
+        :page-sizes="[10,20,30]"
         :page-size="pageSize"
         :total="total"
         class="pageList mt1"
@@ -119,9 +117,10 @@
 </template>
 
 <script>
-import request from '@/utils/request'
-import process from './processInfo'
-export default {
+  import request from '@/utils/request'
+  import process from './processInfo'
+
+  export default {
   inject: ['reload'],
   components: {
     process
@@ -138,7 +137,7 @@ export default {
       dialogVisibleProcess: false,
       searchText: '',
       currentPage: 1, // 当前页
-      pageSize: 7, // 每页显示数
+      pageSize: 10, // 每页显示数
       total: 0, // 总数
       processTypeId: '',
       processTypeName: '',

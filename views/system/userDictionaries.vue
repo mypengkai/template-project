@@ -32,10 +32,10 @@
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-            <el-button v-ltx="'dicUpdate'" type="primary" icon="el-icon-edit" circle @click="bianTan(scope.row)"/>
+            <el-button v-ltx="'dicUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="bianTan(scope.row)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button v-ltx="'dicDelete'" type="danger" icon="el-icon-delete" circle @click="dlelTan(scope.row)"/>
+            <el-button v-ltx="'dicDelete'" type="danger" size="small" icon="el-icon-delete" circle @click="dlelTan(scope.row)"/>
           </el-tooltip>
         </template>
       </el-table-column>

@@ -10,23 +10,21 @@
           <span>分部分项:</span>
           <select-tree clearable :options="projectItemTreeOptions" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick" v-model="sendData.projectCode"/>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="10">
           <span>巡视日期:</span>
-          <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
+          <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:180px"
                           value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
-          <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:200px"
+          <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small" style="min-width:180px"
                           value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="4">
           <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="query()">查询</el-button>
-        </el-col>
-        <el-col :span="2">
           <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
         </el-col>
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table class="textList" border :data="pollingPageList" style="width: 100%" height="68vh">
+    <el-table class="textList" border :data="pollingPageList" style="width: 100%" height="70vh">
       <el-table-column prop="realname" label="巡视人" align="center" width="100"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
@@ -35,15 +33,15 @@
       <el-table-column prop="createTime" label="巡视时间" align="center" width="150"></el-table-column>
       <el-table-column fixed="right" label="详情" align="center" width="100">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="查看详情" placement="top">
-            <el-button type="primary" icon="el-icon-search" circle @click="action(scope.row)"></el-button>
+          <el-tooltip class="item" effect="dark" content="查看" placement="top">
+            <el-button type="primary" size="small" icon="el-icon-search" circle @click="action(scope.row)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :page-sizes="[15,30,60,100]" :page-size="sendData.pageSize" layout="total, sizes, prev, pager, next, jumper"
+    <el-pagination class="pageList mt1" background :page-sizes="[10,20,30]" :page-size="sendData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                    :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="query()"></el-pagination>
     <!-- 查看照片弹框 -->
     <el-dialog width="70%" title="巡视查看" :visible.sync="dialogFormVisible" class="dialogBox">
@@ -76,7 +74,7 @@ export default {
         projectCode: "", // 分部分项Code
         orgId: "",   //组织机构id
         pageNo: 1, //当前页
-        pageSize: 15, // 每页条数
+        pageSize: 10, // 每页条数
         startTime: "", // 开始时间
         endTime: "", // 结束时间
         type: "polling",

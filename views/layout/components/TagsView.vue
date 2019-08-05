@@ -10,9 +10,9 @@
       <span class="fhBox"
             @click="$router.push('/')"
             v-if="flag">
-<!--        <i class="el-icon-s-home"></i>-->
+<!--  <i class="el-icon-s-home"></i>-->
         首页
-        <!--        <span class="el-icon-close"/>-->
+        <!--  <span class="el-icon-close"/>-->
 
       </span>
       <router-link
@@ -102,12 +102,10 @@
                     for (const tag of tags) {
                         if (tag.to.path === this.$route.path) {
                             this.$refs.scrollPane.moveToTarget(tag.$el);
-
                             // when query is different then update
                             if (tag.to.fullPath !== this.$route.fullPath) {
                                 this.$store.dispatch("updateVisitedView", this.$route);
                             }
-
                             break;
                         }
                     }
@@ -126,6 +124,7 @@
             },
             closeSelectedTag(view) {
                 this.$store.dispatch("delView", view).then(({visitedViews}) => {
+
                     if (this.isActive(view)) {
                         const latestView = visitedViews.slice(-1)[0];
                         if (latestView) {
@@ -203,7 +202,7 @@
           color: #fff;
           border-color: #1465bf;
 
-          &::before {
+      /*    &::before {
             content: "";
             background: #fff;
             display: inline-block;
@@ -212,7 +211,7 @@
             border-radius: 50%;
             position: relative;
             margin-right: 2px;
-          }
+          }*/
         }
       }
     }

@@ -37,7 +37,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination class="mt1" background :page-sizes="[6,15,20,30]" :page-size="1"
+    <el-pagination class="mt1" background :page-sizes="[10,20,30]" :page-size="10"
                    layout="total, sizes, prev, pager, next, jumper" :total="total" :current-page.sync="sendData.pageNo"
                    @size-change="handleSizeChange" @current-change="getUserList()"></el-pagination>
   </div>
@@ -58,7 +58,7 @@
         total: 0,
         sendData: {
           pageNo: 1,
-          pageSize: 6
+          pageSize: 10
         }
       }
     },

@@ -7,9 +7,9 @@
       <select-tree :options="projectList" :props="projectTree" v-on:noDe="projectChange"/>
       <span>创建日期:</span>
       <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:200px" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
+                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
       <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small"
-        style="min-width:200px" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+        style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
@@ -17,7 +17,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border  class="textList" :data="getList" style="width: 100%" height="72vh">
+      <el-table border  class="textList" :data="getList" style="width: 100%" height="70vh">
         <el-table-column prop="project" label="分部分项"></el-table-column>
         <el-table-column prop="Station" label="桩号" width="180" align="center"></el-table-column>
         <el-table-column label="指令类型" width="110" align="center">
@@ -44,13 +44,13 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
+            <el-button type="primary" size="small" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :current-page="sendData.pageNo" :page-sizes="[6,10,15,30]" :page-size="sendData.pageSize"
+    <el-pagination class="pageList mt1" background :current-page="sendData.pageNo" :page-sizes="[10,20,30]" :page-size="sendData.pageSize"
       layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" @size-change="handleSizeChange" :total="total"></el-pagination>
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
