@@ -132,7 +132,7 @@
       :total="total"
     ></el-pagination>
     <!-- 打印凭证弹框 -->
-    <el-dialog title="打印凭证" :visible.sync="dialogVisible" width="1100px">
+    <el-dialog title="凭证打印" :visible.sync="dialogVisible" width="1100px">
       <proofProve @closeDialog="dialogVisible =false" :formData="dataList" v-if="flag"></proofProve>
     </el-dialog>
   </div>
