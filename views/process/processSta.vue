@@ -10,25 +10,7 @@
             v-on:noDe="userGroupOnClick"
           />
         </el-col>
-        <!-- <el-col :span="6">
-          <span>统计类型:</span>
-          <select-tree
-            :options="projectItemTreeOption"
-            :props="projectItemDefaultProp"
-            v-on:noDe="projectItemOnClick"
-          />
-        </el-col>
-        <el-col :span="6">
-          <span>自检验收:</span>
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>-->
+
         <el-col :span="12">
           <span>创建日期:</span>
           <el-date-picker
@@ -89,7 +71,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-table :data="footerTable" border style="width: 100%">
+    <el-table :data="footerTable" border style="width: 100%" height="55vh">
       <el-table-column prop="projectitemname" label="分部分项" min-width="90"></el-table-column>
       <el-table-column prop="processname" label="工序名称" min-width="90"></el-table-column>
       <el-table-column prop="realitySelfCheckTime" label="自检时间" min-width="90"></el-table-column>
@@ -123,7 +105,7 @@
       @size-change="handleSizeChange"
       @current-change="query()"
       :current-page="queryData.pageNo"
-      :page-sizes="[5,10,20,40]"
+      :page-sizes="[10,20,30,40]"
       :page-size="queryData.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -163,7 +145,7 @@ export default {
         endtime: "", // 结束时间
         userName: "", // 姓名
         pageNo: 1, // 当前页
-        pageSize: 5, // 每页条数
+        pageSize: 10, // 每页条数
         checkType: "", //验收类型
         checkState: "", //验收状态
         orgId: "", //组织机构id

@@ -93,7 +93,7 @@
         </el-col>
       </el-row>
 
-      <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:20px" height="52vh">
+      <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:20px" height="55vh">
         <el-table-column prop="departname" label="单位" min-width="80"></el-table-column>
         <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
         <el-table-column prop="realname" label="姓名" min-width="80"></el-table-column>
@@ -109,7 +109,7 @@
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        :page-sizes="[7,14,28,56]"
+        :page-sizes="[10,20,30,40]"
         :page-size="1"
         :total="total"
         :current-page.sync="queryData.pageNo"
@@ -150,7 +150,7 @@ export default {
         endTime: "", // 结束时间
         userId: "", //用户Id
         pageNo: 1, // 当前页
-        pageSize: 7 // 每页条数
+        pageSize: 10 // 每页条数
       },
       jobTypeList: [
         {

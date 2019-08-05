@@ -59,7 +59,7 @@
           >重置</el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" border style="width: 100%;margin-top:20px" height="65vh">
+      <el-table :data="tableData" border style="width: 100%;margin-top:20px" height="55vh">
         <el-table-column prop="realname" label="人员" min-width="180"></el-table-column>
         <el-table-column prop="pollingNumber" label="巡视次数" min-width="180"></el-table-column>
         <el-table-column prop="sideStationNumber" label="旁站次数" min-width="180"></el-table-column>
@@ -70,7 +70,7 @@
       <el-pagination
         class="pageList mt1"
         background
-        :page-sizes="[8,16,32,64,128]"
+        :page-sizes="[10,20,30,40]"
         :page-size="queryData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -105,7 +105,7 @@ export default {
         endtime: "", // 结束时间
         userName: "", // 姓名
         pageNo: 1, // 当前页
-        pageSize: 15, // 每页条数
+        pageSize: 10, // 每页条数
         checkType: "", //验收类型
         checkState: "", //验收状态
         orgId: "", //组织机构id
