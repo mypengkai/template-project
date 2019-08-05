@@ -65,7 +65,6 @@ export default {
       document.body.innerHTML = newstr;
       // 3. 还原：将旧的页面储存起来，当打印完成后返给给页面。
       var oldstr = document.body.innerHTML;
-      // 开始打印
       window.print();       
       this.previewShur();     // 改变打印数据之后的状态
       window.location.reload();
