@@ -5,11 +5,11 @@
       <p>湖南长祁高速验收凭证</p>
       <el-table :data="formData" style="width: 100%" max-height="400" border>
         <el-table-column prop="projectName" label="分部分项"></el-table-column>
-        <el-table-column prop="Station" label="桩号" width="120"></el-table-column>
-        <el-table-column prop="processname" label="工序名称" width="200"></el-table-column>
-        <el-table-column prop="realitychecktime" label="验收时间" width="200"></el-table-column>
-        <el-table-column prop="realname" label="验收人" width="120"></el-table-column>
-        <el-table-column prop="checkdescribe" label="验收说明" width="120"></el-table-column>
+        <el-table-column prop="Station" label="桩号" ></el-table-column>
+        <el-table-column prop="processname" label="工序名称" ></el-table-column>
+        <el-table-column prop="realitychecktime" label="验收时间" ></el-table-column>
+        <el-table-column prop="realname" label="验收人"></el-table-column>
+        <el-table-column prop="checkdescribe" label="验收说明" ></el-table-column>
       </el-table>
     </div>
     <!-- endprint -->
@@ -59,7 +59,7 @@ export default {
     },
     // 打印
     drPrint(){
-        // 1.设置要打印的区域 div的class
+      // 1.设置要打印的区域 div的class
       var newstr = document.querySelector('.printCheckConent').innerHTML;
       // 2. 复制给body，并执行window.print打印功能
       document.body.innerHTML = newstr;

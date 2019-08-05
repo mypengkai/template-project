@@ -9,7 +9,6 @@
             </el-form-item>
           </el-form>
         </el-col>
-
         <el-col :span="5">
           <el-form :inline="true" class="grid-content">
             <el-form-item label="分部分项：">
@@ -26,6 +25,7 @@
                 size="small"
                 format="yyyy 年 MM 月 dd 日"
                 value-format="yyyy-MM-dd"
+                 placeholder="选择开始日期时间"
               />-
               <el-date-picker
                 v-model="form.endTime"
@@ -33,6 +33,7 @@
                 size="small"
                 format="yyyy 年 MM 月 dd 日"
                 value-format="yyyy-MM-dd"
+                 placeholder="选择结束日期时间"
               />
           </div>
         </el-col>
@@ -106,7 +107,7 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        max-height="600"
+        max-height="500"
         border
         @selection-change="handleSelectionChange"
       >
@@ -119,7 +120,6 @@
         <el-table-column prop="checkdescribe" label="验收说明" width="120"></el-table-column>
       </el-table>
     </div>
-
     <!-- 分页 -->
     <el-pagination
       class="pageList pt20 mt1"
@@ -131,9 +131,8 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
     ></el-pagination>
-
     <!-- 打印凭证弹框 -->
-    <el-dialog title="打印凭证" :visible.sync="dialogVisible" width="1000px">
+    <el-dialog title="打印凭证" :visible.sync="dialogVisible" width="1100px">
       <proofProve @closeDialog="dialogVisible =false" :formData="dataList" v-if="flag"></proofProve>
     </el-dialog>
   </div>
