@@ -18,7 +18,7 @@
             type="datetime"
             placeholder="选择开始日期时间"
             size="small"
-            style="min-width:200px"
+            style="min-width:180px"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>-
@@ -27,20 +27,18 @@
             type="datetime"
             placeholder="选择结束日期时间"
             size="small"
-            style="min-width:200px"
+            style="min-width:180px"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
             icon="el-icon-search"
             @click="getList()"
           >查询</el-button>
-        </el-col>
-        <el-col :span="2">
           <el-button
             type="primary"
             class="pan-btn light-blue-btn"
@@ -50,7 +48,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-table :data="tableData" style="width: 100%;margin-bottom:20px" @cell-click="handleGoods">
+    <el-table class="textList" border :data="tableData" style="width: 100%;margin-bottom:20px" @cell-click="handleGoods">
       <el-table-column prop="bidSection" label="标段" min-width="180"></el-table-column>
       <el-table-column prop="alreadyCheck" label="已验收" min-width="180">
         <template scope="scope">
@@ -71,7 +69,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-table :data="footerTable" border style="width: 100%" height="55vh">
+    <el-table  class="textList" border :data="footerTable" border style="width: 100%" height="60vh">
       <el-table-column prop="projectitemname" label="分部分项" min-width="90"></el-table-column>
       <el-table-column prop="processname" label="工序名称" min-width="90"></el-table-column>
       <el-table-column prop="realitySelfCheckTime" label="自检时间" min-width="90"></el-table-column>
@@ -92,6 +90,7 @@
               @click="handleClick(scope.row)"
               type="primary"
               circle
+              size="small"
               icon="el-icon-search"
               v-if="tableData.length!=0"
             ></el-button>
@@ -215,7 +214,7 @@ export default {
     },
     handleGoods(row, column, cell, event) {
       console.log(row, column, cell, event);
-    
+
       request
         .post("/rest/processCheck/statisticsDetails", {
           departid: row.usergroupid,

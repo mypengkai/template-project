@@ -9,8 +9,8 @@
     </span>
 
     <div class="rl">
-      <el-button type="primary" size="small" icon="el-icon-search" @click="Inquire()">查询</el-button>
-      <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" @click="Add()">添加</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="Inquire()">查询</el-button>
+      <el-button type="primary" icon="el-icon-circle-plus-outline" @click="Add()">添加</el-button>
     </div>
 
     <!-- table表 -->
@@ -26,8 +26,8 @@
         <el-table-column prop="warnPhone" label="提醒手机号码"/>
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle @click="Edit(scope.row)"/>
-            <el-button type="danger" icon="el-icon-delete" circle @click="Delete(scope.row)"/>
+            <el-button type="warning" size="small" icon="el-icon-edit" circle @click="Edit(scope.row)"/>
+            <el-button type="danger" size="small" icon="el-icon-delete" circle @click="Delete(scope.row)"/>
           </template>
         </el-table-column>
       </el-table>
@@ -38,8 +38,8 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[15,30,45,60]"
-        :page-size="15"
+        :page-sizes="[10,20,30]"
+        :page-size="sendData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
         </el-pagination>
@@ -193,7 +193,7 @@
         },
         sendData: { // 查询参数
           pageNo: 1,
-          pageSize: 15,
+          pageSize: 10,
           departid: ''
         },
         scopeRow: '',
@@ -301,7 +301,7 @@
           setTimeout(() => {
               this.$refs.vuetree.setCurrentKey(this.shumo.toString())
         }, 100);
-        
+
         // 获取当前选择行中的值到编辑对话框中然后弹出
         this.scopeRow = data;
         var sdepartId = data.departId;

@@ -36,7 +36,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="会议时间:">
-        <el-date-picker v-model="myApplyChangeForm.meetingTime" type="datetime" placeholder="选择会议时间" size="small" style="min-width:200px"
+        <el-date-picker v-model="myApplyChangeForm.meetingTime" type="datetime" placeholder="选择会议时间" size="small" style="min-width:180px"
                         value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       </el-form-item>
       <el-form-item label="会议地点:" prop="meetingPlace">
@@ -61,7 +61,7 @@
         <el-table-column property="mobilePhone" label="电话"></el-table-column>
       </el-table>
       <!-- 分页条 -->
-      <el-pagination class="pageList mt1" background :page-sizes="[15,30,60,100]" :page-size="handleQueryParam.pageSize" layout="total, sizes, prev, pager, next, jumper"
+      <el-pagination class="pageList mt1" background :page-sizes="[10,20,30]" :page-size="handleQueryParam.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="handlerPersonTotal" :current-page.sync="handleQueryParam.pageNo" @size-change="handleNextJobSizeChange" @current-change="loadNextJobUserList()"></el-pagination>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="subimtHandlerPerson">确 认</el-button>
@@ -81,7 +81,7 @@
         <el-table-column prop="zhiwei" label="职位" align="center"></el-table-column>
         <el-table-column prop="mobilePhone" label="电话" align="center" show-overflow-tooltip></el-table-column>
       </el-table>
-      <el-pagination class="pageList mt1" background :page-sizes="[15,30,60,100]" :page-size="copyQueryParam.pageSize" layout="total, sizes, prev, pager, next, jumper"
+      <el-pagination class="pageList mt1" background :page-sizes="[10,20,30]" :page-size="copyQueryParam.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="copyPersonTotal" :current-page.sync="copyQueryParam.pageNo" @size-change="handleCopyPersonSizeChange" @current-change="initCopyUsersList()"></el-pagination>
 
       <div slot="footer" class="dialog-footer">
@@ -161,7 +161,7 @@ export default {
       handleQueryParam: {
         username: "",  //用户名
         pageNo: 1,
-        pageSize: 15,
+        pageSize: 10,
         moneyLevel: ""
       },
       copyUserGroupTree: [],  //处理人组织机构Tree
@@ -171,7 +171,7 @@ export default {
         realname: "",  //姓名
         position: "",  //职位
         pageNo: 1,
-        pageSize: 15
+        pageSize: 10
       },
       copyPersonTotal: 0,  //抄送人集合长度
       multipleSelectionCopy: []  //多选抄送人

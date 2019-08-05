@@ -22,7 +22,7 @@
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table class="textList" border :data="myApplyChangePageList" style="width: 100%" height="68vh">
+    <el-table class="textList" border :data="myApplyChangePageList" style="width: 100%" height="70vh">
       <el-table-column prop="changeName" label="变更名称" align="center"></el-table-column>
       <el-table-column prop="amountMoney" label="变更金额(万元)" align="center"></el-table-column>
       <el-table-column label="变更等级" align="center">
@@ -49,14 +49,14 @@
       </el-table-column>
       <el-table-column fixed="right" label="详情" align="center" >
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="查看申请" placement="top">
+          <el-tooltip class="item" effect="dark" content="查看" placement="top">
             <el-button type="primary" size="small" icon="el-icon-search" circle @click="findApplyDetail(scope.row.id)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :page-sizes="[15,30,60,100]" :page-size="sendData.pageSize" layout="total, sizes, prev, pager, next, jumper"
+    <el-pagination class="pageList mt1" background :page-sizes="[10,20,30]" :page-size="sendData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                    :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange" @current-change="query()"></el-pagination>
 
     <!-- 弹框 -->
@@ -94,7 +94,7 @@
           changeName: "", // 开始时间
           moneyLevel: "", // 结束时间
           pageNo: 1, // 当前页
-          pageSize: 15 // 每页条数
+          pageSize: 10 // 每页条数
         },
         myApplyChangePageList: [],  //我申请的变更
         dialogFormVisible: false,   //默认弹框不显示

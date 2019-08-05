@@ -30,7 +30,7 @@
           <span>编码: {{ treeFrom.projectCode }}</span>
         </div>
         <div style="right: 0.5vw;top:.7vw">
-          <span>桩号: {{ treeFrom.zhuanghao }}</span>
+          <span>桩号: {{ treeFrom.zhuanghao=='null_null'? "" : treeFrom.zhuanghao }}</span>
         </div>
         <div style="right: 0vw;bottom: 1vh">
           <el-button v-if="projectItemId!==''" type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addProcess()">添加工序</el-button>
@@ -40,9 +40,11 @@
       <!-- 操作列表 -->
       <div v-if="projectItemId !==''" class="Cztab">
         <el-table border  :data="tableData" height="68vh" class="textList">
-          <!-- height="65vh" -->
-          <el-table-column prop="seq" label="序号" align="center" width="50"/>
-          <el-table-column prop="station" label="桩号" align="center"/>
+          <el-table-column
+            type="index"
+            width="50" align="center" label="序号">
+          </el-table-column>
+
           <el-table-column prop="processName" label="工序名称" align="center"/>
           <el-table-column prop="planSelfCheckTime" label="自检时间" align="center"/>
           <el-table-column prop="planCheckTime" label="验收时间" align="center"/>
@@ -64,10 +66,10 @@
             <template slot-scope="scope">
               <!-- 指定验收 -->
               <el-tooltip v-if="scope.row.state2===0" class="item" effect="dark" content="指定验收计划" placement="top">
-                <el-button :id="scope.$index" type="primary" size="small" icon="el-icon-star-off" circle @click="appointCheckPlan(scope)"/>
+                <el-button :id="scope.$index" type="warning" size="small" icon="el-icon-edit" circle @click="appointCheckPlan(scope)"/>
               </el-tooltip>
               <el-tooltip v-if="scope.row.state2===1" class="item" effect="dark" content="修改验收计划" placement="top">
-                <el-button :id="scope.$index" type="primary" size="small" icon="el-icon-star-off" circle @click="appointCheckPlan(scope)"/>
+                <el-button :id="scope.$index" type="warning" size="small" icon="el-icon-edit" circle @click="appointCheckPlan(scope)"/>
               </el-tooltip>
               <!-- 查看按钮 -->
               <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
@@ -81,7 +83,7 @@
           </el-table-column>
         </el-table>
         <!--  分页 -->
-        <el-pagination :page-sizes="[15,30,60,100]" :page-size="1" :total="querydata.total" :current-page.sync="querydata.pageNo" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleAppointProcessSizeChange" @current-change="loadAppointProcessList"/>
+        <el-pagination :page-sizes="[10,20,30]" :page-size="10" :total="querydata.total" :current-page.sync="querydata.pageNo" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleAppointProcessSizeChange" @current-change="loadAppointProcessList"/>
       </div>
 
     </div>
@@ -140,7 +142,7 @@
           <el-table-column property="mobilePhone" label="电话"/>
         </el-table>
         <!-- 分页 --->
-        <el-pagination :page-sizes="[15,30,60,100]" :page-size="1" :total="pageForm.total" :current-page.sync="pageForm.pageNo" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="selectCheckPerson(currentSelectedState)"/>
+        <el-pagination :page-sizes="[10,20,30]" :page-size="10" :total="pageForm.total" :current-page.sync="pageForm.pageNo" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="selectCheckPerson(currentSelectedState)"/>
 
         <div slot="footer" class="dialog-footer">
           <el-button class="btnSizes" @click="setCheckPersonDialogFormVisible = false">取 消</el-button>
@@ -149,13 +151,6 @@
       </el-dialog>
 
       <el-form ref="apponitCheckFrom" :model="apponitCheckFrom" :rules="apponitCheckFromRules" label-width="125px">
-        <el-form-item label="监理验收人"  prop="planCheckPerson">
-          <el-input v-model="apponitCheckFrom.planCheckPerson" :readonly="true" autocomplete="off" style="width:50%"/>&nbsp;&nbsp;&nbsp;
-          <span class="ysr" @click="selectCheckPerson('supervisor')">[选择验收人]</span>
-        </el-form-item>
-        <el-form-item label="监理验收时间" prop="planCheckTime">
-          <el-date-picker :editable="false"  v-model="apponitCheckFrom.planCheckTime" type="date" placeholder="选择日期" style="width:50%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"/>
-        </el-form-item>
         <el-form-item label="施工验收人" prop="planSelfCheckPerson">
           <el-input v-model="apponitCheckFrom.planSelfCheckPerson" :readonly="true" autocomplete="off" style="width:50%" />&nbsp;&nbsp;&nbsp;
           <span class="ysr" @click="selectCheckPerson('construction')">[选择验收人]</span>
@@ -163,6 +158,14 @@
         <el-form-item label="施工验收时间" prop="planSelfCheckTime">
           <el-date-picker :editable="false" v-model="apponitCheckFrom.planSelfCheckTime" type="date" placeholder="选择日期" style="width:50%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"/>
         </el-form-item>
+        <el-form-item label="监理验收人"  prop="planCheckPerson">
+          <el-input v-model="apponitCheckFrom.planCheckPerson" :readonly="true" autocomplete="off" style="width:50%"/>&nbsp;&nbsp;&nbsp;
+          <span class="ysr" @click="selectCheckPerson('supervisor')">[选择验收人]</span>
+        </el-form-item>
+        <el-form-item label="监理验收时间" prop="planCheckTime">
+          <el-date-picker :editable="false"  v-model="apponitCheckFrom.planCheckTime" type="date" placeholder="选择日期" style="width:50%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"/>
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="appointCheckDialogFormVisible = false">取 消</el-button>
@@ -265,7 +268,7 @@ export default {
       },
       pageForm: {
         pageNo: 1,  // 当前页
-        pageSize: 15,  // 每页条数
+        pageSize: 10,  // 每页条数
         total: 0,  // 总条数
         realname: '',  // 姓名值
         position: ''   // 职位
@@ -273,7 +276,7 @@ export default {
       querydata: {   //指定工序列表
         projectItemId: '',
         pageNo: 1,
-        pageSize: 15,
+        pageSize: 10,
         total: 0   //总条数
       },
       dialogFormVisible: false,   // 添加工序弹框

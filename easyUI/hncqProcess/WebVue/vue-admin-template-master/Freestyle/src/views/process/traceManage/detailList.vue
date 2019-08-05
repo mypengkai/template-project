@@ -256,7 +256,7 @@ export default {
       width: 100%;
       background: url("./images/bkg007.png") no-repeat;
       background-size: 100% 100%;
-      height: 150px;
+      height: 230px;
       img {
         width: 100%;
         height: 100%;

@@ -6,27 +6,28 @@
       <el-input v-model="input" placeholder="请输入内容"/>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="chaxun()">查询</el-button>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button type="primary"  icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="reset()">重置</el-button>
         <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="bianTan()">新增</el-button>
       </div>
     </div>
-    <el-table border  :data="tableData" class="textList" height="74vh">
+    <el-table border  :data="tableData" class="textList" height="70vh">
       <el-table-column prop="rolecode" label="角色编码"/>
       <el-table-column prop="rolename" label="角色名称"/>
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
-          <el-tooltip content="编辑" placement="top">
-            <el-button v-ltx="'roleUpdate'" type="primary" icon="el-icon-edit" circle @click="bianTan(scope.row)"/>
-          </el-tooltip>
-          <el-tooltip content="删除" placement="top">
-            <el-button v-ltx="'roleDelete'" v-if="isDelete(scope.row.rolecode)" type="danger" icon="el-icon-delete" circle @click="open2(scope.row.id)"/>
-          </el-tooltip>
           <el-tooltip content="PC端权限" placement="top">
-            <el-button type="success" icon="el-icon-zoom-in" circle @click="sxlb(scope.row.id,'1')"/>
+            <el-button type="success" icon="el-icon-zoom-in" size="small" circle @click="sxlb(scope.row.id,'1')"/>
           </el-tooltip>
           <el-tooltip content="移动端权限" placement="top">
-            <el-button type="primary" icon="el-icon-phone" circle @click="sxlb(scope.row.id,'2')"/>
+            <el-button type="primary" icon="el-icon-phone" size="small" circle @click="sxlb(scope.row.id,'2')"/>
           </el-tooltip>
+          <el-tooltip content="编辑" placement="top">
+            <el-button v-ltx="'roleUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="bianTan(scope.row)"/>
+          </el-tooltip>
+          <el-tooltip content="删除" placement="top">
+            <el-button v-ltx="'roleDelete'" v-if="isDelete(scope.row.rolecode)" type="danger" size="small" icon="el-icon-delete" circle @click="open2(scope.row.id)"/>
+          </el-tooltip>
+
         </template>
       </el-table-column>
     </el-table>

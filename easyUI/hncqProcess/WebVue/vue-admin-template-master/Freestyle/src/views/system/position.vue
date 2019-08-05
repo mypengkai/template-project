@@ -19,13 +19,13 @@
       <el-table-column prop="realname" label="创建人" align="center"/>
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle v-ltx="'editPosition'" @click="addPosition(scope.row)"/>
-          <el-button type="danger" icon="el-icon-delete" circle v-ltx="'deletePosition'" @click="deletePosition(scope.row)"/>
+          <el-button type="warning" size="small" icon="el-icon-edit" circle v-ltx="'editPosition'" @click="addPosition(scope.row)"/>
+          <el-button type="danger" size="small" icon="el-icon-delete" circle v-ltx="'deletePosition'" @click="deletePosition(scope.row)"/>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination :page-sizes="[7,15,20,30]" :page-size="1" :total="total" :current-page.sync="queryData.pageNo" class="pageList pt20 mt1" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="loadPostionList"/>
+    <el-pagination :page-sizes="[10,20,30]" :page-size="10" :total="total" :current-page.sync="queryData.pageNo" class="pageList pt20 mt1" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="loadPostionList"/>
     <!-- 弹框 -->
     <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" class="dialogBox">
       <el-form class="reverseBox" ref="positionFrom" :model="positionFrom" label-width="130px" :rules="rules">
@@ -66,7 +66,7 @@ export default {
       queryData: {
         jobName: '',
         pageNo: 1,
-        pageSize: 7
+        pageSize: 10
       },
       positionList: [],  //岗位列表
       total: 0, // 分页总条数

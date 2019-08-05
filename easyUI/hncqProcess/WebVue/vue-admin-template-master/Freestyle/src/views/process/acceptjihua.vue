@@ -14,17 +14,33 @@
             <span>姓名:</span>
             <el-input v-model="queryData.userName" placeholder="请输入内容" size="small"></el-input>
           </el-col>-->
-        <el-col :span="5">
-          <span>验收类型:</span>
-          <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
-            <el-option
-              v-for="item in checkTypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+
+        <el-col :span="12">
+          <span>创建日期:</span>
+          <el-date-picker
+            v-model="queryData.starttime"
+            type="datetime"
+            placeholder="选择开始日期时间"
+            size="small"
+            style="min-width:180px"
+            value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
+          -
+          <el-date-picker
+            v-model="queryData.endtime"
+            type="datetime"
+            placeholder="选择结束日期时间"
+            size="small"
+            style="min-width:180px"
+            value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
         </el-col>
+
+      </el-row>
+    </div>
+
+    <div class="topBar">
+      <el-row>
         <el-col :span="5">
           <span>工序状态:</span>
           <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
@@ -36,35 +52,21 @@
             ></el-option>
           </el-select>
         </el-col>
-      </el-row>
-    </div>
 
-    <div class="topBar">
-      <el-row>
-        <el-col :span="20">
-          <span>创建日期:</span>
-          <el-date-picker
-            v-model="queryData.starttime"
-            type="datetime"
-            placeholder="选择开始日期时间"
-            size="small"
-            style="min-width:200px"
-            value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-          -
-          <el-date-picker
-            v-model="queryData.endtime"
-            type="datetime"
-            placeholder="选择结束日期时间"
-            size="small"
-            style="min-width:200px"
-            value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
+        <el-col :span="14">
+          <span>验收类型:</span>
+          <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
+            <el-option
+              v-for="item in checkTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-col>
-        <el-col :span="2">
+
+        <el-col :span="4">
           <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="query()">查询</el-button>
-        </el-col>
-        <el-col :span="2">
           <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
           </el-button>
         </el-col>
@@ -95,7 +97,7 @@
       <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
-            <el-button @click="handleClick(scope.row)" type="primary" circle icon="el-icon-search"
+            <el-button @click="handleClick(scope.row)" type="primary" size="small" circle icon="el-icon-search"
                        v-if="tableData.length!=0"></el-button>
           </el-tooltip>
         </template>
@@ -103,7 +105,7 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination class="pageList pt20 mt1" @size-change="handleSizeChange" @current-change="query"
-                   :current-page="queryData.pageNo" :page-sizes="[15,30,60,100]" :page-size="queryData.pageSize"
+                   :current-page="queryData.pageNo" :page-sizes="[10,20,30]" :page-size="queryData.pageSize"
                    layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
 
     <!-- 查看弹框 -->
@@ -139,7 +141,7 @@
           endtime: '',       // 结束时间
           userName: '',      // 姓名
           pageNo: 1,        // 当前页
-          pageSize: 15,   // 每页条数
+          pageSize: 10,   // 每页条数
           orgId: '',    // 组织机构id
           projectItemId: '',   //工程分部分项id
           checkType: '',   //验收类型

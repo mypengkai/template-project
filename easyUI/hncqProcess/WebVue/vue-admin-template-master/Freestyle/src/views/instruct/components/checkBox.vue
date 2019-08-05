@@ -162,7 +162,7 @@
         <el-table-column prop="departname" label="职务"></el-table-column>
         <el-table-column prop="mobilePhone" label="电话"></el-table-column>
       </el-table>
-      <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[15,30,60,100]" :page-size="receiveData.pageSize"
+      <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[10,20,30]" :page-size="receiveData.pageSize"
                      layout="total, sizes, prev, pager, next, jumper" @current-change="receiveUserList()" :total="total"></el-pagination>
     </el-dialog>
     <!-- 转发信息 -->
@@ -347,7 +347,7 @@ export default {
       },
       receiveData: {
         pageNo: 1, // 当前页
-        pageSize: 15, // 每页条数
+        pageSize: 10, // 每页条数
         userGroupId: "",
         realname: "", //用户真实名字
         position: ""   //职位

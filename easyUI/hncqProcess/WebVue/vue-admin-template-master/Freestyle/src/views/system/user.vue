@@ -35,7 +35,7 @@
     </div>
     <!-- 列表 -->
     <div>
-      <el-table border :data="userList" class="textList" style="width: 100%" height="72vh">
+      <el-table border :data="userList" class="textList" style="width: 100%" height="70vh">
         <el-table-column prop="userName" label="用户账号" />
         <el-table-column prop="realName" label="姓名" align="center"/>
         <el-table-column prop="departName" label="组织机构" align="center"/>
@@ -47,9 +47,10 @@
             <el-tooltip content="修改" placement="top">
               <el-button
                 v-ltx="'userUpdate'"
-                type="primary"
+                type="warning"
                 icon="el-icon-edit"
                 circle
+                size="small"
                 @click="actionItem(scope.row)"
               />
             </el-tooltip>
@@ -58,6 +59,7 @@
                 v-ltx="'userDelete'"
                 type="danger"
                 icon="el-icon-delete"
+                size="small"
                 circle
                 @click="Delete(scope.row)"
               />
@@ -68,8 +70,8 @@
     </div>
     <!-- 分页 -->
     <el-pagination
-      :page-sizes="[7,15,20,30]"
-      :page-size="1"
+      :page-sizes="[10,20,30]"
+      :page-size="10"
       :total="total"
       :current-page.sync="sendData.pageNo"
       class="pageList pt20 mt1"
@@ -125,7 +127,7 @@ export default {
         SQLrealname: "", // 用户真实姓名
         SQLorgid: "", // 部门id
         pageNo: 1,
-        pageSize: 7
+        pageSize: 10
       }
     };
   },

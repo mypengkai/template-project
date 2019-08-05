@@ -15,11 +15,11 @@
       </div>
       <span>发起日期:</span>
       <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:200px" value-format="yyyy-MM-dd HH:mm:ss"
+                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
                       format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       -
       <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:200px" value-format="yyyy-MM-dd HH:mm:ss"
+                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
                       format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
     </div>
     <!-- 查询列表 -->
@@ -50,13 +50,13 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
+            <el-button type="primary" size="small" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[5,10,15,30]"
+    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[10,20,30]"
                    :page-size="sendData.pageSize"
                    layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total"
                    @size-change="handleSizeChange"></el-pagination>
@@ -101,7 +101,7 @@
           starttime: '', // 开始时间
           endtime: '', // 结束时间
           pageNo: 1, // 当前页
-          pageSize: 15, // 每页条数
+          pageSize: 10, // 每页条数
           Mark: 1 //  标记：1：发送、2：接收
         },
 
@@ -173,9 +173,9 @@
 </script>
 
 <style lang="scss" scoped>
-  .el-select .el-input {
+ /* .el-select .el-input {
     width: 130px;
-  }
+  }*/
 
   .input-with-select .el-input-group__prepend {
     background-color: #fff;

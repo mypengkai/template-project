@@ -6,7 +6,7 @@
       <el-table-column property="mobilePhone" label="电话"></el-table-column>
     </el-table>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :page-sizes="[15,30,60,100]" :page-size="queryParam.pageSize" layout="total, sizes, prev, pager, next, jumper"
+    <el-pagination class="pageList mt1" background :page-sizes="[10,20,30]" :page-size="queryParam.pageSize" layout="total, sizes, prev, pager, next, jumper"
                    :total="total" :current-page.sync="queryParam.pageNo" @size-change="handleNextJobSizeChange" @current-change="loadNextJobUserList()"></el-pagination>
     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px; text-align: right;">
       <el-button type="primary" @click="submit">确 认</el-button>
@@ -26,7 +26,7 @@ export default {
       queryParam: {
         username: "",  //用户名
         pageNo: 1,
-        pageSize: 15,
+        pageSize: 10,
         moneyLevel: ""
       },
       currentRow: []  //获取选中的行
