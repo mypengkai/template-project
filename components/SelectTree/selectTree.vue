@@ -24,6 +24,7 @@
       size="small"
       ref="input"
       v-model="labelModel"
+       v-on:change="getperson"
       clearable
       :style="`width: ${width}px`"
       :class="{ 'rotate': showStatus }"
@@ -123,10 +124,16 @@ export default {
     onClickNode(node) {
       this.$emit('noDe',node)
       this.labelModel = node[this.props.label];
+      console.log(this.labelModel)
       this.valueModel = node[this.props.value];
       this.onCloseTree();
     },
+    //获取人员
+    getperson(value){
+      alert(123)
+      // this.$parent.getpersons();
 
+    },
 
     // 偏平数组转化为树状层级结构
     switchTree() {

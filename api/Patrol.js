@@ -13,6 +13,18 @@ export default {
     chakanList(id) {
         return request.post(`/rest/Patrol/chakan/${id}`)
     },
+    //人员使用统计
+    personTj(data){
+        return request.post("/rest/Patrol/userStatistics",data)
+    },
+    //巡视旁站
+    siteTj(data){
+        return request.post("/rest/Patrol/patrolStatistics",data)
+    },
+    //获取人员
+    getperson(){
+        return request.post("")
+    }
 }
 
 

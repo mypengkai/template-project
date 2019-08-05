@@ -23,7 +23,7 @@ tool.messageSuccess = (msg, sec = 3) => {
   Message.success({
     message: msg,
     duration: sec * 1000
-  });
+  })
 };
 
 tool.messageErr = (msg, sec = 3) => {

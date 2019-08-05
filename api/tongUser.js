@@ -9,6 +9,6 @@ export default {
     return request.post('/rest/sync/user/list', data)
   },
   updateUserData(data) {
-    return request.post('/rest/sync/user/add',data)
-  },
+    return request.post('/rest/sync/user/add', data)
+  }
 }
