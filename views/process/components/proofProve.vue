@@ -1,18 +1,17 @@
 <template>
   <div class="printerCheck">
-    <!-- startprint -->
     <div class="printCheckConent">
-      <p>湖南长祁高速验收凭证</p>
-      <el-table :data="formData" style="width:100%;" max-height="400" border>
-        <el-table-column prop="projectName" label="分部分项"></el-table-column>
-        <el-table-column prop="Station" label="桩号"></el-table-column>
-        <el-table-column prop="processname" label="工序名称"></el-table-column>
-        <el-table-column prop="realitychecktime" label="验收时间"></el-table-column>
-        <el-table-column prop="realname" label="验收人"></el-table-column>
-        <el-table-column prop="checkdescribe" label="验收说明"></el-table-column>
+      <el-table :data="formData" style="width:100%;" border>
+        <el-table-column label="湖南长祁高速验收凭证">
+          <el-table-column prop="projectName" label="分部分项"></el-table-column>
+          <el-table-column prop="Station" label="桩号"></el-table-column>
+          <el-table-column prop="processname" label="工序名称"></el-table-column>
+          <el-table-column prop="realitychecktime" label="验收时间"></el-table-column>
+          <el-table-column prop="realname" label="验收人"></el-table-column>
+          <el-table-column prop="checkdescribe" label="验收说明"></el-table-column>
+        </el-table-column>
       </el-table>
     </div>
-    <!-- endprint -->
     <div class="printerCheckfooter">
       <el-button type="info" @click="close">取消</el-button>
       <el-button type="primary" @click="drPrint">打印</el-button>
@@ -67,29 +66,17 @@ export default {
       document.body.innerHTML = newContent;
       //执行window.print打印功能
       window.print();
+      this.previewShur();      // 改变打印数据的状态（已打印，未打印）
       // 重新加载页面，以刷新数据。以防打印完之后，页面不能操作的问题
-      //window.location.reload();
+      window.location.reload();
       document.body.innerHTML = oldContent;
       return false;
-
-      // let newWindow = window.open("_blank"); //  打开新窗口
-      // let codestr = document.querySelector(".printCheckConent").innerHTML; //  获取需要生成pdf页面的div代码
-      // newWindow.document.write(codestr); //  向文档写入HTML表达式或者JavaScript代码
-      // newWindow.document.close(); //  关闭document的输出流, 显示选定的数据
-      // newWindow.print(); //  打印当前窗口
-      // return true;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
 .printerCheck {
-  .printCheckConent {
-    p {
-      font-size: 16px;
-      font-weight: bold;
-    }
-  }
   .printerCheckfooter {
     margin-top: 20px;
     text-align: right;
