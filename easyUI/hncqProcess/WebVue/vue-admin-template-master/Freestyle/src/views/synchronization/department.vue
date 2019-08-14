@@ -7,7 +7,7 @@
       </div>
     </div>
      <!-- syncId -->
-    <tree-table :data="treeData" border >
+    <tree-table :data="treeData" border style="width: 100%" border height="70vh">
       <el-table-column label="组织机构" align="center">
         <template slot-scope="scope"><span style="">{{scope.row.name}}</span></template>
       </el-table-column>
@@ -23,7 +23,7 @@
       </el-table-column>
       <el-table-column label="操作" width="300" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-refresh" circle @click="departData(scope.row)"></el-button>
+          <el-button type="primary" size="small" icon="el-icon-refresh" circle @click="departData(scope.row)"></el-button>
         </template>
       </el-table-column>
     </tree-table>
