@@ -8,7 +8,7 @@
         </el-button>
       </el-col>
     </el-row>
-    <el-table :data="userData" style="width: 100%" border height="480" class="textList">
+    <el-table :data="userData" style="width: 100%" border height="70vh" class="textList">
       <el-table-column label="姓名" align="center" width="200">
         <template slot-scope="scope"><span style>{{scope.row.realname}}</span></template>
       </el-table-column>
@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column label="操作" width="300" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-refresh" circle @click="synchronizationUser(scope.row)"></el-button>
+          <el-button type="primary" size="small" icon="el-icon-refresh" circle @click="synchronizationUser(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
