@@ -11,7 +11,8 @@
         </el-col>
       </el-row>
     </div>
-    <tree-table :data="menuList" class="textList" border row-key>
+    <el-table :data="menuList" class="textList" border row-key="id" :default-expand-all="false"
+              :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
       <el-table-column label="菜单标题" height="250" align="center">
         <template slot-scope="scope">{{ scope.row.meta.title }}</template>
       </el-table-column>
@@ -25,8 +26,7 @@
         <template slot-scope="scope">{{ scope.row.path }}</template>
       </el-table-column>
       <el-table-column label="类型" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.type==='0' ? '按钮': '菜单' }}</template>
+        <template slot-scope="scope">{{ scope.row.type==='0' ? '按钮': '菜单' }}</template>
       </el-table-column>
       <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope" type="scope.row">
@@ -41,97 +41,58 @@
           </el-tooltip>
         </template>
       </el-table-column>
-    </tree-table>
+    </el-table>
 
     <!-- 新增/修改弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" :before-close="closeResourceDialog" :append-to-body="true" :lock-scroll="false" class="dialogBox">
-      <template>
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="资源名称：" prop="name">
-                <el-input v-model="ruleForm.name"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="资源类型：">
-                <el-switch v-model="ruleForm.type" active-color="#13ce66" active-value="1" inactive-value="0" inactive-color="#ff4949" />
-                <span v-html="swithTypeTxt"></span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="使用设备：">
-                <el-switch v-model="ruleForm.isVueFunction" active-color="#13ce66" active-value="1" inactive-value="2" inactive-color="#ff4949"/>
-                <span v-html="swithMarkTxt"></span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item v-if="flag" label="父资源名称：" prop="ID">
-                <el-input :disabled="flag" :placeholder="ruleForm.parentName"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="资源标题：" prop="title">
-                <el-input v-model="ruleForm.title"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="资源图标：" prop="icon">
-                <el-input v-model="ruleForm.icon"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="资源组件：" prop="component">
-                <el-input v-model="ruleForm.component"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="菜单路径：" prop="path">
-                <el-input v-model="ruleForm.path"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="菜单排序：" prop="functionLevel">
-                <el-input-number v-model="ruleForm.functionLevel" :min="1" :max="100" controls-position="right" label="菜单排序"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </template>
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="资源名称：" prop="name">
+          <el-input v-model="ruleForm.name"/>
+        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="资源类型：" prop="type">
+              <el-switch v-model="ruleForm.type" active-color="#13ce66" active-value="1" active-text="菜单" inactive-value="0" inactive-color="#ff4949" inactive-text="按钮" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="终端：">
+              <el-switch v-model="ruleForm.isVueFunction" active-color="#13ce66" active-value="1" active-text="PC" inactive-value="2" inactive-color="#ff4949" inactive-text="手机"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item v-if="flag" label="父资源名称：" prop="ID">
+          <el-input :disabled="flag" :placeholder="ruleForm.parentName"/>
+        </el-form-item>
+        <el-form-item label="资源标题：" prop="title">
+          <el-input v-model="ruleForm.title"/>
+        </el-form-item>
+        <el-form-item label="资源图标：" prop="icon">
+          <el-input v-model="ruleForm.icon"/>
+        </el-form-item>
+        <el-form-item label="资源组件：" prop="component">
+          <el-input v-model="ruleForm.component"/>
+        </el-form-item>
+        <el-form-item label="菜单路径：" prop="path">
+          <el-input v-model="ruleForm.path"/>
+        </el-form-item>
+        <el-form-item label="菜单排序：" prop="functionLevel">
+          <el-input-number v-model="ruleForm.functionLevel" :min="1" :max="100" controls-position="right" label="菜单排序"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
+
   </div>
 
 </template>
 <script>
-  import treeTable from '@/components/TreeTable'
   import api from '@/api/resource.js'
   export default {
     name: 'TreeTable',
-    components: {
-      treeTable
-    },
     data() {
       // 判断是否为正整数
       const checkFunctionLevel = (rule, value, callback) => {
@@ -151,8 +112,6 @@
         menuList: [],
         flag: true,
         mark: 1,
-        swithTypeTxt: '',
-        swithMarkTxt: '',
         // 新增修改时发生
         ruleForm: {
           name: '', // 菜单名称
@@ -168,39 +127,14 @@
           functionLevel: 1 // 菜单排序
         },
         rules: {
-          name: [{ required: true, message: '请输入资源名称', trigger: 'blur' }],
+          name: [{ required: true, message: '请输入资源名称', trigger: 'blur' }, { pattern: /^[a-zA-Z]+$/, message: '只能输入英文' }],
           type: [{ required: true, message: '请选择资源类型', trigger: 'blur' }],
           ID: [{ required: false, message: '请输入父级资源ID', trigger: 'blur' }],
-          title: [{ required: true, message: '请输入资源标题', trigger: 'blur' }],
+          icon: [{ required: false, message: '请输入资源图标', trigger: 'blur' }, { pattern: /^[a-zA-Z]+$/, message: '只能输入英文' }],
+          title: [{ required: true, message: '请输入资源标题', trigger: 'blur' }, {pattern: /^[\u4E00-\u9FA5]+$/, message: '角色名称只能为中文'}],
           Mark: [{ required: true, message: '请选择设备类型', trigger: 'blur' }],
           functionLevel: [{ required: true, message: '请输入菜单排序', validator: checkFunctionLevel, trigger: 'blur' }]
         }
-      }
-    },
-    watch: {
-      // 监听 type的变化
-      ruleForm: {
-        handler(val, oldVal) {
-          // 资源类型
-          switch (val.type) {
-            case '1':
-              this.swithTypeTxt = '菜单'
-              break
-            case '0':
-              this.swithTypeTxt = '按钮'
-              break
-          }
-          // 使用设备
-          switch (val.isVueFunction) {
-            case '1':
-              this.swithMarkTxt = 'PC端'
-              break
-            case '2':
-              this.swithMarkTxt = '移动端'
-              break
-          }
-        },
-        deep: true
       }
     },
     created() {
@@ -211,7 +145,19 @@
         if (val === 'add') {
           this.newTitle = '新增'
           this.flag = false
-          this.ruleForm = {}
+          this.ruleForm = {
+            name: '', // 菜单名称
+            pId: '', // 父菜单id
+            title: '', // 菜单标题
+            icon: '', // icon图标
+            component: '', // 组件
+            path: '', // 菜单路径
+            isVueFunction: '1', // 设备标识
+            id: '',
+            type: '1',
+            parentName: '',
+            functionLevel: 1 // 菜单排序
+          }
         } else if (son) {
           this.newTitle = val.meta.title + '~新增'
           this.flag = true
@@ -253,7 +199,19 @@
       },
       // 关闭dialog
       closeResourceDialog(data) {
-        this.ruleForm = {}
+        this.ruleForm = {
+          name: '', // 菜单名称
+          pId: '', // 父菜单id
+          title: '', // 菜单标题
+          icon: '', // icon图标
+          component: '', // 组件
+          path: '', // 菜单路径
+          isVueFunction: '1', // 设备标识
+          id: '',
+          type: '1',
+          parentName: '',
+          functionLevel: 1 // 菜单排序
+        }
         this.flag = false
         this.newTitle = ''
         this.dialogFormVisible = false
@@ -269,15 +227,12 @@
       submitForm(formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            console.log(JSON.stringify(this.ruleForm))
             // 新增
             api.menuAdd(this.ruleForm).then(res => {
-              this.$emit('comfirm')
               this.$message({
                 type: 'success',
                 message: '已完成!'
-              })
-              this.$emit('cancel')
+              });
             })
           } else {
             return false
