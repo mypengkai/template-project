@@ -2,15 +2,15 @@
   <div>
     <el-form class="reverseBox" ref="userFrom" :model="user" label-width="130px" :rules="rules">
       <div style="width:50%">
-        <el-form-item label="姓名:" prop="realname">
+        <el-form-item label="用户姓名:" prop="realname">
           <el-input v-model="user.realname"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem=='add'" label="用户名:" prop="username">
+        <el-form-item v-if="nowItem=='add'" label="登录名:" prop="username">
           <el-input v-model="user.username"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="nowItem!='add'" label="用户名:" prop="username">
+        <el-form-item v-if="nowItem!='add'" label="登录名:" prop="username">
           <el-input v-model="user.username" :disabled="true"></el-input>
         </el-form-item>
 
@@ -125,8 +125,8 @@ export default {
         parent: "parentdepartid",
       },
       rules: {
-        username: [{ required: true, message: "必填项", trigger: "blur" }],
-        realname: { required: true, message: "必填项", trigger: "blur" },
+        username: [{ required: true, message: "请输入登录名", trigger: "blur" }, { pattern: /^[a-zA-Z]+$/, message: '只能输入英文' }],
+        realname: [{ required: true, message: "请输入用户名", trigger: "blur" }, { pattern: /^[\u4E00-\u9FA5]+$/, message: '角色名称只能为中文'}],
         password: [
           { required: true, message: "必填项", trigger: "blur" },
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }

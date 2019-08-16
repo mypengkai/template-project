@@ -112,5 +112,18 @@ tool.isNotEmptyStr = function (str) {
   }
 }
 
+/**
+ * 判断字符串为空
+ * @param str
+ * @returns {boolean}
+ */
+tool.isEmptyStr = function (str) {
+  if ((undefined === str) || (str === null) || (str === '') || (str.trim().length === 0)) {
+    return true
+  } else {
+    return false
+  }
+}
+
 Vue.prototype.$tool = tool
 export default tool;

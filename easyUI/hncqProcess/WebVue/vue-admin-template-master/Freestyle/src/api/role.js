@@ -2,8 +2,8 @@ import request from '@/utils/request'
 
 export default {
   // 列表
-  roleList() {
-    return request.post('/rest/role/getList')
+  roleList(data) {
+    return request.post('/rest/role/getList', data)
   },
   // 角色新增
   roleAdd(data) {
