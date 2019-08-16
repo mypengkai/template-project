@@ -13,13 +13,13 @@
     </div>
     <el-table :data="menuList" class="textList" border row-key="id" :default-expand-all="false"
               :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
-      <el-table-column label="菜单标题" height="250" align="center">
+      <el-table-column label="菜单名称" height="250" align="center">
         <template slot-scope="scope">{{ scope.row.meta.title }}</template>
       </el-table-column>
-      <el-table-column label="菜单名称" height="250" align="center">
+      <el-table-column label="资源名称" height="250" align="center">
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="分支名称" align="center">
+      <el-table-column label="资源组件" align="center">
         <template slot-scope="scope">{{ scope.row.component }}</template>
       </el-table-column>
       <el-table-column label="菜单地址" align="center">
@@ -46,6 +46,9 @@
     <!-- 新增/修改弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" :before-close="closeResourceDialog" :append-to-body="true" :lock-scroll="false" class="dialogBox">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="菜单名称：" prop="title">
+          <el-input v-model="ruleForm.title"/>
+        </el-form-item>
         <el-form-item label="资源名称：" prop="name">
           <el-input v-model="ruleForm.name"/>
         </el-form-item>
@@ -61,19 +64,17 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item v-if="flag" label="父资源名称：" prop="ID">
+        <el-form-item v-if="flag" label="父菜单名称：" prop="ID">
           <el-input :disabled="flag" :placeholder="ruleForm.parentName"/>
         </el-form-item>
-        <el-form-item label="资源标题：" prop="title">
-          <el-input v-model="ruleForm.title"/>
-        </el-form-item>
-        <el-form-item label="资源图标：" prop="icon">
+
+        <el-form-item label="菜单图标：" prop="icon">
           <el-input v-model="ruleForm.icon"/>
         </el-form-item>
         <el-form-item label="资源组件：" prop="component">
           <el-input v-model="ruleForm.component"/>
         </el-form-item>
-        <el-form-item label="菜单路径：" prop="path">
+        <el-form-item label="菜单地址：" prop="path">
           <el-input v-model="ruleForm.path"/>
         </el-form-item>
         <el-form-item label="菜单排序：" prop="functionLevel">
