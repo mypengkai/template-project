@@ -46,7 +46,7 @@
                        ref="organization_userGroup"/>
         </el-form-item>
         <el-form-item label="GPS搜寻范围(m):">
-          <el-input v-model="organizationForm.searchRange"/>
+          <el-input v-model.number="organizationForm.searchRange" @input="inputChange($event)"/>
         </el-form-item>
         <el-form-item label="描述:" prop="description">
           <el-input v-model="organizationForm.description" type="textarea"/>
@@ -87,7 +87,7 @@ export default {
         description: "",
         parentdepartid: "",
         orgtype: "",
-        searchRange: "100"  //默认搜寻100米
+        searchRange: 100  //默认搜寻100米
       },
       orgTypeOption: [{  //组织机构类型
         value: '1',
@@ -122,7 +122,7 @@ export default {
           description: "",
           parentdepartid: "",
           orgtype: "",
-          searchRange: "100"
+          searchRange: 100
         };
         this.dialogTitle="组织机构新增";
         this.dialogFormVisible=true;
@@ -131,7 +131,7 @@ export default {
         request.get('/rest/organizate/depart/' + item.id).then(res=>{
           this.organizationForm=res.data.data;
           this.organizationForm.departid=res.data.data.id;
-          this.organizationForm.searchRange=res.data.data.search_range+'';
+          this.organizationForm.searchRange=res.data.data.search_range;
           if(res.data.data.parentdepartname===null && res.data.data.parentdepartid===null){
             this.organizationForm.parentdepartid="0";
           }else{
@@ -181,6 +181,9 @@ export default {
     },
     handleCheckChange(data, checked, indeterminate) { // 组织机构选择后的数据---监听Tree 选择
       this.organizationForm.parentdepartid = data.id;
+    },
+    inputChange(e){  //文本框无法输入
+      this.$forceUpdate();
     }
   }
 }
