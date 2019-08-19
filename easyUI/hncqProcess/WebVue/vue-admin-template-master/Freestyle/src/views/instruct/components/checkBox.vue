@@ -162,6 +162,7 @@
         <el-table-column prop="departname" label="职务"></el-table-column>
         <el-table-column prop="mobilePhone" label="电话"></el-table-column>
       </el-table>
+
       <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[10,20,30]" :page-size="receiveData.pageSize"
                      layout="total, sizes, prev, pager, next, jumper" @current-change="receiveUserList()" :total="total"></el-pagination>
     </el-dialog>

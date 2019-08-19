@@ -112,6 +112,7 @@ import smsRechargeAPI from '../../api/smsRecharge'
 import organizationAPI from '@/api/Organization'
 import SelectTree from "@/components/SelectTree/selectTree"
 export default {
+  inject: ['reload'],
   name: "smsRecharge",
   components: {
     SelectTree
@@ -189,7 +190,9 @@ export default {
     },
     resetQueryParam(){   //短信充值重置
       this.queryData={};
+      this.reload();
       this.getSmsRechargeList();
+
     },
     handleSizeChange(data){
       this.queryData.pageSize=data

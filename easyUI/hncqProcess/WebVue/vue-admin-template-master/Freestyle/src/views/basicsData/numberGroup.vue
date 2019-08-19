@@ -23,7 +23,7 @@
         <el-table-column align="center" prop="createName" label="创建人"/>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-            <el-button type="warning" size="small" icon="el-icon-edit" circle @click="Edit(scope.row)"/>
+<!--            <el-button type="warning" size="small" icon="el-icon-edit" circle @click="Edit(scope.row)"/>-->
             <el-button type="danger" size="small" icon="el-icon-delete" circle @click="Delete(scope.row)"/>
           </template>
         </el-table-column>
@@ -153,44 +153,6 @@
           }
         });
       },
-      // 点击编辑
-      Edit(data) {
-        this.shumo.length = 0
-        // 更改el-switch的值
-        var sisWarn = data.isWarn
-        if (sisWarn == '是') {
-          var sisWarn = true
-        }
-        if (sisWarn == '否') {
-          var sisWarn = false
-        }
-        // console.log(data)
-        this.shumo.push(data.departId)
-        setTimeout(() => {
-          this.$refs.vuetree.setCurrentKey(this.shumo.toString())
-        }, 100)
-
-        // 获取当前选择行中的值到编辑对话框中然后弹出
-        this.scopeRow = data
-        var sdepartId = data.departId
-        var sremainSmsNum = data.remainSmsNum
-        var ssendSmsSuccessNum = data.sendSmsSuccessNum
-        var ssendAllNum = data.sendAllNum
-        var ssendSmsFailNum = data.sendSmsFailNum
-        var swarnMoney = data.warnMoney
-        var swarnPhone = data.warnPhone
-        this.editSet.departId = sdepartId
-        this.editSet.remainSmsNum = sremainSmsNum
-        this.editSet.sendSmsSuccessNum = ssendSmsSuccessNum
-        this.editSet.sendAllNum = ssendAllNum
-        this.editSet.sendSmsFailNum = ssendSmsFailNum
-        this.editSet.warnMoney = swarnMoney
-        this.editSet.isWarn = sisWarn
-        this.editSet.warnPhone = swarnPhone
-        // 召唤对话框
-        this.editDialog = true
-      },
-
       handleSizeChange(val) {
         this.sendData.pageSize = val
         this._searchList()
@@ -203,10 +165,6 @@
             this.projectItemTree = res.data.data
           })
         } else {
-          this.$message({
-            message: '施工单位下才有工程分部分项'
-          })
-          return false
         }
       },
       projectItemOnClick(data) {   // 工程分部分项id

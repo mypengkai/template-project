@@ -15,8 +15,14 @@
 
             <el-col :span="24">
               <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
-                <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
-                             v-on:noDe="handleCheckChange"/>
+                <!--   <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
+                                v-on:noDe="handleCheckChange"/>
+                 </el-form-item>-->
+
+                <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:14vw;">
+                  <el-option v-for="item in userGroupTree" :key="item.id" :label="item.sondepartname"
+                             :value="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
 
@@ -102,7 +108,6 @@
   import request from '../../../utils/request'
   import { getToken } from '@/utils/auth'
   import project from '@/api/project.js'
-  import Organization from '@/api/Organization.js'
   import processInfo from '@/api/process.js'
   import SelectTree from '@/components/SelectTree/selectTree.vue'
   import viewer from '@/components/viewer'
@@ -190,7 +195,11 @@
         dialogVisible: false, // 上传图片
         formData: [],
         multipleSelection: [], // 勾选中数据
-        groupName: ''
+        groupName: '',
+        organizationId: '',
+        groupId: '',
+        selectedUserGroup: '',  //选中的用户组织机构
+
       }
     },
     created() {
@@ -228,8 +237,13 @@
         this.form = ObCopyData
         this.activities = ObCopyData.commandUser
       },
-      initUserGroupTree() {   // 初始化组织机构树
-        Organization.organizateTree().then(res => {
+      /*    initUserGroupTree() {   // 初始化组织机构树
+            Organization.organizateTree().then(res => {
+              this.userGroupTree = res.data.data
+            })
+          },*/
+      initUserGroupTree() {  //初始化组织机构树
+        request.post('/rest/processCheck/searchGrouplowestLevel').then(res => {
           this.userGroupTree = res.data.data
         })
       },
@@ -239,12 +253,21 @@
           this.receiveUsersList = res.data.data.data
         })
       },
-      handleCheckChange(data) {  // 组织机构选择后的数据
+  /*    handleCheckChange(data) {  // 组织机构选择后的数据
         this.form.userGroupId = data.id
         this.form.userGroupName = data.name
         project.projectList({ orgId: data.id }).then(res => {
           this.projectItemTree = res.data.data
         })
+      },*/
+      userGroupOnChange(data) {   //选择标段改动
+      /*  this.form.userGroupId = data
+        this.form.userGroupName = data.sondepartname*/
+        this.selectedUserGroup=data;  //选中的用户
+        request.post('/rest/projectItemInfo/getList', { orgId: data}).then(res => {
+          this.projectItemTree=res.data.data;
+        });
+        this.isShowProjectItem = true
       },
       handleProjectItemOnClick(data) { // 分部分项选择后的数据
         this.form.projectItemId = data.id
@@ -259,9 +282,10 @@
         this.receiveUserList()
       },
       addProcessFunction(formName) {
+      debugger
         const fromData = {
-          organizationId: this.userGroupId,
-          groupId: this.projectItemId,
+          organizationId: this.form.userGroupId,
+          groupId: this.form.projectItemId,
           groupName: this.groupName,
           groupUserId: this.groupUserIds,
           groupUser: this.userNames,
@@ -277,6 +301,7 @@
                 })
                 this.loadAppointProcessList()
                 this.dialogFormVisible = false
+
               }
             })
           }
