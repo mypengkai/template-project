@@ -108,7 +108,7 @@
         <el-form-item label="工序验收次数" prop="checkNum">
           <el-input-number v-model="checkNum"  controls-position="right" :min="1" :max="100"></el-input-number>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
+        <el-form-item label="备注">
           <el-input :rows="4" v-model="form.remark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
       </el-form>
@@ -246,7 +246,8 @@ export default {
       // 新增校验
       acceptRule: {
         processMDictId: [{ required: true, message: '请选择工序类型', trigger: 'change' }],
-        processSDictId: [{ required: true, message: '请选择工序', trigger: 'change' }]
+        processSDictId: [{ required: true, message: '请选择工序', trigger: 'change' }],
+        // remark: [{ required: true, message: '请输入备注', trigger: 'change' }],
       },
       // 指定验收校验
       apponitCheckFromRules: {
@@ -508,7 +509,10 @@ export default {
     },
     // 重置按钮
     reset() {
-      this.reload()
+      // this.reload()
+      this.pageForm.realname = "";
+      this.pageForm.position = "";
+
     },
     backupProcess(){   //补录工序
 

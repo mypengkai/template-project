@@ -70,11 +70,14 @@
             <span>类型：</span>
             <el-radio-group v-model="searchType">
               <el-radio label>全部</el-radio>
-              <el-radio label="log">日志</el-radio>
-              <el-radio label="selfcheck">自检</el-radio>
-              <el-radio label="realcheck">验收</el-radio>
-              <el-radio label="polling">巡视</el-radio>
+              <el-radio label="notice">通知</el-radio>
               <el-radio label="command">指令</el-radio>
+              <el-radio label="polling">巡视</el-radio>
+              <el-radio label="sideStation">旁站</el-radio>
+              <el-radio label="meeting">会议纪要</el-radio>
+
+             <!-- <el-radio label="selfcheck">自检</el-radio>
+              <el-radio label="realcheck">验收</el-radio>-->
             </el-radio-group>
           </div>
         </el-col>
