@@ -80,9 +80,9 @@ export default {
         jobType: ""  //岗位类型
       },
       rules: {
-        jobNameCn: [{ required: true, message: '请输入岗位中文名', trigger: 'blur' }],
-        jobNameEn: [{ required: true, message: '请输入岗位英文名', trigger: 'blur' }],
-        jobType: [{ required: true, message: '请输入岗位类型', trigger: 'change' }],
+        jobNameCn: [{ required: true, message: '请输入岗位中文名', trigger: 'blur' }, {pattern: /^[\u4E00-\u9FA5]+$/, message: '角色名称只能为中文'}],
+        jobNameEn: [{ required: true, message: '请输入岗位英文名', trigger: 'blur' }, { pattern: /^[a-zA-Z]+$/, message: '只能输入英文' }],
+        jobType: [{ required: true, message: '请选择岗位类型', trigger: 'change' }]
       },
       jobTypeList: [{
         id: '1',
@@ -115,7 +115,13 @@ export default {
       this.loadPostionList();
     },
     addPosition(data){  //新增岗位
-      this.positionFrom={};
+      this.positionFrom={
+        id: '',
+        jobNameCn: '',
+        jobNameEn: '',
+        jobRemark: '',
+        jobType: ""  //岗位类型
+      };
       if(data==='add'){
         this.dialogFormTitle='新增';
       }else{

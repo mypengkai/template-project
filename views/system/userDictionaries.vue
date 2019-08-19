@@ -2,20 +2,12 @@
   <div class="app-container">
     <div class="inquire" style>
       <div class="rl" style="margin-bottom:10px">
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addtan()">新增</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="addOrganization('add')">新增</el-button>
       </div>
     </div>
-    <el-table :data="shuData" class="textList" border row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column label="组织机构" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="组织机构编码" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.orgCode }}</span>
-        </template>
-      </el-table-column>
+    <el-table :data="organizationTreeTable" class="textList" border row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      <el-table-column label="组织机构" align="center" prop="name"></el-table-column>
+      <el-table-column label="组织机构编码" align="center" prop="orgCode"></el-table-column>
       <el-table-column label="组织机构类型" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.orgTpye==1">项目</span>
@@ -24,86 +16,48 @@
           <span v-if="scope.row.orgTpye==4">标段</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center">
-        <template slot-scope="scope">
-          <span style>{{ scope.row.description }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="GPS搜寻范围(米)" align="center" prop="searchRange"></el-table-column>
+      <el-table-column label="备注" align="center" prop="description"></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-            <el-button v-ltx="'dicUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="bianTan(scope.row)"/>
+            <el-button v-ltx="'dicUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="addOrganization(scope.row)"/>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button v-ltx="'dicDelete'" type="danger" size="small" icon="el-icon-delete" circle @click="dlelTan(scope.row)"/>
+            <el-button v-ltx="'dicDelete'" type="danger" size="small" icon="el-icon-delete" circle @click="deleteOrganization(scope.row)"/>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
+
     <!-- 新增弹框 -->
-    <el-dialog :visible.sync="dialogFormVisible" title="新增详情">
-      <el-form :model="formSet">
-        <el-form-item label="组织机构:" label-width="120px">
-          <el-input v-model="formSet.roleCode" autocomplete="off"/>
+    <el-dialog :visible.sync="dialogFormVisible" :title="dialogTitle">
+      <el-form :model="organizationForm" :rules="rules" ref="organizationForm" label-width="140px">
+        <el-form-item label="组织机构:" prop="departname">
+          <el-input v-model="organizationForm.departname" autocomplete="off"/>
         </el-form-item>
-        <el-form-item label="组织机构类型:" label-width="120px">
-          <el-select v-model="value" placeholder="请选择" @change="bblur">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+        <el-form-item label="组织机构类型:" prop="orgtype">
+          <el-select v-model="organizationForm.orgtype" placeholder="请选择">
+            <el-option v-for="item in orgTypeOption" :key="item.value" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
-        <div style="width:83%">
-          <el-form-item label="上级组织机构:" label-width="120px">
-            <el-input v-model="checkvalue" @focus="zuzhi"/>
-            <el-popover ref="popover4" v-model="flag" placement="bottom-start" width="400" trigger="click">
-              <el-tree :data="shuData" :props="defaultProps" highlight-current @node-click="handleNodeClick"/>
-            </el-popover>
-          </el-form-item>
-          <el-form-item label="描述:" label-width="120px">
-            <el-input v-model="formSet.miaoCode" type="textarea"/>
-          </el-form-item>
-        </div>
+        <el-form-item label="上级组织机构:" prop="parentdepartid">
+          <select-tree clearable :options="organizationTreeTable" :props="defaultProps" node-key="id" :default-expand-all="false" v-on:noDe="handleCheckChange"
+                       ref="organization_userGroup"/>
+        </el-form-item>
+        <el-form-item label="GPS搜寻范围(m):">
+          <el-input v-model="organizationForm.searchRange"/>
+        </el-form-item>
+        <el-form-item label="描述:" prop="description">
+          <el-input v-model="organizationForm.description" type="textarea"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="saveOrganization('organizationForm')">确 定</el-button>
+        </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addJia(0)">确 定</el-button>
-      </div>
     </el-dialog>
 
-    <!-- 编辑弹框 -->
-    <el-dialog :visible.sync="biandialogFormVisible" title="编辑详情">
-      <el-form :model="formSet">
-        <el-form-item label="组织机构:" label-width="120px">
-          <el-input v-model="formSet.roleCode" autocomplete="off"/>
-        </el-form-item>
-        <el-form-item label="组织机构类型:" label-width="120px">
-          <el-select v-model="value" placeholder="请选择" @change="bblur">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <div style="width:83%">
-          <el-form-item label="上级组织机构:" label-width="120px">
-            <el-input v-model="checkvalue1" :disabled="true" @focus="zuzhi"/>
-          </el-form-item>
-          <el-form-item label="描述:" label-width="120px">
-            <el-input v-model="formSet.miaoCode" type="textarea"/>
-          </el-form-item>
-        </div>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="biandialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="bianJia(1)">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -111,32 +65,31 @@
 import treeTable from '@/components/TreeTable'
 import SelectTree from '@/components/SelectTree/selectTree.vue'
 import request from '@/utils/request'
+
 export default {
   name: 'TreeTableDemo',
   components: { treeTable, SelectTree },
   data() {
     return {
-      input: '',
-      biandialogFormVisible: false,
+      organizationTreeTable: [],   //组织机构树表格
       dialogFormVisible: false,
-      formSet: {
-        roleCode: '',
-        firstCode: '',
-        miaoCode: ''
-      },
+      dialogTitle: "",  //弹框标题
       defaultProps: {
-        children: 'children',
-        label: 'name'
+        children: "children",
+        label: "name",
+        value: "id",
+        parent: "parentdepartid",
       },
-      shuData: [],
-      flag: false,
-      flag1: false,
-      checkvalue: '',
-      checkvalue1: '',
-      parentdepartid: '',
-      departid: '',
-      shumo: [],
-      options: [{
+      parentOrganizationTree: [],  //父级组织机构树
+      organizationForm: {  //组织机构表单提交数据
+        departid: "",
+        departname: "",
+        description: "",
+        parentdepartid: "",
+        orgtype: "",
+        searchRange: "100"  //默认搜寻100米
+      },
+      orgTypeOption: [{  //组织机构类型
         value: '1',
         label: '项目'
       }, {
@@ -149,98 +102,64 @@ export default {
         value: '4',
         label: '标段'
       }],
-      value: '',
-      leiXing: ''
+      rules: {
+        departname: [{required: true, message: '请输入组织机构名称', trigger: 'blur'}],
+        parentdepartid: [{required: true, message: '请选择父组织机构', trigger: 'blur'}],
+        orgtype: [{required: true, message: '请选择组织机构类型', trigger: 'change'}],
+        description: [{required: false, message: '请选择组织机构类型', trigger: 'change'}]
+      }
     }
   },
-  created() {},
-  mounted() {
-    this.fn()
+  created() {
+    this.initOrganizationTreeTable()
   },
   methods: {
-    bblur(data) {
-      this.leiXing = data
-    },
-    // 编辑弹框
-    bianTan(data) {
-      this.biandialogFormVisible = true
-      this.shumo.length = 0
-      switch (data.orgTpye) {
-        case '1':
-          this.value='项目';
-          break;
-        case '2':
-          this.value='业主';
-          break;
-        case '3':
-          this.value='监理';
-          break;
-        case '4':
-          this.value='标段';
-          break;
+    addOrganization(item) {  // 新增弹框
+      if(item==='add'){  //新增
+        this.organizationForm={  //组织机构表单提交数据
+          departid: "",
+          departname: "",
+          description: "",
+          parentdepartid: "",
+          orgtype: "",
+          searchRange: "100"
+        };
+        this.dialogTitle="组织机构新增";
+        this.dialogFormVisible=true;
+        this.$refs.organization_userGroup.labelModel="";  //清空
+      }else{
+        request.get('/rest/organizate/depart/' + item.id).then(res=>{
+          this.organizationForm=res.data.data;
+          this.organizationForm.departid=res.data.data.id;
+          this.organizationForm.searchRange=res.data.data.search_range+'';
+          if(res.data.data.parentdepartname===null && res.data.data.parentdepartid===null){
+            this.organizationForm.parentdepartid="0";
+          }else{
+            this.$refs.organization_userGroup.labelModel=res.data.data.parentdepartname;
+            this.organizationForm.parentdepartid=res.data.data.parentdepartid;
+          }
+        });
+        this.dialogTitle=item.name+"~修改";
+        this.dialogFormVisible=true;
       }
-      this.formSet.roleCode = data.name
-      this.formSet.miaoCode = data.description
-      this.departid = data.id
-      this.checkvalue1 = data.parent.name
-      this.shumo.push(data.parentdepartid)
     },
-    // 编辑
-    bianJia(data) {
-      this.addBian(data)
-      this.formSet.roleCode = ''
-      this.formSet.miaoCode = ''
-      this.biandialogFormVisible = false
-    },
-    // 新增弹框
-    addtan() {
-      this.formSet.roleCode = ''
-      this.formSet.miaoCode = ''
-      this.departid = ''
-      this.parentdepartid = ''
-      this.checkvalue = ''
-      this.dialogFormVisible = true
-    },
-    // 新增
-    addJia(data) {
-      if (this.formSet.roleCode == '') {
-        this.$message({
-          message: '请输入组织机构'
-        })
-        return false
-      }
-      if (data == 0 && this.parentdepartid == '') {
-        this.$message({
-          message: '请选中上级组织机构',
-          type: 'warning'
-        })
-        return false
-      }
-      this.addBian(data)
-      this.dialogFormVisible = false
-    },
-    // 新增编辑接口
-    addBian(data) {
-      const addForm = {
-        departid: this.departid,
-        departname: this.formSet.roleCode,
-        description: this.formSet.miaoCode,
-        parentdepartid: this.parentdepartid,
-        orgtype: this.leiXing
-      }
-      request.post('/rest/organizate/addDepart', addForm).then(res => {
-        if (res.data.respCode == '0') {
-          console.log(res.data, 'res.data')
-          this.$message({
-            message: data == 0 ? '恭喜你，新增成功' : '恭喜你，修改成功',
-            type: 'success'
+    saveOrganization(form) { //新增接口
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          request.post('/rest/organizate/addDepart', this.organizationForm).then(res => {
+            if (res.data.ok) {
+              this.$message({
+                message: this.dialogTitle,
+                type: 'success'
+              })
+              this.initOrganizationTreeTable();
+              this.dialogFormVisible=false;
+            }
           })
-          this.fn()
         }
-      })
+      });
     },
-    // 删除接口
-    dlelTan(data) {
+    deleteOrganization(data) {  // 删除接口
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -251,31 +170,17 @@ export default {
             type: 'success',
             message: '删除成功!'
           })
-          this.fn()
-          console.log(res)
+          this.initOrganizationTreeTable()
         })
       })
     },
-    // 新增树监听事件
-    handleNodeClick(data) {
-      this.parentdepartid = data.id
-      this.checkvalue = data.name
-      this.flag = false
-    },
-    // 编辑树监听事件
-    dlestleNodeClick(data) {
-      this.parentdepartid = data.id
-      this.flag1 = false
-    },
-    // 初始化树列表
-    fn() {
+    initOrganizationTreeTable() {  // 初始化树列表
       request.get('/rest/organizate/depart').then(res => {
-        this.shuData = res.data.data
+        this.organizationTreeTable = res.data.data
       })
     },
-    zuzhi() {
-      this.flag = true
-      this.flag1 = true
+    handleCheckChange(data, checked, indeterminate) { // 组织机构选择后的数据---监听Tree 选择
+      this.organizationForm.parentdepartid = data.id;
     }
   }
 }

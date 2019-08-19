@@ -1,6 +1,3 @@
-<!--
-用户管理
--->
 <template>
   <div class="p20">
     <!-- 查询 -->
@@ -12,25 +9,9 @@
       <span>部门:</span>
       <select-tree :options="orgTree" :props="defaultProps" clearable @noDe="handleCheckChange" />
       <div class="rl">
-        <el-button
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-search"
-          @click="_userList"
-        >查询</el-button>
-        <el-button
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-refresh"
-          @click="reset()"
-        >重置</el-button>
-        <el-button
-          v-ltx="'userAdd'"
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-circle-plus-outline"
-          @click="action('add')"
-        >新增</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="_userList">查询</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
+        <el-button v-ltx="'userAdd'" type="primary" class="pan-btn light-blue-btn" icon="el-icon-circle-plus-outline" @click="action('add')">新增</el-button>
       </div>
     </div>
     <!-- 列表 -->
@@ -45,55 +26,22 @@
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="scope">
             <el-tooltip content="修改" placement="top">
-              <el-button
-                v-ltx="'userUpdate'"
-                type="warning"
-                icon="el-icon-edit"
-                circle
-                size="small"
-                @click="actionItem(scope.row)"
-              />
+              <el-button v-ltx="'userUpdate'" type="warning" icon="el-icon-edit" circle size="small" @click="actionItem(scope.row)"/>
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button
-                v-ltx="'userDelete'"
-                type="danger"
-                icon="el-icon-delete"
-                size="small"
-                circle
-                @click="Delete(scope.row)"
-              />
+              <el-button v-ltx="'userDelete'" type="danger" icon="el-icon-delete" size="small" circle @click="Delete(scope.row)"/>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 分页 -->
-    <el-pagination
-      :page-sizes="[10,20,30]"
-      :page-size="10"
-      :total="total"
-      :current-page.sync="sendData.pageNo"
-      class="pageList pt20 mt1"
-      background
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="handleSizeChange"
-      @current-change="_userList()"
+    <el-pagination :page-sizes="[10,20,30]" :page-size="10" :total="total" :current-page.sync="sendData.pageNo" class="pageList pt20 mt1" background
+      layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="_userList()"
     />
     <!-- 弹框 -->
-    <el-dialog
-      :title="nowItem=='add'?'新增':'修改'"
-      :visible.sync="dialogFormVisible"
-      class="dialogBox"
-    >
-      <userAdd
-        v-if="nowItem"
-        :now-item="nowItem"
-        :conent-list="conentList"
-        @cancel="dialogFormVisible=false"
-        @execute="_userList"
-        @comfirm="_userList"
-      />
+    <el-dialog :title="nowItem=='add'?'新增':'修改'" :visible.sync="dialogFormVisible" class="dialogBox">
+      <userAdd v-if="nowItem" :now-item="nowItem" :conent-list="conentList" @cancel="dialogFormVisible=false" @execute="_userList" @comfirm="_userList"/>
     </el-dialog>
   </div>
 </template>

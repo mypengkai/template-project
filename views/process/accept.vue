@@ -4,13 +4,15 @@
     <div class="section">
       <div class="topBar">
         <span>组织机构:</span>
-        <select-tree ref="userGroupSelectTree" :options="userGroupOption" :props="defaultUserGroupProp" @noDe="noDe"/>
+        <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:19vw;">
+          <el-option v-for="item in userGroupOption" :key="item.id" :label="item.sondepartname" :value="item.id"></el-option>
+        </el-select>
       </div>
       <div v-show="isShowProjectItem" class="topBar">
         <el-form :inline="true" class="grid-content">
           <span>分部分项:</span>
           <el-form-item>
-            <div style="height:66vh;overflow-y:auto;border:1px solid #ccc; max-width: 400px; min-width:230px; width:19vw;border-radius: 5px">
+            <div style="height:66vh;overflow-y:auto;border:1px solid #ccc; width:19vw;border-radius: 5px">
               <el-tree :data="projectItemTree" :props="defaultProjectItemProps" highlight-current @node-click="handleNodeClick"/>
             </div>
           </el-form-item>
@@ -203,10 +205,6 @@ export default {
     return {
       isShowProjectItem: false, // 默认工程分部分项不显示
       userGroupOption: [], // 组织机构树
-      defaultUserGroupProp: {  // 分部分项树参数展示
-        children: 'children',
-        label: 'name'
-      },
       defaultProjectItemProps: {   //工程分部分项
         children: 'children',
         label: 'projectItem'
@@ -296,7 +294,7 @@ export default {
   },
   methods: {
     initUserGroup() {  //初始化组织机构树
-      request.get('/rest/organizate/depart').then(res => {
+      request.post('/rest/processCheck/searchGrouplowestLevel').then(res=>{
         this.userGroupOption = res.data.data
       })
     },
@@ -316,21 +314,12 @@ export default {
     processTypeChangeProcess(data) {    // 点击新增工序--工序类型改变工序
       this.initProcessByTypeId(data)
     },
-    noDe(data) {   //点击树节点
-      if (data.children.length === 0) {
-        this.userGroupId = data.id
-        this.selectedUserGroup=data;  //选中的用户
-        request.post('/rest/projectItemInfo/getList', { orgId: data.id }).then(res => {
-          this.projectItemTree = res.data.data
-        });
-        this.isShowProjectItem = true
-      } else {
-        this.$message({
-          message: '施工单位下才有工程分部分项'
-        })
-        this.isShowProjectItem = false
-        return false
-      }
+    userGroupOnChange(data) {   //选择标段改动
+      this.selectedUserGroup=data;  //选中的用户
+      request.post('/rest/projectItemInfo/getList', { orgId: data }).then(res => {
+        this.projectItemTree=res.data.data;
+      });
+      this.isShowProjectItem = true
     },
     showSelectedProjectItemInfo(itemId) { // 点击树节点展示右边详情接口
       request.post('/rest/processCheck/getProject_Process', {projectItemId: itemId}).then(res => {
@@ -542,7 +531,7 @@ export default {
 }
 .acceptLayout {
   max-height: 100vh;
-  padding: 20px;
+  padding: 10px;
   /deep/ .select-tree .el-input.el-input--suffix {
     width: 19vw;
   }

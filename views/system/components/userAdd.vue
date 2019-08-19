@@ -1,93 +1,59 @@
 <template>
-  <div>
-    <el-form class="reverseBox" ref="userFrom" :model="user" label-width="130px" :rules="rules">
-      <div style="width:50%">
-        <el-form-item label="用户姓名:" prop="realname">
-          <el-input v-model="user.realname"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="nowItem=='add'" label="登录名:" prop="username">
-          <el-input v-model="user.username"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="nowItem!='add'" label="登录名:" prop="username">
-          <el-input v-model="user.username" :disabled="true"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="nowItem=='add'" label="密码:" prop="password">
-          <el-input show-password v-model="user.password"></el-input>
-        </el-form-item>
-
-        <el-form-item label="组织机构:">
-          <select-tree
-            clearable
-            :options="orgTree"
-            :props="defaultProps"
-            node-key="id"
-            :default-expand-all="true"
-            v-on:noDe="handleCheckChange"
-            v-model="userGroupName"
-            ref="userInfo_userGroup"
-          />
-        </el-form-item>
-
-        <el-form-item label="角色:" prop="userkey">
-          <el-select v-model="user.userkey" multiple placeholder="请选择角色">
-            <el-option
-              v-for="item in roleList"
-              :key="item.id"
-              :label="item.rolename"
-              :value="item.id"
-            ></el-option>
+  <el-form class="reverseBox" ref="userFrom" :model="user" label-width="130px" :rules="rules">
+    <el-form-item label="用户姓名:" prop="realname">
+      <el-input v-model="user.realname"></el-input>
+    </el-form-item>
+    <el-form-item v-if="nowItem=='add'" label="登录名:" prop="username">
+      <el-input v-model="user.username"></el-input>
+    </el-form-item>
+    <el-form-item v-if="nowItem!='add'" label="登录名:" prop="username">
+      <el-input v-model="user.username" :disabled="true"></el-input>
+    </el-form-item>
+    <el-form-item v-if="nowItem=='add'" label="密码:" prop="password">
+      <el-input show-password v-model="user.password"></el-input>
+    </el-form-item>
+    <el-form-item label="组织机构:" prop="departid">
+      <select-tree clearable :options="orgTree" :props="defaultProps" node-key="id" :default-expand-all="false" v-on:noDe="handleCheckChange"
+                   v-model="userGroupName" ref="userInfo_userGroup"/>
+    </el-form-item>
+    <el-form-item label="角色:" prop="userkey">
+      <el-select v-model="user.userkey" multiple placeholder="请选择角色">
+        <el-option v-for="item in roleList" :key="item.id" :label="item.rolename" :value="item.id"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="职位类型:" prop="personType">
+          <el-select v-model="user.personType" placeholder="请选择职位类型" @change="initPositionList">
+            <el-option v-for="item in personTypeList" :key="item.id" :label="item.value" :value="item.id" ></el-option>
           </el-select>
         </el-form-item>
-
-        <el-form-item label="用户类型:" prop="personType">
-          <el-select v-model="user.personType" placeholder="请选择用户类型">
-            <el-option
-              v-for="item in personTypeList"
-              :key="item.id"
-              :label="item.value"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
+      </el-col>
+      <el-col :span="12">
         <el-form-item label="职位：" prop="zhiwei">
           <el-select v-model="user.zhiwei" placeholder="请选择职位">
-            <el-option
-              v-for="item in positionList"
-              :key="item.id"
-              :label="item.job_name_cn"
-              :value="item.id"
-            ></el-option>
+            <el-option v-for="item in positionList" :key="item.id" :label="item.job_name_cn" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-
-        <el-form-item label="是否授权手机：" prop="peopleOnPhone">
-          <el-switch
-            v-model="user.peopleOnPhone"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-value="1"
-            inactive-value="0">
-          </el-switch>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="唯一手机登录：" prop="peopleOnPhone">
+          <el-switch v-model="user.peopleOnPhone" active-color="#13ce66" inactive-color="#ff4949" active-value="1" inactive-value="0"></el-switch>
         </el-form-item>
-
-
+      </el-col>
+      <el-col :span="12">
         <el-form-item label="手机号码：" prop="mobilePhone">
-          <el-input class="numInput" type="number"
-            onkeypress="return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )"
-            v-model="user.mobilePhone"></el-input>
+          <el-input class="numInput" type="number" v-model="user.mobilePhone"></el-input>
         </el-form-item>
-
-      </div>
-    </el-form>
-    <div class="tar">
+      </el-col>
+    </el-row>
+    <el-form-item>
       <el-button @click="$emit('cancel')">取 消</el-button>
       <el-button type="primary" @click="_comfirm">保 存</el-button>
-    </div>
-  </div>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
@@ -103,18 +69,6 @@ export default {
     SelectTree
   },
   data() {
-    var checkPhone = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("手机号不能为空"));
-      } else {
-        const reg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          return callback(new Error("请输入正确的手机号"));
-        }
-      }
-    };
     return {
       orgTree: [],
       userGroupName: '',   //用于组织机构回选
@@ -128,12 +82,14 @@ export default {
         username: [{ required: true, message: "请输入登录名", trigger: "blur" }, { pattern: /^[a-zA-Z]+$/, message: '只能输入英文' }],
         realname: [{ required: true, message: "请输入用户名", trigger: "blur" }, { pattern: /^[\u4E00-\u9FA5]+$/, message: '角色名称只能为中文'}],
         password: [
-          { required: true, message: "必填项", trigger: "blur" },
+          { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
         ],
-        userkey: [{ required: true, message: "必填项", trigger: "blur" }],
-        mobilePhone: { required: true, validator: checkPhone, trigger: "blur" },
-        departid: [{ required: true, message: "必填项", trigger: "blur" }]
+        userkey: [{ required: true, message: "请选择用户角色", trigger: "change" }],
+        mobilePhone: [{ required: true, message: "请输入手机号码", trigger: "blur" },
+                      { pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/, message: '请输入正确的手机号码'}],
+        departid: [{ required: true, message: "请选择组织机构", trigger: "blur" }],
+        zhiwei: [{ required: true, message: "请选择用户职位", trigger: "change" }]
       }, //表单校验规则
       user: {
         id: "",
@@ -166,7 +122,7 @@ export default {
     this._roleList();
     this._orgTree();
     this.initForm();
-    this.initPositionList();
+    this.initPositionList('');
   },
   mounted() {},
   methods: {
@@ -174,7 +130,19 @@ export default {
       if (this.nowItem == "add"){   //添加时不需要初始化
         return;
       }else {
-        this.user={};  //清空内容
+        this.user={
+          id: "",
+          password: "",
+          realname: "",
+          username: "",
+          userkey: [],
+          zhiwei: "",
+          departName: "",
+          mobilePhone: "",
+          personType: '',  //用户类型
+          departid: "",
+          peopleOnPhone: "0"  //默认不是一人一机
+        };  //清空内容
         user.sysuserCheck({id: this.nowItem.id}).then(res => {
           this.user = res.data.data;
           //赋值角色
@@ -243,10 +211,9 @@ export default {
     handleCheckChange(data, checked, indeterminate) {
       this.user.departid = data.id;
       this.user.departName = data.name;
-      this.innerVisible = false;
     },
-    initPositionList(){
-      position.getList(null).then(res=>{
+    initPositionList(item){
+      position.getList({jobName: '', jobType: item}).then(res=>{
         this.positionList=res.data.data;
       })
     }
