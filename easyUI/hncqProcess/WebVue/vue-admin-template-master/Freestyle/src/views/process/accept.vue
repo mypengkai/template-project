@@ -5,7 +5,7 @@
       <div class="topBar">
         <span>组织机构:</span>
         <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:19vw;">
-          <el-option v-for="item in userGroupOption" :key="item.id" :label="item.sondepartname" :value="item.id"></el-option>
+          <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
         </el-select>
       </div>
       <div v-show="isShowProjectItem" class="topBar">
@@ -294,7 +294,7 @@ export default {
   },
   methods: {
     initUserGroup() {  //初始化组织机构树
-      request.post('/rest/processCheck/searchGrouplowestLevel').then(res=>{
+      request.post('/rest/processCheck/groupEqualRank').then(res=>{
         this.userGroupOption = res.data.data
       })
     },
