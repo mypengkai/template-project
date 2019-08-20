@@ -4,11 +4,13 @@
       <el-row>
         <el-col :span="5">
           <span>组织机构:</span>
-          <select-tree clearable :options="userGroupTreeOptions" :props="userGroupDefaultProps" v-on:noDe="userGroupOnClick" v-model="sendData.orgId"/>
+          <el-select v-model="sendData.orgId" placeholder="请选择" @change="userGroupOnChange">
+            <el-option v-for="item in userGroupTreeOptions" :key="item.id" :label="item.departname" :value="item.id"></el-option>
+          </el-select>
         </el-col>
         <el-col :span="5">
           <span>分部分项:</span>
-          <select-tree clearable :options="projectItemTreeOptions" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick" v-model="sendData.projectCode"/>
+          <select-tree clearable :options="projectItemTreeOptions" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick"/>
         </el-col>
         <el-col :span="10">
           <span>巡视日期:</span>
@@ -52,10 +54,10 @@
 
 <script>
 import CheckPicture from "./components/CheckPicture";
-import SelectTree from "@/components/SelectTree/selectTree.vue";
-import api from "@/api/Patrol.js";
-import Organization from "@/api/Organization.js";
-import project from "@/api/project.js";
+import SelectTree from "./components/syncSelectTree";
+import api from "@/api/Patrol";
+import Organization from "@/api/Organization";
+import project from "@/api/project";
 export default {
   inject: ["reload"],
   components: {
@@ -79,14 +81,10 @@ export default {
         endTime: "", // 结束时间
         type: "polling",
       },
-      userGroupDefaultProps: {  // 组织机构树显示
-        children: "children",
-        label: "name"
-      },
       projectItemDefaultProp: {  // 工程分项树显示
-        label: "projectItem",
-        value: "projectCode",
-        children: "children"
+        children: 'id',
+        label: 'projectItem',
+        isLeaf: 'leaf'
       },
       dialogFormVisible: false,
       nowItem: ''  //当前查看的内容
@@ -113,15 +111,22 @@ export default {
       this.query();
     },
     initUserGroupTree() {   // 初始化组织机构树
-      Organization.organizateTree().then(res => {
+      Organization.userGroupSelect().then(res => {
         this.userGroupTreeOptions = res.data.data;
       });
     },
-    userGroupOnClick(data) {  // 组织机构下拉树
-      this.sendData.orgId = data.id;
-      project.projectList(this.data.id).then(res => {
+    userGroupOnChange(data) {  // 组织机构下拉树
+      this.sendData.orgId = data;
+      project.getProjectItemFromLayer({userGroupId: data, pId: '0'}).then(res => {
         this.projectItemTreeOptions = res.data.data;
       });
+    },
+    loadNextNode(node, resolve) {  //异步获取下一级节点数据
+      if (node.level > 0) {
+        project.getProjectItemFromLayer({userGroupId: this.selectedUserGroup, pId: node.data.id}).then(res => {
+          resolve(res.data.data);
+        });
+      }
     },
     projectItemOnClick(data) {  // 分部分项选择后的数据
       this.sendData.projectCode = data.projectCode;

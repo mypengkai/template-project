@@ -6,7 +6,7 @@
       </div>
     </div>
     <el-table :data="organizationTreeTable" class="textList" border row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column label="组织机构" align="center" prop="name"></el-table-column>
+      <el-table-column label="组织机构" align="left" prop="name"></el-table-column>
       <el-table-column label="组织机构编码" align="center" prop="orgCode"></el-table-column>
       <el-table-column label="组织机构类型" align="center">
         <template slot-scope="scope">

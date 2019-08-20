@@ -12,7 +12,6 @@ export default {
   methods: {
     statistics() {
       homePage.getUserMessage().then(res => {
-          // console.log(res.data.data.splice(0, 5))
         let testData = res.data.data; // 取整个数组
         testData.forEach(v => {
           v.name == "planCheck" && (v.name1 = "任务验收"); // 要

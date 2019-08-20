@@ -13,9 +13,11 @@
       :style="`min-width: ${treeWidth}`"
       :data="data"
       :props="props"
+      lazy
+      :load="loadNode"
       :expand-on-click-node="false"
       :filter-node-method="filterNode"
-      :default-expand-all="expand"
+      :default-expand-all="false"
       @node-click="onClickNode">
     </el-tree>
     <el-input
@@ -35,8 +37,9 @@
 </template>
 
 <script>
+import project from "@/api/project";
 export default {
-  name: 'Pagination',
+  name: 'syncSelectTree',
   props: {
     // 接收绑定参数
     value: String,
@@ -46,11 +49,6 @@ export default {
     options: {
       type: Array,
       required: true,
-    },
-    //是否默认展开
-    expand: {
-      type: Boolean,
-      default: false
     },
     // 输入框占位符
     placeholder: {
@@ -66,7 +64,7 @@ export default {
         parent: 'parentId',
         value: 'rowGuid',
         label: 'areaName',
-        children: 'children',
+        children: 'id',
       }),
     },
   },
@@ -99,7 +97,7 @@ export default {
     },
     value(val) {
       this.labelModel = this.queryTree(this.data, val);
-    },
+    }
   },
   data() {
     return {
@@ -132,6 +130,17 @@ export default {
       console.log(this.labelModel)
       this.valueModel = node[this.props.value];
       this.onCloseTree();
+    },
+    //异步加载下一级节点
+    loadNode(node, resolve){
+      if (node.level > 0) {
+        project.getProjectItemFromLayer({
+          userGroupId: node.data.userGroupId,
+          pId: node.data.id
+        }).then(res => {
+          resolve(res.data.data);
+        });
+      }
     },
     //获取人员
     getperson(value){

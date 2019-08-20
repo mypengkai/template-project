@@ -13,7 +13,7 @@
           <span>分部分项:</span>
           <el-form-item>
             <div style="height:66vh;overflow-y:auto;border:1px solid #ccc; width:19vw;border-radius: 5px">
-              <el-tree :data="projectItemTree" :props="defaultProjectItemProps" highlight-current @node-click="handleNodeClick"/>
+              <el-tree :data="projectItemTree" :props="defaultProjectItemProps" lazy :load="loadNextNode" highlight-current @node-click="handleNodeClick"/>
             </div>
           </el-form-item>
         </el-form>
@@ -206,8 +206,9 @@ export default {
       isShowProjectItem: false, // 默认工程分部分项不显示
       userGroupOption: [], // 组织机构树
       defaultProjectItemProps: {   //工程分部分项
-        children: 'children',
-        label: 'projectItem'
+        children: 'id',
+        label: 'projectItem',
+        isLeaf: 'leaf'
       },
       processMDictOption: [],  // 新增工序类型下拉框
       processSDictOption: [],  // 新增工序下拉框
@@ -317,10 +318,20 @@ export default {
     },
     userGroupOnChange(data) {   //选择标段改动
       this.selectedUserGroup=data;  //选中的用户
-      request.post('/rest/projectItemInfo/getList', { orgId: data }).then(res => {
+      request.post('/rest/projectItemInfo/getProjectBQItemById', { userGroupId: data, pId: '0' }).then(res => {
         this.projectItemTree=res.data.data;
       });
       this.isShowProjectItem = true
+    },
+    loadNextNode(node, resolve) {  //异步获取下一级节点数据
+      if (node.level > 0) {
+        request.post('/rest/projectItemInfo/getProjectBQItemById', {
+          userGroupId: this.selectedUserGroup,
+          pId: node.data.id
+        }).then(res => {
+          resolve(res.data.data);
+        });
+      }
     },
     showSelectedProjectItemInfo(itemId) { // 点击树节点展示右边详情接口
       request.post('/rest/processCheck/getProject_Process', {projectItemId: itemId}).then(res => {

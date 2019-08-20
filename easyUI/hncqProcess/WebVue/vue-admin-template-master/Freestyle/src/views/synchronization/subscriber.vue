@@ -3,9 +3,7 @@
     <el-row>
       <el-col :span="21">&nbsp;</el-col>
       <el-col :span="3">
-        <el-button style="margin-bottom:10px" type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="fromMaterialsUser()">
-          从物质平台同步
-        </el-button>
+        <el-button style="margin-bottom:10px" type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="fromMaterialsUser()">从物质平台同步</el-button>
       </el-col>
     </el-row>
     <el-table :data="userData" style="width: 100%" border height="70vh" class="textList">
@@ -44,14 +42,11 @@
 </template>
 
 <script>
-  import treeTable from '@/components/TreeTable'
-  import SelectTree from '@/components/SelectTree/selectTree'
   import api from '../../api/tongUser'
 
   export default {
     name: 'TreeTableDemo',
     describe: '用户同步',
-    components: { treeTable, SelectTree },
     data() {
       return {
         userData: [],
@@ -70,11 +65,11 @@
         //同步用户到用户中间件
         api.user().then(res => {
           if (res.data.ok) {
-            this.getUserList()
             this.$message({
               type: 'success',
               message: '同步成功'
             })
+            this.getUserList()
           }
         })
       },

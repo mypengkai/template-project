@@ -1,3 +1,4 @@
+<!--
 <template>
   <div class="acceptzh">
     <div class="topBar">
@@ -102,7 +103,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!--    分页-->
+    &lt;!&ndash;    分页&ndash;&gt;
     <el-pagination
       class="pageList mt1"
       @size-change="handleSizeChange"
@@ -114,7 +115,7 @@
       :total="total"
     ></el-pagination>
 
-    <!--    查看弹框-->
+    &lt;!&ndash;    查看弹框&ndash;&gt;
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" fullscreen class="dialogBox">
       <processCheck :realList="chakanData" :processInfoId="processInfoId"></processCheck>
     </el-dialog>
@@ -287,3 +288,4 @@
   }
 </style>
 
+-->

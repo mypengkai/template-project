@@ -6,7 +6,7 @@ import qs from 'qs'
 
 const service = axios.create({
   baseURL: tool.baseURL,
-  timeout: 6000,// 请求超时时间,
+  timeout: 100000,// 请求超时时间,
   // headers: { "X-AUTH-TOKEN": "" },
   isloading: true,
   qs: true,
