@@ -3,14 +3,12 @@
     <div class="tongbu" style="">
       <div class="rl" style="margin-bottom:10px">
         <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"  @click="tongbu()">从物质平台同步</el-button>
-        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn"  @click="tongData()">同步数据</el-button>
       </div>
     </div>
      <!-- syncId -->
-    <tree-table :data="treeData" border style="width: 100%" border height="70vh">
-      <el-table-column label="组织机构" align="center">
-        <template slot-scope="scope"><span style="">{{scope.row.name}}</span></template>
-      </el-table-column>
+    <el-table :data="treeData" border style="width: 100%" border height="68vh" row-key="id" default-expand-all
+              :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      <el-table-column label="组织机构" align="left" prop="name"></el-table-column>
       <el-table-column label="同步状态" align="center" width="200">
         <template slot-scope="scope">
           <template v-if="scope.row.syncId === 'null'">
@@ -26,18 +24,15 @@
           <el-button type="primary" size="small" icon="el-icon-refresh" circle @click="departData(scope.row)"></el-button>
         </template>
       </el-table-column>
-    </tree-table>
+    </el-table>
   </div>
 </template>
 
 <script>
-import treeTable from "@/components/TreeTable";
-import SelectTree from "@/components/SelectTree/selectTree";
 import api from "../../api/tongbu";
 export default {
   name: "TreeTableDemo",
   describe: "部门同步",
-  components: { treeTable, SelectTree },
   data() {
     return {
       treeData: [],
@@ -54,6 +49,7 @@ export default {
           this.$message({
             message:'同步成功'
           });
+          this.getTreeData();
         }
       });
     },
@@ -62,9 +58,6 @@ export default {
       api.treeData().then(res => {
         this.treeData = res.data.data;
       });
-    },
-    tongData(){
-     this.getTreeData();
     },
     departData(data){
       var syncId = data.syncId

@@ -20,11 +20,8 @@ export default {
   // 批量导入
   projectaddbyList(id) {
     return request.post(`/rest/projectItemInfo/addbyList/${id}`)
+  },
+  getProjectItemFromLayer(data){  //异步获取组织机构
+    return request.post('/rest/projectItemInfo/getProjectBQItemById', data)
   }
 }
-
-// export function getUser(params) {
-//   return request.get('/rest/user', {params})
-// }
-
-

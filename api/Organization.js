@@ -7,6 +7,10 @@ export default {
   },
   asynchronousGetDepartTree(params){   //异步获取组织机构树
     return request.get('/rest/sysuser/departTree/'+params)
+  },
+  //将组织机构拉成平级
+  userGroupSelect(){
+    return request.post('/rest/processCheck/groupEqualRank');
   }
 }
 
