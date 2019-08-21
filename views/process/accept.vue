@@ -42,11 +42,7 @@
       <!-- 操作列表 -->
       <div v-if="projectItemId !==''" class="Cztab">
         <el-table border  :data="tableData" height="68vh" class="textList">
-          <el-table-column
-            type="index"
-            width="50" align="center" label="序号">
-          </el-table-column>
-
+          <el-table-column type="index" width="50" align="center" label="序号"></el-table-column>
           <el-table-column prop="processName" label="工序名称" align="center"/>
           <el-table-column prop="planSelfCheckTime" label="自检时间" align="center"/>
           <el-table-column prop="planCheckTime" label="验收时间" align="center"/>
