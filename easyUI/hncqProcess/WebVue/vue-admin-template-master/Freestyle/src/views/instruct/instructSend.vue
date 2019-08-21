@@ -2,9 +2,16 @@
   <div class="p20">
     <div class="topBar">
       <span>组织机构:</span>
-      <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>
+      <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                   :value="item.id"></el-option>
+      </el-select>
+
+      <!--      <select-tree clearable :options="userGroupOption" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>-->
       <span>分部分项:</span>
-      <select-tree :options="projectItemTree" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>
+      <!--      <select-tree :options="projectItemTree" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>-->
+      <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                   v-on:noDe="projectItemOnClick"/>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
@@ -50,7 +57,8 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
+            <el-button type="primary" size="small" icon="el-icon-search" circle
+                       @click="actionItem(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -71,9 +79,9 @@
 <script>
   import checkBox from './components/checkBox'
   import api from '@/api/instruct'
-  import Organization from '@/api/Organization'
-  import SelectTree from '@/components/SelectTree/selectTree'
+  import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import project from '@/api/project'
+  import Organization from '@/api/Organization'
 
   export default {
     inject: ['reload'],
@@ -88,15 +96,17 @@
           children: 'children',
           label: 'name'
         },
-        projectItemDefaultProps: {  // 工程分项树显示
+        projectItemDefaultProp: {  //工程分部分项tree    props
           children: 'children',
           label: 'projectItem'
         },
-        userGroupTree: [], // 组织机构树
+        userGroupOption: [], // 组织机构树
+        projectItemOptions: [],   //   工程分部分项List   条件选择
         projectItemTree: [], // 分部分项树
         total: 0,
         sendData: {
           departId: '', //部门id
+          orgId: '', //部门id
           projectItemId: '', // 分部分项id
           starttime: '', // 开始时间
           endtime: '', // 结束时间
@@ -106,6 +116,7 @@
         },
 
         nowItem: '',
+        userGroupId: '',
         timeRange: '', // 时间日期范围
         name: '', // 组织机构回填显示
         projectItem: '', // 分部分项回填显示
@@ -116,17 +127,34 @@
     },
     created() {
       this._searchList()
-      this.initUserGrouptTree()
+      this.initUserGroup()
     },
     methods: {
       action(val) {
         this.nowItem = val
         this.dialogFormVisible = true
       },
-      initUserGrouptTree() {  // 组织机构树
-        Organization.organizateTree().then(res => {
-          this.userGroupTree = res.data.data
+      initUserGroup() {  // 初始化组织机构input框数据
+        Organization.userGroupSelect().then(res => {
+          this.userGroupOption = res.data.data
         })
+      },
+      userGroupOnChange(data) {  // 组织机构下拉树
+        this.sendData.orgId = data
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+          this.projectItemOptions = res.data.data
+          this.$refs.getSelectData.labelModel = ''
+        })
+      },
+      loadNextNode(node, resolve) {  //异步获取下一级节点数据
+        if (node.level > 0) {
+          Organization.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
+          })
+        }
+      },
+      projectItemOnClick(data) {
+        this.sendData.projectItemId = data.id
       },
       async actionItem(id) {  // 查询单个请求
         let { data } = await api.searchOne({ id })
@@ -157,9 +185,6 @@
           return false
         }
       },
-      projectItemOnClick(data) {   // 工程分部分项id
-        this.sendData.projectItemId = data.id
-      },
       reset() {  // 重置按钮
         this.reload()
       }
@@ -173,9 +198,9 @@
 </script>
 
 <style lang="scss" scoped>
- /* .el-select .el-input {
-    width: 130px;
-  }*/
+  /* .el-select .el-input {
+     width: 130px;
+   }*/
 
   .input-with-select .el-input-group__prepend {
     background-color: #fff;

@@ -4,11 +4,15 @@
       <el-row>
         <el-col :span="5">
           <span>组织机构:</span>
-          <select-tree
+        <!--  <select-tree
             :options="userGroupTreeOption"
             :props="userGroupDefaultProp"
             v-on:noDe="userGroupOnClick"
-          />
+          />-->
+
+          <el-select v-model="queryData.orgId" placeholder="请选择" @change="userGroupOnClick">
+            <el-option v-for="item in userGroupTreeOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
+          </el-select>
         </el-col>
 
         <el-col :span="5">
@@ -25,31 +29,6 @@
 
 
         <el-col :span="8">
-          <span>日期:</span>
-          <el-date-picker
-            v-model="queryData.startTime"
-            type="datetime"
-            placeholder="选择开始日期时间"
-            size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-          -
-          <el-date-picker
-            v-model="queryData.endTime"
-            type="datetime"
-            placeholder="选择结束日期时间"
-            size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-        </el-col>
-      </el-row>
-      <el-row>
-
-        <el-col :span="18">
           <span>用户类型:</span>
           <el-select v-model="queryData.personType" placeholder="请选择">
             <el-option
@@ -60,8 +39,7 @@
             ></el-option>
           </el-select>
         </el-col>
-
-        <el-col :span="4">
+        <el-col :span="6">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
@@ -77,6 +55,33 @@
           >重置
           </el-button>
         </el-col>
+
+        <!--   <el-col :span="8">
+             <span>日期:</span>
+             <el-date-picker
+               v-model="queryData.startTime"
+               type="datetime"
+               placeholder="选择开始日期时间"
+               size="small"
+               style="min-width:180px"
+               value-format="yyyy-MM-dd HH:mm:ss"
+               format="yyyy-MM-dd HH:mm:ss"
+             ></el-date-picker>
+             -
+             <el-date-picker
+               v-model="queryData.endTime"
+               type="datetime"
+               placeholder="选择结束日期时间"
+               size="small"
+               style="min-width:180px"
+               value-format="yyyy-MM-dd HH:mm:ss"
+               format="yyyy-MM-dd HH:mm:ss"
+             ></el-date-picker>
+           </el-col>-->
+      </el-row>
+      <el-row>
+
+
       </el-row>
 
       <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:10px" height="68vh">
@@ -134,10 +139,15 @@
           startTime: '', // 开始时间
           endTime: '', // 结束时间
           userId: '', //用户Id
+          orgId: '', //组织机构
           pageNo: 1, // 当前页
           pageSize: 10 // 每页条数
         },
         jobTypeList: [
+          {
+            id: '1',
+            value: '业主'
+          },
           {
             id: '2',
             value: '监理'
@@ -160,7 +170,7 @@
     methods: {
       initUserGroup() {
         // 初始化组织机构input框数据
-        request.post('/rest/processCheck/searchGrouplowestLevel').then(res => {
+        request.post('/rest/processCheck/groupEqualRank').then(res => {
           this.userGroupTreeOption = res.data.data
         })
       },
@@ -172,8 +182,8 @@
       userGroupOnClick(data) {
         // 点击组织机构节点展示分部分项
         this.projectItemTreeOption = []
-        this.queryData.usergroupId = data.id
-        console.log(data.id)
+        this.queryData.usergroupId = data
+        console.log(data)
         request
           .post('/rest/processCheck/notDeletedUser', {
             userGroupId: this.queryData.usergroupId,
@@ -184,7 +194,9 @@
           })
           .then(res => {
 
-            this.personList = res.data.data.data
+            this.personList = res.data.data.data;
+            // this.queryData.userId ='';
+
           })
       },
       query() {
@@ -192,9 +204,9 @@
         request
           .post('/rest/Patrol/userStatistics', {
             personType: this.queryData.personType || '',
-            usergroupId: this.queryData.usergroupId || '',
-            startTime: this.queryData.startTime || '',
-            endTime: this.queryData.endTime || '',
+            // usergroupId: this.queryData.usergroupId || '',
+           /* startTime: this.queryData.startTime || '',
+            endTime: this.queryData.endTime || '',*/
             userId: this.queryData.userId || '',
             pageNo: this.queryData.pageNo,
             pageSize: this.queryData.pageSize
@@ -204,6 +216,9 @@
             this.tableData = res.data.data.data
 
           })
+      },
+      reset() {  // 重置按钮
+        this.reload();
       }
     }
   }

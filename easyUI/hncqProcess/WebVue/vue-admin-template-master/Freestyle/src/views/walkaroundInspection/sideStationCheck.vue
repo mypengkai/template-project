@@ -4,13 +4,22 @@
       <el-row>
         <el-col :span="5">
           <span>组织机构:</span>
-          <select-tree  :options="userGroupTreeOptions" :props="userGroupDefaultProps"
-                       v-on:noDe="userGroupOnClick"  />
+          <!--         <select-tree  :options="userGroupTreeOptions" :props="userGroupDefaultProps"
+                                v-on:noDe="userGroupOnClick"  />-->
+          <el-select v-model="sendData.orgId" placeholder="请选择" @change="userGroupOnChange">
+            <el-option v-for="item in userGroupTreeOptions" :key="item.id" :label="item.departname"
+                       :value="item.id"></el-option>
+          </el-select>
+
         </el-col>
         <el-col :span="5">
           <span>分部分项:</span>
-          <select-tree  :options="projectItemTreeOptions" :props="projectItemDefaultProp"
-                       v-on:noDe="projectItemOnClick" />
+          <select-tree  clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                       v-on:noDe="projectItemOnClick"/>
+
+
+          <!--<select-tree  :options="projectItemTreeOptions" :props="projectItemDefaultProp"
+                       v-on:noDe="projectItemOnClick" />-->
         </el-col>
         <!--    </el-row>
           </div>
@@ -64,7 +73,7 @@
 
 <script>
   import CheckPicture from './components/CheckPicture'
-  import SelectTree from '@/components/SelectTree/selectTree.vue'
+  import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import api from '@/api/Patrol.js'
   import Organization from '@/api/Organization.js'
   import project from '@/api/project.js'
@@ -82,7 +91,8 @@
         sideStationPollingPageList: [], // 巡视列表
         total: 0,
         sendData: {
-          departName:'',
+          departName: '',
+          projectItem: '',
           departId: '', //部门id
           userId: '', // 用户名参数
           projectCode: '', // 分部分项Code
@@ -103,7 +113,8 @@
           children: 'children'
         },
         dialogFormVisible: false,
-        nowItem: ''  //当前查看的内容
+        nowItem: ''
+        // labelModel: '',
       }
     },
     created() {
@@ -127,20 +138,42 @@
         this.query()
       },
       initUserGroupTree() {   // 初始化组织机构树
-        Organization.organizateTree().then(res => {
+        Organization.userGroupSelect().then(res => {
           this.userGroupTreeOptions = res.data.data
         })
       },
-      userGroupOnClick(data) {  // 组织机构下拉树
-        this.sendData.orgId = data.id
-        this.sendData.departName = data.name;
-        project.projectList(this.sendData.orgId).then(res => {
+      userGroupOnChange(data) {  // 组织机构下拉树
+        // debugger
+        this.sendData.orgId = data
+        // this.projectItemDefaultProp = {}
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
           this.projectItemTreeOptions = res.data.data
+          this.$refs.getSelectData.labelModel = ''
         })
       },
-      projectItemOnClick(data) {  // 分部分项选择后的数据
-        this.sendData.projectCode = data.projectCode
+      loadNextNode(node, resolve) {  //异步获取下一级节点数据
+        if (node.level > 0) {
+          project.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
+          })
+        }
       },
+      projectItemOnClick(data) {  // 分部分项选择后的数据
+        console.log('dataasss', data)
+        this.sendData.projectCode = data.projectCode
+
+      },
+      /*   userGroupOnClick(data) {  // 组织机构下拉树
+           this.sendData.orgId = data.id
+           this.sendData.departName = data.name;
+           project.projectList(this.sendData.orgId).then(res => {
+             this.projectItemTreeOptions = res.data.data
+           })
+         },*/
+      /*   projectItemOnClick(data) {  // 分部分项选择后的数据
+           this.sendData.projectCode = data.projectCode
+           this.projectItemDefaultProp = {}
+         },*/
       reset() {  // 重置按钮
         this.reload()
       }

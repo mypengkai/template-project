@@ -631,7 +631,6 @@ export default {
     display: block;
   }
 }
-// 时间轴
 .timelineBox {
   height: 9vh;
   .el-timeline-item {
@@ -644,7 +643,6 @@ export default {
     border-top: 2px solid #e4e7ed !important;
   }
 }
-//图片地图切换
 .navb {
   width: 50%;
   height: 7%;
@@ -661,8 +659,6 @@ export default {
   }
 }
 .reverseBox {
-  // height: 62vh;
-  // overflow-y: auto;
   position: relative;
   /deep/.el-form-item__label {
     font-size: 14px;
@@ -687,7 +683,6 @@ export default {
     height: 30px;
   }
 }
-//时间轴图标描述
 .reference {
   width: 100%;
   .el-timeline {
@@ -699,7 +694,6 @@ export default {
     float: left;
     padding-bottom: 0;
     height: 3vh;
-    // padding-right: 1vw;
   }
   /deep/.el-timeline-item__node--normal {
     width: 0.7vw;
@@ -732,8 +726,6 @@ export default {
 }
 .reverseAddBox {
   width: 100%;
-  // height: 65vh;
-  // overflow-y: auto;
   /deep/.el-form-item__label {
     font-size: 0.7vw;
   }

@@ -47,7 +47,7 @@
   import checkBox from './components/checkBox'
   import api from '../../api/numberGroup'
   import Organization from '@/api/Organization'
-  import SelectTree from '@/components/SelectTree/selectTree'
+  import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import project from '@/api/project'
 
   export default {
@@ -128,7 +128,7 @@
           this._searchList()
         })
       },
-      addProcessFunction(formName) {  // 新增工序
+      addProcessFunction(formName) {  // 新增
         const fromData = {
           userGroupId: this.userGroupId,
           processMDictId: this.form.processMDictId,
