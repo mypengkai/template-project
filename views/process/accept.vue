@@ -63,8 +63,7 @@
               </template>
             </template>
           </el-table-column>
-
-            <el-table-column fixed="right" label="操作" width="150" align="center">
+          <el-table-column fixed="right" label="操作" width="150" align="center">
             <template slot-scope="scope">
               <!-- 指定验收 -->
               <el-tooltip v-if="scope.row.state2===0" class="item" effect="dark" content="指定验收计划" placement="top">
