@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <template>
   <div class="engineer p20">
     <div class="processType">
@@ -11,49 +10,19 @@
             </div>
           </el-col>
           <el-col :span="2">
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              class="pan-btn light-blue-btn"
-              @click="initTable()"
-            >
-              查询
-            </el-button>
+            <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="initTable()">查询</el-button>
           </el-col>
           <el-col :span="2">
-            <el-button
-              type="primary"
-              class="pan-btn light-blue-btn"
-              icon="el-icon-refresh"
-              @click="reset()"
-            >
-              重置
-            </el-button>
+            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
           </el-col>
           <el-col :span="2">
-            <el-button
-              class="pan-btn light-blue-btn"
-              type="primary"
-              icon="el-icon-circle-plus-outline"
-              @click="addType"
-            >
-              新增
-            </el-button>
+            <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-circle-plus-outline" @click="addType">新增</el-button>
           </el-col>
         </el-row>
       </div>
       <!--列表-->
       <div class="processtable">
-        <el-table
-          :data="tableData"
-          :row-style="{height: '0'}"
-          class="textList"
-          height="70vh"
-          stripe
-          highlight-current-row
-          border
-          @selection-change="selectChange(selection)"
-        >
+        <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="70vh" stripe highlight-current-row border>
           <el-table-column min-width="100px" prop="seq" label="序号"  width="100" align="center"/>
           <el-table-column min-width="180px" prop="processType" fixed label="工序类型" align="center" />
           <el-table-column prop="createName" min-width="120px" label="创建人" align="center" />
@@ -63,11 +32,9 @@
               <el-tooltip class="item" effect="dark" content="修改" placement="top">
                 <el-button v-ltx="'processingUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="editType(scope.row)"/>
               </el-tooltip>
-
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
                 <el-button v-ltx="'processingDelete'" type="danger" size="small" icon="el-icon-delete" circle @click="deleteProcessType(scope.row.id)" />
               </el-tooltip>
-
               <el-tooltip class="item" effect="dark" content="查询" placement="top">
                 <el-button type="primary" size="small" icon="el-icon-search" circle @click="viewMore(scope.row, $event)" />
               </el-tooltip>
@@ -77,17 +44,8 @@
       </div>
       <!--分页-->
 
-      <el-pagination
-        :current-page="currentPage"
-        :page-sizes="[10,20,30]"
-        :page-size="pageSize"
-        :total="total"
-        class="pageList mt1"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="currentPage" :page-sizes="[10,20,30]" :page-size="pageSize" :total="total" class="pageList mt1" background
+        layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
 
       <!--新增、修改弹框-->
       <el-dialog :visible.sync="dialogVisible" :title="type + '工序类型'" width="30%" append-to-body>
@@ -109,22 +67,14 @@
         </div>
       </el-dialog>
     </div>
-    <!-- //查询工序 -->
-    <el-dialog :visible.sync="dialogVisibleProcess" title="工序信息" width="60%" class="dialogBox">
-      <process :process-type-id="processTypeId" :process-type-name="processTypeName" />
-    </el-dialog>
   </div>
 </template>
 
 <script>
   import request from '@/utils/request'
-  import process from './processInfo'
 
   export default {
   inject: ['reload'],
-  components: {
-    process
-  },
   data() {
     return {
       tableData: null,

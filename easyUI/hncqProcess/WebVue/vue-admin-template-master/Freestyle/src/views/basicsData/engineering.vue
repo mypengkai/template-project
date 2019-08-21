@@ -4,55 +4,53 @@
     <div class="topBar">
       <span>组织机构:</span>
       <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id" :default-expand-all="false" v-on:noDe="handleUserGroupCheckChange"
-                   ref="organization_userGroup"/>
+                   ref="ProjectItem_userGroup"/>
       <div class="rl">
         <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="initProjectList">查询</el-button>
+        <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setProjectItemKeyBtn">设置关键部位</el-button>
+        <!--
         <el-button type="primary" icon="el-icon-download" class="pan-btn light-blue-btn" @click="projectTemplateDownLoad">下载模板</el-button>
         <el-button type="primary" icon="el-icon-upload2" class="pan-btn light-blue-btn" @click="ImportProjectFromExcel">导入数据</el-button>
         <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="projectAdd('add')">新增</el-button>
+        -->
       </div>
     </div>
     <!-- 操作列表 -->
     <el-table ref="projectItemTreeTable" :data="dataList" class="textList" row-key="id" border
-              lazy :load="loadNextLayer" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
+              lazy :load="loadNextProjectItemLayer" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
       <el-table-column label="工程分部分项" align="left" prop="projectItem"></el-table-column>
-      <el-table-column label="所属组织机构" align="center" width="150" prop="name"></el-table-column>
-      <el-table-column label="类型" align="center" width="120">
-        <template slot-scope="scope">
-          <template v-if="scope.row.projectType==='1'">
-            单位工程
-          </template>
-          <template v-else-if="scope.row.projectType==='2'">
-            子单位工程
-          </template>
-          <template v-else-if="scope.row.projectType==='3'">
-            分部工程
-          </template>
-          <template v-else-if="scope.row.projectType==='4'">
-            子分部工程
-          </template>
-          <template v-else-if="scope.row.projectType==='5'">
-            分项工程
-          </template>
-          <template v-else-if="scope.row.projectType==='6'">
-            子分项工程
-          </template>
-        </template>
-      </el-table-column>
+      <el-table-column label="编码" align="center" width="150" prop="id"></el-table-column>
+      <el-table-column label="父编码" align="center" width="150" prop="pid"></el-table-column>
       <el-table-column label="起始桩号" align="center" width="150" prop="startStation"></el-table-column>
       <el-table-column label="终止桩号" align="center" width="150" prop="endStation"></el-table-column>
+      <el-table-column label="是否关键部位" align="center">
+        <template slot-scope="scope" >
+          <span v-if="scope.row.iskey==='0'">否</span>
+          <span v-if="scope.row.iskey==='1'">是</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否完成" align="center" >
+        <template slot-scope="scope" >
+          <span v-if="scope.row.iscomplete==='0'">未</span>
+          <span v-if="scope.row.iscomplete==='1'">已</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" width="150" prop="createTime"></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
+          <!--
           <el-tooltip class="item" effect="dark" content="新增" placement="top">
             <el-button v-ltx="'engineeringAdd'" type="success" size="small" icon="el-icon-plus" circle @click="projectAdd(scope.row)" />
           </el-tooltip>
+          -->
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
             <el-button v-ltx="'engineeringUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="updateProject(scope.row)" />
           </el-tooltip>
+          <!--
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
             <el-button v-ltx="'engineeringDelete'" type="danger" size="small" icon="el-icon-delete" circle @click="deleteProject(scope.row)" />
           </el-tooltip>
+          -->
         </template>
       </el-table-column>
     </el-table>
@@ -68,11 +66,20 @@
         <el-form-item label="工程分部分项:" prop="projectItem">
           <el-input v-model="projectForm.projectItem" placeholder="请输入工程分部分项"/>
         </el-form-item>
+        <el-form-item label="编码:" prop="id">
+          <el-input v-model="projectForm.id" placeholder="编码" :readonly="true"/>
+        </el-form-item>
         <el-form-item label="父工程分部分项:" >
+          <el-input v-model="projectItem.value" placeholder="请选择工程分部分项" :readonly="true" />
+          <!--
           <el-input v-model="projectItem.value" @focus="InitProjectItemTree" placeholder="请选择工程分部分项" :readonly="true" suffix-icon="el-icon-arrow-down"/>
           <el-popover ref="userGroupPopover" v-model="projectItem.flag" placement="bottom-start" width="350" trigger="click">
             <el-tree :data="projectItemTreeList" :props="defaultProjectTreeProps" highlight-current @node-click="handleProjectItemNodeClick"/>
           </el-popover>
+          -->
+        </el-form-item>
+        <el-form-item label="父编码:" >
+          <el-input v-model="projectForm.pid" placeholder="请输入编码" :readonly="true" />
         </el-form-item>
         <el-form-item label="桩号:">
           <el-col :span="11">
@@ -92,11 +99,13 @@
             <el-input v-model="projectForm.lat" placeholder="请输入纬度"/>
           </el-col>
         </el-form-item>
+        <!--
         <el-form-item label="工程类型:" >
           <el-select v-model="projectForm.projectType" placeholder="请选择">
             <el-option v-for="item in projectTypeDataList" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        -->
       </el-form>
       <div class="tar">
         <el-button @click="dialogFormVisible=false">取 消</el-button>
@@ -130,6 +139,26 @@
       <div class="buttomBox">
         <el-button type="primary" @click="dialogFormVisiblechannel = false">取消</el-button>
         <el-button type="primary" @click="ImportDataComfim()">确认</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 设置关键部位 -->
+    <el-dialog :visible.sync="dialogSetPartKeyVisible" title="设置关键工序" :fullscreen="true">
+      <el-form class="reverseBox" ref="setProjectItemKey" label-width="120px">
+        <el-form-item label="组织机构:" >
+          <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id" :default-expand-all="false" v-on:noDe="handleSetKeyUserGroupCheckChange"
+                       ref="setKeyProjectItem_userGroup"/>
+        </el-form-item>
+        <el-form-item label="分部分项:" >
+          <div style="height:66vh;overflow-y:auto;border:1px solid #ccc;border-radius: 5px">
+            <el-tree :data="setProjectItemKey" :props="defaultSetKeyProjectItemProps" lazy show-checkbox node-key="id" :load="loadNextLayer" highlight-current
+                     :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>
+          </div>
+        </el-form-item>
+      </el-form>
+      <div class="buttomBox">
+        <el-button type="primary" @click="dialogSetPartKeyVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitSetKeyProjectItem()">确认</el-button>
       </div>
     </el-dialog>
 
@@ -221,14 +250,29 @@
         dataImportUserGroupList:[],
         userGroupTree: [],  //组织机构树
         queryParamData: {
-          userGroupId: "",   //组织机构id
-          id: ""
-        }
+          userGroupId: ""   //组织机构id
+        },
+        //设置关键工序
+        dialogSetPartKeyVisible: false,
+        defaultSetKeyProjectItemProps: {
+          children: 'id',
+          label: 'projectItem',
+          isLeaf: 'leaf'
+        },
+        setProjectItemKey: [],  //分部分项
+        setProjectItemOrgId: '',  //设置关键工序中的组织机构id
+        filterText: '',  //过滤数据
+        getSelectedKeyIds: '',  //得到选中的关键部位
       }
     },
     components: {
       SelectTree,
       treeTable
+    },
+    watch: {
+      filterText(val) {
+        this.$refs.setKeyProjectItemTree.filter(val);
+      }
     },
     created() {
       this.initOrganizationTreeTable()
@@ -245,6 +289,11 @@
             this.dataList = res.data.data
           })
         }
+      },
+      loadNextProjectItemLayer(tree, treeNode, resolve){  //异步加载列表中分部分项
+        api.getProjectItemFromLayer({userGroupId: this.queryParamData.userGroupId, pId: tree.id}).then(res => {
+          resolve(res.data.data)
+        })
       },
       projectTemplateDownLoad(){  //下载 工程分部分项Excel模板
         let elemIF=document.createElement('iframe')
@@ -358,7 +407,6 @@
         let that=this;
         this.$refs['addProjectForm'].validate((valid) => {
           if (valid) {
-            console.log(that.projectForm);
             api.projectAdd(that.projectForm).then(res => {
               this.$message({
                 type: "success",
@@ -400,20 +448,59 @@
           this.userGroupTree = res.data.data
         })
       },
-      handleUserGroupCheckChange(item){  //点击后选择分部分项
+      handleUserGroupCheckChange(item){  //组织机构条件选择
         this.queryParamData.userGroupId=item.id;
       },
-      loadNextLayer(row, treeNode, resolve){  //异步加载下一级分部分项
-        api.getProjectItemFromLayer({userGroupId: this.queryParamData.userGroupId, pId: row.id}).then(res => {
-          resolve(res.data.data)
+      handleSetKeyUserGroupCheckChange(item){  //设置关键工序的条件
+        this.setProjectItemOrgId=item.id;
+        api.getProjectItemFromLayer({userGroupId: item.id, pId: '0'}).then(res => {
+          this.setProjectItemKey = res.data.data
         })
+      },
+      setProjectItemKeyBtn(){  //设置关键工序
+        this.dialogSetPartKeyVisible=true;
+        api.getAllProjectItemKeyIds().then(res=>{
+          this.getSelectedKeyIds=res.data.data;
+        });
+      },
+      loadNextLayer(node, resolve){  //异步加载下一级分部分项
+        if (node.level > 0) {
+          api.getProjectItemFromLayer({userGroupId: this.setProjectItemOrgId, pId: node.data.id}).then(res => {
+            resolve(res.data.data)
+          })
+        }
+      },
+      filterNode(value, data, node){  //过滤分部分项
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
+      submitSetKeyProjectItem(){  //设置关键工序
+        let ids=this.$refs.setKeyProjectItemTree.getCheckedKeys();
+        let paramIds="";
+        for(let id of ids){
+          paramIds+=id+','
+        }
+        if(this.$tool.isEmptyStr(paramIds)){
+          this.$message({
+            type: 'warn',
+            message: "请选择需要设置的分部分项"
+          });
+        }else{
+          api.setKeyProjectItemByIds({ids: paramIds+this.getSelectedKeyIds}).then(res=>{
+            this.$message({
+              type: 'success',
+              message: "设置成功"
+            });
+            this.dialogSetPartKeyVisible=false;
+          })
+        }
       },
       handleImportUserGroupNodeClick(data){
 
       },
       ImportDataComfim(){   //确认数据导入
 
-      }
+      },
     }
   }
 </script>

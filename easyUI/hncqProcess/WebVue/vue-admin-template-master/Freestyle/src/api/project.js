@@ -23,5 +23,11 @@ export default {
   },
   getProjectItemFromLayer(data){  //异步获取组织机构
     return request.post('/rest/projectItemInfo/getProjectBQItemById', data)
+  },
+  setKeyProjectItemByIds(data){  //设置关键工序
+    return request.post('/rest/projectItemInfo//selectionKeyParts', data);
+  },
+  getAllProjectItemKeyIds(){  //得到已经选中
+    return request.post('/rest/projectItemInfo/sendKeyParts')
   }
 }

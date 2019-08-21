@@ -6,35 +6,21 @@
       <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id" :default-expand-all="false" v-on:noDe="handleCheckChange"
                    ref="organization_userGroup"/>
       <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="syncFormZj()">中交同步</el-button>
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="syncFormZj()">中交更新</el-button>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="syncToShtooneProjectItem()">同步入库</el-button>
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="syncToShtooneProjectItemGoUpdate()">同步更新</el-button>
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="loadSyncUserGroupDataList()">查询</el-button>
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="syncFormZj()">中交同步</el-button>
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="syncFormZj()">中交更新</el-button>
+        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="syncToShtooneProjectItem()">同步入库</el-button>
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="syncToShtooneProjectItemGoUpdate()">同步更新</el-button>
       </div>
     </div>
-    <el-table :data="syncUserGroupDataList" class="textList" border row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column label="组织机构" align="left" prop="name"></el-table-column>
-      <el-table-column label="组织机构编码" align="center" prop="orgCode"></el-table-column>
-      <el-table-column label="组织机构类型" align="center">
-        <template slot-scope="scope">
-          <span v-if="scope.row.orgTpye==1">项目</span>
-          <span v-if="scope.row.orgTpye==2">业主</span>
-          <span v-if="scope.row.orgTpye==3">监理</span>
-          <span v-if="scope.row.orgTpye==4">标段</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="GPS搜寻范围(米)" align="center" prop="searchRange"></el-table-column>
-      <el-table-column label="备注" align="center" prop="description"></el-table-column>
-      <el-table-column label="操作" width="200" align="center">
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-            <el-button v-ltx="'dicUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="addOrganization(scope.row)"/>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button v-ltx="'dicDelete'" type="danger" size="small" icon="el-icon-delete" circle @click="deleteOrganization(scope.row)"/>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+    <el-table :data="syncUserGroupDataList" class="textList" border row-key="id" default-expand-all
+              lazy :load="loadNextUserGroup" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
+      <el-table-column label="分部分项" align="left" prop="Description"></el-table-column>
+      <el-table-column label="编码" align="center" prop="Code"></el-table-column>
+      <el-table-column label="父编码" align="center" prop="ParentCode"></el-table-column>
+      <el-table-column label="起始桩号" align="center" prop="StartStake"></el-table-column>
+      <el-table-column label="终止桩号" align="center" prop="EndStake"></el-table-column>
+      <el-table-column label="创建时间" align="center" prop="CreatedTime"></el-table-column>
     </el-table>
 
   </div>
@@ -66,6 +52,23 @@ export default {
     this.initOrganizationTreeTable();
   },
   methods:{
+    loadSyncUserGroupDataList(){
+      if(this.$tool.isEmptyStr(this.queryData.userGroupId)){
+        this.$message({
+          type: 'warn',
+          message: "请选择组织机构"
+        });
+      }else {
+        request.post('/rest/processCheck/treeProjectItemInfo', {orgCode: this.queryData.userGroupId}).then(res => {
+          this.syncUserGroupDataList = res.data.data;
+        })
+      }
+    },
+    loadNextUserGroup(row, treeNode, resolve){   //加载下级组织机构
+      request.post('/rest/processCheck/treeItemInfoSon', {codeid: row.Code}).then(res => {
+        resolve(res.data.data)
+      })
+    },
     initOrganizationTreeTable() {  // 初始化树列表
       request.get('/rest/organizate/depart').then(res => {
         this.userGroupTree = res.data.data
