@@ -4,74 +4,43 @@
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
-          <!--  <select-tree
-              :options="userGroupOption"
-              :props="userGroupDefaultProp"
-              v-on:noDe="userGroupOnClick"
-            />-->
+          <!--
+            <select-tree :options="userGroupOption" :props="userGroupDefaultProp" v-on:noDe="userGroupOnClick"/>
+          -->
           <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
-            <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                       :value="item.id"></el-option>
+            <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
           </el-select>
         </el-col>
 
         <el-col :span="12">
           <span>创建日期:</span>
-          <el-date-picker
-            v-model="queryData.starttime"
-            type="datetime"
-            placeholder="选择开始日期时间"
-            size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-          -
-          <el-date-picker
-            v-model="queryData.endtime"
-            type="datetime"
-            placeholder="选择结束日期时间"
-            size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
+          <el-date-picker v-model="queryData.starttime" type="datetime" placeholder="选择开始日期时间" size="small" style="min-width:180px"
+                          value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
+          <el-date-picker v-model="queryData.endtime" type="datetime" placeholder="选择结束日期时间" size="small" style="min-width:180px"
+                          value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
         </el-col>
         <el-col :span="4">
-          <el-button
-            class="pan-btn light-blue-btn"
-            type="primary"
-            icon="el-icon-search"
-            @click="getList()"
-          >查询
-          </el-button>
-          <el-button
-            type="primary"
-            class="pan-btn light-blue-btn"
-            icon="el-icon-refresh"
-            @click="reset()"
-          >重置
-          </el-button>
+          <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="getList()">查询</el-button>
+          <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
         </el-col>
       </el-row>
     </div>
-    <el-table class="textList" border :data="tableData" style="width: 100%;margin-bottom:20px"
-              @cell-click="handleGoods">
+    <el-table class="textList" border :data="tableData" style="width: 100%;margin-bottom:20px" @cell-click="handleGoods">
       <el-table-column prop="bidSection" label="标段" min-width="180"></el-table-column>
       <el-table-column prop="alreadyCheck" label="已验收" min-width="180">
-        <template scope="scope">
+        <template slot-scope="scope">
           <span v-if="scope.row.alreadyCheck==0">{{scope.row.alreadyCheck}}</span>
           <span v-else style="color: blue">{{scope.row.alreadyCheck}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="alreadySelfCheck" label="已自检" min-width="180">
-        <template scope="scope">
+        <template slot-scope="scope">
           <span v-if="scope.row.alreadySelfCheck==0">{{scope.row.alreadySelfCheck}}</span>
           <span v-else style="color: blue">{{scope.row.alreadySelfCheck}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="notSelfCheck" label="未自检" min-width="180">
-        <template scope="scope">
+        <template slot-scope="scope">
           <span v-if="scope.row.notSelfCheck==0">{{scope.row.notSelfCheck}}</span>
           <span v-else style="color: blue">{{scope.row.notSelfCheck}}</span>
         </template>
@@ -85,7 +54,7 @@
       <el-table-column prop="realityCheckTime" label="验收时间" min-width="90"></el-table-column>
       <el-table-column prop="realityCheckPerson" label="验收人" min-width="90"></el-table-column>
       <el-table-column prop="state" label="状态" min-width="90">
-        <template scope="scope">
+        <template slot-scope="scope">
           <span v-if="scope.row.state== 1&&scope.row.adopt==null">未自检</span>
           <span v-if="scope.row.state== 2&&scope.row.adopt==null">未验收</span>
           <span v-if="scope.row.state== 3&&scope.row.adopt==1">已验收</span>
@@ -94,34 +63,20 @@
       <el-table-column prop="name" label="查看" min-width="90">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
-            <el-button
-              @click="handleClick(scope.row)"
-              type="primary"
-              circle
-              size="small"
-              icon="el-icon-search"
-              v-if="tableData.length!=0"
-            ></el-button>
+            <el-button @click="handleClick(scope.row)" type="primary" circle size="small" icon="el-icon-search" v-if="tableData.length!=0"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      class="pageList mt1"
-      @size-change="handleSizeChange"
-      @current-change="query()"
-      :current-page="queryData.pageNo"
-      :page-sizes="[10,20,30,40]"
-      :page-size="queryData.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    ></el-pagination>
+    <el-pagination class="pageList mt1" @size-change="handleSizeChange" @current-change="query()" :current-page="queryData.pageNo"
+      :page-sizes="[10,20,30,40]" :page-size="queryData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
 
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" fullscreen class="dialogBox">
       <processCheck :realList="chakanData" :processInfoId="processInfoId"></processCheck>
     </el-dialog>
   </div>
 </template>
+
 <script>
   import SelectTree from '@/components/SelectTree/selectTree.vue'
   import request from '@/utils/request'
@@ -159,23 +114,18 @@
           projectItemId: '' //工程分部分项id
         },
         //自建验收下拉框
-        options: [
-          {
-            value: '选项1',
-            label: '黄金糕'
-          },
-          {
-            value: '选项2',
-            label: '双皮奶'
-          },
-          {
-            value: '选项3',
-            label: '蚵仔煎'
-          }
-        ],
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }],
         //选中的数据
         value: '',
-
         tableData: [],
         footerTable: [],
         userGroupId: ''
