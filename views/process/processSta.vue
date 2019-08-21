@@ -1,15 +1,18 @@
-<!--
 <template>
   <div class="acceptzh">
     <div class="topBar">
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
-          <select-tree
-            :options="userGroupTreeOption"
-            :props="userGroupDefaultProp"
-            v-on:noDe="userGroupOnClick"
-          />
+          <!--  <select-tree
+              :options="userGroupOption"
+              :props="userGroupDefaultProp"
+              v-on:noDe="userGroupOnClick"
+            />-->
+          <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+            <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                       :value="item.id"></el-option>
+          </el-select>
         </el-col>
 
         <el-col :span="12">
@@ -103,7 +106,6 @@
         </template>
       </el-table-column>
     </el-table>
-    &lt;!&ndash;    分页&ndash;&gt;
     <el-pagination
       class="pageList mt1"
       @size-change="handleSizeChange"
@@ -115,7 +117,6 @@
       :total="total"
     ></el-pagination>
 
-    &lt;!&ndash;    查看弹框&ndash;&gt;
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" fullscreen class="dialogBox">
       <processCheck :realList="chakanData" :processInfoId="processInfoId"></processCheck>
     </el-dialog>
@@ -125,6 +126,7 @@
   import SelectTree from '@/components/SelectTree/selectTree.vue'
   import request from '@/utils/request'
   import processCheck from '@/views/process/components/processCheck'
+  import Organization from '@/api/Organization'
 
   export default {
     inject: ['reload'],
@@ -138,7 +140,7 @@
           children: 'children',
           label: 'name'
         },
-        userGroupTreeOption: [], //查询条件中的组织机构树
+        userGroupOption: [], //查询条件中的组织机构树
         projectItemTreeOption: [], //查询条件中的统计类型树
         dialogTableVisible: false,
         processInfoId: '', //用于查询详情的id
@@ -175,7 +177,8 @@
         value: '',
 
         tableData: [],
-        footerTable: []
+        footerTable: [],
+        userGroupId: ''
       }
     },
     mounted() {
@@ -187,16 +190,25 @@
     methods: {
       initUserGroup() {
         // 初始化组织机构input框数据
-        request.get('/rest/organizate/depart').then(res => {
-          this.userGroupTreeOption = res.data.data
+        Organization.userGroupSelect().then(res => {
+          this.userGroupOption = res.data.data
         })
+      },
+      userGroupOnChange(data) {   //选择标段改动
+        this.selectedUserGroup = data  //选中的用户
+        Organization.post('/rest/projectItemInfo/getList', { orgId: data }).then(res => {
+          this.projectItemTree = res.data.data
+        })
+        Organization.getProjectItemFromLayer({userGroupId: data, pId: '0'}).then(res => {
+          this.projectItemOptions = res.data.data;
+          this.$refs.getSelectData.labelModel = ''
+        });
       },
       userGroupOnClick(data) {
         // 点击组织机构节点展示分部分项
         this.projectItemTreeOption = []
         this.queryData.orgId = data.id
-        request
-          .post('/rest/projectItemInfo/getList', { orgId: data.id })
+        Organization.post('/rest/projectItemInfo/getList', { orgId: data.id })
           .then(res => {
             this.projectItemTreeOption = res.data.data
           })
@@ -220,7 +232,6 @@
       },
       handleGoods(row, column, cell, event) {
         console.log(row, column, cell, event)
-
         request
           .post('/rest/processCheck/statisticsDetails', {
             departid: row.usergroupid,
@@ -263,9 +274,6 @@
     padding: 20px;
     height: 100%;
 
-  .elBoutton {
-  }
-
   /deep/ .el-input__inner {
     line-height: 30px !important;
   }
@@ -287,5 +295,3 @@
     text-align: center;
   }
 </style>
-
--->

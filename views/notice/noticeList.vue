@@ -108,9 +108,7 @@
 </template>
 
 <script>
-  // import checkBox from "../components/checkBox";
   import api from '@/api/notice.js'
-  // import SelectTree from "@/components/SelectTree/selectTree.vue";
   export default {
     inject: ['reload'],
     components: {

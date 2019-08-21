@@ -1,6 +1,7 @@
 <template>
   <div class="printerCheck">
-    <div class="printerCheckTop">
+    <el-row>
+      <el-col :span="5">
       <span>
         <el-form label-width="80px" :inline="true">
           <el-form-item label="打印编码:">
@@ -8,6 +9,8 @@
           </el-form-item>
         </el-form>
       </span>
+      </el-col>
+      <el-col :span="5">
       <span>
         <el-button
           type="primary"
@@ -16,20 +19,21 @@
           @click="queryPrint"
         >查询</el-button>
       </span>
-    </div>
+      </el-col>
+    </el-row>
     <div class="printCheckConent" v-if="isShow">
       <p>湖南长祁高速验收凭证</p>
       <el-table :data="tableData" style="width: 100%" height="65vh" border class="textList">
         <!-- <el-table-column label="承包单位: 湖南长祁高速"> -->
-          <el-table-column prop="projectName" label="分部分项"></el-table-column>
-          <el-table-column prop="processNumber" label="打印编码" width="120"></el-table-column>
-          <el-table-column prop="Station" label="桩号" width="120"></el-table-column>
+        <el-table-column prop="projectName" label="分部分项"></el-table-column>
+        <el-table-column prop="processNumber" label="打印编码" width="120"></el-table-column>
+        <el-table-column prop="Station" label="桩号" width="120"></el-table-column>
         <!-- </el-table-column> -->
         <!-- <el-table-column label="监理单位：湖南长祁高速"> -->
-          <el-table-column prop="processname" label="工序名称" width="300"></el-table-column>
-          <el-table-column prop="realitychecktime" label="验收时间" width="200"></el-table-column>
-          <el-table-column prop="realname" label="验收人" width="120"></el-table-column>
-          <el-table-column prop="checkdescribe" label="验收说明" width="120"></el-table-column>
+        <el-table-column prop="processname" label="工序名称" width="300"></el-table-column>
+        <el-table-column prop="realitychecktime" label="验收时间" width="200"></el-table-column>
+        <el-table-column prop="realname" label="验收人" width="120"></el-table-column>
+        <el-table-column prop="checkdescribe" label="验收说明" width="120"></el-table-column>
         <!-- </el-table-column> -->
       </el-table>
     </div>
@@ -47,66 +51,71 @@
   </div>
 </template>
 <script>
-import request from "@/utils/request";
-export default {
-  data() {
-    return {
-      isShow: false, // 没有查询隐藏
-      form: {
-        processNumber: "", // 验收编码
-        pageNo: 1, // 当前页
-        pageSize: 10 // 每页条数
-      },
-      total: 0,
-      tableData: []
-    };
-  },
-  methods: {
-    // 凭证查询
-    queryPrint() {
-      if (
-        this.form.processNumber == "" ||
-        this.form.processNumber == undefined ||
-        this.form.processNumber == null
-      ) {
-        this.$message({
-          message: "请输入打印编码",
-          type: "warning"
-        });
-        return false;
+  import request from '@/utils/request'
+
+  export default {
+    data() {
+      return {
+        isShow: true, // 没有查询隐藏
+        form: {
+          processNumber: '', // 验收编码
+          pageNo: 1, // 当前页
+          pageSize: 10 // 每页条数
+        },
+        total: 0,
+        tableData: []
       }
-      request
-        .post("/rest/processCheck/searchProcessNumber", this.form)
-        .then(res => {
-          if (res.data.respCode == 0) {
-            this.isShow = true;
-            this.tableData = res.data.data.data;
-            this.total = res.data.data.totalCount;
-          }
-        });
     },
-    // 分页
-    handleSizeChange(val) {
-      this.queryData.pageSize = val;
-      this.queryPrint();
+    methods: {
+      // 凭证查询
+      queryPrint() {
+        if (
+          this.form.processNumber == '' ||
+          this.form.processNumber == undefined ||
+          this.form.processNumber == null
+        ) {
+          this.$message({
+            message: '请输入打印编码',
+            type: 'warning'
+          })
+          return false
+        }
+        request
+          .post('/rest/processCheck/searchProcessNumber', this.form)
+          .then(res => {
+            if (res.data.respCode == 0) {
+              this.isShow = true
+              this.tableData = res.data.data.data
+              this.total = res.data.data.totalCount
+            }
+          })
+      },
+      // 分页
+      handleSizeChange(val) {
+        this.queryData.pageSize = val
+        this.queryPrint()
+      }
     }
   }
-};
 </script>
 <style lang="scss" scoped>
-.printerCheck {
-  padding: 20px;
+  .printerCheck {
+    padding: 20px;
+
   .printerCheckTop {
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
   }
+
   .printCheckConent {
-    p {
-      font-size: 18px;
-      font-weight: 700;
-    }
+
+  p {
+    font-size: 18px;
+    font-weight: 700;
   }
-}
+
+  }
+  }
 </style>

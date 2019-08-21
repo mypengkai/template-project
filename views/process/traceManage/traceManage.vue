@@ -5,8 +5,13 @@
         <el-col :span="5" v-if="tabPosition == 'first'">
           <div>
             <el-form :inline="true" class="grid-content" style="font-size:.8vw">
+
               <el-form-item label="组织机构：">
-                <select-tree :options="options" v-on:noDe="noDe" :props="defaultProp"/>
+
+                <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+                  <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                             :value="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-form>
           </div>
@@ -15,11 +20,15 @@
           <div>
             <el-form :inline="true" class="grid-content">
               <el-form-item label="分部分项：">
-                <select-tree
-                  :options="unitsTree"
-                  v-on:noDe="handleCheckChangeUnit"
-                  :props="defaultPropsProject"
-                />
+                <!--     <select-tree
+                       :options="projectItemOptions"
+                       v-on:noDe="handleCheckChangeUnit"
+                       :props="defaultPropsProject"
+                     />projectItemOptions
+                   </el-form-item>-->
+                <select-tree clearable :options="projectItemOptions" ref="getSelectData"
+                             :props="projectItemDefaultProp"
+                             v-on:noDe="projectItemOnClick"/>
               </el-form-item>
             </el-form>
           </div>
@@ -30,7 +39,7 @@
           <div class="grid-content">
             <!-- <el-form inline>
               <el-form-item label="姓名：">
-                <select-tree :options="unitsTree"  v-on:noDe="handleCheckChangeUnit" :props="defaultPropsProject"/>
+                <select-tree :options="projectItemOptions"  v-on:noDe="handleCheckChangeUnit" :props="defaultPropsProject"/>
               </el-form-item>
             </el-form>-->
             <span>姓名：</span>
@@ -74,10 +83,10 @@
               <el-radio label="command">指令</el-radio>
               <el-radio label="polling">巡视</el-radio>
               <el-radio label="sideStation">旁站</el-radio>
+              <el-radio label="realcheck">验收</el-radio>
               <el-radio label="meeting">会议纪要</el-radio>
 
-             <!-- <el-radio label="selfcheck">自检</el-radio>
-              <el-radio label="realcheck">验收</el-radio>-->
+              <!-- <el-radio label="selfcheck">自检</el-radio>-->
             </el-radio-group>
           </div>
         </el-col>
@@ -125,10 +134,10 @@
   import list from './detailList'
   import { getToken } from '@/utils/auth'
   import request from '@/utils/request'
-  import SelectTree from '@/components/SelectTree/selectTree.vue'
+  import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
+  import Organization from '@/api/Organization'
 
   let token = localStorage.getItem('myToken')
-
   export default {
     name: 'TraceManage',
     inject: ['reload'],
@@ -138,6 +147,14 @@
     },
     data() {
       return {
+        userGroupDefaultProps: {  //组织机构tree props
+          children: 'children',
+          label: 'name'
+        },
+        projectItemDefaultProp: {  //工程分部分项tree    props
+          children: 'children',
+          label: 'projectItem'
+        },
         department: '',
         departmentProject: '',
         searchType: '',
@@ -145,8 +162,9 @@
         dateFrom: '', //日期
         dateTo: '',
         active: '', // 自定义属性
-        options: [], //工程列表
-        unitsTree: [], // 工程分项
+        userGroupOption: [], //工程列表
+        userGroupId: '',
+        projectItemOptions: [], // 工程分项
         username: '', //用户名
         conentOptions: [], // 展示数据
         userOptions: [], // 人员数据
@@ -174,7 +192,7 @@
     },
     watch: {},
     created() {
-      this.projectInit()
+      this.initUserGroup()
       this.projecQuery()
       this.peopleQuery()
     },
@@ -182,13 +200,30 @@
     },
     methods: {
       //  单位查询
-      projectInit() {
-        request.get('/rest/organizate/depart').then(res => {
-          if (res.data) {
-            this.options = res.data.data
-          }
+      initUserGroup() {
+        Organization.userGroupSelect().then(res => {
+          this.userGroupOption = res.data.data
         })
       },
+      userGroupOnChange(data) {  // 组织机构下拉树
+        this.userGroupId = data
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+          this.projectItemOptions = res.data.data
+          this.$refs.getSelectData.labelModel = ''
+        })
+      },
+      loadNextNode(node, resolve) {  //异步获取下一级节点数据
+        if (node.level > 0) {
+          Organization.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
+          })
+        }
+      },
+      // 获取分部分项id
+      projectItemOnClick(data) {
+        this.form.projectId = data.id
+      },
+/*
 
       //选中的数据(tree)
       noDe(data, checked, indeterminate) {
@@ -210,9 +245,11 @@
             'X-AUTH-TOKEN': token
           })
           .then(res => {
-            this.unitsTree = res.data.data
+            this.projectItemOptions = res.data.data
           })
       },
+*/
+
       handleCheckChangeUnit(data) {
         this.from.unitsName = data.projectItem
         this.from.unitsId = data.id

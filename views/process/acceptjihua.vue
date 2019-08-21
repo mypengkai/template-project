@@ -4,11 +4,18 @@
       <el-row>
         <el-col :span="5">
           <span>组织机构:</span>
-          <select-tree :options="userGroupOptions" :props="userGroupDefaultProps" v-on:noDe="userGroupOnclick"/>
+          <!--          <select-tree :options="userGroupOptions" :props="userGroupDefaultProps" v-on:noDe="userGroupOnclick"/>-->
+          <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+            <el-option v-for="item in userGroupOptions" :key="item.id" :label="item.departname"
+                       :value="item.id"></el-option>
+          </el-select>
+
         </el-col>
         <el-col :span="5">
           <span>分部分项:</span>
-          <select-tree :options="projectItemOptions" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>
+          <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                       v-on:noDe="projectItemOnClick"/>
+          <!--          <select-tree :options="projectItemOptions" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>-->
         </el-col>
         <!--  <el-col :span="6">
             <span>姓名:</span>
@@ -74,8 +81,8 @@
     </div>
 
     <el-table border class="textList" :data="tableData" style="width: 100%;" height="68vh" v-if="tableData.length!=0">
-      <el-table-column prop="name1" label="分部分项" ></el-table-column>
-      <el-table-column prop="Station" label="桩号" align="center" width="150" ></el-table-column>
+      <el-table-column prop="projectitem" label="分部分项"></el-table-column>
+      <el-table-column prop="Station" label="桩号" align="center" width="150"></el-table-column>
       <el-table-column prop="processName" label="工序名称" align="center" width="200"></el-table-column>
       <el-table-column prop="jijiazijianren" label="自检人" width="100" align="center"></el-table-column>
       <el-table-column prop="planSelfCheckTime" label="自检时间" width="100" align="center"></el-table-column>
@@ -116,9 +123,10 @@
 </template>
 
 <script>
-  import SelectTree from '@/components/SelectTree/selectTree.vue'
+  import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import processCheck from '@/views/process/components/processCheck'
   import request from '@/utils/request'
+  import Organization from '@/api/Organization'
 
   export default {
     inject: ['reload'],
@@ -132,7 +140,7 @@
           children: 'children',
           label: 'name'
         },
-        projectItemDefaultProps: {  //工程分部分项tree    props
+        projectItemDefaultProp: {  //工程分部分项tree    props
           children: 'children',
           label: 'projectItem'
         },
@@ -173,38 +181,52 @@
         projectItemOptions: [],   //   工程分部分项List   条件选择
         tableData: [],  //数据列表
         chakanData: [],  //查看数据
-        processInfoId: ''   //用于查询详情的id
+        processInfoId: '',  //用于查询详情的id
+        userGroupId: '',  //从下拉列表中选中的usergroupid
+        selectedUserGroup: ''  //选中的用户组织机构
       }
     },
     created() {
       this.query()
     },
     mounted() {
-      this.initUserGroupTree()
+      this.initUserGroup()
     },
     methods: {
       handleSizeChange(val) {
         this.queryData.pageSize = val
         this.chaxun()
       },
-      initUserGroupTree() {  // 初始化组织机构input框数据
-        request.get('/rest/organizate/depart').then(res => {
+      initUserGroup() {  // 初始化组织机构input框数据
+        Organization.userGroupSelect().then(res => {
           this.userGroupOptions = res.data.data
         })
       },
-      reset() {
-        this.reload()
+      userGroupOnChange(data) {  // 组织机构下拉树
+        this.queryData.orgId = data;
+        Organization.getProjectItemFromLayer({userGroupId: data, pId: '0'}).then(res => {
+          this.projectItemOptions = res.data.data;
+          this.$refs.getSelectData.labelModel = ''
+        });
       },
-      userGroupOnclick(data) {  // 点击组织机构节点展示分部分项
-        this.queryData.orgId = data.id
-        this.projectItemOptions = []
-        request.post('/rest/projectItemInfo/getList', { orgId: data.id }).then(res => {
-          this.projectItemOptions = res.data.data
-        })
+      loadNextNode(node, resolve) {  //异步获取下一级节点数据
+        if (node.level > 0) {
+          Organization.getProjectItemFromLayer({userGroupId: this.selectedUserGroup, pId: node.data.id}).then(res => {
+            resolve(res.data.data);
+          });
+        }
       },
+    /*  projectItemOnClick(data) {  // 分部分项选择后的数据
+        this.sendData.projectCode = data.projectCode;
+      },
+      */
       // 获取分部分项id
       projectItemOnClick(data) {
         this.queryData.projectItemId = data.id
+      },
+
+      reset() {
+        this.reload()
       },
       query() {  // 查询接口
         let formData = {

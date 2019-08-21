@@ -5,18 +5,24 @@
         <el-col :span="5">
           <el-form :inline="true" class="grid-content" style="font-size:.8vw">
             <el-form-item label="组织机构：">
-              <select-tree :options="projectData" v-on:noDe="projectOnClick" :props="projectItem"/>
+              <!--              <select-tree :options="userGroupOption" v-on:noDe="projectOnClick" :props="projectItem"/>-->
+              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+                <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                           :value="item.id"></el-option>
+              </el-select>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="5">
           <el-form :inline="true" class="grid-content">
             <el-form-item label="分部分项：">
-              <select-tree :options="partialData" v-on:noDe="partialClick" :props="partialItem"/>
+              <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                           v-on:noDe="projectItemOnClick"/>
+              <!--              <select-tree :options="partialData" v-on:noDe="partialClick" :props="partialItem"/>-->
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="12">
           <div class="grid-content">
             <span>日期：</span>
             <el-date-picker
@@ -38,16 +44,10 @@
             />
           </div>
         </el-col>
-        <el-col :span="5">
-          <el-form label-width="80px" :model="form">
-            <el-form-item label="桩号:">
-              <el-input v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
+
       </el-row>
       <el-row>
-        <el-col :span="16">
+        <el-col :span="5">
           <el-form label-width="80px" :model="form">
             <el-form-item label="打印状态:">
               <el-select v-model="form.type" placeholder="请选择" size="small">
@@ -61,7 +61,15 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="13">
+          <el-form label-width="80px" :model="form">
+            <el-form-item label="桩号:">
+              <el-input style="width: 200px;" v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+
+        <el-col :span="4">
           <div class="grid-content">
             <span>
               <el-button
@@ -132,8 +140,9 @@
 </template>
 <script>
   import request from '@/utils/request'
-  import SelectTree from '@/components/SelectTree/selectTree.vue'
   import proofProve from './components/proofProve.vue'
+  import Organization from '@/api/Organization'
+  import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
 
   export default {
     inject: ['reload'],
@@ -145,12 +154,14 @@
       return {
         form: {
           departName: '', // 组织机构名称
-          departid: '', // 组织机构ID
+          userGroupId: '', // 组织机构ID
+          orgId: '', // 组织机构ID
           startTime: '', // 起始时间
           endTime: '', // 结束时间
           station: '', // 桩号
           projectName: '', // 分部分项名称
           projectCode: '', // 分部分项Code
+          projectItemId: '', // 分部分项id
           type: 0, // 打印状态
           pageNo: 1, // 当前页
           pageSize: 10 // 每页条数
@@ -170,8 +181,13 @@
         dialogVisible: false, // 弹框
         tableData: [], // table 数据
         multipleSelection: [], // 勾选中数据
-        projectData: [], // 组织机构数据
-        // 组织树配置
+        userGroupOption: [], // 组织机构数据
+        userGroupId: '', // 从下拉列表中选中的组织机构
+        projectItemOptions: [],   //   工程分部分项List   条件选择
+        projectItemDefaultProp: {  //工程分部分项tree    props
+          children: 'children',
+          label: 'projectItem'
+        },
         projectItem: {
           children: 'children',
           label: 'name'
@@ -194,7 +210,7 @@
       }
     },
     created() {
-      this.initProjectGroup()
+      this.initUserGroup()
     },
     mounted() {
       // 默认搜未打印数据
@@ -202,25 +218,34 @@
     },
     methods: {
       // 初始化组织机构input框数据
-      initProjectGroup() {
-        request.get('/rest/organizate/depart').then(res => {
-          if (res.status == 200) {
-            this.projectData = res.data.data
-          }
+      /*     initProjectGroup() {
+             request.get('/rest/organizate/depart').then(res => {
+               if (res.status == 200) {
+                 this.userGroupOption = res.data.data
+               }
+             })
+           },*/
+      initUserGroup() {  //初始化组织机构树
+        Organization.userGroupSelect().then(res => {
+          this.userGroupOption = res.data.data
         })
       },
-      // 点击组织机构
-      projectOnClick(data) {
-        this.form.departid = data.id
-        this.form.departName = data.name
-        request.post('/rest/projectItemInfo/getList', {
-          orgId: this.form.departid
+      userGroupOnChange(data) {  // 组织机构下拉树
+        this.form.orgId = data
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+          this.projectItemOptions = res.data.data
+          this.$refs.getSelectData.labelModel = ''
         })
-          .then(res => {
-            if (res.status == 200) {
-              this.partialData = res.data.data
-            }
+      },
+      loadNextNode(node, resolve) {  //异步获取下一级节点数据
+        if (node.level > 0) {
+          Organization.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
           })
+        }
+      },
+      projectItemOnClick(data) {
+        this.form.projectItemId = data.id
       },
       // 分部分项
       partialClick(data) {
@@ -240,7 +265,7 @@
       },
       // 分页
       handleSizeChange(val) {
-        this.queryData.pageSize = val
+        this.form.pageSize = val
         this.querySelected()
       },
       // table

@@ -107,7 +107,6 @@
 <script>
   import request from '../../../utils/request'
   import { getToken } from '@/utils/auth'
-  import project from '@/api/project.js'
   import processInfo from '@/api/process.js'
   import SelectTree from '@/components/SelectTree/selectTree.vue'
   import viewer from '@/components/viewer'
@@ -149,7 +148,6 @@
         },
         form: {
           remark: '', // 指令内容
-          userGroupId: '', // 组织机构id
           userGroupName: '',   //组织机构名称
           processMDictId: '',  //工序类型id
           processDictId: '', // 工序字典的工序id 非必传
@@ -176,6 +174,8 @@
           pageNo: 1, // 当前页
           pageSize: 10, // 每页条数
           userGroupId: '',
+          projectItemId: '', // 分部分项id
+
           realname: '', //用户真实名字
           position: ''   //职位
         },
@@ -198,7 +198,7 @@
         groupName: '',
         organizationId: '',
         groupId: '',
-        selectedUserGroup: '',  //选中的用户组织机构
+        selectedUserGroup: ''  //选中的用户组织机构
 
       }
     },
@@ -253,20 +253,20 @@
           this.receiveUsersList = res.data.data.data
         })
       },
-  /*    handleCheckChange(data) {  // 组织机构选择后的数据
-        this.form.userGroupId = data.id
-        this.form.userGroupName = data.name
-        project.projectList({ orgId: data.id }).then(res => {
+      /*    handleCheckChange(data) {  // 组织机构选择后的数据
+            this.form.userGroupId = data.id
+            this.form.userGroupName = data.name
+            project.projectList({ orgId: data.id }).then(res => {
+              this.projectItemTree = res.data.data
+            })
+          },*/
+      userGroupOnChange(data) {   //选择标段改动
+        /*  this.form.userGroupId = data
+          this.form.userGroupName = data.sondepartname*/
+        this.selectedUserGroup = data  //选中的用户
+        request.post('/rest/projectItemInfo/getList', { orgId: data }).then(res => {
           this.projectItemTree = res.data.data
         })
-      },*/
-      userGroupOnChange(data) {   //选择标段改动
-      /*  this.form.userGroupId = data
-        this.form.userGroupName = data.sondepartname*/
-        this.selectedUserGroup=data;  //选中的用户
-        request.post('/rest/projectItemInfo/getList', { orgId: data}).then(res => {
-          this.projectItemTree=res.data.data;
-        });
         this.isShowProjectItem = true
       },
       handleProjectItemOnClick(data) { // 分部分项选择后的数据
@@ -282,7 +282,6 @@
         this.receiveUserList()
       },
       addProcessFunction(formName) {
-      debugger
         const fromData = {
           organizationId: this.form.userGroupId,
           groupId: this.form.projectItemId,
@@ -301,7 +300,7 @@
                 })
                 this.loadAppointProcessList()
                 this.dialogFormVisible = false
-
+                this.$emit("cancel");
               }
             })
           }

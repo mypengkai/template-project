@@ -91,6 +91,7 @@ export default {
   methods: {
     action(val) {
       this.nowItem = val;
+      console.log('this.nowItem',this.nowItem)
       this.dialogFormVisible = true;
     },
     // 查询单个请求
