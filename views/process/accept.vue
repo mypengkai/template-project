@@ -322,7 +322,8 @@ export default {
       if (node.level > 0) {
         request.post('/rest/projectItemInfo/getProjectBQItemById', {
           userGroupId: this.selectedUserGroup,
-          pId: node.data.id
+          pId: node.data.id,
+          iskey: '1'
         }).then(res => {
           resolve(res.data.data);
         });
