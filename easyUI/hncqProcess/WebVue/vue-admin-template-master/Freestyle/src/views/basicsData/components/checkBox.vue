@@ -13,18 +13,20 @@
             </el-col>
             <el-col :span="24">
               <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
-                <!--   <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
-                                v-on:noDe="handleCheckChange"/>
-                 </el-form-item>-->
                 <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:14vw;">
-                  <el-option v-for="item in userGroupTree" :key="item.id" :label="item.sondepartname"
+                  <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                              :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item style="width:20vw" label="分部分项：" v-if="nowItem =='add'">
-                <select-tree :options="projectItemTree" :props="projectTree" v-on:noDe="handleProjectItemOnClick"/>
+
+                <select-tree clearable :options="projectItemTreeOptions" ref="getSelectData"
+                             :props="projectItemDefaultProp"
+                             v-on:noDe="projectItemOnClick"/>
+
+                <!--                <select-tree :options="projectItemTree" :props="projectTree" v-on:noDe="handleProjectItemOnClick"/>-->
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -61,7 +63,7 @@
         </el-row>
         <el-row>
           <div class="tar">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click="clock()">取 消</el-button>
             <el-button type="primary" v-if="nowItem=='add'" @click="addProcessFunction('formName')">确 定</el-button>
           </div>
         </el-row>
@@ -104,8 +106,9 @@
   import request from '../../../utils/request'
   import { getToken } from '@/utils/auth'
   import processInfo from '@/api/process.js'
-  import SelectTree from '@/components/SelectTree/selectTree.vue'
+  import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import viewer from '@/components/viewer'
+  import Organization from '@/api/Organization.js'
 
   export default {
     inject: ['reload'],
@@ -194,15 +197,28 @@
         groupName: '',
         organizationId: '',
         groupId: '',
-        selectedUserGroup: ''  //选中的用户组织机构
+        selectedUserGroup: '',  //选中的用户组织机构
+        orgId: '',
+        projectItemTreeOptions: [],
+        userGroupId: '',
+        userGroupOption: [],
+        projectItemDefaultProp: {  // 工程分项树显示
+          children: 'id',
+          label: 'projectItem',
+          isLeaf: 'leaf'
+        }
 
       }
     },
     created() {
       this.initForm()
       this.receiveUserList()
+      this.initUserGroupTree()
     },
     methods: {
+      clock() {
+        this.$emit('cancel')
+      },
       toggleSelection() {
 
         this.formData = this.multipleSelection
@@ -239,8 +255,8 @@
             })
           },*/
       initUserGroupTree() {  //初始化组织机构树
-        request.post('/rest/processCheck/searchGrouplowestLevel').then(res => {
-          this.userGroupTree = res.data.data
+        Organization.userGroupSelect().then(res => {
+          this.userGroupOption = res.data.data
         })
       },
       receiveUserList() {  //接收人列表
@@ -250,13 +266,21 @@
         })
       },
       userGroupOnChange(data) {   //选择标段改动
-        /*  this.form.userGroupId = data
-          this.form.userGroupName = data.sondepartname*/
-        this.selectedUserGroup = data  //选中的用户
-        request.post('/rest/projectItemInfo/getList', { orgId: data }).then(res => {
-          this.projectItemTree = res.data.data
+        this.orgId = data
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+          this.projectItemTreeOptions = res.data.data
+          this.$refs.getSelectData.labelModel = ''
         })
-        this.isShowProjectItem = true
+      },
+      loadNextNode(node, resolve) {  //异步获取下一级节点数据
+        if (node.level > 0) {
+          Organization.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
+          })
+        }
+      },
+      projectItemOnClick(data) {  // 分部分项选择后的数据
+        this.form.projectItemId = data.id
       },
       handleProjectItemOnClick(data) { // 分部分项选择后的数据
         this.form.projectItemId = data.id
@@ -287,12 +311,13 @@
                   message: '恭喜你，新增成功',
                   type: 'success'
                 })
-                this.loadAppointProcessList()
+                // this.loadAppointProcessList()
                 this.dialogFormVisible = false
-                this.$emit("cancel");
               }
             })
           }
+          this.$emit('cancel')
+
         })
       },
 

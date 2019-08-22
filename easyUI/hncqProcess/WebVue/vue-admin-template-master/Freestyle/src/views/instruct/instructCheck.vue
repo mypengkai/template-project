@@ -106,8 +106,6 @@
         },
         userGroupOption: [], // 组织机构树
         projectItemTreeOptions: [], // 分部分项树
-
-        projectItemTreeOptions: [], // 分部分项树
         total: 0,
         //点击搜素传递的传输
         sendData: {
@@ -166,12 +164,6 @@
       },
       projectItemOnClick(data) {  // 分部分项选择后的数据
         this.sendData.projectItemId = data.id
-      },
-      handleCheckChange(data) {  // 组织机构下拉树
-        this.sendData.departId = data.id
-        project.projectItemTreeOptions(this.sendData).then(res => {
-          this.projectItemTreeOptions = res.data.data
-        })
       },
       projectChange(data) { // 工程分部分项树
         this.sendData.projectItemId = data.id
