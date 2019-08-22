@@ -101,17 +101,16 @@
     </div>
 
     <el-table border class="textList" :data="tableData" height="68vh" fit>
-      <el-table-column prop="name1" label="分部分项" width="400"></el-table-column>
+      <el-table-column prop="name1" label="分部分项" width=""></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="150" align="center"></el-table-column>
       <el-table-column prop="processName" label="工序名称" width="200" align="center"></el-table-column>
-      <el-table-column prop="shijizijianren" label="自检人" width="70" align="center"></el-table-column>
+      <el-table-column prop="shijizijianren" label="自检人" width="80" align="center"></el-table-column>
       <el-table-column prop="planSelfCheckTime" label="计划自检时间" width="110" align="center"></el-table-column>
       <el-table-column prop="realitySelfCheckTime" label="实际自检时间" width="150" align="center"></el-table-column>
-      <el-table-column prop="shijiyanshouren" label="验收人" width="70" align="center"></el-table-column>
+      <el-table-column prop="shijiyanshouren" label="验收人" width="80" align="center"></el-table-column>
       <el-table-column prop="planCheckTime" label="计划验收时间" width="110" align="center"></el-table-column>
       <el-table-column prop="realityCheckTime" label="实际验收时间" width="150" align="center"></el-table-column>
-
-      <el-table-column label="状态" align="center" width="160">
+      <el-table-column label="状态" align="center" width="140">
         <template slot-scope="scope">
           <template
             v-if="scope.row.adopt===null || scope.row.adopt==='' || scope.row.adopt===undefined"
@@ -126,7 +125,7 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="100" align="center">
+      <el-table-column fixed="right" label="操作" width="80" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button

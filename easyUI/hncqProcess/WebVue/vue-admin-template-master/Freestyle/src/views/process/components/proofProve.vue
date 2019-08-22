@@ -2,7 +2,7 @@
   <div class="printerCheck">
     <div class="printCheckConent">
       <el-table :data="formData" style="width:100%;" border>
-        <el-table-column label="湖南长祁高速验收凭证">
+        <el-table-column label="湖南常祁高速验收凭证">
           <el-table-column prop="projectName" label="分部分项"></el-table-column>
           <el-table-column prop="Station" label="桩号"></el-table-column>
           <el-table-column prop="processname" label="工序名称"></el-table-column>

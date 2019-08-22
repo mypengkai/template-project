@@ -144,6 +144,7 @@
           this.getList = res.data.data.data
         })
       },
+
       initUserGroup() {   // 初始化组织机构树
         Organization.userGroupSelect().then(res => {
           this.userGroupOption = res.data.data

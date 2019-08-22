@@ -79,8 +79,8 @@ import Organization from "@/api/Organization";
 import SelectTree from "@/components/SelectTree/selectTree";
 import project from "@/api/project";
 import change from "@/api/change";
-import createChange from './components/createChange'
-import changeDetail from './changeDetail'
+import createChange from './components/createMeeting'
+import changeDetail from './meetingDetail'
 export default {
   inject: ["reload"],
   name: "sendChange",

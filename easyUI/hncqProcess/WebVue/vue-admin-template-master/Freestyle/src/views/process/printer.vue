@@ -61,7 +61,7 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="13">
+        <el-col :span="12">
           <el-form label-width="80px" :model="form">
             <el-form-item label="桩号:">
               <el-input style="width: 200px;" v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
@@ -69,7 +69,7 @@
           </el-form>
         </el-col>
 
-        <el-col :span="4">
+        <el-col :span="6">
           <div class="grid-content">
             <span>
               <el-button

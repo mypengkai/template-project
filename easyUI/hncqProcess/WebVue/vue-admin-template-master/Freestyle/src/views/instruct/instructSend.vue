@@ -6,10 +6,7 @@
         <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                    :value="item.id"></el-option>
       </el-select>
-
-      <!--      <select-tree clearable :options="userGroupOption" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>-->
       <span>分部分项:</span>
-      <!--      <select-tree :options="projectItemTree" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>-->
       <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
                    v-on:noDe="projectItemOnClick"/>
       <div class="rl">

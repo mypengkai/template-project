@@ -61,7 +61,7 @@
 
     <!-- 弹框 -->
     <el-dialog :title="nowItem=='add' ? '申请变更' : '修改变更' " :visible.sync="dialogFormVisible" class="dialogBox">
-      <createChange :nowItem="nowItem" @cancel="dialogFormVisible=false" @comfirm="query"/>
+      <createMeeting :nowItem="nowItem" @cancel="dialogFormVisible=false" @comfirm="query"/>
     </el-dialog>
   </div>
 </template>
@@ -70,8 +70,8 @@
   import Organization from "@/api/Organization";
   import SelectTree from "@/components/SelectTree/selectTree";
   import project from "@/api/project";
-  import change from "@/api/change";
-  import createChange from './components/createChange'
+  import meeting from "@/api/meeting";
+  import createMeeting from './components/createMeeting'
   export default {
     inject: ["reload"],
     name: "sendChange",
@@ -116,7 +116,7 @@
     },
     components:{
       SelectTree,
-      createChange
+      createMeeting
     },
     created() {
       this.query();
@@ -146,7 +146,7 @@
         this.sendData.projectItemId = data.id;
       },
       query(){   //查询
-        change.changeListByParam(this.sendData).then(res => {
+        meeting.changeListByParam(this.sendData).then(res => {
           this.total = res.data.data.totalCount;
           this.myApplyChangePageList = res.data.data.data;
         });
