@@ -5,18 +5,16 @@
       <tr>
         <th width=5% height="35px">编码</th>
         <th width=20%>分部分项</th>
-        <th width=5%>工程类型</th>
         <th width=10%>桩号</th>
         <th width=10%>工序名称</th>
-        <th width=10%>状态</th>
+        <th width=5%>状态</th>
       </tr>
       <tr>
-        <td>{{currentProcess.projectCode}}</td>
+        <td>{{currentProcess.projectid.split('_')[1]}}</td>
         <td>{{currentProcess.projectItem}}</td>
-        <td>{{showProjectTypeLabel(currentProcess.projectType)}}</td>
         <td>{{currentProcess.zhuanghao}}</td>
         <td>{{currentProcess.processName}}</td>
-        <td>{{changeStateLabel(currentProcess.state2, currentProcess.adopt)}}</td>
+        <td>{{currentProcess.iscomplete == '1' ? '已完成' : '未完成'}}</td>
       </tr>
     </table>
     <br/>
@@ -55,33 +53,41 @@
       </tr>
       <tr>
         <td colspan="3" height="400px">
-          <template v-if="currentProcess.selfFilePath!==null">
-            <el-carousel :interval="4000" type="card" height="200px">
-              <el-carousel-item v-for="(item, index) in currentProcess.selfFilePath" :key="index">
-                <el-image
-                  fit="fill"
-                  :src="item.filePath"
-                ></el-image>
-              </el-carousel-item>
-            </el-carousel>
-            <el-button type="primary" @click="pictureShows(currentProcess.selfFilePath, 0)">点击查看大图</el-button>
+          <template v-if="currentProcess.SelfCheckFile!==null">
+            <template v-for="(item, index) in currentProcess.SelfCheckFile">
+              <el-carousel :interval="4000" type="card" height="200px">
+                <el-carousel-item v-for="(node, file) in item.infolist">
+                  <el-image
+                    fit="fill"
+                    :src="node.filePath"
+                  ></el-image>
+                </el-carousel-item>
+              </el-carousel>
+              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图
+              </el-button>
+            </template>
           </template>
+
           <template v-else>
             没有自检照片
           </template>
         </td>
         <td colspan="2">
-          <template v-if="currentProcess.filePath!==null">
-            <el-carousel :interval="4000" type="card" height="200px">
-              <el-carousel-item v-for="(item, index) in currentProcess.filePath" :key="index">
-                <el-image
-                  fit="fill"
-                  :src="item.filePath"
-                ></el-image>
-              </el-carousel-item>
-            </el-carousel>
-            <el-button type="primary" @click="pictureShows(currentProcess.filePath, 0)">点击查看大图</el-button>
+          <template v-if="currentProcess.CheckFile!==null">
+            <template v-for="(item, index) in currentProcess.CheckFile">
+              <el-carousel :interval="4000" type="card" height="200px">
+                <el-carousel-item v-for="(node, file) in item.infolist">
+                  <el-image
+                    fit="fill"
+                    :src="node.filePath"
+                  ></el-image>
+                </el-carousel-item>
+              </el-carousel>
+              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图</el-button>
+            </template>
           </template>
+
+
           <template v-else>
             没有验收照片
           </template>
@@ -118,6 +124,8 @@
       return {
         imginnerVisible: false,
         processPicture: [],
+        CheckFile: [],
+        SelfCheckFile: [],
         currentProcess: {},
         currentProcessInfoId: this.processInfoId
       }
@@ -183,8 +191,12 @@
           id: this.currentProcessInfoId,
           isNext: state
         }).then(res => {
-          this.currentProcess = res.data.data
-          this.currentProcessInfoId = res.data.data.infoId
+          let that = this
+          if (res.data.data) {
+            this.currentProcess = res.data.data
+            this.currentProcessInfoId = res.data.data.infoId
+          }
+
         })
 
       }

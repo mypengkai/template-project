@@ -137,7 +137,8 @@
         if (node.level > 0) {
           project.getProjectItemFromLayer({
             userGroupId: node.data.userGroupId,
-            pId: node.data.id
+            pId: node.data.id,
+            iskey: '1'
           }).then(res => {
             resolve(res.data.data)
           })

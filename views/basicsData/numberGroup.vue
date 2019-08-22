@@ -98,7 +98,7 @@
         this.dialogFormVisible = true
       },
       initUserGrouptTree() {  // 组织机构树
-        Organization.organizateTree().then(res => {
+        Organization.userGroupSelect().then(res => {
           this.userGroupTree = res.data.data
         })
       },
