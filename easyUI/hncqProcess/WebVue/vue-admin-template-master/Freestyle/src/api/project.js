@@ -29,5 +29,8 @@ export default {
   },
   getAllProjectItemKeyIds(){  //得到已经选中
     return request.post('/rest/projectItemInfo/sendKeyParts')
-  }
+  },
+  getAllProjectItemTree(data){   //异步获取组织机构
+    return request.post('/rest/projectItemInfo/getProjectBQItemByIdNotZroe', data)
+  },
 }
