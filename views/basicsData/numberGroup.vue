@@ -2,9 +2,17 @@
   <div class="p20">
     <div class="topBar">
       <span>组织机构:</span>
-      <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>
+<!--      <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>-->
+      <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                   :value="item.id"></el-option>
+      </el-select>
       <span>分部分项:</span>
-      <select-tree :options="projectItemTree" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>
+
+      <select-tree clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                   v-on:noDe="projectItemOnClick"/>
+
+<!--      <select-tree :options="projectItemTree" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>-->
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
@@ -86,6 +94,17 @@
         innerVisible: false, // 组织机构弹框
         projectVisible: false, // 工程分项弹框
 
+        userGroupOption:[],
+        projectItemTreeOptions: [], // 分部分项树
+        userGroupId: '',
+        orgId: '',
+        projectItemDefaultProp: {  // 工程分项树显示
+          children: 'id',
+          label: 'projectItem',
+          isLeaf: 'leaf'
+        },
+
+
       }
     },
     created() {
@@ -99,8 +118,25 @@
       },
       initUserGrouptTree() {  // 组织机构树
         Organization.userGroupSelect().then(res => {
-          this.userGroupTree = res.data.data
+          this.userGroupOption = res.data.data
         })
+      },
+      userGroupOnChange(data) {  // 组织机构下拉树
+        this.orgId = data
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+          this.projectItemTreeOptions = res.data.data
+          this.$refs.getSelectData.labelModel = ''
+        })
+      },
+      loadNextNode(node, resolve) {  //异步获取下一级节点数据
+        if (node.level > 0) {
+          Organization.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
+          })
+        }
+      },
+      projectItemOnClick(data) {  // 分部分项选择后的数据
+        this.sendData.projectItemId = data.id
       },
       /*   async actionItem(id) {  // 查询单个请求
            let { data } = await api.searchOne({ id })

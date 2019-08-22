@@ -3,17 +3,30 @@
     <table border="0" cellspacing="0" cellpadding="0"
            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;">
       <tr>
+        <th width=10%>工序名称</th>
         <th width=5% height="35px">编码</th>
         <th width=20%>分部分项</th>
         <th width=10%>桩号</th>
-        <th width=10%>工序名称</th>
-        <th width=5%>状态</th>
+        <th width=8%>状态</th>
+        <th width=5%>完成状态</th>
       </tr>
       <tr>
+        <td>{{currentProcess.processName}}</td>
         <td>{{currentProcess.projectid.split('_')[1]}}</td>
         <td>{{currentProcess.projectItem}}</td>
         <td>{{currentProcess.zhuanghao}}</td>
-        <td>{{currentProcess.processName}}</td>
+        <td>
+          <template v-if="currentProcess.adopt===null || currentProcess.adopt==='' || currentProcess.adopt===undefined">
+            <template v-if="currentProcess.state2===0">已指定工序,待指定计划</template>
+            <template v-else-if="currentProcess.state2===1">已指定计划,待自检</template>
+            <template v-else-if="currentProcess.state2===2">已自检,待验收</template>
+          </template>
+          <template v-else>
+            <template v-if="currentProcess.state2===2 && currentProcess.adopt==='0'">不通过,待自检</template>
+            <template v-else-if="currentProcess.state2===3 && currentProcess.adopt==='1'">已验收,通过</template>
+          </template>
+        </td>
+
         <td>{{currentProcess.iscomplete == '1' ? '已完成' : '未完成'}}</td>
       </tr>
     </table>
@@ -57,14 +70,14 @@
             <template v-for="(item, index) in currentProcess.SelfCheckFile">
               <el-carousel :interval="4000" type="card" height="200px">
                 <el-carousel-item v-for="(node, file) in item.infolist">
-                  <el-image
+                  <el-image @click="pictureShows(item.infolist, 0)"
                     fit="fill"
                     :src="node.filePath"
                   ></el-image>
                 </el-carousel-item>
               </el-carousel>
-              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图
-              </el-button>
+<!--              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图-->
+<!--              </el-button>-->
             </template>
           </template>
 
@@ -77,17 +90,15 @@
             <template v-for="(item, index) in currentProcess.CheckFile">
               <el-carousel :interval="4000" type="card" height="200px">
                 <el-carousel-item v-for="(node, file) in item.infolist">
-                  <el-image
+                  <el-image @click="pictureShows(item.infolist, 0)"
                     fit="fill"
                     :src="node.filePath"
                   ></el-image>
                 </el-carousel-item>
               </el-carousel>
-              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图</el-button>
+<!--              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图</el-button>-->
             </template>
           </template>
-
-
           <template v-else>
             没有验收照片
           </template>

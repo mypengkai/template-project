@@ -77,11 +77,11 @@
               </template>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="150" align="center">
+          <el-table-column fixed="right" label="操作" width="180" align="center">
             <template slot-scope="scope">
               <!-- 指定验收 -->
-              <el-tooltip v-if="scope.row.state2===0" class="item" effect="dark" content="指定验收计划" placement="top">
-                <el-button :id="scope.$index" type="warning" size="small" icon="el-icon-edit" circle
+              <el-tooltip v-if="scope.row.state1===0" class="item" effect="dark" content="指定验收计划" placement="top">
+                <el-button :id="scope.$index" type="success" size="small" icon="el-icon-edit-outline" circle
                            @click="appointCheckPlan(scope)"/>
               </el-tooltip>
               <el-tooltip v-if="scope.row.checktype!==4" class="item" effect="dark" content="修改验收计划" placement="top">
@@ -94,7 +94,7 @@
               </el-tooltip>
               <!-- 删除按钮 -->
               <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
-                <el-button v-ltx="'acceptDelete'" v-if="scope.row.state2===0" type="danger" icon="el-icon-delete" circle
+                <el-button v-ltx="'acceptDelete'" v-if="scope.row.state1===0" type="danger" icon="el-icon-delete" circle
                            size="small" @click="deleteMainProcess(scope)"/>
               </el-tooltip>
             </template>
@@ -140,7 +140,7 @@
 
 
     <!-- 补录工序弹框 -->
-    <el-dialog :visible.sync="dialogFormVisibleBL" title="补录工序" width="60%" center :lock-scroll="true"	>
+    <el-dialog :visible.sync="dialogFormVisibleBL" title="补录工序" width="60%" center :lock-scroll="true">
       <el-dialog :visible.sync="setCheckPersonDialogFormVisible" width="50%" title="选中验收人" :append-to-body="true">
         <div class="topBar">
           <span>姓名:</span>
@@ -805,15 +805,17 @@
       overState(codeid) {  // 查看状态
         let that = this
         request.post('/rest/processCheck/processComplete', { codeid: codeid }).then(res => {
-          if (res.data.data.complete && that.iscomplete == '0') {
-            this.overProcessBtn = true
-            this.addProcessBtn = true
-          } else if (res.data.data.complete && that.iscomplete == '1') {
-            this.overProcessBtn = false
-            this.addProcessBtn = false
-          } else if (!res.data.data.complete && that.iscomplete == '0') {
-            this.overProcessBtn = false
-            this.addProcessBtn = true
+          if (res.data.data.data) {
+            if (res.data.data.complete && that.iscomplete == '0') {
+              this.overProcessBtn = true
+              this.addProcessBtn = true
+            } else if (res.data.data.complete && that.iscomplete == '1') {
+              this.overProcessBtn = false
+              this.addProcessBtn = false
+            } else if (!res.data.data.complete && that.iscomplete == '0') {
+              this.overProcessBtn = false
+              this.addProcessBtn = true
+            }
           }
         })
       },
