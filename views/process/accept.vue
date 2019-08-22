@@ -132,119 +132,63 @@
 
     <!-- 补录工序弹框 -->
     <el-dialog :visible.sync="dialogFormVisibleBL" title="补录工序" width="60%" center>
-      <el-form ref="addProcessForm" :model="formData" label-width="120px" size="mini">
+      <el-form ref="supplementProcessForm" :rules="supplementProcessRules" :model="formData" label-width="120px" size="mini">
         <el-row>
           <el-col :span="12">
             <el-form-item label="组织机构:">
-              <!--              <el-select v-model="userGroupIdBL" placeholder="请选择" @change="userGroupOnChangeBL">-->
-              <!--                <el-option v-for="item in userGroupOptionBL" :key="item.id" :label="item.departname"-->
-              <!--                           :value="item.id"></el-option>-->
-              <!--              </el-select>-->
-              <el-input v-model="departname" readonly="true"></el-input>
+              <el-input v-model="departname" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="分部分项:">
-
-              <!--    <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProps"
-                               v-on:noDe="projectItemOnClick"/>-->
-              <el-input v-model="projectItem" readonly="true"></el-input>
+              <el-input v-model="projectItem" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="工序:" prop="processSDictId">
+            <el-form-item label="起始桩号:">
+              <el-input v-model="treeFrom.startStation" :readonly="true"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="结束桩号:">
+              <el-input v-model="treeFrom.endStation" :readonly="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="工序:" prop="processDictId" >
               <el-select v-model="formData.processDictId" placeholder="请选择工序">
                 <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <!--  <el-form-item label="桩号:">
-                <el-input v-model="treeFrom.startStation-treeFrom.endStation"/>
-
-              </el-form-item>-->
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="起始桩号:">
-              <el-input v-model="treeFrom.startStation" readonly="true"/>
+            <el-form-item label="计划自检时间:" prop="planSelfCheckTime">
+              <el-date-picker v-model="formData.planSelfCheckTime" type="date" placeholder="选择日期时间:" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="结束桩号:">
-              <el-input v-model="treeFrom.endStation" readonly="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row v-show="false">
-          <el-col :span="12">
-            <el-form-item label="验收序号:" prop="seq">
-              <el-input-number v-model="formData.seq" controls-position="right" :min="1" :max="100"></el-input-number>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="验收次数:" prop="checkNum">
-              <el-input-number v-model="formData.checkNum" controls-position="right" :min="1"
-                               :max="100"></el-input-number>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!--      <el-row>
-                <el-col :span="12">
-                  <el-form-item label="起始桩号:">
-                    <el-input v-model="formData.startStation"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="结束桩号:">
-                    <el-input v-model="formData.endStation"/>
-                  </el-form-item>
-                </el-col>
-              </el-row>-->
-        <!--     <el-row>
-               <el-col :span="12">
-                 <el-form-item label="计划自检人:" prop="planSelfCheckPerson">
-                   <el-input  v-model="formData.planSelfCheckPerson" :readonly="true"
-                             autocomplete="off"/>&nbsp;&nbsp;&nbsp;
-                   <el-button slot="append" icon="el-icon-search" @click="selectCheckPerson('construction')"></el-button>
-                   </el-input>
-
-                 </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="计划验收人:" prop="planSelfCheckPerson">
-                   <el-input v-model="formData.planCheckPerson" :readonly="true" autocomplete="off"/>&nbsp;&nbsp;&nbsp;
-                   <el-button slot="append" icon="el-icon-search" @click="selectCheckPerson('construction')"></el-button>
-                   </el-input>
-                 </el-form-item>
-               </el-col>
-             </el-row>-->
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="计划自检时间:" prop="planTime">
-              <el-date-picker v-model="formData.planSelfCheckTime" type="datetime" placeholder="选择日期时间:"
-                              value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="计划验收时间:" prop="planTime">
-              <el-date-picker v-model="formData.planCheckTime" type="datetime" placeholder="选择日期时间:"
-                              value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <el-form-item label="计划验收时间:" prop="planCheckTime">
+              <el-date-picker v-model="formData.planCheckTime" type="date" placeholder="选择日期时间:" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="自检描述:">
+            <el-form-item label="自检描述:" prop="selfCheckDescribe">
               <el-input :rows="2" v-model="formData.selfCheckDescribe" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="验收描述:">
+            <el-form-item label="验收描述:" prop="checkDescribe">
               <el-input :rows="2" v-model="formData.checkDescribe" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
@@ -252,26 +196,18 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="自检图片:">
-              <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers"
-                         list-type="picture-card"
-                         :auto-upload="false" :on-preview="handlePictureSelf" :data="form">
+              <el-upload class="avatar-uploader" ref="uploadSelf" :action="leakRepairProcessUrl" name="files" :headers="headers" accept=".jpg, .png"
+                         list-type="picture-card" :auto-upload="false" :before-upload="selfBeforeUplad" :data="filesSelfCheckParamData">
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisibleS">
-                <img width="50%" :src="filesSelfCheck" alt="图片">
-              </el-dialog>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="验收图片:">
-              <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers"
-                         list-type="picture-card"
-                         :auto-upload="false" :on-preview="handlePictureCheck" :data="form">
+              <el-upload class="avatar-uploader" ref="uploadCheck" :action="leakRepairProcessUrl" name="files" :headers="headers" accept=".jpg, .png"
+                         list-type="picture-card" :auto-upload="false" :before-upload="checkBeforeUplad" :data="filesCheckParamData">
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisibleC">
-                <img width="50%" :src="filesCheck" alt="图片">
-              </el-dialog>
             </el-form-item>
           </el-col>
         </el-row>
@@ -282,16 +218,11 @@
               <el-input :rows="2" v-model="formData.remark" type="textarea" placeholder="请输入内容"/>
             </el-form-item>
           </el-col>
-          <!--  <el-col :span="12">
-              <el-form-item label="验收照片描述">
-                <el-input :rows="2" v-model="formData.remark" type="textarea" placeholder="请输入内容"/>
-              </el-form-item>
-            </el-col>-->
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleBL = false">取 消</el-button>
-        <el-button type="primary" @click="addProcessFunction('addProcessForm')">确 定</el-button>
+        <el-button type="primary" @click="subimitSupplementProcessFunction('supplementProcessForm')">确 定</el-button>
       </div>
 
     </el-dialog>
@@ -307,8 +238,7 @@
           <span>职务:</span>
           <el-input v-model="pageForm.position" placeholder="请输入内容"/>
           <div class="rl">
-            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
-                       @click="selectCheckPerson(currentSelectedState)">查询
+            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search" @click="selectCheckPerson(currentSelectedState)">查询
             </el-button>
             <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
             </el-button>
@@ -370,15 +300,14 @@
 <script>
   import imgList from './components/imgList'
   import request from '@/utils/request'
-  // import SelectTree from '@/components/SelectTree/selectTree.vue'
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import processCheck from '@/views/process/components/processCheck'
-  import Organization from '@/api/Organization.js'
+  import Organization from '@/api/Organization.js';
+  import { getToken } from "@/utils/auth";
 
   export default {
     inject: ['reload'],
     components: {
-      // SelectTree,
       SelectTree,
       imgList,
       processCheck
@@ -460,7 +389,6 @@
         acceptRule: {
           processMDictId: [{ required: true, message: '请选择工序类型', trigger: 'change' }],
           processSDictId: [{ required: true, message: '请选择工序', trigger: 'change' }]
-          // remark: [{ required: true, message: '请输入备注', trigger: 'change' }],
         },
         // 指定验收校验
         apponitCheckFromRules: {
@@ -503,35 +431,44 @@
         orgId: '',
         departname: '',
         projectItem: '',
-        formData: {
-          userGroupId: '',
-          processDictId: '',
-          projectItemId: '',
+        leakRepairProcessUrl: process.env.BASE_API + "/rest/processCheck/processAddImage",  //补录工序url
+        headers: {
+          "X-AUTH-TOKEN": getToken()
+        },
+        leakRepairUploadForm: new FormData(),   // 一个formdata
+        formData: {   //补录工序form
+          userGroupId: '',  //组织机构id
+          processDictId: '',  //工序id
+          projectItemId: '',  //分部分项id
           planSelfCheckTime: '',
-          planSelfCheckPerson: '',
           planCheckTime: '',
-          planCheckPerson: '',
           selfCheckDescribe: '',
           checkDescribe: '',
-          adopt: '',
-          startStation: '',
-          endStation: '',
-          seq: 1,
           remark: '',
-          checkType: '2',
-          checkNum: 1,
-          createTime: '',
-          photoDescribe: '',
-          filesSelfCheck: '',
-          filesCheck: ''
+          filesSelfCheckUrl: "",  //自检文件预览
+          filesCheckUrl: ""  //验收文件预览
         },
-        dialogVisibleS: false,
-        dialogVisibleC: false
-
+        supplementProcessRules: {
+          userGroupId: [{required: true, trigger: 'change', message: '请选择组织机构'}],
+          projectItemId: [{required: true, trigger: 'change', message: '请选择分部分项'}],
+          processDictId: [{required: true, trigger: 'change', message: '请选择工序'}],
+          planSelfCheckTime: [{required: true, trigger: 'change', message: '请选择自检时间'}],
+          planCheckTime: [{required: true, trigger: 'change', message: '请选择验收时间'}],
+          selfCheckDescribe: [{required: true, trigger: 'change', message: '请输入自检描述'}],
+          checkDescribe: [{required: true, trigger: 'change', message: '请输入验收描述'}]
+        },
+        dialogVisibleSelf: false,  //自检图片预览
+        dialogVisibleCheck: false,   //验收图片预览
+        supplementProcessId: '',  //补录数据最后返回的id
+        filesSelfCheckParamData: {
+          state: '0',
+          processId: ''
+        },
+        filesCheckParamData: {
+          state: '1',
+          processId: ''
+        }
       }
-    },
-    created() {
-
     },
     mounted() {
       this.initUserGroup()
@@ -557,11 +494,6 @@
           })
         }
       },
-
-      projectItemOnClick(data) {  // 分部分项选择后的数据
-        this.formData.projectItemId = data.id
-      },
-
       initUserGroup() {  //初始化组织机构树
         request.post('/rest/processCheck/groupEqualRank').then(res => {
           this.userGroupOption = res.data.data
@@ -578,14 +510,9 @@
         this.processSDictOption = []  //先清空
         this.processSDictOption.unshift({ process: '全部' })
         request.post('/rest/processCheck/numberSdData', { codeid: codeid }).then(res => {
-
-          console.log('resssss', res)
           this.processSDictOption = res.data.data
         })
       },
-      /*  processTypeChangeProcess(data) {    // 点击新增工序--工序类型改变工序
-          this.initProcessByTypeId(data)
-        },*/
       userGroupOnChange(data) {   //选择标段改动
         this.selectedUserGroup = data  //选中的用户
         request.post('/rest/projectItemInfo/getProjectBQItemById', { userGroupId: data, pId: '0' }).then(res => {
@@ -616,7 +543,6 @@
       loadAppointProcessList() {   //加载指定工序列表
         request.post('/rest/processCheck/getProject_ProcessPage', this.querydata).then(res => {
           this.querydata.total = res.data.data.totalCount
-          console.log('res', res)
           this.tableData = res.data.data.data
         })
       },
@@ -627,12 +553,6 @@
       handleNodeClick(data) {
         this.projectItemId = ''
         this.showSelectedProjectItemInfo(data.id)   //展示选中的分部分项
-        // if (data.children.length > 0) {
-        //   this.$message({
-        //     message: '分部分项只能选子项'
-        //   })
-        //   return false
-        // } else {
         this.projectItemId = data.id
         if (this.projectItemId.split('_')[1].length == 18) {
           this.addProcessBtn = true
@@ -640,9 +560,9 @@
           this.addProcessBtn = false
         }
 
-        this.querydata.projectItemId = data.id
+        this.querydata.projectItemId = data.id;
+        this.formData.projectItemId = data.id;
         this.loadAppointProcessList()
-        // }
       },
       addProcess() {   // 新增弹框获取input框数据
         this.dialogFormVisible = true
@@ -653,13 +573,11 @@
           processMDictId: '',   //工序类型名称
           processSDictId: ''   //工序名称
         } //清空
-        // this.initProcessTypeDict()
         this.initProcessByTypeId(this.treeFrom.id)
       },
       addProcessFunction(formName) {  // 新增工序
         const fromData = {
           userGroupId: this.userGroupId,
-          // processMDictId: this.form.processMDictId,
           processDictId: this.form.processSDictId,
           projectItemId: this.projectItemId,
           remark: this.form.remark,
@@ -791,26 +709,38 @@
       },
       // 重置按钮
       reset() {
-        // this.reload()
         this.pageForm.realname = ''
         this.pageForm.position = ''
-
+      },
+      selfBeforeUplad(file){  //自检图片上传之前
+        this.leakRepairUploadForm.append('files[]',file);
+      },
+      checkBeforeUplad(file){  //验收图片上传之前
+        this.leakRepairUploadForm.append('files[]',file);
       },
       backupProcess() {   //补录工序
         this.dialogFormVisibleBL = true
-        /*    this.checkNum = 1
-            this.seq = 1*/
         this.formData = {} //清空
-        // this.initProcessTypeDict()
         this.initProcessByTypeId(this.treeFrom.id)
       },
-      handlePictureSelf(file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisibleS = true
-      },
-      handlePictureCheck(file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisibleC = true
+      subimitSupplementProcessFunction(form){  //补录工序
+        this.formData.userGroupId=this.userGroupId;
+        this.formData.projectItemId=this.projectItemId;
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            request.post('/rest/processCheck/leakRepair', this.formData).then(res=>{
+              if(res.data.ok){
+                this.filesCheckParamData.processId=res.data.data;
+                this.filesSelfCheckParamData.processId= res.data.data;
+                this.$refs.uploadSelf.submit();
+                this.$refs.uploadCheck.submit();
+                this.loadAppointProcessList()
+                this.dialogFormVisibleBL=false;
+
+              }
+            });
+          }
+        });
       }
 
     }
