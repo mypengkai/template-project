@@ -285,13 +285,13 @@
             message: "请选择组织机构"
           });
         }else {
-          api.getProjectItemFromLayer({userGroupId: this.queryParamData.userGroupId, pId: '0'}).then(res => {
+          api.getAllProjectItemTree({userGroupId: this.queryParamData.userGroupId, pId: '0'}).then(res => {
             this.dataList = res.data.data
           })
         }
       },
       loadNextProjectItemLayer(tree, treeNode, resolve){  //异步加载列表中分部分项
-        api.getProjectItemFromLayer({userGroupId: this.queryParamData.userGroupId, pId: tree.id}).then(res => {
+        api.getAllProjectItemTree({userGroupId: this.queryParamData.userGroupId, pId: tree.id}).then(res => {
           resolve(res.data.data)
         })
       },
