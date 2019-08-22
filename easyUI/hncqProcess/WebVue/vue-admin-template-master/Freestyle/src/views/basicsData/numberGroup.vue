@@ -33,7 +33,9 @@
     <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[10,20,30]"
                    :page-size="sendData.pageSize"
                    layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total"
-                   @size-change="handleSizeChange"></el-pagination>
+                   @size-change="handleSizeChange">
+
+    </el-pagination>
 
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">

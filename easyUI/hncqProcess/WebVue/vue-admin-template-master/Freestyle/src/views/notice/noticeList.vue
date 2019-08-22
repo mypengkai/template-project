@@ -3,7 +3,16 @@
     <!-- 选项栏 -->
     <div class="topBar">
       <span>标题名称:</span>
-      <el-input v-model="input" placeholder="请输入内容"/>
+      <el-input v-model="noticeData.title" placeholder="请输入内容"/>
+      <span>发送时间:</span>
+
+      <el-date-picker v-model="noticeData.starttime" type="datetime" placeholder="选择日期时间" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
+                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      -
+      <el-date-picker v-model="noticeData.endtime" type="datetime" placeholder="选择日期时间" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
+                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
@@ -11,12 +20,14 @@
         <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
                    @click="action('add')">新增
         </el-button>
+
+
       </div>
     </div>
 
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
         <el-table-column prop="title" label="通知标题"></el-table-column>
         <el-table-column prop="launchName" label="发起人" align="center" width="150"></el-table-column>
         <el-table-column prop="createTime" label="发起时间" align="center" width="200"></el-table-column>
@@ -53,28 +64,33 @@
       :title="addTitle"
       :visible.sync="dialogFormVisible"
       :before-close="clearFrom">
-      <el-form class="reverseBox" ref="noticeData" :model="noticeData" label-width="120px">
+      <el-form class="reverseBox" ref="noticeData" :model="addNoticeData" label-width="120px">
         <el-form-item label="通知标题:">
-          <el-input placeholder="请输入通知标题" v-model="noticeData.title"/>
+          <el-input placeholder="请输入通知标题" v-model="addNoticeData.title"/>
         </el-form-item>
         <el-form-item label="接收人:" prop="userkey">
-          <el-select v-model="noticeData.users" multiple placeholder="请选择人员" style="width: 608px">
-            <el-option
-              v-for="item in userList"
-              :key="item.id"
-              :label="item.username"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!--   <el-select v-model="noticeData.users" multiple  placeholder="请选择人员" style="width: 608px">
+               <el-option
+                 v-for="item in userList"
+                 :key="item.id"
+                 :label="item.username"
+                 :value="item.id"
+               ></el-option>
+             </el-select>-->
+          <el-input v-model="addNoticeData.users" v-show="false">
+          </el-input>
+          <el-input readonly="true" v-model="userNames">
+            <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('receive')"></el-button>
+          </el-input>
           <!--          <el-input placeholder="请输入接收人" v-model="noticeData.users"/>-->
         </el-form-item>
         <el-form-item label="通知内容:">
-          <el-input placeholder="请输入通知内容" v-model="noticeData.content"/>
+          <el-input type="textarea" placeholder="请输入通知内容" v-model="addNoticeData.content"/>
         </el-form-item>
       </el-form>
       <div class="tar">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add()">保 存</el-button>
+        <el-button type="primary" @click="add()">发 送</el-button>
       </div>
     </el-dialog>
 
@@ -93,41 +109,88 @@
           <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.createName"/>
         </el-form-item>
         <el-form-item label="接收人:">
-          <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.realnames"/>
+          <el-input type="textarea" style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.realnames"/>
         </el-form-item>
         <el-form-item label="通知内容:">
-          <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.content"/>
+          <el-input type="textarea" style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.content"/>
         </el-form-item>
       </el-form>
       <div class="tar">
-        <el-button @click="dialogFormVisibleC = false">取 消</el-button>
-        <el-button type="primary" @click="add()">保 存</el-button>
+<!--        <el-button @click="dialogFormVisibleC = false">取 消</el-button>-->
+        <el-button type="primary" @click="dialogFormVisibleC = false">关 闭</el-button>
+<!--        <el-button type="primary" @click="add()">关 闭</el-button>-->
       </div>
     </el-dialog>
+
+    <!-- 用户弹框 -->
+    <el-dialog class="dialogBox" width="45%" title="选择用户" :visible.sync="acceptUserDialog" append-to-body>
+      <div class="topBar">
+        <span>组织机构:</span>
+        <!--  <select-tree clearable :options="userGroupTreeOptions" :props="userGroupDefaultProps"
+                       v-on:noDe="handleReceiveUserGroupCheckChange"/>-->
+        <el-select v-model="orgId" placeholder="请选择" @change="userGroupOnChange">
+          <el-option v-for="item in userGroupTreeOptions" :key="item.id" :label="item.departname"
+                     :value="item.id"></el-option>
+        </el-select>
+
+
+      </div>
+      <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="50vh"
+                @selection-change="handleSelectionChange">
+        <!--        @current-change="handleCurrentChange"-->
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column prop="username" label="姓名"></el-table-column>
+        <el-table-column prop="zhiwei" label="职务"></el-table-column>
+        <el-table-column prop="mobilePhone" label="电话"></el-table-column>
+      </el-table>
+      <div class="tar" style="margin: 10px">
+        <el-button @click="acceptUserDialog = false">取消</el-button>
+        <el-button type="primary" @click="toggleSelection()">确定</el-button>
+      </div>
+
+      <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[10,20,30]"
+                     :page-size="receiveData.pageSize"
+                     layout="total, sizes, prev, pager, next, jumper" @current-change="receiveUserList()"
+                     :total="total"></el-pagination>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
   import api from '@/api/notice.js'
+  import processInfo from '@/api/process.js'
+  import Organization from '@/api/Organization'
+  import SelectTree from '@/components/SelectTree/selectTree.vue'
+
   export default {
     inject: ['reload'],
     components: {
       // checkBox
+      SelectTree
     },
     data() {
       return {
         input: '',
         value: '',
         value1: '',
+        orgId: '',
         getList: [], // 当前列表
         total: 0,
         noticeData: {
           title: '',
-          users: '',
-          content: '',
-          // type: '0',
+          startTime: '',
+          endTime: '',
           pageNo: 1, // 当前页
-          pageSize: 6 // 每页条数
+          pageSize: 10 // 每页条数
+        },
+        addNoticeData: {
+          title: '',
+          users: '',
+          content: ''
         },
         noticeDataC: {
           title: '',
@@ -135,7 +198,7 @@
           realnames: '',
           content: '',
           pageNo: 1, // 当前页
-          pageSize: 6 // 每页条数
+          pageSize: 10 // 每页条数
         },
         userData: {
           userGroupId: '',
@@ -156,13 +219,48 @@
         dialogFormVisible: false, // 查看编辑弹框
         dialogFormVisibleC: false, // 查看编辑弹框
         innerVisible: false, // 组织机构弹框
-        projectVisible: false // 工程分项弹框
+        projectVisible: false, // 工程分项弹框
+
+        acceptUserDialog: false,
+        userGroupTreeOptions: [], // 组织机构树
+        projectItemTree: [], // 分部分项树
+        receiveUsersList: [], // 接收人列表
+        userGroupDefaultProps: {  // 组织机构树显示
+          children: 'children',
+          label: 'name'
+        },
+        receiveData: {
+          pageNo: 1, // 当前页
+          pageSize: 10, // 每页条数
+          userGroupId: '',
+          projectItemId: '', // 分部分项id
+          realname: '', //用户真实名字
+          position: ''   //职位
+        },
+        userNames: '',
+        form: {
+          remark: '', // 指令内容
+          userGroupName: '',   //组织机构名称
+          processMDictId: '',  //工序类型id
+          processDictId: '', // 工序字典的工序id 非必传
+          projectItemId: '', // 分部分项id
+          projectItemName: '',  //分部分项名称
+          ReceiveUserid: '', // 接收人id
+          receiveUserName: '',   //接收人名称
+          planCheckTime: '', // 计划检查时间
+          commandType: '', // 指令类型
+          batchNo: '',
+          patrolId: ''  //巡视id
+        }
+
       }
     },
     created() {
       this._searchList()
       this.getListByUser()
       this.getUserList()
+      this.receiveUserList()
+      // this.initUserGroupTree()
 
     },
     methods: {
@@ -181,14 +279,15 @@
       },
       // 新增接口
       add() {
-        api.createNotice(this.noticeData).then(res => {
+        api.createNotice(this.addNoticeData).then(res => {
           if (res.data.respCode == '0') {
             this.$message({
-              message: '恭喜你，新增成功',
+              message: '恭喜你，发送成功',
               type: 'success'
             })
-            this.dialogFormVisible = false
+
           }
+          this.dialogFormVisible = false
         })
       },
       // 查询单个请求
@@ -221,7 +320,6 @@
         let that = this
         this.$refs['noticeData'].validate((valid) => {
           if (valid) {
-            console.log(that.noticeData)
             api.projectAdd(that.projectForm).then(res => {
               this.$message({
                 type: 'success',
@@ -249,7 +347,70 @@
           orgId: ''
         }
         this.dialogFormVisible = false
+      },
+      //弹框
+      handleReceiveUserGroupCheckChange(data) {
+        this.receiveData.userGroupId = data.id
+        this.receiveUserList()
+      },
+
+      initUserGroupTree() {  //初始化组织机构树
+        Organization.userGroupSelect().then(res => {
+          console.log('redsss', res.data.data)
+          this.userGroupTreeOptions = res.data.data
+
+        })
+      },
+      receiveUserList() {  //接收人列表
+        processInfo.getUsersByDepartId(this.receiveData).then(res => {
+          this.total = res.data.data.totalCount
+          this.receiveUsersList = res.data.data.data
+        })
+      },
+      userGroupOnChange(data) {   //选择标段改动
+        console.log('dataaaaa', data)
+        this.receiveData.userGroupId = data
+        /*  this.form.userGroupId = data
+          this.form.userGroupName = data.sondepartname*/
+        // this.selectedUserGroup = data  //选中的用户
+        /*  request.post('/rest/processCheck/notDeletedUser', { orgId: data }).then(res => {
+            this.projectItemTree = res.data.data
+          })*/
+        processInfo.getUsersByDepartId(this.receiveData).then(res => {
+          this.total = res.data.data.totalCount
+          this.receiveUsersList = res.data.data.data
+        })
+
+      },
+      handleProjectItemOnClick(data) { // 分部分项选择后的数据
+        this.form.projectItemId = data.id
+        this.form.projectItemName = data.name
+      },
+      alertAcceptUserDialog(state) {
+        this.receiveUserList()
+        this.acceptUserDialog = true
+        this.addNoticeData.users = ''
+        this.userNames = ''
+        this.initUserGroupTree()
+      },
+      //获取选中
+      handleSelectionChange(val) {
+        this.multipleSelection = val
+
+        this.form.receiveUserName = val.username
+      },
+      toggleSelection() {
+        this.formData = this.multipleSelection
+        this.acceptUserDialog = false
+        let items = this.multipleSelection
+        for (let i = 0; i < items.length; i++) {
+          let that = this
+          this.addNoticeData.users += items[i].id + ','
+          this.phoneNumbers += items[i].mobilePhone + ','
+          this.userNames += items[i].username + ','
+        }
       }
+
     },
     watch: {
       dialogFormVisible(val) {
@@ -288,5 +449,9 @@
   /deep/ #checkDialog .el-input .el-input__inner {
     border: none !important
 
+  }
+  /deep/ .el-textarea__inner {
+    border: none;
+    resize: none;
   }
 </style>

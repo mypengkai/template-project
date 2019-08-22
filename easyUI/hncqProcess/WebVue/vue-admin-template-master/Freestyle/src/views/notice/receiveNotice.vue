@@ -3,7 +3,17 @@
     <!-- 选项栏 -->
     <div class="topBar">
       <span>标题名称:</span>
-      <el-input v-model="input" placeholder="请输入内容"/>
+      <el-input v-model="noticeData.title" placeholder="请输入内容"/>
+
+      <span>发送时间:</span>
+
+      <el-date-picker v-model="noticeData.starttime" type="datetime" placeholder="选择日期时间" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
+                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      -
+      <el-date-picker v-model="noticeData.endtime" type="datetime" placeholder="选择日期时间" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
+                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
@@ -16,7 +26,7 @@
 
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
         <el-table-column prop="title" label="通知标题"></el-table-column>
         <el-table-column prop="launchName" label="发起人" align="center" width="150"></el-table-column>
         <el-table-column prop="createTime" label="发起时间" align="center" width="200"></el-table-column>
@@ -73,8 +83,10 @@
         </el-form-item>
       </el-form>
       <div class="tar">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add()">保 存</el-button>
+        <!--        <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="add()">保 存</el-button>-->
+        <el-button type="primary" @click="dialogFormVisibleC = false">关 闭</el-button>
+
       </div>
     </el-dialog>
 
@@ -94,15 +106,17 @@
           <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.createName"/>
         </el-form-item>
         <el-form-item label="接收人:">
-          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.realnames"/>
+          <el-input type="textarea" style="border: none;" readonly placeholder="" v-model="noticeDataC.realnames"/>
         </el-form-item>
         <el-form-item label="通知内容:">
-          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.content"/>
+          <el-input type="textarea" style="border: none;" readonly placeholder="" v-model="noticeDataC.content"/>
         </el-form-item>
       </el-form>
       <div class="tar">
-        <el-button @click="dialogFormVisibleC = false">取 消</el-button>
-        <el-button type="primary" @click="add()">保 存</el-button>
+        <!-- <el-button @click="dialogFormVisibleC = false">取 消</el-button>
+         <el-button type="primary" @click="add()">保 存</el-button>-->
+        <el-button type="primary" @click="dialogFormVisibleC = false">关 闭</el-button>
+
       </div>
     </el-dialog>
   </div>
@@ -127,8 +141,8 @@
         noticeData: {
           title: '',
           users: '',
-          content: '',
-          // type: '0',
+          starttime: '',
+          endtime: '',
           pageNo: 1, // 当前页
           pageSize: 10 // 每页条数
         },
@@ -144,6 +158,7 @@
           userGroupId: '',
           realname: '',
           position: '',
+
           pageNo: 1, // 当前页
           pageSize: 10// 每页条数
         },
@@ -275,8 +290,6 @@
   /deep/ .el-range-editor.el-input__inner {
     padding: 3px 0px;
     border: none !important
-
-
   }
 
   /deep/ .el-date-editor {
@@ -284,9 +297,12 @@
   }
 
   }
-  /deep/ .el-input .el-input__inner {
-          border: none !important
+  /deep/.el-dialog__body .el-textarea__inner {
+    border: none;
+    resize: none;
+  }
 
-        }
-
+  /deep/ .el-dialog__body .el-input__inner {
+    border: none;
+  }
 </style>

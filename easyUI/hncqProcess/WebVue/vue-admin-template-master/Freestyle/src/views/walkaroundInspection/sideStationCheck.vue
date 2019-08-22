@@ -17,7 +17,6 @@
           <select-tree  clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
                        v-on:noDe="projectItemOnClick"/>
 
-
           <!--<select-tree  :options="projectItemTreeOptions" :props="projectItemDefaultProp"
                        v-on:noDe="projectItemOnClick" />-->
         </el-col>
