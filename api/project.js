@@ -21,7 +21,7 @@ export default {
   projectaddbyList(id) {
     return request.post(`/rest/projectItemInfo/addbyList/${id}`)
   },
-  getProjectItemFromLayer(data){  //异步获取组织机构
+  getProjectItemFromLayer(data){   //异步获取组织机构
     return request.post('/rest/projectItemInfo/getProjectBQItemById', data)
   },
   setKeyProjectItemByIds(data){  //设置关键工序

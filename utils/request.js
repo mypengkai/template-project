@@ -27,7 +27,7 @@ service.interceptors.request.use(config => {
   // config.headers["Content-Type"]="multipart/form-data";
   getToken() && (config.headers["X-AUTH-TOKEN"] = getToken());
 
-  config.isloading && (loadinginstace = Loading.service({ text: '使劲加载中...', background: 'rgba(0, 0, 0, 0.5)' }));
+  config.isloading && (loadinginstace = Loading.service({ text: '正在加载中...', background: 'rgba(0, 0, 0, 0.5)' }));
   return config
 }, error => {
   loadinginstace && loadinginstace.close();

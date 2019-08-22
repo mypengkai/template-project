@@ -11,21 +11,17 @@
                 <el-input v-model="groupName"></el-input>
               </el-form-item>
             </el-col>
-
-
             <el-col :span="24">
               <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
                 <!--   <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
                                 v-on:noDe="handleCheckChange"/>
                  </el-form-item>-->
-
                 <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:14vw;">
                   <el-option v-for="item in userGroupTree" :key="item.id" :label="item.sondepartname"
                              :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-
             <el-col :span="24">
               <el-form-item style="width:20vw" label="分部分项：" v-if="nowItem =='add'">
                 <select-tree :options="projectItemTree" :props="projectTree" v-on:noDe="handleProjectItemOnClick"/>
@@ -253,13 +249,6 @@
           this.receiveUsersList = res.data.data.data
         })
       },
-      /*    handleCheckChange(data) {  // 组织机构选择后的数据
-            this.form.userGroupId = data.id
-            this.form.userGroupName = data.name
-            project.projectList({ orgId: data.id }).then(res => {
-              this.projectItemTree = res.data.data
-            })
-          },*/
       userGroupOnChange(data) {   //选择标段改动
         /*  this.form.userGroupId = data
           this.form.userGroupName = data.sondepartname*/
