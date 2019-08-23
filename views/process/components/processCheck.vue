@@ -1,20 +1,34 @@
 <template>
-  <div class="demo-image__preview" style="overflow-y: auto; width: 100%; ">
+  <div class="demo-image__preview" style="overflow-y: auto; height: 800px ">
     <table border="0" cellspacing="0" cellpadding="0"
            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;">
+
       <tr>
-        <th width=10%>工序名称</th>
-        <th width=5% height="35px">编码</th>
+        <!--        <th width=10%>工序名称</th>-->
         <th width=20%>分部分项</th>
+        <th width=5% height="35px">编码</th>
         <th width=10%>桩号</th>
-        <th width=8%>状态</th>
+        <!--        <th width=8%>状态</th>-->
         <th width=5%>完成状态</th>
       </tr>
       <tr>
-        <td>{{currentProcess.processName}}</td>
-        <td>{{currentProcess.projectid.split('_')[1]}}</td>
+        <!--        <td>{{currentProcess.processName}}</td>-->
         <td>{{currentProcess.projectItem}}</td>
+        <td>{{currentProcess.projectid}}</td>
         <td>{{currentProcess.zhuanghao}}</td>
+        <td>{{currentProcess.iscomplete == '1' ? '已完成' : '未完成'}}</td>
+      </tr>
+    </table>
+    <table cellspacing="0" cellpadding="0"
+           style="width: 100%; text-align: center; line-height: 28px; margin-top: 5px;border-collapse:collapse;border:none;">
+
+    </table>
+    <table cellspacing="0" cellpadding="0"
+           style="width: 100%; text-align: center; line-height: 28px; margin-top: 5px;border-collapse:collapse;border:none;">
+      <tr>
+        <th width="">工序名称</th>
+        <td colspan="2">{{currentProcess.processName}}</td>
+        <th>状态</th>
         <td>
           <template v-if="currentProcess.adopt===null || currentProcess.adopt==='' || currentProcess.adopt===undefined">
             <template v-if="currentProcess.state2===0">已指定工序,待指定计划</template>
@@ -26,18 +40,13 @@
             <template v-else-if="currentProcess.state2===3 && currentProcess.adopt==='1'">已验收,通过</template>
           </template>
         </td>
-
-        <td>{{currentProcess.iscomplete == '1' ? '已完成' : '未完成'}}</td>
       </tr>
-    </table>
-    <br/>
-    <table cellspacing="0" cellpadding="0"
-           style="width: 100%; text-align: center; line-height: 28px; margin-top: 5px;border-collapse:collapse;border:none;">
       <tr>
         <th width="10%"></th>
         <th colspan="2" width="45%" height="35px">自检资料</th>
         <th colspan="2" width="45%" height="35px">验收资料</th>
       </tr>
+
       <tr>
 
         <td rowspan="2">计划</td>
@@ -47,6 +56,7 @@
         <td>验收人</td>
       </tr>
       <tr>
+
         <td>{{currentProcess.planSelfCheckTime===null ? '&nbsp;': currentProcess.planSelfCheckTime}}</td>
         <td>{{currentProcess.planSelfCheckPerson===null ? '&nbsp;': currentProcess.planSelfCheckPerson}}</td>
         <td>{{currentProcess.planCheckTime===null ? '&nbsp;': currentProcess.planCheckTime}}</td>
@@ -69,18 +79,20 @@
           <div class="block">
             <template v-if="currentProcess.SelfCheckFile!==null">
               <el-timeline v-for="(item, index) in currentProcess.SelfCheckFile" :key="index">
-                <el-timeline-item :timestamp="item.createtime" placement="top">
+                <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px">
                   <el-card>
                     <h4>自检描述:{{item.checkexplain}}</h4>
-                    <h5>影像资料:</h5>
+                    <!--                    <h4>影像资料:</h4>-->
                     <template v-if="item.infolist!==null">
                       <ul v-for="(node, key) in item.infolist" :key="key">
-                        <li>
+                        <li style="float: left">
                           <template v-if="node.fileType==='jpg'">
-                            <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"></el-image>
+                            <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
+                                      @click="pictureShows(item.infolist, 0)"></el-image>
                           </template>
-                          <template v-else-if="node.fileType==='mp4' || item.fileType==='mov'">
-                            <video :src="node.filePath" style="width: 100px; height: 60px;"></video>
+                          <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                            <video :src="node.filePath" style="width: 100px; height: 100px;"
+                                   @click="videoPlayerShow(node)"></video>
                           </template>
                         </li>
                       </ul>
@@ -93,44 +105,65 @@
               没有自检照片
             </template>
           </div>
-
-
-
-           <!-- <template v-for="(item, index) in currentProcess.SelfCheckFile">
-              {{item}}
-              <template>
-                <video-player class="video-player vjs-custom-skin"
-                              ref="videoPlayer"
-                              :playsinline="true"
-                              :options="playerOptions"
-                ></video-player>
-              </template>
-              <el-carousel :interval="4000" type="card" height="200px">
-                <el-carousel-item v-for="(node, file) in item.infolist">
-                  <el-image @click="pictureShows(item.infolist, 0)"
-                            fit="fill"
-                            :src="node.filePath"
-                  ></el-image>
-                </el-carousel-item>
-              </el-carousel>
-            </template>
-          </template>-->
-
+          <!-- <template v-for="(item, index) in currentProcess.SelfCheckFile">
+             {{item}}
+             <template>
+               <video-player class="video-player vjs-custom-skin"
+                             ref="videoPlayer"
+                             :playsinline="true"
+                             :options="playerOptions"
+               ></video-player>
+             </template>
+             <el-carousel :interval="4000" type="card" height="200px">
+               <el-carousel-item v-for="(node, file) in item.infolist">
+                 <el-image @click="pictureShows(item.infolist, 0)"
+                           fit="fill"
+                           :src="node.filePath"
+                 ></el-image>
+               </el-carousel-item>
+             </el-carousel>
+           </template>
+         </template>-->
 
         </td>
         <td colspan="2">
+          <!--   <template v-if="currentProcess.CheckFile!==null">
+               <template v-for="(item, index) in currentProcess.CheckFile">
+                 <el-carousel :interval="4000" type="card" height="200px">
+                   <el-carousel-item v-for="(node, file) in item.infolist">
+                     <el-image @click="pictureShows(item.infolist, 0)"
+                               fit="fill"
+                               :src="node.filePath"
+                     ></el-image>
+                   </el-carousel-item>
+                 </el-carousel>
+               </template>
+             </template>-->
           <template v-if="currentProcess.CheckFile!==null">
-            <template v-for="(item, index) in currentProcess.CheckFile">
-              <el-carousel :interval="4000" type="card" height="200px">
-                <el-carousel-item v-for="(node, file) in item.infolist">
-                  <el-image @click="pictureShows(item.infolist, 0)"
-                            fit="fill"
-                            :src="node.filePath"
-                  ></el-image>
-                </el-carousel-item>
-              </el-carousel>
-            </template>
+            <el-timeline v-for="(item, index) in currentProcess.CheckFile" :key="index">
+              <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px">
+                <el-card>
+                  <h4>自检描述:{{item.checkexplain}}</h4>
+                  <!--                    <h4>影像资料:</h4>-->
+                  <template v-if="item.infolist!==null">
+                    <ul v-for="(node, key) in item.infolist" :key="key">
+                      <li style="float: left">
+                        <template v-if="node.fileType==='jpg'">
+                          <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
+                                    @click="pictureShows(item.infolist)"></el-image>
+                        </template>
+                        <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                          <video :src="node.filePath" style="width: 100px; height: 100px;"
+                                 @click="videoPlayerShow(node)"></video>
+                        </template>
+                      </li>
+                    </ul>
+                  </template>
+                </el-card>
+              </el-timeline-item>
+            </el-timeline>
           </template>
+
           <template v-else>
             没有验收照片
           </template>
@@ -148,9 +181,18 @@
     </div>
 
     <!-- 图片详情弹出层 -->
-    <el-dialog title="图片详情" fullscreen :visible.sync="imginnerVisible" append-to-body>
+    <el-dialog title="图片详情" width="50%" :visible.sync="imginnerVisible" append-to-body>
       <viewer :imgList="processPicture"></viewer>
     </el-dialog>
+    <el-dialog title="音像资料" width="50%" :visible.sync="vedioinnerVisible" append-to-body>
+      <!--      <viewer :imgList="processPicture"></viewer>-->
+      <video-player class="video-player vjs-custom-skin"
+                    ref="videoPlayer"
+                    :playsinline="true"
+                    :options="playerOptions"
+      ></video-player>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -166,6 +208,7 @@
     data() {
       return {
         imginnerVisible: false,
+        vedioinnerVisible: false,
         processPicture: [],
         CheckFile: [],
         SelfCheckFile: [],
@@ -173,7 +216,7 @@
         currentProcessInfoId: this.processInfoId,
         playerOptions: {
           playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-          autoplay: false, //如果true,浏览器准备好时开始回放。
+          autoplay: true, //如果true,浏览器准备好时开始回放。
           muted: false, // 默认情况下将会消除任何音频。
           loop: false, // 导致视频一结束就重新开始。
           preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
@@ -182,7 +225,7 @@
           fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
           sources: [{
             type: '',//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-            src: 'http://192.168.10.15:8080/hncqProcess/img/server/Process/20190822/1566484501471_1566484524626.mp4' //url地址
+            src: 'http://192.168.10.15:8080/hncqProcess/img/server/Process/20190822/1566484268444_1566484316749.mp4' //url地址
           }],
           poster: '../../static/images/test.jpg', //你的封面地址
           width: document.documentElement.clientWidth, //播放器宽度
@@ -193,15 +236,15 @@
             remainingTimeDisplay: false,
             fullscreenToggle: true  //全屏按钮
           }
-        }
+        },
+        processVedio: []
       }
     },
     watch: {
       realList: {
         handler(newVal, oldVal) {
           this.currentProcess = newVal
-          console.log('11',this.currentProcess)
-
+          console.log('11', this.currentProcess)
         },
         deep: true
       }
@@ -209,9 +252,22 @@
     created() {
     },
     methods: {
-      pictureShows(item, index) {
-        this.processPicture = item
+      pictureShows(node) {
+        let newArr = []
+        for (let i = 0; i < node.length; i++) {
+          if (node[i].fileType == 'jpg') {
+            newArr.push(node[i])
+          }
+        }
+        this.processPicture = newArr
         this.imginnerVisible = true
+      },
+      videoPlayerShow(node) {
+        this.playerOptions.sources.push({
+          src: node.filePath,
+          type: node.fileType
+        })
+        this.vedioinnerVisible = true
       },
 
       showProjectTypeLabel(type) {
@@ -329,6 +385,11 @@
   .vjs-custom-skin > .video-js {
     width: 35%;
     height: 40%;
+
+  }
+
+  /deep/ ul, li {
+    list-style-type: none;
 
   }
 </style>

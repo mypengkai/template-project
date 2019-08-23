@@ -80,7 +80,7 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" style="width: 100%;" height="68vh" v-if="tableData.length!=0">
+    <el-table border class="textList" :data="tableData" style="width: 100%;" height="68vh">
       <el-table-column prop="name1" label="分部分项"></el-table-column>
       <el-table-column prop="Station" label="桩号" align="center" width="150"></el-table-column>
       <el-table-column prop="processName" label="工序名称" align="center" width="200"></el-table-column>
@@ -104,8 +104,8 @@
       <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
-            <el-button @click="handleClick(scope.row)" type="primary" size="small" circle icon="el-icon-search"
-                       v-if="tableData.length!=0"></el-button>
+            <el-button @click="handleClick(scope.row)" type="primary" size="small" circle
+                       icon="el-icon-search"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -203,23 +203,23 @@
         })
       },
       userGroupOnChange(data) {  // 组织机构下拉树
-        this.queryData.orgId = data;
-        Organization.getProjectItemFromLayer({userGroupId: data, pId: '0'}).then(res => {
-          this.projectItemOptions = res.data.data;
+        this.queryData.orgId = data
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+          this.projectItemOptions = res.data.data
           this.$refs.getSelectData.labelModel = ''
-        });
+        })
       },
       loadNextNode(node, resolve) {  //异步获取下一级节点数据
         if (node.level > 0) {
-          Organization.getProjectItemFromLayer({userGroupId: this.selectedUserGroup, pId: node.data.id}).then(res => {
-            resolve(res.data.data);
-          });
+          Organization.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
+          })
         }
       },
-    /*  projectItemOnClick(data) {  // 分部分项选择后的数据
-        this.sendData.projectCode = data.projectCode;
-      },
-      */
+      /*  projectItemOnClick(data) {  // 分部分项选择后的数据
+          this.sendData.projectCode = data.projectCode;
+        },
+        */
       // 获取分部分项id
       projectItemOnClick(data) {
         this.queryData.projectItemId = data.id
