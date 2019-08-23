@@ -22,7 +22,7 @@
       </div>
     </div>
     <!-- 右边详情列表    -->
-    <div v-if="treeFrom.projectItem!='' && treeFrom.projectItem!=undefined" class="particularsList">
+    <div v-if="leftTopDetils" class="particularsList">
       <div class="particulars brotherBar">
         <div style="left: 2vw;top:.7vw">
           <span>工程名称: {{ treeFrom.projectItem }}</span>
@@ -34,7 +34,7 @@
           <!--          <span>桩号: {{ treeFrom.zhuanghao=='null_null'? '' : treeFrom.zhuanghao }}</span>-->
           <span>桩号: {{ treeFrom.startStation}}-{{treeFrom.endStation }}</span>
         </div>
-        <div style="right: 0vw;bottom: 1vh">
+        <div class="btnDiv" style="right: 0vw;bottom: 1vh">
           <!--          v-if="projectItemId!==''"-->
           <el-button v-if="addProcessBtn" type="primary" icon="el-icon-circle-plus-outline"
                      class="pan-btn light-blue-btn" @click="addProcess()">添加工序
@@ -50,7 +50,7 @@
         </div>
       </div>
       <!-- 操作列表 -->
-      <div v-if="true" class="Cztab">
+      <div v-if="leftTopDetils" class="Cztab">
         <el-table border :data="tableData" height="68vh" class="textList">
           <el-table-column type="index" width="50" align="center" label="序号"></el-table-column>
           <el-table-column prop="processName" label="工序名称" align="center"/>
@@ -537,6 +537,7 @@
           processId: ''
         },
         overProcessBtn: false,
+        leftTopDetils: false,
         iscomplete: ''
       }
     },
@@ -586,8 +587,9 @@
           this.projectItem = res.data.data.projectItem
           this.departname = res.data.data.departname
           this.treeFrom = res.data.data
-          this.treeFrom.state1 = res.data.data.state1 === '1' ? '已指定验收' : '未指定验收'
           this.iscomplete = res.data.data.iscomplete
+          this.treeFrom.state1 = res.data.data.state1 === '1' ? '已指定验收' : '未指定验收'
+
         })
       },
       loadAppointProcessList() {   //加载指定工序列表
@@ -602,15 +604,17 @@
       },
       handleNodeClick(data) {
         this.projectItemId = ''
+        //展示选中的分部分项
         this.overState(data.id)
-        this.showSelectedProjectItemInfo(data.id)   //展示选中的分部分项
+        this.showSelectedProjectItemInfo(data.id)
+
         this.projectItemId = data.id
-        if (this.projectItemId.split('_')[1].length == 18) {
+
+        if (data.id.split('_')[1].length == 18) {
           this.addProcessBtn = true
         } else {
           this.addProcessBtn = false
         }
-
         this.querydata.projectItemId = data.id
         this.formData.projectItemId = data.id
         this.loadAppointProcessList()
@@ -803,20 +807,55 @@
         })
       },
       overState(codeid) {  // 查看状态
-        let that = this
+         let that = this
         request.post('/rest/processCheck/processComplete', { codeid: codeid }).then(res => {
-          if (res.data.data.data) {
-            if (res.data.data.complete && that.iscomplete == '0') {
-              this.overProcessBtn = true
-              this.addProcessBtn = true
-            } else if (res.data.data.complete && that.iscomplete == '1') {
-              this.overProcessBtn = false
-              this.addProcessBtn = false
-            } else if (!res.data.data.complete && that.iscomplete == '0') {
-              this.overProcessBtn = false
-              this.addProcessBtn = true
-            }
+          if (res.data.ok) {
+            request.post('/rest/projectItemInfo/getProjectItemById/' + codeid).then(ress => {
+           /*   this.projectItem = ress.data.data.projectItem
+              this.departname = ress.data.data.departname
+              this.treeFrom = ress.data.data*/
+              if (res.data.data) {
+                if (res.data.data.complete && ress.data.data.iscomplete == '0') {
+                  that.overProcessBtn = true
+                  that.addProcessBtn = true
+                  that.leftTopDetils = true
+
+                } else if (res.data.data.complete && ress.data.data.iscomplete == '1') {
+                  that.overProcessBtn = false
+                  that.addProcessBtn = false
+                  that.leftTopDetils = true
+                } else if (!res.data.data.complete && ress.data.data.iscomplete == '0') {
+                  that.overProcessBtn = false
+                  that.addProcessBtn = true
+                  that.leftTopDetils = true
+                }
+              } else if (res.data.data = null || res.data.data == '') {
+                that.overProcessBtn = true
+                that.leftTopDetils = true
+
+              } else {
+                that.leftTopDetils = true
+
+              }
+
+            })
+
           }
+
+          /*     if (res.data.data) {
+                 if (res.data.data.complete && this.iscomplete == '0') {
+                   this.overProcessBtn = true
+                   this.addProcessBtn = true
+                 } else if (res.data.data.complete && this.iscomplete == '1') {
+                   this.overProcessBtn = false
+                   this.addProcessBtn = false
+                 } else if (!res.data.data.complete && this.iscomplete == '0') {
+                   this.overProcessBtn = false
+                   this.addProcessBtn = true
+                 }
+               } else if (res.data.data = null || res.data.data == '') {
+                 this.overProcessBtn = true
+               }*/
         })
       },
       overProcess(codeid) {
