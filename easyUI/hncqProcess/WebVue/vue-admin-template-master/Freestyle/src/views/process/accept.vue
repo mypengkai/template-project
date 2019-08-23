@@ -356,7 +356,7 @@
       </div>
     </el-dialog>
     <!-- 查看弹框 -->
-    <el-dialog :visible.sync="dialogTableVisible" title="查看详情" fullscreen>
+    <el-dialog :lock-scroll="true" :visible.sync="dialogTableVisible" title="查看详情" fullscreen>
       <processCheck :real-list="chakanData" :processInfoId="processInfoId"/>
     </el-dialog>
   </div>
@@ -807,13 +807,13 @@
         })
       },
       overState(codeid) {  // 查看状态
-         let that = this
+        let that = this
         request.post('/rest/processCheck/processComplete', { codeid: codeid }).then(res => {
           if (res.data.ok) {
             request.post('/rest/projectItemInfo/getProjectItemById/' + codeid).then(ress => {
-           /*   this.projectItem = ress.data.data.projectItem
-              this.departname = ress.data.data.departname
-              this.treeFrom = ress.data.data*/
+              /*   this.projectItem = ress.data.data.projectItem
+                 this.departname = ress.data.data.departname
+                 this.treeFrom = ress.data.data*/
               if (res.data.data) {
                 if (res.data.data.complete && ress.data.data.iscomplete == '0') {
                   that.overProcessBtn = true
@@ -885,10 +885,19 @@
     font-weight: 900;
   }
 
+  .el-dialog {
+    overflow: hidden;
+  }
+
+  .el-dialog .el-dialog__body {
+    overflow: auto;
+  }
+
 
   .acceptLayout {
     max-height: 100vh;
     padding: 10px;
+
 
   /deep/ .select-tree .el-input.el-input--suffix {
     width: 19vw;
