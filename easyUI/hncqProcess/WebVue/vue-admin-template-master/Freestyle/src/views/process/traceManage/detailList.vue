@@ -169,7 +169,7 @@
         flag: false,
         selfList: [], // 自检数据
         realList: [], // 验收数据
-        processInfoId: [], // 验收数据
+        processInfoId: "", // 验收数据
         hackReset: false
       }
     },
@@ -207,18 +207,13 @@
         }
         // 验收
         if (item.type == 'realcheck') {
-          this.dialogTableVisibleRealcheck = true
-          request
-            .post('/rest/processCheck/getProcessDetail', {
-              id: item.processId
-            })
-            .then(res => {
-              if (res.data.respCode == '0') {
-                let arr = []
-                arr.push(res.data.data)
-                this.realList = arr
+          this.processInfoId=item.processId;
+          request.post('/rest/processCheck/getProcessDetail', {id: item.processId}).then(res => {
+              if (res.data.ok) {
+                this.realList = res.data.data
               }
             })
+          this.dialogTableVisibleRealcheck = true
         }
         // 自检
         if (item.type == 'selfcheck') {
