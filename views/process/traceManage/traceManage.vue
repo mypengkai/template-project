@@ -3,35 +3,26 @@
     <div class="search">
       <el-row>
         <el-col :span="5" v-if="tabPosition == 'first'">
-          <div>
-            <el-form :inline="true" class="grid-content" style="font-size:.8vw">
-
-              <el-form-item label="组织机构：">
-
-                <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
-                  <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                             :value="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-          </div>
+          <el-form :inline="true" class="grid-content" style="font-size:.8vw">
+            <el-form-item label="组织机构：">
+              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+                <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
         </el-col>
         <el-col :span="5" v-if="tabPosition == 'first'">
-          <div>
-            <el-form :inline="true" class="grid-content">
-              <el-form-item label="分部分项：">
+          <el-form :inline="true" class="grid-content">
+            <el-form-item label="分部分项：">
                 <!--     <select-tree
                        :options="projectItemOptions"
                        v-on:noDe="handleCheckChangeUnit"
                        :props="defaultPropsProject"
                      />projectItemOptions
                    </el-form-item>-->
-                <select-tree clearable :options="projectItemOptions" ref="getSelectData"
-                             :props="projectItemDefaultProp"
-                             v-on:noDe="projectItemOnClick"/>
-              </el-form-item>
-            </el-form>
-          </div>
+                <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick"/>
+            </el-form-item>
+          </el-form>
         </el-col>
         <!-- ========================================== -->
         <!-- 人员查询 -->
