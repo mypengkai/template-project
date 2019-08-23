@@ -66,10 +66,39 @@
       </tr>
       <tr>
         <td colspan="3" height="400px">
-          <template v-if="currentProcess.SelfCheckFile!==null">
+          <div class="block">
+            <template v-if="currentProcess.SelfCheckFile!==null">
+              <el-timeline v-for="(item, index) in currentProcess.SelfCheckFile" :key="index">
+                <el-timeline-item :timestamp="item.createtime" placement="top">
+                  <el-card>
+                    <h4>自检描述:{{item.checkexplain}}</h4>
+                    <h5>影像资料:</h5>
+                    <template v-if="item.infolist!==null">
+                      <ul v-for="(node, key) in item.infolist" :key="key">
+                        <li>
+                          <template v-if="node.fileType==='jpg'">
+                            <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"></el-image>
+                          </template>
+                          <template v-else-if="node.fileType==='mp4' || item.fileType==='mov'">
+                            <video :src="node.filePath" style="width: 100px; height: 60px;"></video>
+                          </template>
+                        </li>
+                      </ul>
+                    </template>
+                  </el-card>
+                </el-timeline-item>
+              </el-timeline>
+            </template>
+            <template v-else>
+              没有自检照片
+            </template>
+          </div>
 
-            <template v-for="(item, index) in currentProcess.SelfCheckFile">
-              <template v-show="true">
+
+
+           <!-- <template v-for="(item, index) in currentProcess.SelfCheckFile">
+              {{item}}
+              <template>
                 <video-player class="video-player vjs-custom-skin"
                               ref="videoPlayer"
                               :playsinline="true"
@@ -84,14 +113,10 @@
                   ></el-image>
                 </el-carousel-item>
               </el-carousel>
-              <!--              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图-->
-              <!--              </el-button>-->
             </template>
-          </template>
+          </template>-->
 
-          <template v-else>
-            没有自检照片
-          </template>
+
         </td>
         <td colspan="2">
           <template v-if="currentProcess.CheckFile!==null">
@@ -104,7 +129,6 @@
                   ></el-image>
                 </el-carousel-item>
               </el-carousel>
-              <!--              <el-button type="primary" @click="pictureShows(item.infolist, 0)">点击查看大图</el-button>-->
             </template>
           </template>
           <template v-else>
