@@ -14,7 +14,7 @@
       <tr>
         <!--        <td>{{currentProcess.processName}}</td>-->
         <td>{{currentProcess.projectItem}}</td>
-        <td>{{currentProcess.projectid}}</td>
+        <td>{{currentProcess.projectid.split('_')[1]}}</td>
         <td>{{currentProcess.zhuanghao}}</td>
         <td>{{currentProcess.iscomplete == '1' ? '已完成' : '未完成'}}</td>
       </tr>
