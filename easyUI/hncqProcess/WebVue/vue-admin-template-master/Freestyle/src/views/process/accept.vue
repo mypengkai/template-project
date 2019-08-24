@@ -331,20 +331,20 @@
         </div>
       </el-dialog>
       <el-form ref="apponitCheckFrom" :model="apponitCheckFrom" :rules="apponitCheckFromRules" label-width="125px">
-        <el-form-item label="施工验收人" prop="planSelfCheckPerson">
+        <el-form-item label="自检人" prop="planSelfCheckPerson">
           <el-input v-model="apponitCheckFrom.planSelfCheckPerson" :readonly="true" autocomplete="off"
                     style="width:50%"/>&nbsp;&nbsp;&nbsp;
           <span class="ysr" @click="selectCheckPerson('construction')">[选择验收人]</span>
         </el-form-item>
-        <el-form-item label="施工验收时间" prop="planSelfCheckTime">
+        <el-form-item label="自检时间" prop="planSelfCheckTime">
           <el-date-picker :editable="false" v-model="apponitCheckFrom.planSelfCheckTime" type="date" placeholder="选择日期"
                           style="width:50%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"/>
         </el-form-item>
-        <el-form-item label="监理验收人" prop="planCheckPerson">
+        <el-form-item label="验收人" prop="planCheckPerson">
           <el-input v-model="apponitCheckFrom.planCheckPerson" :readonly="true" autocomplete="off" style="width:50%"/>&nbsp;&nbsp;&nbsp;
           <span class="ysr" @click="selectCheckPerson('supervisor')">[选择验收人]</span>
         </el-form-item>
-        <el-form-item label="监理验收时间" prop="planCheckTime">
+        <el-form-item label="验收时间" prop="planCheckTime">
           <el-date-picker :editable="false" v-model="apponitCheckFrom.planCheckTime" type="date" placeholder="选择日期"
                           style="width:50%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"/>
         </el-form-item>
