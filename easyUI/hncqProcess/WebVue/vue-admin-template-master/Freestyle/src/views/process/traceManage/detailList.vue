@@ -83,7 +83,7 @@
               <div class="grid-content bg-purple-light">{{item.departname}}</div>
             </el-col>
             <el-col :span="6">
-              <div class="grid-content bg-purple">{{item.zhiwei}}</div>
+              <div class="grid-content bg-purple">{{item.job_name_cn}}</div>
             </el-col>
           </el-row>
           <div class="spanOne" :style="{'color':(item.state == flag ? 'red' :'green')}">
