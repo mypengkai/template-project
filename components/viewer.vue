@@ -21,6 +21,8 @@
             <li>图片大小：{{item.fileSize}}</li>
             <li>经度：{{item.lgt}}</li>
             <li>纬度：{{item.lat}}</li>
+            <li>桩号：{{zhuanghao}}</li>
+
             <li>拍照位置：{{item.photoLocation}}</li>
           </ul>
         </div>
@@ -56,7 +58,7 @@ Viewer.setDefaults({
     url: "data-source"
 });
 export default {
-  props: ['imgList'],
+  props: ['imgList','zhuanghao'],
   data() {
     return {};
   },

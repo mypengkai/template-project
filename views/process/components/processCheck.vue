@@ -12,7 +12,7 @@
         <th width=5%>完成状态</th>
       </tr>
       <tr>
-        <!--        <td>{{currentProcess.processName}}</td>-->
+        <!--  <td>{{currentProcess.processName}}</td>-->
         <td>{{currentProcess.projectItem}}</td>
         <td>{{currentProcess.projectid.split('_')[1]}}</td>
         <td>{{currentProcess.zhuanghao}}</td>
@@ -84,7 +84,7 @@
                     <h4>自检描述:{{item.checkexplain}}</h4>
                     <!--                    <h4>影像资料:</h4>-->
                     <template v-if="item.infolist!==null">
-                      <ul v-for="(node, key) in item.infolist" :key="key">
+                      <ul v-for="(node, key) in item.infolist" :key="key" style="margin-left:10px">
                         <li style="float: left">
                           <template v-if="node.fileType==='jpg'">
                             <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
@@ -105,56 +105,27 @@
               没有自检照片
             </template>
           </div>
-          <!-- <template v-for="(item, index) in currentProcess.SelfCheckFile">
-             {{item}}
-             <template>
-               <video-player class="video-player vjs-custom-skin"
-                             ref="videoPlayer"
-                             :playsinline="true"
-                             :options="playerOptions"
-               ></video-player>
-             </template>
-             <el-carousel :interval="4000" type="card" height="200px">
-               <el-carousel-item v-for="(node, file) in item.infolist">
-                 <el-image @click="pictureShows(item.infolist, 0)"
-                           fit="fill"
-                           :src="node.filePath"
-                 ></el-image>
-               </el-carousel-item>
-             </el-carousel>
-           </template>
-         </template>-->
 
         </td>
         <td colspan="2">
-          <!--   <template v-if="currentProcess.CheckFile!==null">
-               <template v-for="(item, index) in currentProcess.CheckFile">
-                 <el-carousel :interval="4000" type="card" height="200px">
-                   <el-carousel-item v-for="(node, file) in item.infolist">
-                     <el-image @click="pictureShows(item.infolist, 0)"
-                               fit="fill"
-                               :src="node.filePath"
-                     ></el-image>
-                   </el-carousel-item>
-                 </el-carousel>
-               </template>
-             </template>-->
           <template v-if="currentProcess.CheckFile!==null">
             <el-timeline v-for="(item, index) in currentProcess.CheckFile" :key="index">
-              <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px">
+              <el-timeline-item :timestamp="item.createtime" placement="top">
                 <el-card>
                   <h4>自检描述:{{item.checkexplain}}</h4>
                   <!--                    <h4>影像资料:</h4>-->
                   <template v-if="item.infolist!==null">
                     <ul v-for="(node, key) in item.infolist" :key="key">
-                      <li style="float: left">
+                      <li style="float: left;margin-left:10px">
                         <template v-if="node.fileType==='jpg'">
                           <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
                                     @click="pictureShows(item.infolist)"></el-image>
                         </template>
                         <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
                           <video :src="node.filePath" style="width: 100px; height: 100px;"
-                                 @click="videoPlayerShow(node)"></video>
+                                 @click="videoPlayerShow(node)">
+
+                          </video>
                         </template>
                       </li>
                     </ul>
@@ -182,7 +153,7 @@
 
     <!-- 图片详情弹出层 -->
     <el-dialog title="图片详情" width="50%" :visible.sync="imginnerVisible" append-to-body>
-      <viewer :imgList="processPicture"></viewer>
+      <viewer :imgList="processPicture" :zhuanghao="zhuanghao"></viewer>
     </el-dialog>
     <el-dialog title="影像资料" width="50%" :visible.sync="vedioinnerVisible" append-to-body>
       <!--      <viewer :imgList="processPicture"></viewer>-->
@@ -209,6 +180,7 @@
       return {
         imginnerVisible: false,
         processPicture: [],
+        zhuanghao: '',
         CheckFile: [],
         SelfCheckFile: [],
         currentProcess: {},
@@ -237,7 +209,7 @@
           }
         },
         processVedio: [],
-        vedioinnerVisible: false,
+        vedioinnerVisible: false
       }
     },
     watch: {
@@ -259,19 +231,21 @@
           }
         }
         this.processPicture = newArr
+        this.zhuanghao = this.currentProcess.zhuanghao
         this.imginnerVisible = true
       },
       videoPlayerShow(node) {
-      /*  this.playerOptions.sources.push({
+        this.playerOptions.sources = []
+        /*  this.playerOptions.sources.push({
+            src: node.filePath,
+            type: "video/mp4"
+          })
+          this.vedioinnerVisible = true
+  */
+        this.playerOptions.sources[0] = {
           src: node.filePath,
-          type: "video/mp4"
-        })
-        this.vedioinnerVisible = true
-*/
-        this.playerOptions.sources[0]= {
-          src: node.filePath,
-          type: "video/mp4"
-        };
+          type: 'video/mp4'
+        }
         this.vedioinnerVisible = true
 
       },
