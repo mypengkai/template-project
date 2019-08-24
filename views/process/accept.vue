@@ -567,7 +567,6 @@
         this.selectedUserGroup = data  //选中的用户
         request.post('/rest/projectItemInfo/getProjectBQItemById', { userGroupId: data, pId: '0' }).then(res => {
           this.projectItemTree = res.data.data
-
         })
         this.isShowProjectItem = true
       },
@@ -667,25 +666,29 @@
         }
       },
       selectCheckPerson(type) {  // 验收人弹框数据
+        let that = this
         this.setCheckPersonDialogFormVisible = true
         this.checkPersonData = []
         if (type === 'supervisor') {   //监理
           this.currentSelectedState = 'supervisor'
-          request.post('/rest/processCheck/notDeletedUser', {
-            pageNo: this.pageForm.pageNo,
-            pageSize: this.pageForm.pageSize,
-            userGroupId: this.selectedUserGroup.parentdepartid,
-            realname: this.pageForm.realname,
-            position: this.pageForm.position
-          }).then(res => {
-            this.pageForm.total = res.data.data.totalCount
-            this.checkPersonData = res.data.data.data
+          request.get('/rest/organizate/depart/' + this.userGroupId).then(res => {
+            request.post('/rest/processCheck/notDeletedUser', {
+              pageNo: that.pageForm.pageNo,
+              pageSize: that.pageForm.pageSize,
+              userGroupId: res.data.data.parentdepartid,
+              realname: that.pageForm.realname,
+              position: that.pageForm.position
+            }).then(res => {
+              that.pageForm.total = res.data.data.totalCount
+              that.checkPersonData = res.data.data.data
+            })
           })
+
         } else if (type === 'construction') {  //施工
           this.currentSelectedState = 'construction'
           request.post('/rest/processCheck/notDeletedUser', {
             pageNo: this.pageForm.pageNo, pageSize: this.pageForm.pageSize,
-            userGroupId: this.selectedUserGroup.id, realname: this.pageForm.realname, position: this.pageForm.position
+            userGroupId: this.selectedUserGroup, realname: this.pageForm.realname, position: this.pageForm.position
           }).then(res => {
             this.pageForm.total = res.data.data.totalCount
             this.checkPersonData = res.data.data.data
@@ -791,7 +794,7 @@
         this.$refs[form].validate((valid) => {
           if (valid) {
             request.post('/rest/processCheck/leakRepair', this.formData).then(res => {
-              if (res.data.ok) {
+              if (res.data) {
                 this.filesCheckParamData.processId = res.data.data
                 this.filesSelfCheckParamData.processId = res.data.data
                 this.planSelfCheckPerson = this.formData.planSelfCheckPerson
@@ -809,7 +812,7 @@
       overState(codeid) {  // 查看状态
         let that = this
         request.post('/rest/processCheck/processComplete', { codeid: codeid }).then(res => {
-          if (res.data.ok) {
+          if (res.data) {
             request.post('/rest/projectItemInfo/getProjectItemById/' + codeid).then(ress => {
               /*   this.projectItem = ress.data.data.projectItem
                  this.departname = ress.data.data.departname
@@ -835,7 +838,6 @@
 
               } else {
                 that.leftTopDetils = true
-
               }
 
             })
