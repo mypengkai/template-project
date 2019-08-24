@@ -253,7 +253,4 @@ export default {
       max-height:360px;
       overflow-x: hidden;
   }
-  // .el-input__inner{
-  //     padding: 0  15px;
-  // }
 </style>

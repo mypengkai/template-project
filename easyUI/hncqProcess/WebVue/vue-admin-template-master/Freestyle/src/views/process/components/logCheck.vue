@@ -39,7 +39,7 @@
       </el-tabs>
     </div>
     <!-- //图片预览 -->
-    <el-dialog title="图片预览" :visible.sync="dialogTableVisible" fullscreen append-to-body>
+    <el-dialog title="图片预览" :visible.sync="dialogTableVisible" width="50%" append-to-body>
           <viewer :photo="photo" :imgList="imgList"></viewer>
     </el-dialog>
 

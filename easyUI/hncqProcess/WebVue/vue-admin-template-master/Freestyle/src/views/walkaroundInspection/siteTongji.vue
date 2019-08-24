@@ -65,7 +65,8 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" border style="width: 100%;margin-top:20px" height="70vh" fit>
+    </div>
+      <el-table class="textList" :data="tableData" border style="width: 100%;margin-top:20px" height="70vh" fit>
         <el-table-column prop="realname" label="姓名" align="center"></el-table-column>
         <el-table-column prop="pollingNumber" label="巡视次数" align="center" width="300"></el-table-column>
         <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width="300"></el-table-column>
@@ -84,7 +85,7 @@
         @size-change="handleSizeChange"
         @current-change="query()"
       ></el-pagination>
-    </div>
+
   </div>
 </template>
 <script>

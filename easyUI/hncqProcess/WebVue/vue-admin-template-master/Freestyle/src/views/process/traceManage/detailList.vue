@@ -20,7 +20,7 @@
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
-              <template v-else-if="item.type== 'realcheck'">验收</template>
+              <template v-else-if="item.type== 'realcheck'">工序验收</template>
               <template v-else-if="item.type == 'polling'">巡视</template>
               <template v-else-if="item.type == 'command'">指令</template>
             </el-col>
@@ -35,7 +35,7 @@
               <div class="grid-content bg-purple-light">{{item.departname}}</div>
             </el-col>
             <el-col :span="6">
-              <div class="grid-content bg-purple">{{item.zhiwei}}</div>
+              <div class="grid-content bg-purple">{{item.job_name_cn}}</div>
             </el-col>
           </el-row>
           <div class="spanOne" :style="{'color':(item.state == flag ? 'red' :'green')}">
@@ -68,7 +68,7 @@
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
-              <template v-else-if="item.type== 'realcheck'">验收</template>
+              <template v-else-if="item.type== 'realcheck'">工序验收</template>
               <template v-else-if="item.type == 'polling'">巡视</template>
               <template v-else-if="item.type == 'command'">指令</template>
             </el-col>
@@ -169,7 +169,7 @@
         flag: false,
         selfList: [], // 自检数据
         realList: [], // 验收数据
-        processInfoId: "", // 验收数据
+        processInfoId: '', // 验收数据
         hackReset: false
       }
     },
@@ -205,14 +205,14 @@
         if (item.type == 'polling') {
           this.dialogTableVisiblePolling = true
         }
-        // 验收
+        // 工序验收
         if (item.type == 'realcheck') {
-          this.processInfoId=item.processId;
-          request.post('/rest/processCheck/getProcessDetail', {id: item.processId}).then(res => {
-              if (res.data.ok) {
-                this.realList = res.data.data
-              }
-            })
+          this.processInfoId = item.processId
+          request.post('/rest/processCheck/getProcessDetail', { id: item.processId }).then(res => {
+            if (res.data.ok) {
+              this.realList = res.data.data
+            }
+          })
           this.dialogTableVisibleRealcheck = true
         }
         // 自检

@@ -66,7 +66,6 @@
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import api from '@/api/Patrol'
   import Organization from '@/api/Organization'
-  import project from '@/api/project'
 
   export default {
     inject: ['reload'],

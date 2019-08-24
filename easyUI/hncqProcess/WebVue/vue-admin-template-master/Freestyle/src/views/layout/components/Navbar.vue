@@ -8,6 +8,7 @@
       />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
+          <span style="display: inline-block;width: 60px;height: 40px;color:#000;vertical-align: inherit;">{{userName}}</span>
           <img src="../../../../static/timg.jpg" alt class="user-avatar">
           <i class="el-icon-caret-bottom"/>
         </div>
@@ -75,183 +76,189 @@
 </template>
 
 <script>
-    import Cookies from "js-cookie";
-    import {mapGetters} from "vuex";
-    // import Breadcrumb from "@/components/Breadcrumb";
-    import Hamburger from "@/components/Hamburger";
-    import request from "@/utils/request";
-    import Mallki from "@/components/TextHoverEffect/Mallki";
+  import Cookies from 'js-cookie'
+  import { mapGetters } from 'vuex'
+  // import Breadcrumb from "@/components/Breadcrumb";
+  import Hamburger from '@/components/Hamburger'
+  import request from '@/utils/request'
+  import Mallki from '@/components/TextHoverEffect/Mallki'
 
-    export default {
-        components: {
-            // Breadcrumb,
-            Hamburger,
-            Mallki
+  export default {
+    components: {
+      // Breadcrumb,
+      Hamburger,
+      Mallki
+    },
+    computed: {
+      ...mapGetters(['sidebar', 'avatar'])
+    },
+    data() {
+      return {
+        dialogFormVisible: false,
+        xiuFormVisible: false,
+        formPass: {
+          passWord: '',
+          xinpassWoed: ''
         },
-        computed: {
-            ...mapGetters(["sidebar", "avatar"])
+        form: {
+          userName: '',
+          realName: '',
+          mobilePhone: '',
+          email: '',
+          id: ''
         },
-        data() {
-            return {
-                dialogFormVisible: false,
-                xiuFormVisible: false,
-                formPass: {
-                    passWord: "",
-                    xinpassWoed: ""
-                },
-                form: {
-                    userName: "",
-                    realName: "",
-                    mobilePhone: "",
-                    email: "",
-                    id: '',
-                },
-                ruleses: {
-                    passWord: [
-                        {required: true, message: "请输入原密码", trigger: "blur"}
-                    ],
-                    xinpassWoed: [
-                        {required: true, message: "请输入新密码", trigger: "blur"},
-                        {min: 6, message: "请输入打入6位以上的密码", trigger: "blur"}
-                    ]
-                },
-                uesrList: [] // 登陆用户信息
-            };
+        userName: '',
+        ruleses: {
+          passWord: [
+            { required: true, message: '请输入原密码', trigger: 'blur' }
+          ],
+          xinpassWoed: [
+            { required: true, message: '请输入新密码', trigger: 'blur' },
+            { min: 6, message: '请输入打入6位以上的密码', trigger: 'blur' }
+          ]
         },
-        mounted() {
-            this.fn();
-        },
-        methods: {
-            toggleSideBar() {
-                this.$store.dispatch("ToggleSideBar");
-            },
-            xiugai() {
-                this.dialogFormVisible = true;
-            },
-            xiuPass() {
-                this.xiuFormVisible = true;
-            },
-            quxiaoForm() {
-                this.formPass.passWord = "";
-                this.formPass.xinpassWoed = "";
-                this.xiuFormVisible = false;
-            },
-            xiuForm() {
-                this.$refs.wordForm.validate(valid => {
-                    if (valid) {
-                        let pass = localStorage.getItem("pass");
-                        console.log(pass);
-                        if (this.formPass.passWord == this.formPass.xinpassWoed) {
-                            this.$message({
-                                showClose: true,
-                                message: "请输入不一样的密码",
-                                type: "warning"
-                            });
-                            return false;
-                        }
-                        if (this.formPass.passWord != pass) {
-                            this.$message({
-                                showClose: true,
-                                message: "请输入正确的原密码",
-                                type: "warning"
-                            });
-                            return false;
-                        }
-                        let passData = {
-                            password: this.formPass.xinpassWoed,
-                            oldpassword: this.formPass.passWord
-                        };
-                        return request
-                            .post("/rest/sysuser/resetPassword", passData)
-                            .then(res => {
-                                if (res.status == 200) {
-                                    this.$message({
-                                        showClose: true,
-                                        message: "恭喜你，密码修改成功",
-                                        type: "success"
-                                    });
-                                    localStorage.setItem("pass", this.formPass.xinpassWoed);
-                                    this.formPass.passWord = "";
-                                    this.formPass.xinpassWoed = "";
-                                    this.xiuFormVisible = false;
-                                }
-                            })
-                            .then(() => {
-                                // 密码修改成功跳转到登陆页
-                                this.logout();
-                                //this.$router.push({path:'/login'})
-                                //localStorage.clear();
-                                //Cookies.clear();
-                            });
-                    } else {
-                        console.log("error submit!!");
-                        return false;
-                    }
-                });
-            },
-            logout() {
-                this.$store.dispatch("LogOut").then(() => {
-                    Cookies.remove("names");
-                    localStorage.clear();
-                    Cookies.clear();
-                    location.reload(); // 为了重新实例化vue-router对象 避免bug
-                });
-
-            },
-            // 请求接口(登录人信息)
-            fn() {
-                return request.post("/rest/sysuser/searchSelfMsg").then(res => {
-                    if (res.data.respCode == 0) {
-                        this.uesrList = res.data.data;
-                    }
-                    this.form.userName = this.uesrList.username;
-                    this.form.realName = this.uesrList.realname;
-                    this.form.mobilePhone = this.uesrList.mobilePhone;
-                    this.form.email = this.uesrList.email;
-                    this.form.id = this.uesrList.id
-                });
-            },
-            // 验证
-            checkSure() {
-                // console.log(this.form);
-                let regMoble = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
-                let regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                if (!regMoble.test(this.form.mobilePhone)) {
-                    this.$message({
-                        showClose: true,
-                        message: "请输入正确的手机号码",
-                        type: "warning"
-                    });
-                    return false;
-                }
-                if (!regEmail.test(this.form.email)) {
-                    this.$message({
-                        showClose: true,
-                        message: "请输入正确的邮箱格式",
-                        type: "warning"
-                    });
-                    return false;
-                }
-                request
-                    .post("/rest/sysuser/add", {
-                        id: this.form.id,
-                        userName: this.form.userName,
-                        realName: this.form.userName,
-                        mobilePhone: this.form.userName,
-                        email: this.form.email
-                    })
-                    .then(res => {
-                        console.log(res.data, "res.data");
-                        if (res.data.respCode == '0') {
-                            this.$message({
-                                message: '恭喜你，修改成功'
-                            })
-                        }
-                        this.dialogFormVisible = false
-                    });
+        uesrList: [] // 登陆用户信息
+      }
+    },
+    mounted() {
+      this.fn()
+      this.getuserName()
+    },
+    methods: {
+      getuserName() {
+        this.userName = localStorage.getItem('name')
+      },
+      toggleSideBar() {
+        this.$store.dispatch('ToggleSideBar')
+      },
+      xiugai() {
+        this.dialogFormVisible = true
+      },
+      xiuPass() {
+        this.xiuFormVisible = true
+      },
+      quxiaoForm() {
+        this.formPass.passWord = ''
+        this.formPass.xinpassWoed = ''
+        this.xiuFormVisible = false
+      },
+      xiuForm() {
+        this.$refs.wordForm.validate(valid => {
+          if (valid) {
+            let pass = localStorage.getItem('pass')
+            console.log(pass)
+            if (this.formPass.passWord == this.formPass.xinpassWoed) {
+              this.$message({
+                showClose: true,
+                message: '请输入不一样的密码',
+                type: 'warning'
+              })
+              return false
             }
+            if (this.formPass.passWord != pass) {
+              this.$message({
+                showClose: true,
+                message: '请输入正确的原密码',
+                type: 'warning'
+              })
+              return false
+            }
+            let passData = {
+              password: this.formPass.xinpassWoed,
+              oldpassword: this.formPass.passWord
+            }
+            return request
+              .post('/rest/sysuser/resetPassword', passData)
+              .then(res => {
+                if (res.status == 200) {
+                  this.$message({
+                    showClose: true,
+                    message: '恭喜你，密码修改成功',
+                    type: 'success'
+                  })
+                  localStorage.setItem('pass', this.formPass.xinpassWoed)
+                  this.formPass.passWord = ''
+                  this.formPass.xinpassWoed = ''
+                  this.xiuFormVisible = false
+                }
+              })
+              .then(() => {
+                // 密码修改成功跳转到登陆页
+                this.logout()
+                //this.$router.push({path:'/login'})
+                //localStorage.clear();
+                //Cookies.clear();
+              })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+      logout() {
+        this.$store.dispatch('LogOut').then(() => {
+          Cookies.remove('names')
+          localStorage.clear()
+          Cookies.clear()
+          location.reload() // 为了重新实例化vue-router对象 避免bug
+        })
+
+      },
+      // 请求接口(登录人信息)
+      fn() {
+        return request.post('/rest/sysuser/searchSelfMsg').then(res => {
+          localStorage.setItem("userId",res.data.data.id)
+          if (res.data.respCode == 0) {
+            this.uesrList = res.data.data
+          }
+          this.form.userName = this.uesrList.username
+          this.form.realName = this.uesrList.realname
+          this.form.mobilePhone = this.uesrList.mobilePhone
+          this.form.email = this.uesrList.email
+          this.form.id = this.uesrList.id
+        })
+      },
+      // 验证
+      checkSure() {
+        // console.log(this.form);
+        let regMoble = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/
+        let regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+        if (!regMoble.test(this.form.mobilePhone)) {
+          this.$message({
+            showClose: true,
+            message: '请输入正确的手机号码',
+            type: 'warning'
+          })
+          return false
         }
-    };
+        if (!regEmail.test(this.form.email)) {
+          this.$message({
+            showClose: true,
+            message: '请输入正确的邮箱格式',
+            type: 'warning'
+          })
+          return false
+        }
+        request
+          .post('/rest/sysuser/add', {
+            id: this.form.id,
+            userName: this.form.userName,
+            realName: this.form.userName,
+            mobilePhone: this.form.userName,
+            email: this.form.email
+          })
+          .then(res => {
+            console.log(res.data, 'res.data')
+            if (res.data.respCode == '0') {
+              this.$message({
+                message: '恭喜你，修改成功'
+              })
+            }
+            this.dialogFormVisible = false
+          })
+      }
+    }
+  }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
@@ -263,56 +270,57 @@
     position: relative;
     border-bottom: none;
 
-    .headline {
-      position: absolute;
-      left: 17%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      font-weight: bolder;
-      font-size: 1.5vw;
-      color: #000;
-      letter-spacing: 10px;
-    }
+  .headline {
+    position: absolute;
+    left: 17%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bolder;
+    font-size: 1.5vw;
+    color: #000;
+    letter-spacing: 10px;
+  }
 
-    .hamburger-container {
-      line-height: 3vh;
-      height: 5vh;
-      float: left;
-      padding: 0 10px;
-    }
+  .hamburger-container {
+    line-height: 3vh;
+    height: 5vh;
+    float: left;
+    padding: 0 10px;
+  }
 
-    .screenfull {
-      position: absolute;
-      right: 90px;
-      top: 16px;
-      color: red;
-    }
+  .screenfull {
+    position: absolute;
+    right: 90px;
+    top: 16px;
+    color: red;
+  }
 
-    .avatar-container {
-      display: inline-block;
-      position: absolute;
-      right: 35px;
+  .avatar-container {
+    display: inline-block;
+    position: absolute;
+    right: 35px;
 
-      .avatar-wrapper {
-        cursor: pointer;
-        margin-top: 1.8vh;
-        position: relative;
-        line-height: initial;
+  .avatar-wrapper {
+    cursor: pointer;
+    margin-top: 1.8vh;
+    position: relative;
+    line-height: initial;
 
-        .user-avatar {
-          width: 2.3vw;
-          height: 2.3vw;
-          border-radius: 10px;
-        }
+  .user-avatar {
+    width: 2.3vw;
+    height: 2.3vw;
+    border-radius: 10px;
+  }
 
-        .el-icon-caret-bottom {
-          position: absolute;
-          right: -20px;
-          top: 1.5vw;
-          font-size: 12px;
-        }
-      }
-    }
+  .el-icon-caret-bottom {
+    position: absolute;
+    right: -20px;
+    top: 1.5vw;
+    font-size: 12px;
+  }
+
+  }
+  }
   }
 
   .component-item {

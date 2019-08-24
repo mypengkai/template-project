@@ -27,27 +27,27 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
-        <el-table-column prop="project" label="分部分项"></el-table-column>
-        <el-table-column prop="Station" label="桩号" width="180" align="center"></el-table-column>
-        <el-table-column label="指令类型" width="110" align="center">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
+        <el-table-column prop="projectitem" label="分部分项"></el-table-column>
+        <el-table-column prop="station" label="桩号" width="180" align="center"></el-table-column>
+        <!--<el-table-column label="指令类型" width="110" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.commandType==='1'">安全</template>
             <template v-else-if="scope.row.commandType==='2'">纸质</template>
             <template v-else-if="scope.row.commandType==='3'">口头</template>
           </template>
-        </el-table-column>
-        <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
-        <el-table-column prop="planTime" label="发起时间" width="110" align="center"></el-table-column>
-        <el-table-column prop="commandUserNow" label="处理人" width="100" align="center"></el-table-column>
-        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>
+        </el-table-column>-->
+        <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
+        <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
+        <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
         <el-table-column label="状态" width="100" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.issolve==='1'">
-              <template v-if="scope.row.status==='0'">待处理</template>
+              <template v-if="scope.row.state==='0'">待处理</template>
             </template>
             <template v-else-if="scope.row.issolve==='0'">
-              <template v-if="scope.row.status==='0'">待处理</template>
+              <template v-if="scope.row.state==='0'">待处理</template>
             </template>
           </template>
         </el-table-column>
@@ -58,7 +58,7 @@
               icon="el-icon-search"
               size="small"
               circle
-              @click="actionItem(scope.row.id)"
+              @click="actionItem(scope.row.commandId)"
             ></el-button>
           </template>
         </el-table-column>
@@ -136,7 +136,7 @@
         this.dialogFormVisible = true
       },
       _searchList() {  //查询列表
-        api.getList(this.sendData).then(res => {
+        api.myCommandReceive(this.sendData).then(res => {
           this.total = res.data.data.totalCount
           this.getList = res.data.data.data
         })

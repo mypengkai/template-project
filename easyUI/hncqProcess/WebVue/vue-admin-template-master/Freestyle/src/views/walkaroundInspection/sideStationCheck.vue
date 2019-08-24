@@ -64,7 +64,7 @@
                    :total="total" :current-page.sync="sendData.pageNo" @size-change="handleSizeChange"
                    @current-change="query()"></el-pagination>
     <!-- 查看照片弹框 -->
-    <el-dialog width="70%" title="巡视查看" :visible.sync="dialogFormVisible" class="dialogBox">
+    <el-dialog width="70%" title="旁站查看" :visible.sync="dialogFormVisible" class="dialogBox">
       <CheckPicture :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false"></CheckPicture>
     </el-dialog>
   </div>

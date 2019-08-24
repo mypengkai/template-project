@@ -80,7 +80,6 @@
             ></el-option>
           </el-select>
         </el-col>
-
         <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
@@ -254,6 +253,7 @@
           this.$refs.getSelectData.labelModel = ''
         })
       },
+
       loadNextNode(node, resolve) {  //异步获取下一级节点数据
         if (node.level > 0) {
           project.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
