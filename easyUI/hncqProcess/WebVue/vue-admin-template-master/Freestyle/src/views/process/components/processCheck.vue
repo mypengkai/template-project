@@ -262,11 +262,18 @@
         this.imginnerVisible = true
       },
       videoPlayerShow(node) {
-        this.playerOptions.sources.push({
+      /*  this.playerOptions.sources.push({
           src: node.filePath,
           type: "video/mp4"
         })
         this.vedioinnerVisible = true
+*/
+        this.playerOptions.sources[0]= {
+          src: node.filePath,
+          type: "video/mp4"
+        };
+        this.vedioinnerVisible = true
+
       },
 
       showProjectTypeLabel(type) {
