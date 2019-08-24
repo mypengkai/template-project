@@ -28,43 +28,46 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="68vh">
-        <el-table-column prop="project" label="分部分项"></el-table-column>
-        <el-table-column prop="Station" label="桩号" width="180" align="center"></el-table-column>
-        <el-table-column label="指令类型" width="110" align="center">
+      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
+        <el-table-column prop="projectitem" label="分部分项"></el-table-column>
+        <el-table-column prop="station" label="桩号" width="180" align="center"></el-table-column>
+        <!--<el-table-column label="指令类型" width="110" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.commandType==='1'">安全</template>
             <template v-else-if="scope.row.commandType==='2'">纸质</template>
             <template v-else-if="scope.row.commandType==='3'">口头</template>
           </template>
-        </el-table-column>
-        <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
-        <el-table-column prop="planTime" label="发起时间" width="110" align="center"></el-table-column>
-        <el-table-column prop="commandUserNow" label="处理人" width="100" align="center"></el-table-column>
-        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>
+        </el-table-column>-->
+        <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
+        <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
+        <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
         <el-table-column label="状态" width="100" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.issolve==='1'">
-              <template v-if="scope.row.status==='0'">待处理</template>
+              <template v-if="scope.row.state==='0'">待处理</template>
             </template>
             <template v-else-if="scope.row.issolve==='0'">
-              <template v-if="scope.row.status==='0'">待处理</template>
+              <template v-if="scope.row.state==='0'">待处理</template>
             </template>
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
             <el-button type="primary" size="small" icon="el-icon-search" circle
-                       @click="actionItem(scope.row.id)"></el-button>
+                       @click="actionItem(scope.row.commandId)"></el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+
     <!-- 分页条 -->
     <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[10,20,30]"
                    :page-size="sendData.pageSize"
                    layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total"
-                   @size-change="handleSizeChange"></el-pagination>
+                   @size-change="handleSizeChange">
+
+    </el-pagination>
 
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
@@ -101,9 +104,9 @@
         projectItemOptions: [],   //   工程分部分项List   条件选择
         projectItemTree: [], // 分部分项树
         total: 0,
+        orgId: '', //部门id
         sendData: {
           departId: '', //部门id
-          orgId: '', //部门id
           projectItemId: '', // 分部分项id
           starttime: '', // 开始时间
           endtime: '', // 结束时间
@@ -137,7 +140,7 @@
         })
       },
       userGroupOnChange(data) {  // 组织机构下拉树
-        this.sendData.orgId = data
+        this.orgId = data
         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
           this.projectItemOptions = res.data.data
           this.$refs.getSelectData.labelModel = ''
@@ -159,7 +162,7 @@
         this.dialogFormVisible = true
       },
       _searchList() {  // 列表请求
-        api.getList(this.sendData).then(res => {
+        api.myCommandPerson(this.sendData).then(res => {
           this.total = res.data.data.totalCount
           this.sendCommandList = res.data.data.data
         })

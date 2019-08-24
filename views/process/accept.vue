@@ -983,8 +983,8 @@
 
   /deep/ .el-dialog__body .el-form .el-input__inner,
   /deep/ .el-dialog__body .el-form .el-textarea__inner,
-  .el-input-number--mini,
-  .el-input-number {
+  .el-dialog__body .el-input-number--mini,
+  .el-dialog__body .el-input-number {
     width: 19vw;
   }
 </style>

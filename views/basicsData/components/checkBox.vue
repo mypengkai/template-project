@@ -466,7 +466,7 @@
   /deep/ .el-timeline-item__wrapper {
     position: relative;
     padding-left: 1.2vw;
-    top: -1.5vh;
+    top: -0.5vh;
   }
 
   }

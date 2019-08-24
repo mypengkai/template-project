@@ -4,14 +4,15 @@
       <el-row>
         <el-col :span="5">
           <span>组织机构:</span>
-        <!--  <select-tree
-            :options="userGroupTreeOption"
-            :props="userGroupDefaultProp"
-            v-on:noDe="userGroupOnClick"
-          />-->
+          <!--  <select-tree
+              :options="userGroupTreeOption"
+              :props="userGroupDefaultProp"
+              v-on:noDe="userGroupOnClick"
+            />-->
 
           <el-select v-model="queryData.orgId" placeholder="请选择" @change="userGroupOnClick">
-            <el-option v-for="item in userGroupTreeOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
+            <el-option v-for="item in userGroupTreeOption" :key="item.id" :label="item.departname"
+                       :value="item.id"></el-option>
           </el-select>
         </el-col>
 
@@ -55,7 +56,6 @@
           >重置
           </el-button>
         </el-col>
-
         <!--   <el-col :span="8">
              <span>日期:</span>
              <el-date-picker
@@ -79,38 +79,36 @@
              ></el-date-picker>
            </el-col>-->
       </el-row>
-      <el-row>
 
-
-      </el-row>
-
-      <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:10px" height="68vh">
-        <el-table-column prop="departname" label="单位" min-width="80"></el-table-column>
-        <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
-        <el-table-column prop="realname" label="姓名" min-width="80"></el-table-column>
-        <el-table-column prop="CheckNumber" label="验收" min-width="80"></el-table-column>
-        <!-- <el-table-column prop="date" label="日志" min-width="80"></el-table-column> -->
-        <el-table-column prop="ReceivedInstructNumber" label="收到指令" min-width="80"></el-table-column>
-        <el-table-column prop="IssueInstructNumber" label="发出指令" min-width="80"></el-table-column>
-        <el-table-column prop="CompleteInstructNumber" label="完成指令" min-width="80"></el-table-column>
-        <el-table-column prop="PatrolNumber" label="巡视统计" min-width="80"></el-table-column>
-        <!-- <el-table-column prop="date" label="在岗天数" min-width="80"></el-table-column>
-        <el-table-column prop="name" label="缺勤天数" min-width="80"></el-table-column>-->
-        <el-table-column prop="PhotoNumber" label="照片" min-width="80"></el-table-column>
-      </el-table>
-      <!-- 分页条 -->
-      <el-pagination
-        :page-sizes="[10,20,30]"
-        :page-size="10"
-        :total="total"
-        :current-page.sync="queryData.pageNo"
-        class="pageList mt1"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="query()"
-      ></el-pagination>
     </div>
+    <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:10px" height="68vh">
+      <el-table-column prop="departname" label="单位" min-width="80"></el-table-column>
+      <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
+      <el-table-column prop="realname" label="姓名" min-width="80"></el-table-column>
+      <el-table-column prop="CheckNumber" label="验收" min-width="80"></el-table-column>
+      <!-- <el-table-column prop="date" label="日志" min-width="80"></el-table-column> -->
+      <el-table-column prop="ReceivedInstructNumber" label="收到指令" min-width="80"></el-table-column>
+      <el-table-column prop="IssueInstructNumber" label="发出指令" min-width="80"></el-table-column>
+      <el-table-column prop="CompleteInstructNumber" label="完成指令" min-width="80"></el-table-column>
+      <el-table-column prop="PatrolNumber" label="巡视统计" min-width="80"></el-table-column>
+      <!-- <el-table-column prop="date" label="在岗天数" min-width="80"></el-table-column>
+      <el-table-column prop="name" label="缺勤天数" min-width="80"></el-table-column>-->
+      <el-table-column prop="PhotoNumber" label="照片" min-width="80"></el-table-column>
+    </el-table>
+    <!-- 分页条 -->
+
+    <el-pagination
+      :page-sizes="[10,20,30]"
+      :page-size="10"
+      :total="total"
+      :current-page.sync="queryData.pageNo"
+      class="pageList mt1"
+      background
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="handleSizeChange"
+      @current-change="query()"
+    ></el-pagination>
+
   </div>
 </template>
 <script>
@@ -194,7 +192,7 @@
           })
           .then(res => {
 
-            this.personList = res.data.data.data;
+            this.personList = res.data.data.data
             // this.queryData.userId ='';
 
           })
@@ -205,8 +203,8 @@
           .post('/rest/Patrol/userStatistics', {
             personType: this.queryData.personType || '',
             // usergroupId: this.queryData.usergroupId || '',
-           /* startTime: this.queryData.startTime || '',
-            endTime: this.queryData.endTime || '',*/
+            /* startTime: this.queryData.startTime || '',
+             endTime: this.queryData.endTime || '',*/
             userId: this.queryData.userId || '',
             pageNo: this.queryData.pageNo,
             pageSize: this.queryData.pageSize
@@ -218,7 +216,7 @@
           })
       },
       reset() {  // 重置按钮
-        this.reload();
+        this.reload()
       }
     }
   }
@@ -227,16 +225,15 @@
   .acceptzh {
     padding: 20px;
     height: 100%;
-
-    /*  .elBoutton {
-    / / float: right;
-    }*/
   }
 
-  .el-input__inner {
-    line-height: 30px !important;
-    height: 4vh;
-  }
+  /*
+
+    .el-input__inner {
+      line-height: 30px !important;
+      height: 4vh;
+    }
+  */
 
   /deep/ .el-table thead {
     color: #000;
@@ -251,6 +248,11 @@
   }
 
   /deep/ .el-table td {
+    text-align: center;
+  }
+
+  .el-input__inner {
+    width: 40px;
     text-align: center;
   }
 </style>

@@ -94,8 +94,8 @@ export default {
         if (valid) {
           this.loading = true;
           this.$store.dispatch("Login", this.loginForm).then(() => {
-
             Cookies.set("names", this.loginForm.username);
+            localStorage.setItem("name",this.loginForm.username)
             localStorage.setItem("pass", this.loginForm.password);
             this.loading = false;
             this.$router.push({ path: this.redirect || "/" });

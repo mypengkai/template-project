@@ -74,7 +74,7 @@
               <el-radio label="command">指令</el-radio>
               <el-radio label="polling">巡视</el-radio>
               <el-radio label="sideStation">旁站</el-radio>
-              <el-radio label="realcheck">验收</el-radio>
+              <el-radio label="realcheck">工序验收</el-radio>
               <el-radio label="meeting">会议纪要</el-radio>
               <!-- <el-radio label="selfcheck">自检</el-radio>-->
             </el-radio-group>
