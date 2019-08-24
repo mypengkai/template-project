@@ -261,14 +261,6 @@
           })
         }
       },
-   /*   userGroupOnClick(data) {
-        // 点击组织机构节点展示分部分项
-        this.projectItemTreeOption = []
-        this.queryData.orgId = data.id
-        request.post('/rest/projectItemInfo/getList', { orgId: data.id }).then(res => {
-          this.projectItemTreeOption = res.data.data
-        })
-      },*/
       projectItemOnClick(data) {
         // 获取分部分项id
         this.queryData.projectItemId = data.id
@@ -319,9 +311,6 @@
   .acceptzh {
     padding: 20px;
     height: 100%;
-
-  .elBoutton {
-  }
 
   /deep/ .el-input__inner {
     line-height: 30px !important;

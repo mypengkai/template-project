@@ -13,16 +13,20 @@
         </div>
         <div class="p20-contation">
           <el-row>
-            <el-col :span="18">
-              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
-            </el-col>
-            <el-col :span="6" style="color:#409eff ; margin-top:0.5vw;">
+
+            <el-col :span="10" style="color:#409eff;margin-top:0.5vw;font-weight: bolder">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
+              <template v-else-if="item.type == 'notice'">通知</template>
+              <template v-else-if="item.type == 'command'">指令</template>
               <template v-else-if="item.type== 'realcheck'">工序验收</template>
               <template v-else-if="item.type == 'polling'">巡视</template>
-              <template v-else-if="item.type == 'command'">指令</template>
+              <template v-else-if="item.type == 'sideStation'">旁站</template>
+              <template v-else-if="item.type == 'meeting'">会议纪要</template>
+            </el-col>
+            <el-col :span="14">
+              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -31,10 +35,10 @@
             <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="11">
               <div class="grid-content bg-purple-light">{{item.departname}}</div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="7">
               <div class="grid-content bg-purple">{{item.job_name_cn}}</div>
             </el-col>
           </el-row>
@@ -61,16 +65,18 @@
         </div>
         <div class="p20-contation">
           <el-row>
-            <el-col :span="18">
-              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
-            </el-col>
-            <el-col :span="6" style="color:#409eff ; margin-top:0.5vw;">
+            <el-col :span="10" style="color:#409eff ; margin-top:0.5vw;font-weight: bolder">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <template v-if="item.type == 'log'">日志</template>
               <template v-else-if="item.type == 'selfcheck'">自检</template>
+              <template v-else-if="item.type == 'notice'">通知</template>
               <template v-else-if="item.type== 'realcheck'">工序验收</template>
               <template v-else-if="item.type == 'polling'">巡视</template>
               <template v-else-if="item.type == 'command'">指令</template>
+              <template v-else-if="item.type == 'meeting'">会议纪要</template>
+            </el-col>
+            <el-col :span="14">
+              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -79,10 +85,10 @@
             <el-col :span="6">
               <div class="grid-content bg-purple">{{item.realname}}</div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="11">
               <div class="grid-content bg-purple-light">{{item.departname}}</div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="7">
               <div class="grid-content bg-purple">{{item.job_name_cn}}</div>
             </el-col>
           </el-row>
@@ -101,6 +107,13 @@
     <!-- 巡视查看 -->
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
       <pollingCheck :targetID="targetID"></pollingCheck>
+    </el-dialog>
+    <!-- 通知查看 -->
+    <el-dialog title="通知详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
+      <pollingCheck :targetID="targetID"></pollingCheck>
+    </el-dialog>
+    <!-- 会议查看 -->
+    <el-dialog title="会议纪要详情" :visible.sync="dialogTableVisibleMeeting" width="60%" class="dialogBox">
     </el-dialog>
     <!--验收查看-->
     <el-dialog
@@ -160,6 +173,8 @@
       return {
         dialogTableVisibleCommied: false, //指令
         dialogTableVisiblePolling: false, //巡视
+        dialogTableVisibleNotice: false, //通知
+        dialogTableVisibleMeeting: false, //会议
         dialogTableVisibleSelfcheck: false, // 自检
         dialogTableVisiblelogcheck: false, //日志
         dialogTableVisibleRealcheck: false, // 验收
@@ -204,6 +219,12 @@
         //巡视查看
         if (item.type == 'polling') {
           this.dialogTableVisiblePolling = true
+        }
+        if (item.type == 'notice') {
+          this.dialogTableVisibleNotice = true
+        }
+        if (item.type == 'notice') {
+          this.dialogTableVisibleMeeting = true
         }
         // 工序验收
         if (item.type == 'realcheck') {
