@@ -109,9 +109,9 @@
       <pollingCheck :targetID="targetID"></pollingCheck>
     </el-dialog>
     <!-- 通知查看 -->
-    <el-dialog title="通知详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
+ <!--   <el-dialog title="通知详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
       <pollingCheck :targetID="targetID"></pollingCheck>
-    </el-dialog>
+    </el-dialog>-->
     <!-- 会议查看 -->
     <el-dialog title="会议纪要详情" :visible.sync="dialogTableVisibleMeeting" width="60%" class="dialogBox">
     </el-dialog>

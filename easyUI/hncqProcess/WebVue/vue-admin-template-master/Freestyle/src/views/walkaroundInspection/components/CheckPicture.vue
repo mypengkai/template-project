@@ -139,7 +139,7 @@
         <el-tab-pane label="影像资料" name="image">
           <div class="condition">
             <ul v-for="(node, key) in nowItem.pictureOfCommand" :key="key">
-              <!--              <li @click="pictureShow(item)">-->
+              <!-- <li @click="pictureShow(item)">-->
               <li>
                 <template v-if="node.fileType==='jpg'">
                   <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
