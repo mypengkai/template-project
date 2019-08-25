@@ -223,7 +223,7 @@
       pictureShow(node) { //图片预览
         let newArr = []
         for (let i = 0; i < node.length; i++) {
-          if (node[i].fileType == 'jpg') {
+          if (node[i].fileType == 'jpg' || node[i].fileType == 'png' || node[i].fileType == 'jpeg') {
             newArr.push(node[i])
           }
         }
@@ -231,10 +231,10 @@
         this.dialogpicture = true
       },
       videoPlayerShow(node) {
-        this.playerOptions.sources[0]= {
+        this.playerOptions.sources[0] = {
           src: node.filePath,
-          type: "video/mp4"
-        };
+          type: 'video/mp4'
+        }
         this.vedioinnerVisible = true
       }
     }

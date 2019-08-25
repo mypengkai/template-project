@@ -9,10 +9,12 @@
       </el-select>
       <span>分部分项:</span>
 
-      <select-tree clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
+      <select-tree clearable lazy show-checkbox  :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
                    v-on:noDe="projectItemOnClick"/>
+<!--
+      <el-tree :data="projectItemTreeOptions" :props="projectItemDefaultProp" lazy show-checkbox node-key="id" :load="loadNextLayer" highlight-current
+               :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>-->
 
-<!--      <select-tree :options="projectItemTree" :props="projectItemDefaultProps" v-on:noDe="projectItemOnClick"/>-->
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
@@ -102,6 +104,10 @@
           children: 'id',
           label: 'projectItem',
           isLeaf: 'leaf'
+        },
+        defaultUserGroupProps: {
+          children: "children",
+          label: "name"
         },
 
 

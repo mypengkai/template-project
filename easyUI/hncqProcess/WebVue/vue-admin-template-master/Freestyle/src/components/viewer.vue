@@ -75,10 +75,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .viewer {
+  overflow: auto;
   .viewLeft {
     width: 30%;
     float: left;
     height: 550px;
+
     ul {
       padding: 0;
       margin: 0;
