@@ -13,7 +13,6 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import ltx from './utils/permission'
 import echarts from 'echarts'
-
 import VideoPlayer from 'vue-video-player' //视频
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
