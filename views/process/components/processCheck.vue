@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-image__preview" style="overflow-y: auto; height: 830px ">
+  <div class="demo-image__preview" style="overflow-y: auto; height: 800px ">
     <table border="0" cellspacing="0" cellpadding="0"
            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;">
 
@@ -85,8 +85,8 @@
                     <!--                    <h4>影像资料:</h4>-->
                     <template v-if="item.infolist!==null">
                       <ul v-for="(node, key) in item.infolist" :key="key" style="margin-left:10px">
-                        <li style="float: left">
-                          <template v-if="node.fileType==='jpg'">
+                        <li style="float: left;margin-left: 10px">
+                          <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
                             <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
                                       @click="pictureShows(item.infolist, 0)"></el-image>
                           </template>
@@ -117,7 +117,7 @@
                   <template v-if="item.infolist!==null">
                     <ul v-for="(node, key) in item.infolist" :key="key">
                       <li style="float: left;margin-left:10px">
-                        <template v-if="node.fileType==='jpg'">
+                        <template v-if="node.fileType==='jpg' ||node.fileType == 'png' ||node.fileType == 'jpeg'">
                           <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
                                     @click="pictureShows(item.infolist)"></el-image>
                         </template>
@@ -226,7 +226,7 @@
       pictureShows(node) {
         let newArr = []
         for (let i = 0; i < node.length; i++) {
-          if (node[i].fileType == 'jpg') {
+          if (node[i].fileType == 'jpg' || node[i].fileType == 'png' || node[i].fileType == 'jpeg') {
             newArr.push(node[i])
           }
         }
@@ -371,5 +371,9 @@
   /deep/ ul, li {
     list-style-type: none;
 
+  }
+
+  /deep/ .el-dialog__wrapper {
+    overflow-y: hidden;
   }
 </style>
