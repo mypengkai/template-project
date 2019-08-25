@@ -453,7 +453,7 @@
       },
       handleSetKeyUserGroupCheckChange(item){  //设置关键工序的条件
         this.setProjectItemOrgId=item.id;
-        api.getProjectItemFromLayer({userGroupId: item.id, pId: '0'}).then(res => {
+        api.getAllProjectItemTree({userGroupId: item.id, pId: '0'}).then(res => {
           this.setProjectItemKey = res.data.data
         })
       },
@@ -465,7 +465,7 @@
       },
       loadNextLayer(node, resolve){  //异步加载下一级分部分项
         if (node.level > 0) {
-          api.getProjectItemFromLayer({userGroupId: this.setProjectItemOrgId, pId: node.data.id}).then(res => {
+          api.getAllProjectItemTree({userGroupId: this.setProjectItemOrgId, pId: node.data.id}).then(res => {
             resolve(res.data.data)
           })
         }
