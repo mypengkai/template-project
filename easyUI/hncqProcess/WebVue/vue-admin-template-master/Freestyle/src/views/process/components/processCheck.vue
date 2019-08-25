@@ -2,17 +2,13 @@
   <div class="demo-image__preview" style="overflow-y: auto; height: 800px ">
     <table border="0" cellspacing="0" cellpadding="0"
            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;">
-
       <tr>
-        <!--        <th width=10%>工序名称</th>-->
         <th width=20%>分部分项</th>
         <th width=5% height="35px">编码</th>
         <th width=10%>桩号</th>
-        <!--        <th width=8%>状态</th>-->
         <th width=5%>完成状态</th>
       </tr>
       <tr>
-        <!--  <td>{{currentProcess.processName}}</td>-->
         <td>{{currentProcess.projectItem}}</td>
         <td>{{currentProcess.projectid.split('_')[1]}}</td>
         <td>{{currentProcess.zhuanghao}}</td>
@@ -21,7 +17,6 @@
     </table>
     <table cellspacing="0" cellpadding="0"
            style="width: 100%; text-align: center; line-height: 28px; margin-top: 5px;border-collapse:collapse;border:none;">
-
     </table>
     <table cellspacing="0" cellpadding="0"
            style="width: 100%; text-align: center; line-height: 28px; margin-top: 5px;border-collapse:collapse;border:none;">
@@ -46,9 +41,7 @@
         <th colspan="2" width="45%" height="35px">自检资料</th>
         <th colspan="2" width="45%" height="35px">验收资料</th>
       </tr>
-
       <tr>
-
         <td rowspan="2">计划</td>
         <td>时间</td>
         <td>自检人</td>
@@ -56,7 +49,6 @@
         <td>验收人</td>
       </tr>
       <tr>
-
         <td>{{currentProcess.planSelfCheckTime===null ? '&nbsp;': currentProcess.planSelfCheckTime}}</td>
         <td>{{currentProcess.planSelfCheckPerson===null ? '&nbsp;': currentProcess.planSelfCheckPerson}}</td>
         <td>{{currentProcess.planCheckTime===null ? '&nbsp;': currentProcess.planCheckTime}}</td>
@@ -82,17 +74,19 @@
                 <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px">
                   <el-card>
                     <h4>自检描述:{{item.checkexplain}}</h4>
-                    <!--                    <h4>影像资料:</h4>-->
                     <template v-if="item.infolist!==null">
                       <ul v-for="(node, key) in item.infolist" :key="key" style="margin-left:10px">
                         <li style="float: left;margin-left: 10px">
                           <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                            <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
-                                      @click="pictureShows(item.infolist, 0)"></el-image>
+                            <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill" @click="pictureShows(item.infolist, 0)"></el-image>
                           </template>
                           <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                            <video :src="node.filePath" style="width: 100px; height: 100px;"
-                                   @click="videoPlayerShow(node)"></video>
+                            <div class="video-box" >
+                              <video id="video" style="width:100px;height:100px">
+                                <source :src="node.filePath" type="video/mp4">
+                              </video>
+                              <div class="video-img" @click="videoPlayerShow(node)"></div>
+                            </div>
                           </template>
                         </li>
                       </ul>
@@ -112,7 +106,7 @@
             <el-timeline v-for="(item, index) in currentProcess.CheckFile" :key="index">
               <el-timeline-item :timestamp="item.createtime" placement="top">
                 <el-card>
-                  <h4>自检描述:{{item.checkexplain}}</h4>
+                  <h4>验收描述:{{item.checkexplain}}</h4>
                   <!--                    <h4>影像资料:</h4>-->
                   <template v-if="item.infolist!==null">
                     <ul v-for="(node, key) in item.infolist" :key="key">
@@ -122,10 +116,12 @@
                                     @click="pictureShows(item.infolist)"></el-image>
                         </template>
                         <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                          <video :src="node.filePath" style="width: 100px; height: 100px;"
-                                 @click="videoPlayerShow(node)">
-
-                          </video>
+                          <div class="video-box" >
+                            <video id="video2" style="width:100px;height:100px">
+                              <source :src="node.filePath" type="video/mp4">
+                            </video>
+                            <div class="video-img" @click="videoPlayerShow(node)"></div>
+                          </div>
                         </template>
                       </li>
                     </ul>
@@ -375,5 +371,24 @@
 
   /deep/ .el-dialog__wrapper {
     overflow-y: hidden;
+  }
+  .video-box{
+    position: relative;
+  }
+  .video-box video{
+    display: inline-block;
+    vertical-align: baseline;
+  }
+  .video-box .video-img{
+    text-align: center;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    background: url(../../../imgs/play.png) no-repeat;
+    background-size: 50% 50%;
+    cursor:pointer
   }
 </style>
