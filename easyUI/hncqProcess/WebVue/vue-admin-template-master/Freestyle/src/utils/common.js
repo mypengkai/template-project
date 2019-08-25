@@ -8,6 +8,9 @@ const tool = {
   //环境自动切换 适应域名
   baseURL: process.env.BASE_API,
 };
+
+const defaultDatePattern = 'yyyy-MM-dd'
+
 tool._vue = new Vue();
 tool.upload = {
   img: () => `${tool.baseURL}/upload/wsww/?X-AUTH-TOKEN=${getToken()}`//图片上传地址
@@ -123,6 +126,41 @@ tool.isEmptyStr = function (str) {
   } else {
     return false
   }
+}
+
+tool.formatDate = function(dat, parttern) {
+  if(!parttern || parttern === '') parttern = defaultDatePattern
+  let o = {
+    'M+': dat.getMonth() + 1, // 月份
+    'd+': dat.getDate(), // 日
+    'h+': dat.getHours() % 12 === 0 ? 12 : dat.getHours() % 12, // 小时
+    'H+': dat.getHours(), // 小时
+    'm+': dat.getMinutes(), // 分
+    's+': dat.getSeconds(), // 秒
+    'q+': Math.floor((dat.getMonth() + 3) / 3), // 季度
+    'S': dat.getMilliseconds() // 毫秒
+  };
+  let week = {
+    '0': '/u65e5',
+    '1': '/u4e00',
+    '2': '/u4e8c',
+    '3': '/u4e09',
+    '4': '/u56db',
+    '5': '/u4e94',
+    '6': '/u516d'
+  };
+  if(/(y+)/.test(parttern)) {
+    parttern = parttern.replace(RegExp.$1, (dat.getFullYear() + '').substr(4 - RegExp.$1.length));
+  }
+  if(/(E+)/.test(parttern)) {
+    parttern = parttern.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? '/u661f/u671f' : '/u5468') : '') + week[dat.getDay() + '']);
+  }
+  for(let k in o) {
+    if(new RegExp('(' + k + ')').test(parttern)) {
+      parttern = parttern.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+    }
+  }
+  return parttern;
 }
 
 Vue.prototype.$tool = tool
