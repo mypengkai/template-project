@@ -154,9 +154,7 @@
     <el-dialog title="影像资料" width="50%" :visible.sync="vedioinnerVisible" append-to-body>
       <!--      <viewer :imgList="processPicture"></viewer>-->
       <video-player class="video-player vjs-custom-skin"
-                    ref="videoPlayer"
-                    :playsinline="true"
-                    :options="playerOptions"
+                    ref="videoPlayer" :playsinline="true" :options="playerOptions"
       ></video-player>
     </el-dialog>
 
@@ -195,7 +193,6 @@
             src: '' //url地址
           }],
           poster: '', //你的封面地址
-          // width: document.documentElement.clientWidth, //播放器宽度
           notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
           controlBar: {
             timeDivider: true,
@@ -232,60 +229,11 @@
       },
       videoPlayerShow(node) {
         this.playerOptions.sources = []
-        /*  this.playerOptions.sources.push({
-            src: node.filePath,
-            type: "video/mp4"
-          })
-          this.vedioinnerVisible = true
-  */
         this.playerOptions.sources[0] = {
           src: node.filePath,
           type: 'video/mp4'
         }
         this.vedioinnerVisible = true
-
-      },
-
-      showProjectTypeLabel(type) {
-        switch (type) {
-          case '1':
-            return '单位工程'
-            break
-          case '2':
-            return '子单位工程'
-            break
-          case '3':
-            return '分部工程'
-            break
-          case '4':
-            return '子分部工程'
-            break
-          case 5:
-            return '分部工程'
-            break
-          case '6':
-            return '子分部工程'
-            break
-        }
-      },
-      changeStateLabel(val, state) {
-        if (state === null || state === '' || state === undefined) {
-          if (val === 0) {
-            return '已指定工序,待指定计划'
-          } else if (val === 1) {
-            return '已指定计划,待自检'
-          } else if (val === 2) {
-            return '已自检,待验收'
-          }
-        } else {
-          if (val === 2 && state === '0') {
-            return '不通过,待自检'
-          } else {
-            if (val === 3 && state === '1') {
-              return '已验收,通过'
-            }
-          }
-        }
       },
       processPageOne(state) {   //工序翻页
         request.post('/rest/processCheck/getProcessNextDetail', {
