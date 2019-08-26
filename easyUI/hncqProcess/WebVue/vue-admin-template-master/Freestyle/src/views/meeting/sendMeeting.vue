@@ -60,7 +60,7 @@
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meetingAddress" label="会议地址" align="center"></el-table-column>
       <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
-      <el-table-column label="会议等级" align="center">
+      <el-table-column label="金额等级" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.moneyLevel==='one_level'">一级</template>
           <template v-else-if="scope.row.moneyLevel==='two_level'">二级</template>
@@ -90,7 +90,13 @@
               @click="findApplyDetail(scope.row.id)"
             ></el-button>
           </el-tooltip>
-         
+           <el-tooltip class="item" effect="dark" content="修改" placement="top" v-if="scope.row.changeToken==='1'">
+            <el-button
+              type="warning" size="small" icon="el-icon-edit"
+              circle
+              @click="dealMeet(scope.row.id)"
+            ></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -112,8 +118,9 @@
       :title="nowItem=='add' ? '创建会议记要' : '修改变更' "
       :visible.sync="dialogFormVisible"
       class="dialogBox"
+      width="80%"
     >
-      <createChange :nowItem="nowItem" @cancel="dialogFormVisible=false" @comfirm="query" />
+      <createChange :nowItem="nowItem"   @cancel="dialogFormVisible=false" @comfirm="query" v-if="creatFlag" />
     </el-dialog>
 
     <!-- 查看弹框 -->
@@ -130,6 +137,7 @@ import project from "@/api/project";
 import change from "@/api/change";
 import createChange from "./components/createMeeting";
 import changeDetail from "./meetingDetail";
+
 export default {
   inject: ["reload"],
   name: "sendChange",
@@ -154,13 +162,14 @@ export default {
       nowItem: "", //当前对象
       dialogChangeDetailVisible: false, //查看详情弹框
       changeId: "", //详情id
-      flag: false
+      flag: false,
+      creatFlag:false
     };
   },
   components: {
     SelectTree,
     createChange,
-    changeDetail
+    changeDetail,
   },
   created() {
     this.query();
@@ -222,7 +231,12 @@ export default {
     apply(item) {
       //申请
       this.nowItem = item;
+      console.log(this.nowItem)
       this.dialogFormVisible = true; //显示弹框
+      this.creatFlag = false;
+      this.$nextTick(()=>{
+          this.creatFlag = true;
+      })
     },
     findApplyDetail(item) {
       //查看详情
@@ -233,8 +247,14 @@ export default {
         this.flag = true;
       });
     },
-    action(data){
-       
+    // 修改
+    dealMeet(id){
+      this.changeId = id;
+      this.dialogFormVisible = true;
+      this.flag = false;
+      this.$nextTick(() => {
+        this.flag = true;
+      });
     }
   }
 };

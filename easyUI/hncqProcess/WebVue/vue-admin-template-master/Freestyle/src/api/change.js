@@ -38,6 +38,10 @@ export default {
   //我的会议记要
   myApply(data){
      return request.post("/rest/meetingsummary/myApplyMeeting",data)
-  } 
+  } ,
+  // 收到记要处理
+  dealApply(data){
+    return request.post("/rest/meetingsummary/meetingExamine",data)
+  }
 
 }

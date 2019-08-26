@@ -58,7 +58,6 @@ export default {
   overflow: hidden;
   &.mobile.openSidebar {
     position: fixed;
-    top: 0;
   }
 }
 .drawer-bg {

@@ -80,20 +80,11 @@
           <th>计划完成时间</th>
           <td>{{Newplantimes}}</td>
         </tr>
-
-        <tr v-for="(node,index) in newChangInfo.role" :key="index">
+        <!-- <tr v-for="(node,index) in newChangInfo.role" :key="index">
           <template v-if="node.state==0">
             <th>发起人</th>
             <td>{{node.userName}}</td>
             <th>创建时间</th>
-            <td>{{node.createTime}}</td>
-            <th>计划完成时间</th>
-            <td>{{node.plancompletionTime}}</td>
-          </template>
-          <template v-if="node.state==1">
-            <th>审核人</th>
-            <td>{{node.userName}}</td>
-            <th>处理时间</th>
             <td>{{node.createTime}}</td>
             <th>计划完成时间</th>
             <td>{{node.plancompletionTime}}</td>
@@ -106,8 +97,38 @@
             <th>计划完成时间</th>
             <td>{{node.plancompletionTime}}</td>
           </template>
-        </tr>
+        </tr> -->
       </table>
+      <el-timeline>
+        <el-timeline-item
+          :timestamp="node.createTime"
+          placement="top"
+          v-for="(node,index) in newChangInfo.role" 
+          :key="index"
+         
+        >
+          <el-card  v-if="node.state==2">
+            <h4>审核人：{{node.userName}}</h4>
+            <p>处理时间：{{node.createTime}}</p>
+            <p>计划完成时间：{{node.createTime}}</p>
+          </el-card>
+          <el-card  v-if="node.state==0">
+            <h4>发起人:{{node.userName}}</h4>
+            <p>创建时间：{{node.createTime}}</p>
+            <p>计划完成时间：{{node.createTime}}</p>
+          </el-card>
+          <el-card  v-if="node.state==1">
+            <h4>备案人：{{node.userName}}</h4>
+            <p>处理时间：{{node.createTime}}</p>
+            <p>计划完成时间：{{node.createTime}}</p>
+          </el-card>
+          <el-card  v-if="node.state==3">
+            <h4>抄送人：{{node.userName}}</h4>
+            <p>处理时间：{{node.createTime}}</p>
+            <p>计划完成时间：{{node.createTime}}</p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
     </div>
 
     <div class="block">
@@ -223,7 +244,6 @@
         </el-timeline-item>
       </el-timeline>
     </div>
-  
   </div>
 </template>
 
@@ -257,8 +277,6 @@ export default {
   methods: {
     initChangeDetail() {
       change.getApplySee({ meetingId: this.changeId }).then(res => {
-        //debugger;
-        //console.log(res, "res");
         this.changeInfo = res.data.data.MeetingInfo;
         //将数组中index>0的放在历史数据中,而等于0为最新数据
         let index = 0;
@@ -368,6 +386,5 @@ td {
 .detail {
   height: 100%;
   overflow-x: hidden;
-  
 }
 </style>

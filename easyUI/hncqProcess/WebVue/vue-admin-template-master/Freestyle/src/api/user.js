@@ -30,6 +30,10 @@ export default {
   },
   getNextJobUserByCurrentId(data){  //根据当前用户获取下一级审核人
     return request.post('/rest/change/NextJobUser', data)
+  },
+  // 下一级审核人
+  getNextmeetUser(data){
+     return request.post("/rest/meetingsummary/NextJobUser",data)
   }
 }
 

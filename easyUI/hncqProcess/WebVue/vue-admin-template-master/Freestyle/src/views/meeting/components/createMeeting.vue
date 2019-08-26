@@ -30,10 +30,9 @@
         <el-col :span="12">
           <el-form-item label="金额计算式:" prop="formulaCalculatingAmount">
             <el-input
-              type="number"
+              type="text"
               v-model="myApplyChangeForm.formulaCalculatingAmount"
               placeholder="请输入增减计算式"
-              
             />
           </el-form-item>
         </el-col>
@@ -42,12 +41,20 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="增减数量" prop="addDecreaseNumber">
-            <el-input v-model="myApplyChangeForm.addDecreaseNumber" placeholder="请输入增减数量" />
+            <el-input
+              type="number"
+              v-model="myApplyChangeForm.addDecreaseNumber"
+              placeholder="请输入增减数量"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="数量计算式" prop="quantitativeFormulas">
-            <el-input v-model="myApplyChangeForm.quantitativeFormulas" placeholder="请输入数量计算式" />
+            <el-input
+              type="text"
+              v-model="myApplyChangeForm.quantitativeFormulas"
+              placeholder="请输入数量计算式"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -131,38 +138,34 @@
         </el-col>
       </el-row>
 
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="审核人:">
-            <el-input
-              placeholder="请选择审核人"
-              v-model="myApplyChangeForm.handleUserName"
-              :readonly="true"
-              class="input-with-select"
-            >
-              <el-button slot="append" icon="el-icon-search" @click="handlePersonOnclick"></el-button>
-            </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="抄送人:">
-            <el-input
-              placeholder="请选择抄送人"
-              v-model="myApplyChangeForm.copyUserName"
-              :readonly="true"
-              class="input-with-select"
-            >
-              <el-button slot="append" icon="el-icon-search" @click="copyPersonOnclick"></el-button>
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <el-form-item label="审核人:">
+        <el-input
+          placeholder="请选择审核人"
+          v-model="myApplyChangeForm.handleUserName"
+          :readonly="true"
+          class="input-with-select"
+        >
+          <el-button slot="append" icon="el-icon-search" @click="handlePersonOnclick"></el-button>
+        </el-input>
+      </el-form-item>
+
+      <el-form-item label="抄送人:">
+        <el-input
+          placeholder="请选择抄送人"
+          v-model="myApplyChangeForm.copyUserName"
+          :readonly="true"
+          class="input-with-select"
+        >
+          <el-button slot="append" icon="el-icon-search" @click="copyPersonOnclick"></el-button>
+        </el-input>
+      </el-form-item>
+
       <el-row>
         <el-col :span="12">
           <el-form-item label="开会时间:">
             <el-date-picker
               v-model="myApplyChangeForm.meetingDatetime"
-              type="datetime"
+              type="date"
               placeholder="选择开会时间"
               size="small"
               style="min-width:180px"
@@ -175,7 +178,7 @@
           <el-form-item label="计划完成时间:">
             <el-date-picker
               v-model="myApplyChangeForm.plancompletionTime"
-              type="datetime"
+              type="date"
               placeholder="选择计划时间"
               size="small"
               style="min-width:180px"
@@ -187,15 +190,20 @@
       </el-row>
 
       <el-form-item label="变更理由:" prop="changeReason">
-        <el-input v-model="myApplyChangeForm.changeReason" placeholder="请输入变更理由" />
+        <el-input
+          :rows="4"
+          type="textarea"
+          v-model="myApplyChangeForm.changeReason"
+          placeholder="请输入变更理由"
+        />
       </el-form-item>
 
-      <el-form-item label="现场记要内容:" prop="sceneSummaryContent">
+      <el-form-item label="现场纪要内容:" prop="sceneSummaryContent">
         <el-input
           :rows="4"
           type="textarea"
           v-model="myApplyChangeForm.sceneSummaryContent"
-          placeholder="请输入记要内容"
+          placeholder="请输入纪要内容"
         />
       </el-form-item>
 
@@ -208,8 +216,11 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm()">申 请</el-button>
-        <el-button @click="$emit('cancel')">取 消</el-button>
+        <div style="display: flex;justify-content:flex-end">
+          <el-button @click="$emit('cancel')">取 消</el-button>
+          <el-button type="primary" @click="submitForm()">确 定</el-button>
+        
+        </div>
       </el-form-item>
     </el-form>
 
@@ -221,6 +232,12 @@
       class="dialogBox"
       append-to-body
     >
+      <div class="topBar">
+        <span>用户名：</span>
+        <el-input v-model="users.realname" placeholder="请选择" @change="checkRealname"></el-input>
+        <span>职位：</span>
+        <el-input v-model="users.position" placeholder="请选择" @change="checkPosition"></el-input>
+      </div>
       <el-table
         ref="changeSingleTable"
         :data="usersData"
@@ -260,6 +277,12 @@
       class="dialogBox"
       append-to-body
     >
+      <div class="topBar">
+        <span>用户名：</span>
+        <el-input v-model="users.realname" placeholder="请选择" @change="checkRealname"></el-input>
+        <span>职位：</span>
+        <el-input v-model="users.position" placeholder="请选择" @change="checkPosition"></el-input>
+      </div>
       <el-table
         ref="changeSingleTable"
         :data="noteNameData"
@@ -295,7 +318,7 @@
     <!-- 选择处理人弹框 -->
     <el-dialog
       width="70%"
-      title="选择处理人"
+      title="选择审核人"
       :visible.sync="dialogHandleFormVisible"
       class="dialogBox"
       append-to-body
@@ -340,7 +363,12 @@
       append-to-body
     >
       <div class="topBar">
-        <el-select v-model="copyQueryParam.userGroupId" placeholder="请选择" @change="checkDepart()">
+        <span>组织机构：</span>
+        <el-select
+          v-model="copyQueryParam.userGroupId"
+          placeholder="请选择"
+          @change="copyUserGroupOnClick()"
+        >
           <el-option
             v-for="item in copyUserGroupTree"
             :key="item.id"
@@ -413,6 +441,7 @@ export default {
         meetingSummaryNumber: "", // 变更编号
         departId: "", //组织机构id
         projectItemId: "", //工程分部分项i
+        projectItem:'',
         userId: "", //下一个审核人id
         makeCopy: "", //抄送人id
         changeToken: "1", // 申请
@@ -506,24 +535,27 @@ export default {
     nowItem: {
       type: String,
       required: true
-    }
+    },
   },
   watch: {
-    nowItem(newVal, oldVal) {},
+    nowItem(newVal) {
+        console.log(newVal);
+    },
     myApplyChangeForm: {
       handler(newVal, oldVal) {
-        console.log(newVal, oldVal);
         if (this.$tool.isNotEmptyStr(newVal.addDecreaseMoney)) {
           this.convertMoneyToLevel(newVal.addDecreaseMoney);
         }
       },
       deep: true
-    }
+    },
   },
   created() {
     this.initUserGrouptTree();
     this.getChangeName();
-    //this.initCopyUsersList();
+    //this.initDealMeet();
+    //this.myApplyChangeForm = this.formData;
+    
   },
   methods: {
     //记要名称
@@ -554,6 +586,7 @@ export default {
     handleProjectItemChange(data) {
       // 工程分部分项id
       this.myApplyChangeForm.projectItemId = data.id;
+      this.myApplyChangeForm.projectItem = data.name;
       this.getStationByProjectItemId(data.id);
     },
     getStationByProjectItemId(id) {
@@ -580,7 +613,12 @@ export default {
         this.noteNameTotal = res.data.data.totalCount;
       });
     },
-
+    checkRealname() {
+      this.initDparentUser();
+    },
+    checkPosition() {
+      this.initDparentUser();
+    },
     handleUserOnclick() {
       this.dialogusersVisible = true;
       this.initDparentUser();
@@ -654,10 +692,10 @@ export default {
         this.initCopyUsersList();
       });
     },
-    copyUserGroupOnClick(item) {
+    copyUserGroupOnClick() {
       //组织机构筛选框
-      this.copyQueryParam.userGroupId = item.id;
       this.initCopyUsersList();
+      this.initDparentUser();
     },
     initCopyUsersList() {
       //初始化抄送人列表
@@ -788,21 +826,32 @@ export default {
 
       change.applyAddList(this.myApplyChangeForm).then(res => {
         this.$message({
-          message: "申请成功",
+          message: "创建成功",
           type: "success"
         });
+        this.myApplyChangeForm = "";
         this.$emit("cancel"); //关闭弹框
         this.$emit("comfirm"); //确认
       });
-    }
+    },
+    // // 处理数据回填
+    // initDealMeet(){
+    //     change.getApplySee({ meetingId: this.nowItem }).then(res=>{
+    //           this.myApplyChangeForm = res.data.data.MeetingInfo;
+    //           console.log(this.myApplyChangeForm)
+    //           this.myApplyChangeForm.meetingName = this.myApplyChangeForm.meetingHostName;
+    //           this.myApplyChangeForm.meetingNoteName = this.myApplyChangeForm.meetingNoteTakerName;
+    //     })
+    // }
+  
   }
 };
 </script>
 
 <style scoped>
 .crestedBox {
-  height: 50vh;
-  padding: 0 30px;
+  height: 60vh;
+  padding-right: 30px;
   overflow-x: hidden;
 }
 </style>
