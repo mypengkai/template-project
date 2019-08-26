@@ -50,7 +50,6 @@ export default {
   },
   methods:{
     loadNextJobUserList(){  //加载下一个人员
-      debugger
       user.getNextJobUserByCurrentId(this.queryParam).then(res=>{
         this.total = res.data.data.totalCount;
         this.tableData = res.data.data.data;

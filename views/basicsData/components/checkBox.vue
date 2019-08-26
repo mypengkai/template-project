@@ -267,7 +267,6 @@
       },
       userGroupOnChange(data) {   //选择标段改动
         this.orgId = data
-        debugger
         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
 
           this.projectItemTreeOptions = res.data.data
