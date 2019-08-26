@@ -23,7 +23,7 @@
             <li>纬度：{{item.lat}}</li>
             <li>桩号：{{zhuanghao}}</li>
 
-            <li>拍照位置：{{item.photoLocation}}</li>
+            <li>拍照地点：{{item.photoLocation}}</li>
           </ul>
         </div>
         <div class="viewRight">

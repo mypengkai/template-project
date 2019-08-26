@@ -134,7 +134,7 @@
         </el-col>
       </el-row>-->
     </div>
-    <div style="width: 50%;float: left;">
+    <div style="width: 50%;float: right;">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="影像资料" name="image">
           <div class="condition">

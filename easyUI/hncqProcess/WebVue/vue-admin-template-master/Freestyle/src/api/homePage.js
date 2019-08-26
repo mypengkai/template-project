@@ -1,8 +1,11 @@
 import request from '@/utils/request'
 
 export default {
-  getUserMessage(params) {
+/*  getUserMessage(params) {
     return request.get('/rest/homePage/getUserMessage', {params})
+  },*/
+  getUserMessage(params) {
+    return request.get('/rest/homePage/getUserTaskMessage', {params})
   },
   getPicMessage(params) {
     return request.get('/rest/homePage/getPicMessage', {params})
