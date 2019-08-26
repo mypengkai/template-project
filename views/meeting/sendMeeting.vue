@@ -13,6 +13,7 @@
             ></el-option>
           </el-select>
         </el-col>
+        
         <el-col :span="6">
           <span>分部分项:</span>
           <select-tree
@@ -23,25 +24,7 @@
             ref="getSelectData"
           />
         </el-col>
-        <el-col :span="6">
-          <span>会议编码:</span>
-          <el-input placeholder="请输入会议编码" v-model="sendData.meetingSummaryNumber"></el-input>
-        </el-col>
-
-        <el-col :span="6">
-          <span>会议主题:</span>
-          <el-input placeholder="请输入会议主题" v-model="sendData.meetingTheme"></el-input>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="topBar">
-      <el-row>
-        <el-col :span="6">
-          <span>变更等级:</span>
-          <el-input placeholder="请输入变更等级" v-model="sendData.moneyLevel"></el-input>
-        </el-col>
-
-        <el-col :span="6">
+         <el-col :span="6" style="margin-left:25%">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
@@ -63,6 +46,7 @@
         </el-col>
       </el-row>
     </div>
+   
 
     <!-- 查询列表 -->
     <el-table
@@ -72,11 +56,11 @@
       style="width: 100%"
       height="70vh"
     >
-      <el-table-column prop="meetingSummaryNumber" label="会议编码" align="center"></el-table-column>
+      <el-table-column prop="meetingSummaryNumber" label="会议编号" align="center"></el-table-column>
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meetingAddress" label="会议地址" align="center"></el-table-column>
-      <el-table-column prop="addDecreaseMoney" label="变更金额(万元)" align="center"></el-table-column>
-      <el-table-column label="变更等级" align="center">
+      <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
+      <el-table-column label="会议等级" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.moneyLevel==='one_level'">一级</template>
           <template v-else-if="scope.row.moneyLevel==='two_level'">二级</template>
@@ -84,8 +68,8 @@
           <template v-else-if="scope.row.moneyLevel==='four_level'">四级</template>
         </template>
       </el-table-column>
-      <el-table-column prop="shenqingrename" label="申请人" align="center"></el-table-column>
-      <el-table-column prop="userName" label="审核人" align="center"></el-table-column>
+      <el-table-column prop="createrealname" label="申请人" align="center"></el-table-column>
+      <el-table-column prop="realname" label="审核人" align="center"></el-table-column>
       <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
@@ -103,9 +87,10 @@
               size="small"
               icon="el-icon-search"
               circle
-              @click="findApplyDetail(scope.row.meetingId)"
+              @click="findApplyDetail(scope.row.id)"
             ></el-button>
           </el-tooltip>
+         
         </template>
       </el-table-column>
     </el-table>
@@ -160,13 +145,9 @@ export default {
       total: 0,
       sendData: {
         departId: "", //部门id
-        projectCode: "", // 分部分项id
-        isAwaitExamine: "0", // 待审核，已审核
-        meetingTheme: "", // 会议记要名称
+        projectItemId: "", // 分部分项id
         pageNo: 1, // 当前页
         pageSize: 10, // 每页条数
-        moneyLevel: "", // 金额等级
-        meetingSummaryNumber: "" // 会议编码
       },
       myApplyChangePageList: [], //我申请的变更
       dialogFormVisible: false, //默认弹框不显示
@@ -224,7 +205,7 @@ export default {
     },
     query() {
       //查询
-      change.applyMyList(this.sendData).then(res => {
+      change.myApply(this.sendData).then(res => {
         this.total = res.data.data.totalCount;
         this.myApplyChangePageList = res.data.data.data;
       });
@@ -251,6 +232,9 @@ export default {
       this.$nextTick(() => {
         this.flag = true;
       });
+    },
+    action(data){
+       
     }
   }
 };

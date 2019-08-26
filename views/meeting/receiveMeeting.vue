@@ -37,11 +37,18 @@
     <div class="topBar">
       <el-row>
         <el-col :span="6">
-          <span>变更等级:</span>
-          <el-input placeholder="请输入变更等级" v-model="sendData.moneyLevel"></el-input>
+          <span>会议等级:</span>
+          <el-select v-model="sendData.moneyLevel" placeholder="请选择会议等级">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-col>
 
-        <el-col :span="6">
+        <el-col :span="6" style="margin-left:50%">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
@@ -69,8 +76,8 @@
       <el-table-column prop="meetingSummaryNumber" label="会议编码" align="center"></el-table-column>
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meetingAddress" label="会议地址" align="center"></el-table-column>
-      <el-table-column prop="addDecreaseMoney" label="变更金额(万元)" align="center"></el-table-column>
-      <el-table-column label="变更等级" align="center">
+      <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
+      <el-table-column label="会议等级" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.moneyLevel==='one_level'">一级</template>
           <template v-else-if="scope.row.moneyLevel==='two_level'">二级</template>
@@ -149,6 +156,25 @@ export default {
         children: "children",
         label: "projectItem"
       },
+        // 会议等级
+      options: [
+        {
+          value: "one_level",
+          label: "一级"
+        },
+        {
+          value: "two_level",
+          label: "二级"
+        },
+        {
+          value: "three_level",
+          label: "三级"
+        },
+        {
+          value: "four_level",
+          label: "四级"
+        }
+      ],
       userGroupTree: [], // 组织机构树
       projectItemTreeOption: [], // 分部分项树
       total: 0,
