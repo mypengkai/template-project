@@ -45,13 +45,11 @@
         <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>
         <el-table-column label="状态" width="100" align="center">
           <template slot-scope="scope">
-            <template v-if="scope.row.issolve==='1'">
-              <template v-if="scope.row.status==='0'">待处理</template>
-              <template v-if="scope.row.status==='1'">完成</template>
-            </template>
-            <template v-else-if="scope.row.issolve==='0'">
-              <template v-if="scope.row.status==='0'">待处理</template>
-            </template>
+            <template v-if="scope.row.state=='-1'">待处理</template>
+            <template v-else-if="scope.row.state=='0'">转发</template>
+            <template v-else-if="scope.row.state=='1'">已完成</template>
+            <template v-else-if="scope.row.state=='2'">待复核</template>
+            <template v-else-if="scope.row.state=='3'">退回</template>
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">

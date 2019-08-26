@@ -43,15 +43,11 @@
         <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
         <el-table-column label="状态" width="100" align="center">
           <template slot-scope="scope">
-<!--            <template v-if="scope.row.issolve==='1'">-->
               <template v-if="scope.row.state=='-1'">待处理</template>
-<!--            </template>-->
-<!--            <template v-else-if="scope.row.issolve==='0'">-->
               <template v-else-if="scope.row.state=='0'">转发</template>
               <template v-else-if="scope.row.state=='1'">已完成</template>
-              <template v-else-if="scope.row.state=='2'">完成</template>
+              <template v-else-if="scope.row.state=='2'">待复核</template>
               <template v-else-if="scope.row.state=='3'">退回</template>
-<!--            </template>-->
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
@@ -136,11 +132,12 @@
       async actionItem(id) {  // 查询单个请求
         let { data } = await api.searchOne({ id })
         this.nowItem = data.data
+        console.log(this.nowItem)
         this.dialogFormVisible = true
+
       },
       _searchList() {  //查询列表
         api.myCommandReceive(this.sendData).then(res => {
-          debugger
           this.total = res.data.data.totalCount
           this.getList = res.data.data.data
         })
