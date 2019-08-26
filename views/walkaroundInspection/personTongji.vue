@@ -4,12 +4,6 @@
       <el-row>
         <el-col :span="5">
           <span>组织机构:</span>
-          <!--  <select-tree
-              :options="userGroupTreeOption"
-              :props="userGroupDefaultProp"
-              v-on:noDe="userGroupOnClick"
-            />-->
-
           <el-select v-model="queryData.orgId" placeholder="请选择" @change="userGroupOnClick">
             <el-option v-for="item in userGroupTreeOption" :key="item.id" :label="item.departname"
                        :value="item.id"></el-option>
@@ -17,19 +11,42 @@
         </el-col>
 
         <el-col :span="5">
-          <span>姓名:</span>
-          <el-select v-model="queryData.userId" placeholder="请选择">
-            <el-option
-              v-for="item in personList"
-              :key="item.id"
-              :label="item.username"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <span>用户姓名:</span>
+          <el-input style="width: 200px;" v-model="queryData.realName" placeholder="请输入用户姓名" size="small"></el-input>
+          <!-- <span>姓名:</span>
+           <el-select v-model="queryData.userId" placeholder="请选择">
+             <el-option
+               v-for="item in personList"
+               :key="item.id"
+               :label="item.username"
+               :value="item.id"
+             ></el-option>
+           </el-select>-->
+        </el-col>
+        <el-col :span="8">
+          <span>日期:</span>
+          <el-date-picker
+            v-model="queryData.startTime"
+            type="datetime"
+            placeholder="选择开始日期时间"
+            size="small"
+            style="min-width:180px"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
+          -
+          <el-date-picker
+            v-model="queryData.endTime"
+            type="datetime"
+            placeholder="选择结束日期时间"
+            size="small"
+            style="min-width:180px"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
         </el-col>
 
-
-        <el-col :span="8">
+        <!--<el-col :span="8">
           <span>用户类型:</span>
           <el-select v-model="queryData.personType" placeholder="请选择">
             <el-option
@@ -39,7 +56,7 @@
               :value="item.id"
             ></el-option>
           </el-select>
-        </el-col>
+        </el-col>-->
         <el-col :span="6">
           <el-button
             class="pan-btn light-blue-btn"
@@ -56,35 +73,14 @@
           >重置
           </el-button>
         </el-col>
-        <!--   <el-col :span="8">
-             <span>日期:</span>
-             <el-date-picker
-               v-model="queryData.startTime"
-               type="datetime"
-               placeholder="选择开始日期时间"
-               size="small"
-               style="min-width:180px"
-               value-format="yyyy-MM-dd HH:mm:ss"
-               format="yyyy-MM-dd HH:mm:ss"
-             ></el-date-picker>
-             -
-             <el-date-picker
-               v-model="queryData.endTime"
-               type="datetime"
-               placeholder="选择结束日期时间"
-               size="small"
-               style="min-width:180px"
-               value-format="yyyy-MM-dd HH:mm:ss"
-               format="yyyy-MM-dd HH:mm:ss"
-             ></el-date-picker>
-           </el-col>-->
+
       </el-row>
 
     </div>
     <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:10px" height="68vh">
       <el-table-column prop="departname" label="单位" min-width="80"></el-table-column>
-      <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
       <el-table-column prop="realname" label="姓名" min-width="80"></el-table-column>
+      <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
       <el-table-column prop="CheckNumber" label="验收" min-width="80"></el-table-column>
       <!-- <el-table-column prop="date" label="日志" min-width="80"></el-table-column> -->
       <el-table-column prop="ReceivedInstructNumber" label="收到指令" min-width="80"></el-table-column>
@@ -132,11 +128,10 @@
         total: 0,
         queryData: {
           //查询条件
-          personType: '', // 人员类型
+          realName: '', // 组织id*/
           usergroupId: '', // 组织id
           startTime: '', // 开始时间
           endTime: '', // 结束时间
-          userId: '', //用户Id
           orgId: '', //组织机构
           pageNo: 1, // 当前页
           pageSize: 10 // 每页条数
@@ -198,17 +193,20 @@
           })
       },
       query() {
+        request.post('/rest/Patrol/userStatistics', {
+          // personType: this.queryData.personType || '',
+          // usergroupId: this.queryData.usergroupId || '',
+          /* startTime: this.queryData.startTime || '',
+           endTime: this.queryData.endTime || '',*/
+          // userId: this.queryData.userId || '',
 
-        request
-          .post('/rest/Patrol/userStatistics', {
-            personType: this.queryData.personType || '',
-            // usergroupId: this.queryData.usergroupId || '',
-            /* startTime: this.queryData.startTime || '',
-             endTime: this.queryData.endTime || '',*/
-            userId: this.queryData.userId || '',
-            pageNo: this.queryData.pageNo,
-            pageSize: this.queryData.pageSize
-          })
+          usergroupId: this.queryData.usergroupId ||'',
+          realName: this.queryData.realName,
+          startTime: this.queryData.startTime || '',
+          endTime: this.queryData.endTime || '',
+          pageNo: this.queryData.pageNo,
+          pageSize: this.queryData.pageSize
+        })
           .then(res => {
             this.total = res.data.data.totalCount
             this.tableData = res.data.data.data

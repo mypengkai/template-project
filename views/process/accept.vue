@@ -600,12 +600,20 @@
       // localStorage.getItem('userId')
       this.initUserGroup()
     },
-
+    created() {
+      let nowUserId = localStorage.getItem('userId')
+      request.post('/rest/sysuser/chakan', { id: nowUserId }).then(res => {
+        // this.userGroupOption = res.data.data
+        console.log(res.data.data.id)
+        let data = res.data.data.departid
+        this.userGroupOnChange(data)
+        this.userGroupId = res.data.data.departName
+      })
+    },
     methods: {
       initUserGroup() {  //初始化组织机构树
         request.post('/rest/processCheck/groupEqualRank').then(res => {
           this.userGroupOption = res.data.data
-
         })
 
       },
@@ -622,9 +630,8 @@
           this.processSDictOption = res.data.data
         })
       },
-      userGroupOnChange(data) {   //选择标段改动
-        // debugger
-
+      userGroupOnChange(data) {
+        //选择标段改动
         this.selectedUserGroup = data  //选中的用户
         request.post('/rest/projectItemInfo/getProjectBQItemById', { userGroupId: data, pId: '0' }).then(res => {
           this.projectItemTree = res.data.data
