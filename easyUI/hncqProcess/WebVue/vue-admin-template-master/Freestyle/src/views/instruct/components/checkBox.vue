@@ -50,8 +50,8 @@
           <el-col :span="12">
             <div class="TimeAndType" v-if="nowItem =='add'">
               <el-form-item label="计划检查时间：" v-if="nowItem =='add'" prop="planTime">
-                <el-date-picker v-model="form.planCheckTime" type="datetime" placeholder="选择日期时间："
-                                value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="form.planCheckTime" type="date" placeholder="选择日期："
+                                value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </div>
           </el-col>
@@ -67,8 +67,8 @@
           <el-col :span="12">
             <div class="TimeAndType" v-if="nowItem =='add'">
               <el-form-item label="计划完成时间：" v-if="nowItem =='add'" prop="planTime">
-                <el-date-picker v-model="form.planFinishTime" type="datetime" placeholder="选择日期时间："
-                                value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="form.planFinishTime" type="date" placeholder="选择日期："
+                                value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </div>
           </el-col>
@@ -243,8 +243,8 @@
         </el-form-item>
 
         <el-form-item label="计划完成时间：" prop="planTime">
-          <el-date-picker v-model="transpondForm.planFinishTime" type="datetime" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-date-picker v-model="transpondForm.planFinishTime" type="date" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
 
         <el-form-item label="备注：">
@@ -267,8 +267,8 @@
          </el-form-item>-->
 
         <el-form-item label="计划完成时间：" prop="planTime">
-          <el-date-picker v-model="returnForm.planFinishTime" type="datetime" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-date-picker v-model="returnForm.planFinishTime" type="date" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
 
         <el-form-item label="备注：">
@@ -301,8 +301,8 @@
             </el-input>
           </el-form-item>-->
         <el-form-item label="计划完成时间：" prop="planTime">
-          <el-date-picker v-model="soonFinishForm.planFinishTime" type="datetime" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-date-picker v-model="soonFinishForm.planFinishTime" type="date" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="soonFinishForm.remark"></el-input>
@@ -336,8 +336,8 @@
             </el-input>
           </el-form-item>-->
         <el-form-item label="计划完成时间：" prop="planTime">
-          <el-date-picker v-model="finishForm.planFinishTime" type="datetime" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-date-picker v-model="finishForm.planFinishTime" type="date" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="finishForm.remark"></el-input>
@@ -365,7 +365,6 @@
     <el-dialog title="图片预览" :visible.sync="dialogcommcheck" width="50%" append-to-body>
       <viewer :photo="commcheckList" :imgList="pictureOfCommand"></viewer>
     </el-dialog>
-
 
     <!-- 图片预览 接收人-->
     <el-dialog title="图片预览" :visible.sync="dialogcommchecks" width="50%" append-to-body>

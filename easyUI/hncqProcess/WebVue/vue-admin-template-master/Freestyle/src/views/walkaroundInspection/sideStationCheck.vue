@@ -26,13 +26,13 @@
             <el-row>-->
         <el-col :span="10">
           <span>创建日期:</span>
-          <el-date-picker v-model="sendData.startTime" type="datetime" placeholder="选择日期时间" size="small"
+          <el-date-picker v-model="sendData.startTime" type="date" placeholder="选择日期" size="small"
                           style="min-width:180px"
-                          value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                          value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>
           -
-          <el-date-picker v-model="sendData.endTime" type="datetime" placeholder="选择日期时间" size="small"
+          <el-date-picker v-model="sendData.endTime" type="date" placeholder="选择日期" size="small"
                           style="min-width:180px"
-                          value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                          value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>
         </el-col>
         <el-col :span="4">
           <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="query()">查询</el-button>
@@ -45,7 +45,7 @@
     <el-table border borderclass="textList" :data="sideStationPollingPageList" style="width: 100%" height="73vh">
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="100"></el-table-column>
-      <el-table-column prop="describe" label="巡视说明"></el-table-column>
+      <el-table-column prop="describe" label="巡视描述"></el-table-column>
       <el-table-column prop="photoLocation" label="拍照地点"></el-table-column>
       <el-table-column prop="createTime" align="center" width="200" label="创建时间"></el-table-column>
       <el-table-column prop="realname" align="center" label="巡视人" width="100"></el-table-column>

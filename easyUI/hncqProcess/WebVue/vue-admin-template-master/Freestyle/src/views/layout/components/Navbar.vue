@@ -8,9 +8,10 @@
       />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <span style="display: inline-block;width: 60px;height: 40px;color:#000;vertical-align: inherit;">{{userName}}</span>
           <img src="../../../../static/timg.jpg" alt class="user-avatar">
+          <span style="display: inline-block;width: 100px;height: 40px;color:#000;vertical-align: inherit;">{{userName}}</span>
           <i class="el-icon-caret-bottom"/>
+
         </div>
 
         <!-- 修改个人信息功能 -->
@@ -313,8 +314,8 @@
   }
 
   .el-icon-caret-bottom {
-    position: absolute;
-    right: -20px;
+    /*position: absolute;*/
+    right:0px;
     top: 1.5vw;
     font-size: 12px;
   }

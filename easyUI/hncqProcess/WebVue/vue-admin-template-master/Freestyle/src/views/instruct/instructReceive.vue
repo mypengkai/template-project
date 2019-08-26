@@ -12,13 +12,13 @@
       <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
                    v-on:noDe="projectItemOnClick"/>
       <span>创建日期:</span>
-      <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
       -
-      <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>

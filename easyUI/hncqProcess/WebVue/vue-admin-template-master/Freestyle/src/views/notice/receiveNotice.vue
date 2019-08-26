@@ -7,13 +7,13 @@
 
       <span>发送时间:</span>
 
-      <el-date-picker v-model="noticeData.starttime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="noticeData.starttime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
       -
-      <el-date-picker v-model="noticeData.endtime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="noticeData.endtime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
@@ -28,9 +28,10 @@
     <div>
       <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
         <el-table-column prop="title" label="通知标题"></el-table-column>
-        <el-table-column prop="launchName" label="发起人" align="center" width="150"></el-table-column>
-        <el-table-column prop="createTime" label="发起时间" align="center" width="200"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="200px" align="center">
+        <el-table-column prop="createName" label="发起人" align="center" width="150"></el-table-column>
+        <el-table-column prop="realnames" label="接收人" align="center" width="450"></el-table-column>
+        <el-table-column prop="createTime" label="发起时间" align="center" width="150"></el-table-column>
+        <el-table-column fixed="right" label="操作" width="80" align="center">
           <template slot-scope="scope">
             <el-button
               type="primary"

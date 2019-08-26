@@ -29,18 +29,16 @@
               v-model="form.startTime"
               type="date"
               size="small"
-              format="yyyy 年 MM 月 dd 日"
               value-format="yyyy-MM-dd"
-              placeholder="选择开始日期时间"
+              placeholder="选择开始日期"
             />
             -
             <el-date-picker
               v-model="form.endTime"
               type="date"
               size="small"
-              format="yyyy 年 MM 月 dd 日"
               value-format="yyyy-MM-dd"
-              placeholder="选择结束日期时间"
+              placeholder="选择结束日期"
             />
           </div>
         </el-col>

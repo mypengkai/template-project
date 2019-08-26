@@ -14,10 +14,10 @@
 
         <el-col :span="12">
           <span>创建日期:</span>
-          <el-date-picker v-model="queryData.starttime" type="datetime" placeholder="选择开始日期时间" size="small" style="min-width:180px"
-                          value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>-
-          <el-date-picker v-model="queryData.endtime" type="datetime" placeholder="选择结束日期时间" size="small" style="min-width:180px"
-                          value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-date-picker v-model="queryData.starttime" type="date" placeholder="选择开始日期" size="small" style="min-width:180px"
+                          value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>-
+          <el-date-picker v-model="queryData.endtime" type="date" placeholder="选择结束日期" size="small" style="min-width:180px"
+                          value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>
         </el-col>
         <el-col :span="4">
           <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="getList()">查询</el-button>

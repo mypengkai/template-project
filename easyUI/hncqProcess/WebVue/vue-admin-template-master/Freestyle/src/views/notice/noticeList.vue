@@ -6,13 +6,13 @@
       <el-input v-model="noticeData.title" placeholder="请输入内容"/>
       <span>发送时间:</span>
 
-      <el-date-picker v-model="noticeData.starttime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="noticeData.starttime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
       -
-      <el-date-picker v-model="noticeData.endtime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="noticeData.endtime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
         </el-button>
@@ -29,9 +29,10 @@
     <div>
       <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
         <el-table-column prop="title" label="通知标题"></el-table-column>
-        <el-table-column prop="launchName" label="发起人" align="center" width="150"></el-table-column>
-        <el-table-column prop="createTime" label="发起时间" align="center" width="200"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="200px" align="center">
+        <el-table-column prop="createName" label="发起人" align="center" width="150"></el-table-column>
+        <el-table-column prop="realnames" label="接收人" align="center" width="450"></el-table-column>
+        <el-table-column prop="createTime" label="发起时间" align="center" width="150"></el-table-column>
+        <el-table-column fixed="right" label="操作" width="80" align="center">
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -101,7 +102,7 @@
       :visible.sync="dialogFormVisibleC"
       id="checkDialog"
     >
-      <el-form class="reverseBox" ref="noticeDataC" :model="noticeDataC" label-width="120px">
+      <el-form id="checkBox" class="reverseBox" ref="noticeDataC" :model="noticeDataC" label-width="120px">
         <el-form-item label="通知标题:">
           <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.title"/>
         </el-form-item>
@@ -109,16 +110,17 @@
           <el-input style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.createName"/>
         </el-form-item>
         <el-form-item label="接收人:">
-          <el-input type="textarea" style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.realnames"/>
+          <el-input type="textarea" style="border: none;" readonly="true" placeholder=""
+                    v-model="noticeDataC.realnames"/>
         </el-form-item>
         <el-form-item label="通知内容:">
           <el-input type="textarea" style="border: none;" readonly="true" placeholder="" v-model="noticeDataC.content"/>
         </el-form-item>
       </el-form>
       <div class="tar">
-<!--        <el-button @click="dialogFormVisibleC = false">取 消</el-button>-->
+        <!--        <el-button @click="dialogFormVisibleC = false">取 消</el-button>-->
         <el-button type="primary" @click="dialogFormVisibleC = false">关 闭</el-button>
-<!--        <el-button type="primary" @click="add()">关 闭</el-button>-->
+        <!--        <el-button type="primary" @click="add()">关 闭</el-button>-->
       </div>
     </el-dialog>
 
@@ -174,6 +176,8 @@
     },
     data() {
       return {
+
+        flag: false,
         input: '',
         value: '',
         value1: '',
@@ -251,6 +255,7 @@
           commandType: '', // 指令类型
           batchNo: '',
           patrolId: ''  //巡视id
+
         }
 
       }
@@ -266,6 +271,11 @@
     methods: {
       action(val) {
         this.nowItem = ''
+        this.addNoticeData = {
+          title: '',
+          users: '',
+          content: ''
+        }
         this.dialogFormVisible = true
       },
       handleSizeChange(val) {
@@ -285,9 +295,9 @@
               message: '恭喜你，发送成功',
               type: 'success'
             })
-
           }
           this.dialogFormVisible = false
+
         })
       },
       // 查询单个请求
@@ -339,13 +349,18 @@
       },
       // 清空
       clearFrom(data) {
-        this.noticeData = {
-          id: '',
-          title: '',
-          realnames: '',
-          content: '',
-          orgId: ''
-        }
+        this.$refs[data].resetFields()
+        /*   this.noticeData = {
+             id: '',
+             title: '',
+             realnames: '',
+             content: ''
+           }
+           this.addNoticeData = {
+             title: '',
+             users: '',
+             content: ''
+           }*/
         this.dialogFormVisible = false
       },
       //弹框
@@ -450,8 +465,9 @@
     border: none !important
 
   }
-  /deep/ .el-textarea__inner {
-    border: none;
+
+  /deep/ #checkBox .el-textarea__inner {
     resize: none;
+    border: none;
   }
 </style>
