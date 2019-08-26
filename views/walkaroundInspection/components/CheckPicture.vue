@@ -141,7 +141,7 @@
             <ul v-for="(node, key) in nowItem.pictureOfCommand" :key="key">
               <!-- <li @click="pictureShow(item)">-->
               <li>
-                <template v-if="node.fileType==='jpg'">
+                <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
                   <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
                             @click="pictureShow(nowItem.pictureOfCommand)"></el-image>
                 </template>

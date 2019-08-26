@@ -13,6 +13,8 @@
       :style="`min-width: ${treeWidth}`"
       :data="data"
       :props="props"
+      :check-strictly="isCheckOtherNode"
+      :show-checkbox="isCheckbox"
       lazy
       :load="loadNode"
       :expand-on-click-node="false"
@@ -56,6 +58,14 @@
         type: String,
         required: false,
         default: '请选择'
+      },
+      isCheckOtherNode: {   //     是否级联选中
+        type: Boolean,
+        default: false
+      },
+      isCheckbox: {   //   checkbox
+        type: Boolean,
+        default: false
       },
       // 树节点配置选项
       props: {
