@@ -80,7 +80,7 @@ export default {
       },
       rules: {
         username: [{ required: true, message: "请输入登录名", trigger: "blur" }, { pattern: /^[a-zA-Z]+$/, message: '只能输入英文' }],
-        realname: [{ required: true, message: "请输入用户名", trigger: "blur" }, { pattern: /^[\u4E00-\u9FA5]+$/, message: '角色名称只能为中文'}],
+        realname: [{ required: true, message: "请输入用户名", trigger: "blur" }, { pattern: /^[^\x00-\xff]+$/, message: '角色名称只能为中文'}],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }

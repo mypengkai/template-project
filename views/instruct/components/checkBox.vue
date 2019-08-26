@@ -93,95 +93,104 @@
       <div :class="{reverseBox:nowItem!=='add'}" class="elInputBox" label-width="120px">
         <!--  <el-row>
           </el-row>-->
-        <el-col :span="12">
-          <el-form-item style="width:22vw" label="分部分项：" v-if="nowItem !=='add'">
-            <el-input type="textarea" autosize readonly v-model="form.projectItem"></el-input>
-          </el-form-item>
-          <el-form-item style="width:22vw" label="计划检查时间：" v-if="nowItem !=='add'">
-            <el-input type="textarea" autosize readonly v-model="form.planTime"></el-input>
-          </el-form-item>
-          <el-form-item style="width:22vw" label="创建时间：" v-if="nowItem !=='add'">
-            <el-input readonly v-model="form.createTime"></el-input>
-          </el-form-item>
-          <el-form-item label="指令时间轴：" v-if="nowItem !=='add'">
-            <div class="reference">
-              <el-timeline>
-                <el-timeline-item v-for="(activity, index) in activities2" :key="index" :icon="activity.icon"
-                                  :type="activity.type" :color="activity.color"
-                                  :size="activity.size" :timestamp="activity.timestamp">{{activity.content}}
-                </el-timeline-item>
-              </el-timeline>
-            </div>
-            <div class="pta">
-              <el-timeline :reverse="reverse">
-                <el-timeline-item v-for="(activity, index) in activities" :key="index"
-                                  :icon="convertIcon(activity, 'icon')"
-                                  :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')"
-                                  :timestamp="activity.finishTime">
-                  {{activity.name}} 指令描述 : {{ activity.remark }}
-                </el-timeline-item>
-              </el-timeline>
-            </div>
-          </el-form-item>
+        <div style="overflow:auto;">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item style="width:22vw" label="分部分项：" v-if="nowItem !=='add'">
+                <el-input type="textarea" autosize readonly v-model="form.projectItem"></el-input>
+              </el-form-item>
+              <el-form-item style="width:22vw" label="计划检查时间：" v-if="nowItem !=='add'">
+                <el-input type="textarea" autosize readonly v-model="form.planTime"></el-input>
+              </el-form-item>
+              <el-form-item style="width:22vw" label="创建时间：" v-if="nowItem !=='add'">
+                <el-input readonly v-model="form.createTime"></el-input>
+              </el-form-item>
+              <el-form-item label="指令时间轴：" v-if="nowItem !=='add'">
+                <div class="reference">
+                  <el-timeline>
+                    <el-timeline-item v-for="(activity, index) in activities2" :key="index" :icon="activity.icon"
+                                      :type="activity.type" :color="activity.color"
+                                      :size="activity.size" :timestamp="activity.timestamp">{{activity.content}}
+                    </el-timeline-item>
+                  </el-timeline>
+                </div>
+                <div class="pta">
+                  <el-timeline :reverse="reverse">
+                    <el-timeline-item v-for="(activity, index) in activities" :key="index"
+                                      :icon="convertIcon(activity, 'icon')"
+                                      :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')"
+                                      :timestamp="activity.finishTime">
+                      {{activity.name}} 指令描述 : {{ activity.remark }}
+                    </el-timeline-item>
+                  </el-timeline>
+                </div>
+              </el-form-item>
+            </el-col>
 
-          <div style="overflow:hidden;position:relative" v-if="nowItem !=='add' && finishPictureOfCommand.length>0 ">
-            <div class="fl faqi">
-              <span class="accomplish">发起指令</span>
-              <el-tabs v-model="activeName">
-                <el-tab-pane label="影像资料" name="first">
-                  <ul>
-                    <li v-for="(item,index) in form.pictureOfCommand" :key="index" @click="actionImg(item,index)">
-                      <img :src="item.picture" style="cursor:pointer">
-                    </li>
-                  </ul>
-                </el-tab-pane>
-                <el-tab-pane label="拍照地点" name="second">
-                  <div style="height:45vh">
-                    <instructMap :nowItem="nowItem"></instructMap>
-                  </div>
-                </el-tab-pane>
-              </el-tabs>
-            </div>
-            <div class="elhr"></div>
-            <div class="rl wanchen">
-              <span class="accomplish">完成指令</span>
-              <el-tabs v-model="activeName1">
-                <el-tab-pane label="影像资料" name="first">
-                  <ul>
-                    <li v-for="(item,index) in finishPictureOfCommand" :key="index" @click="actionImgs(item,index)">
-                      <img :src="item.picture" style="cursor:pointer">
-                    </li>
-                  </ul>
-                </el-tab-pane>
-                <el-tab-pane label="拍照地点" name="second">
-                  <div style="height:45vh">
-                    <Map :nowItem="nowItem"></Map>
-                  </div>
-                </el-tab-pane>
-              </el-tabs>
-            </div>
-          </div>
-        </el-col>
+            <el-col :span="12">
+              <div style="overflow:hidden;" v-if="nowItem !=='add' && finishPictureOfCommand.length>0 ">
+                <div class="fl faqi">
+                  <span class="accomplish">发起指令</span>
+                  <el-tabs v-model="activeName">
+                    <el-tab-pane label="影像资料" name="first">
+                      <ul>
+                        <li v-for="(item,index) in form.pictureOfCommand" :key="index" @click="actionImg(item,index)">
+                          <img :src="item.picture" style="cursor:pointer">
+                        </li>
+                      </ul>
+                    </el-tab-pane>
+                    <el-tab-pane label="拍照地点" name="second">
+                      <div style="height:45vh">
+                        <instructMap :nowItem="nowItem"></instructMap>
+                      </div>
+                    </el-tab-pane>
+                  </el-tabs>
+                </div>
+                <div class="elhr"></div>
+                <div class="rl wanchen">
+                  <span class="accomplish">完成指令</span>
+                  <el-tabs v-model="activeName1">
+                    <el-tab-pane label="影像资料" name="first">
+                      <ul>
+                        <li v-for="(item,index) in finishPictureOfCommand" :key="index" @click="actionImgs(item,index)">
+                          <img :src="item.picture" style="cursor:pointer">
+                        </li>
+                      </ul>
+                    </el-tab-pane>
+                    <el-tab-pane label="拍照地点" name="second">
+                      <div style="height:45vh">
+                        <Map :nowItem="nowItem"></Map>
+                      </div>
+                    </el-tab-pane>
+                  </el-tabs>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <!-- 指令发送 -->
+              <div v-if="nowItem !=='add' && finishPictureOfCommand.length===0 " class="pictureContent">
+                <el-tabs type="border-card" v-model="tabPosition">
+                  <el-tab-pane label="影像资料" name="first">
+                    <div class="imgContation">
+                      <ul>
+                        <li v-for="(item,index) in pictureOfCommand" :key="index" @click="actionImg(item,index)">
+                          <img :src="item.picture" alt style="width:100%;height:100%">
+                        </li>
+                      </ul>
+                    </div>
+                  </el-tab-pane>
+                  <el-tab-pane label="所在位置" name="second">
+                    <div style="height:45vh">
+                      <instructMap :nowItem="nowItem"></instructMap>
+                    </div>
+                  </el-tab-pane>
+                </el-tabs>
+              </div>
+            </el-col>
 
-        <!-- 指令发送 -->
-        <div v-if="nowItem !=='add' && finishPictureOfCommand.length===0 " class="pictureContent">
-          <el-tabs type="border-card" v-model="tabPosition">
-            <el-tab-pane label="影像资料" name="first">
-              <div class="imgContation">
-                <ul>
-                  <li v-for="(item,index) in pictureOfCommand" :key="index" @click="actionImg(item,index)">
-                    <img :src="item.picture" alt style="width:100%;height:100%">
-                  </li>
-                </ul>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="所在位置" name="second">
-              <div style="height:45vh">
-                <instructMap :nowItem="nowItem"></instructMap>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
+          </el-row>
         </div>
+
       </div>
       <div class="tar" style=" right: 40%;position: absolute;bottom: 10px;padding: 10px">
         <el-button type="primary"
@@ -193,8 +202,12 @@
                    @click="returnDialog=true">退回指令
         </el-button>
         <el-button type="primary"
-                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="returnBtn"
+                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="soonFinishBtn"
                    @click="soonFinishDialog=true">完成指令
+        </el-button>
+        <el-button type="primary"
+                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="finishBtn"
+                   @click="finishDialog=true">复核指令
         </el-button>
         <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
       </div>
@@ -294,10 +307,57 @@
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="soonFinishForm.remark"></el-input>
         </el-form-item>
+
+        <el-form-item label="图片选择：" prop>
+          <el-upload class="avatar-uploader" ref="uploadSoonFinish" :action="uploadUrlSoonFinish" name="files"
+                     :headers="headers"
+                     list-type="picture-card"
+                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="soonFinishForm">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisibleSoonFinish">
+            <img width="50%" :src="dialogImageUrlSoonFinish" alt="图片">
+          </el-dialog>
+        </el-form-item>
       </el-form>
       <div class="tar">
         <el-button @click="soonFinishDialog = false">取 消</el-button>
         <el-button type="primary" @click="soonFinishCommand">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
+    <!-- 指令复核 -->
+    <el-dialog class="dialogBox" width="40%" title="指令完成" :visible.sync="finishDialog" append-to-body>
+      <el-form :model="finishForm" label-width="130px">
+        <!--  <el-form-item label="指定人：" prop="transpondName">
+            <el-input readonly v-model="transpondForm.transpondName">
+              <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
+            </el-input>
+          </el-form-item>-->
+        <el-form-item label="计划完成时间：" prop="planTime">
+          <el-date-picker v-model="finishForm.planFinishTime" type="datetime" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="finishForm.remark"></el-input>
+        </el-form-item>
+
+        <el-form-item label="图片选择：" prop>
+          <el-upload class="avatar-uploader" ref="uploadFinish" :action="uploadUrlFinish" name="files"
+                     :headers="headers"
+                     list-type="picture-card"
+                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="finishForm">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisibleFinish">
+            <img width="50%" :src="dialogImageUrlFinish" alt="图片">
+          </el-dialog>
+        </el-form-item>
+      </el-form>
+      <div class="tar">
+        <el-button @click="finishDialog = false">取 消</el-button>
+        <el-button type="primary" @click="finishCommand">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -348,8 +408,8 @@
         finishBtn: true,
 
         reverse: false,   //转发
-        activeName: 'second',   //发起指令的tab
-        activeName1: 'second',   //收到指令的tab
+        activeName: 'first',   //发起指令的tab
+        activeName1: 'first',   //收到指令的tab
         processMDictOption: [],  // 工序类型下拉框
         processSDictOption: [],  // 工序下拉框
         dialogcommcheck: false,
@@ -388,7 +448,7 @@
         }, {
           content: '转发指令',
           timestamp: '',
-          type: 'info',
+          type: 'warning',
           icon: 'el-icon-refresh'
         }, {
           content: '正在处理指令',
@@ -400,6 +460,11 @@
           timestamp: '',
           type: 'success',
           icon: 'el-icon-check'
+        }, {
+          content: '复核指令',
+          timestamp: '',
+          type: 'success',
+          icon: 'el-icon-star-off'
         }],
         answer: '', // 转发响应变量
         nowType: 0,
@@ -410,8 +475,12 @@
         newactiveIndex2: '1',
         uploadUrl: process.env.BASE_API + '/rest/command/addCommand',
         uploadUrlReturn: process.env.BASE_API + '/rest/command/returnCommand',
+        uploadUrlSoonFinish: process.env.BASE_API + '/rest/command/soonFinishCommand',
+        uploadUrlFinish: process.env.BASE_API + '/rest/command/finishCommand',
         dialogImageUrl: '',
         dialogImageUrlReturn: '',
+        dialogImageUrlSoonFinish: '',
+        dialogImageUrlFinish: '',
         commcheckList: [], // 预览图片信息
         planTime: '',
         headers: {
@@ -450,11 +519,19 @@
         },
         returnForm: {
           commandid: '', // 指令用户表id
-          remark: '' // 备注
+          remark: '', // 备注
+          planFinishTime: ''
         },
         soonFinishForm: {
           commandid: '', // 指令用户表id
-          remark: '' // 备注
+          remark: '', // 备注
+          planFinishTime: ''
+
+        },
+        finishForm: {
+          commandid: '', // 指令用户表id
+          remark: '', // 备注
+          planFinishTime: ''
         },
         // 指令内容框框
         commandUser: {
@@ -521,6 +598,8 @@
         innerTranspondDialog: false, // 转发指令信息
         dialogVisible: false, // 上传图片
         dialogVisibleReturn: false, // 上传图片
+        dialogVisibleSoonFinish: false, // 上传图片
+        dialogVisibleFinish: false, // 上传图片
         orgId: ''
 
       }
@@ -529,6 +608,7 @@
       this.initForm()
       this.receiveUserList()
       this.form.batchNo = this.createUUID()  //生成批处理id
+
     },
     methods: {
       reset() {  // 重置按钮
@@ -541,16 +621,40 @@
           return
         }
         let ObCopyData = this.$tool.ObCopy(this.nowItem) //复制nowItem传来的值 处理复杂类型
-
         this.form = ObCopyData // 第一层查看
         this.activities = ObCopyData.commandUser
         this.transpondForm.commanduserId = ObCopyData.commanduserId // 转发指令
 
-        this.returnForm.commandid = ObCopyData.commandinfoid // 转发指令
-        this.soonFinishForm.commandid = ObCopyData.commandinfoid // 转发指令
-
+        this.returnForm.commandid = ObCopyData.commandinfoid //退回指令
+        this.soonFinishForm.commandid = ObCopyData.commandinfoid // 完成指令
+        this.finishForm.commandid = ObCopyData.commandinfoid // 复核指令
         this.pictureOfCommand = ObCopyData.pictureOfCommand
         this.finishPictureOfCommand = ObCopyData.finishPictureOfCommand
+        console.log('ObCopyData', ObCopyData)
+        let nowUserId = localStorage.getItem('userId')
+        //处理按钮显示与否
+        if (ObCopyData.commandState == '-1' || ObCopyData.commandState == '0') {
+          this.returnBtn = true
+          this.soonFinishBtn = true
+          this.finishBtn = false
+          if (nowUserId == ObCopyData.createUserId) {
+            this.soonFinishBtn = false
+            this.finishBtn = true
+
+          }
+        } else if (ObCopyData.commandState == '2') {
+          this.returnBtn = true
+          this.soonFinishBtn = false
+          this.finishBtn = false
+          if (nowUserId == ObCopyData.createUserId) {
+            this.finishBtn = true
+          }
+        } else if (ObCopyData.commandState == '1') {
+          this.returnBtn = false
+          this.soonFinishBtn = false
+          this.finishBtn = false
+        }
+
       },
       initUserGroupTree() {   // 初始化组织机构树
         Organization.userGroupSelect().then(res => {
@@ -752,20 +856,42 @@
         // })
       },
       soonFinishCommand() {  // 完成指令
-        instruct.soonFinishCommand(this.soonFinishForm).then(res => {
-          let _message = res.data.message
-          if (_message == '成功') {
-            this.answer = 'success'
-          } else {
-            this.answer = 'error'
-          }
-          this.$message({
-            type: this.answer,
-            message: _message
-          })
-          this.$emit('cancel')
-          this.reload()
-        })
+        /*     instruct.soonFinishCommand(this.soonFinishForm).then(res => {
+               let _message = res.data.message
+               if (_message == '成功') {
+                 this.answer = 'success'
+               } else {
+                 this.answer = 'error'
+               }
+               this.$message({
+                 type: this.answer,
+                 message: _message
+               })
+               this.$emit('cancel')
+               this.reload()
+             })*/
+        this.$refs.uploadSoonFinish.submit()
+        this.$emit('cancel')
+        this.reload()
+      },
+      finishCommand() {  // 完成指令
+        /*     instruct.soonFinishCommand(this.soonFinishForm).then(res => {
+               let _message = res.data.message
+               if (_message == '成功') {
+                 this.answer = 'success'
+               } else {
+                 this.answer = 'error'
+               }
+               this.$message({
+                 type: this.answer,
+                 message: _message
+               })
+               this.$emit('cancel')
+               this.reload()
+             })*/
+        this.$refs.uploadFinish.submit()
+        this.$emit('cancel')
+        this.reload()
       },
       handleCurrentChange(val) {   //确认接收人
         if (this.dialogState === 'receive') {
@@ -1005,9 +1131,7 @@
   }
   }
   .pictureContent {
-    width: 50%;
-    padding: 30px 10px;
-    float: right;
+    padding: 20px 10px;
 
   ul {
     padding: 0;

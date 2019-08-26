@@ -47,7 +47,7 @@
             <template v-if="scope.row.state=='-1'">待处理</template>
             <template v-else-if="scope.row.state=='0'">转发</template>
             <template v-else-if="scope.row.state=='1'">已完成</template>
-            <template v-else-if="scope.row.state=='2'">完成</template>
+            <template v-else-if="scope.row.state=='2'">待复核</template>
             <template v-else-if="scope.row.state=='3'">退回</template>
           </template>
         </el-table-column>
