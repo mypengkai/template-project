@@ -13,7 +13,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
-                <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:14vw;">
+                <el-select  v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:14vw;">
                   <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                              :value="item.id"></el-option>
                 </el-select>
@@ -22,7 +22,7 @@
             <el-col :span="24">
               <el-form-item style="width:20vw" label="分部分项：" v-if="nowItem =='add'">
 
-                <select-tree clearable :options="projectItemTreeOptions" ref="getSelectData"
+                <select-tree :isCheckbox="true" :isCheckOtherNode="false" clearable :options="projectItemTreeOptions" ref="getSelectData"
                              :props="projectItemDefaultProp"
                              v-on:noDe="projectItemOnClick"/>
 
@@ -267,7 +267,9 @@
       },
       userGroupOnChange(data) {   //选择标段改动
         this.orgId = data
+        debugger
         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+
           this.projectItemTreeOptions = res.data.data
           this.$refs.getSelectData.labelModel = ''
         })

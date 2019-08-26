@@ -183,22 +183,23 @@
           </el-tabs>
         </div>
       </div>
+      <div class="tar" style=" right: 40%;position: absolute;bottom: 10px;padding: 10px">
+        <el-button type="primary"
+                   v-if="nowItem !=='add' && $route.name=='instructReceive' && finishPictureOfCommand.length===0 "
+                   @click="innerTranspondDialog = true">转发指令
+        </el-button>
+        <el-button type="primary"
+                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="returnBtn"
+                   @click="returnDialog=true">退回指令
+        </el-button>
+        <el-button type="primary"
+                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="returnBtn"
+                   @click="soonFinishDialog=true">完成指令
+        </el-button>
+        <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
+      </div>
     </el-form>
-    <div class="tar" style=" right: 50%;position: absolute;bottom: 10px;">
-      <el-button type="primary"
-                 v-if="nowItem !=='add' && $route.name=='instructReceive' && finishPictureOfCommand.length===0 "
-                 @click="innerTranspondDialog = true">转发指令
-      </el-button>
-      <el-button type="primary"
-                 v-if="nowItem !=='add' && $route.name=='instructReceive' && finishPictureOfCommand.length===0 "
-                 @click="innerTranspondDialog = true">退回指令
-      </el-button>
-      <el-button type="primary"
-                 v-if="nowItem !=='add' && $route.name=='instructReceive' && finishPictureOfCommand.length===0 "
-                 @click="innerTranspondDialog = true">完成指令
-      </el-button>
-      <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
-    </div>
+
 
     <!-- 接收人弹框 -->
     <el-dialog class="dialogBox" width="45%" title="选择接收人" :visible.sync="acceptUserDialog" append-to-body>
@@ -220,7 +221,7 @@
                      :total="total"></el-pagination>
     </el-dialog>
     <!-- 转发信息 -->
-    <el-dialog class="dialogBox" width="40%" title="转发信息" :visible.sync="innerTranspondDialog" append-to-body>
+    <el-dialog class="dialogBox" width="40%" title="指令转发" :visible.sync="innerTranspondDialog" append-to-body>
       <el-form :model="transpondForm" :rules="rulesform" label-width="130px">
         <el-form-item label="指定人：" prop="transpondName">
           <el-input readonly v-model="transpondForm.transpondName">
@@ -240,6 +241,63 @@
       <div class="tar">
         <el-button @click="innerTranspondDialog = false">取 消</el-button>
         <el-button type="primary" @click="transpondCommand">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 指令退回 -->
+    <el-dialog class="dialogBox" width="40%" title="指令退回" :visible.sync="returnDialog" append-to-body>
+      <el-form :model="returnForm" label-width="130px">
+        <!-- <el-form-item label="指定人：" prop="transpondName">
+           <el-input readonly v-model="transpondForm.transpondName">
+             <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
+           </el-input>
+         </el-form-item>-->
+
+        <el-form-item label="计划完成时间：" prop="planTime">
+          <el-date-picker v-model="returnForm.planFinishTime" type="datetime" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="备注：">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="returnForm.remark"></el-input>
+        </el-form-item>
+        <el-form-item label="图片选择：" prop>
+          <el-upload class="avatar-uploader" ref="uploadReturn" :action="uploadUrlReturn" name="files"
+                     :headers="headers"
+                     list-type="picture-card"
+                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="returnForm">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisibleReturn">
+            <img width="50%" :src="dialogImageUrlReturn" alt="图片">
+          </el-dialog>
+        </el-form-item>
+      </el-form>
+      <div class="tar">
+        <el-button @click="returnDialog = false">取 消</el-button>
+        <el-button type="primary" @click="returnCommand">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 指令完成 -->
+    <el-dialog class="dialogBox" width="40%" title="指令完成" :visible.sync="soonFinishDialog" append-to-body>
+      <el-form :model="soonFinishForm" label-width="130px">
+        <!--  <el-form-item label="指定人：" prop="transpondName">
+            <el-input readonly v-model="transpondForm.transpondName">
+              <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
+            </el-input>
+          </el-form-item>-->
+        <el-form-item label="计划完成时间：" prop="planTime">
+          <el-date-picker v-model="soonFinishForm.planFinishTime" type="datetime" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="soonFinishForm.remark"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="tar">
+        <el-button @click="soonFinishDialog = false">取 消</el-button>
+        <el-button type="primary" @click="soonFinishCommand">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -282,6 +340,13 @@
     props: ['nowItem'],
     data() {
       return {
+        returnDialog: false,
+        soonFinishDialog: false,
+        finishDialog: false,
+        returnBtn: true,
+        soonFinishBtn: true,
+        finishBtn: true,
+
         reverse: false,   //转发
         activeName: 'second',   //发起指令的tab
         activeName1: 'second',   //收到指令的tab
@@ -344,7 +409,9 @@
         newactiveIndex: '1',
         newactiveIndex2: '1',
         uploadUrl: process.env.BASE_API + '/rest/command/addCommand',
+        uploadUrlReturn: process.env.BASE_API + '/rest/command/returnCommand',
         dialogImageUrl: '',
+        dialogImageUrlReturn: '',
         commcheckList: [], // 预览图片信息
         planTime: '',
         headers: {
@@ -380,6 +447,14 @@
           remark: '', // 备注
           transpondName: '',
           planFinishTime: ''
+        },
+        returnForm: {
+          commandid: '', // 指令用户表id
+          remark: '' // 备注
+        },
+        soonFinishForm: {
+          commandid: '', // 指令用户表id
+          remark: '' // 备注
         },
         // 指令内容框框
         commandUser: {
@@ -445,6 +520,7 @@
         dialogState: '',  //用于界定弹框是转发人还是接收人
         innerTranspondDialog: false, // 转发指令信息
         dialogVisible: false, // 上传图片
+        dialogVisibleReturn: false, // 上传图片
         orgId: ''
 
       }
@@ -455,6 +531,9 @@
       this.form.batchNo = this.createUUID()  //生成批处理id
     },
     methods: {
+      reset() {  // 重置按钮
+        this.reload()
+      },
       initForm() {
         if (this.nowItem == 'add') {
           this.initUserGroupTree()  //初始化组织机构
@@ -462,9 +541,14 @@
           return
         }
         let ObCopyData = this.$tool.ObCopy(this.nowItem) //复制nowItem传来的值 处理复杂类型
+
         this.form = ObCopyData // 第一层查看
         this.activities = ObCopyData.commandUser
         this.transpondForm.commanduserId = ObCopyData.commanduserId // 转发指令
+
+        this.returnForm.commandid = ObCopyData.commandinfoid // 转发指令
+        this.soonFinishForm.commandid = ObCopyData.commandinfoid // 转发指令
+
         this.pictureOfCommand = ObCopyData.pictureOfCommand
         this.finishPictureOfCommand = ObCopyData.finishPictureOfCommand
       },
@@ -650,6 +734,39 @@
           this.reload()
         })
       },
+      returnCommand() {  // 退回指令
+        // instruct.returnCommand(this.returnForm).then(res => {
+        /*       let _message = res.data.message
+               if (_message == '成功') {
+                 this.answer = 'success'
+               } else {
+                 this.answer = 'error'
+               }
+               this.$message({
+                 type: this.answer,
+                 message: _message
+               })*/
+        this.$refs.uploadReturn.submit()
+        this.$emit('cancel')
+        this.reload()
+        // })
+      },
+      soonFinishCommand() {  // 完成指令
+        instruct.soonFinishCommand(this.soonFinishForm).then(res => {
+          let _message = res.data.message
+          if (_message == '成功') {
+            this.answer = 'success'
+          } else {
+            this.answer = 'error'
+          }
+          this.$message({
+            type: this.answer,
+            message: _message
+          })
+          this.$emit('cancel')
+          this.reload()
+        })
+      },
       handleCurrentChange(val) {   //确认接收人
         if (this.dialogState === 'receive') {
           this.form.ReceiveUserid = val.id // 新增传接收人id
@@ -664,9 +781,14 @@
         this.dialogImageUrl = file.url
         this.dialogVisible = true
       },
-      beforeUpload: function(file) {
-        this.commandFormData.append('files', file)
+      handlePictureCardPreviewReturn(file) {
+
+        this.dialogImageUrlReturn = file.url
+        this.dialogVisibleReturn = true
       },
+      /*  beforeUpload: function(file) {
+          this.commandFormData.append('files', file)
+        },*/
       createUUID: function() {
         function S4() {
           return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)

@@ -17,9 +17,13 @@ export default {
   returnCommand(data) {
     return request.post('/rest/command/returnCommand', data)
   },
-  // 指令完成
+  // 指令复核
   finishCommand(data) {
     return request.post('/rest/command/finishCommand', data)
+  },
+  // 指令完成
+  soonFinishCommand(data) {
+    return request.post('/rest/command/soonFinishCommand', data)
   },
   // 指令详情
   searchOne(data) {
