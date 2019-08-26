@@ -2,7 +2,7 @@
   <div class="selfcheck">
     <el-form :model="processAll" label-width="150px">
       <div style="width:50%">
-        <el-form-item label="工程分部分项:">
+        <el-form-item label="分部分项:">
           <el-input v-model="processAll.projectItem" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="工序名称:">
@@ -44,13 +44,13 @@
           <el-tabs type="border-card" v-model="tabPosition">
             <el-tab-pane label="影像资料" name="first">
               <div class="imgContation">
-               
+
                   <ul>
                     <li v-for="(item,index) in objlist" :key="index" @click="selfPicture(item)">
                       <img :src="item.filePath" alt style="width:100%;height:100%">
                     </li>
                   </ul>
-                
+
               </div>
             </el-tab-pane>
             <!-- <el-tab-pane label="所在位置" name="second" style="max-height:300px;">
@@ -332,7 +332,7 @@ export default {
 
             this.objlist = conents.selfFilePath;
             this.imgListOne = this.objlist[0]
-           
+
             if (this.processAll.state == "0") {
               this.processAll.stateProcess = "指定工序";
             }
@@ -393,7 +393,7 @@ export default {
           this.realPicture = array
           this.dialogTable = true
     },
-   
+
 
   }
 };
@@ -430,7 +430,7 @@ export default {
          display: block;
       }
     }
-  }  
+  }
   }
 }
 .allBox {

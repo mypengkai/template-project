@@ -26,11 +26,20 @@
           </div>
         </div>
       </el-col>
+     <!-- <el-col :span="6">
+        <div class="grid-content">
+          <div class="noComplete1">
+            <p class="p1 ng-binding">{{data.toBeProcessed}}</p>
+            <p class="p2">通知待处理</p>
+          </div>
+        </div>
+      </el-col>-->
+
       <el-col :span="6">
         <div class="grid-content">
           <div class="noComplete4">
             <p class="p1 ng-binding">0</p>
-            <p class="p2">变更待处理</p>
+            <p class="p2">会议待处理</p>
           </div>
         </div>
       </el-col>
@@ -40,29 +49,29 @@
 </template>
 
 <script>
-import homePage from "@/api/homePage.js";
+  import homePage from '@/api/homePage.js'
 
-export default {
-  mounted() {
-    this.record();
-  },
-  data() {
-    return {
-      data: {
-        toBeSelfChecked: "",
-        toBeChecked: "",
-        toBeProcessed: ""
+  export default {
+    mounted() {
+      this.record()
+    },
+    data() {
+      return {
+        data: {
+          toBeSelfChecked: '',
+          toBeChecked: '',
+          toBeProcessed: ''
+        }
+      }
+    },
+    methods: {
+      record() {
+        homePage.getMytask().then(res => {
+          this.data = res.data.data[0]
+        })
       }
     }
-  },
-  methods: {
-    record() {
-      homePage.getMytask().then(res => {
-        this.data = res.data.data[0];
-      });
-    },
   }
-};
 </script>
 
 <style>

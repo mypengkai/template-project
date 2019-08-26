@@ -71,17 +71,20 @@
           <div class="block">
             <template v-if="currentProcess.SelfCheckFile!==null">
               <el-timeline v-for="(item, index) in currentProcess.SelfCheckFile" :key="index">
-                <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px">
+                <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px;text-align: left">
                   <el-card>
-                    <h4>自检描述:{{item.checkexplain}}</h4>
+                    <h4 style="text-align: left;">完成状态:{{item.isadopt=='1'?'通过':'不通过'}}</h4>
+                    <h4 style="text-align: left;">自检描述:{{item.checkexplain}}</h4>
+                    <h4 style="text-align: left;">影像资料:</h4>
                     <template v-if="item.infolist!==null">
                       <ul v-for="(node, key) in item.infolist" :key="key" style="margin-left:10px">
                         <li style="float: left;margin-left: 10px">
                           <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                            <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill" @click="pictureShows(item.infolist, 0)"></el-image>
+                            <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
+                                      @click="pictureShows(item.infolist, 0)"></el-image>
                           </template>
                           <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                            <div class="video-box" >
+                            <div class="video-box">
                               <video id="video" style="width:100px;height:100px">
                                 <source :src="node.filePath" type="video/mp4">
                               </video>
@@ -104,10 +107,11 @@
         <td colspan="2">
           <template v-if="currentProcess.CheckFile!==null">
             <el-timeline v-for="(item, index) in currentProcess.CheckFile" :key="index">
-              <el-timeline-item :timestamp="item.createtime" placement="top">
+              <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px;text-align: left">
                 <el-card>
-                  <h4>验收描述:{{item.checkexplain}}</h4>
-                  <!--                    <h4>影像资料:</h4>-->
+                  <h4 style="text-align: left;">完成状态:{{item.isadopt=='1'?'通过':'不通过'}}</h4>
+                  <h4 style="text-align: left;">验收描述:{{item.checkexplain}}</h4>
+                  <h4 style="text-align: left;">影像资料:</h4>
                   <template v-if="item.infolist!==null">
                     <ul v-for="(node, key) in item.infolist" :key="key">
                       <li style="float: left;margin-left:10px">
@@ -116,7 +120,7 @@
                                     @click="pictureShows(item.infolist)"></el-image>
                         </template>
                         <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                          <div class="video-box" >
+                          <div class="video-box">
                             <video id="video2" style="width:100px;height:100px">
                               <source :src="node.filePath" type="video/mp4">
                             </video>
@@ -320,14 +324,17 @@
   /deep/ .el-dialog__wrapper {
     overflow-y: hidden;
   }
-  .video-box{
+
+  .video-box {
     position: relative;
   }
-  .video-box video{
+
+  .video-box video {
     display: inline-block;
     vertical-align: baseline;
   }
-  .video-box .video-img{
+
+  .video-box .video-img {
     text-align: center;
     position: absolute;
     top: 25%;
@@ -337,6 +344,6 @@
     z-index: 999;
     background: url(../../../imgs/play.png) no-repeat;
     background-size: 50% 50%;
-    cursor:pointer
+    cursor: pointer
   }
 </style>

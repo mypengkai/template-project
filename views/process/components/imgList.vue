@@ -6,7 +6,7 @@
           <el-table-column property="projectCode" label="编码"></el-table-column>
         </el-col>
         <el-col :span="5">
-          <el-table-column property="projectItem" label="工程名称"></el-table-column>
+          <el-table-column property="projectItem" label="分部分项"></el-table-column>
         </el-col>
         <el-col :span="4">
           <el-table-column property="projectType" label="工程类型"></el-table-column>

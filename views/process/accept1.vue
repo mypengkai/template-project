@@ -25,7 +25,7 @@
     <div v-if="treeFrom.projectItem!='' && treeFrom.projectItem!=undefined" class="particularsList">
       <div class="particulars brotherBar">
         <div style="left: 2vw;top:.7vw">
-          <span>工程名称: {{treeFrom.projectItem }}</span>
+          <span>分部分项: {{treeFrom.projectItem }}</span>
         </div>
         <!--  <div style="left: 15vw;top:.7vw">
             <span>工程类型: {{ treeFrom.projectType }}</span>
@@ -229,14 +229,14 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="计划自检时间:" prop="planTime">
-              <el-date-picker v-model="formData.planSelfCheckTime" type="datetime" placeholder="选择日期时间:"
-                              value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              <el-date-picker v-model="formData.planSelfCheckTime" type="date" placeholder="选择日期:"
+                              value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="计划验收时间:" prop="planTime">
-              <el-date-picker v-model="formData.planCheckTime" type="datetime" placeholder="选择日期时间:"
-                              value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              <el-date-picker v-model="formData.planCheckTime" type="date" placeholder="选择日期:"
+                              value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>

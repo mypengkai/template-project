@@ -113,7 +113,7 @@
         <el-col :span="24">
           <div class="divHeight">
             <span class="spanWord">巡视描述:</span>
-            <span>{{nowItem.remark}}</span>
+            <span>{{nowItem.describe}}</span>
           </div>
         </el-col>
       </el-row>
@@ -125,14 +125,14 @@
           </div>
         </el-col>
       </el-row>
-      <el-row>
+     <!-- <el-row>
         <el-col :span="24">
           <div class="divHeight">
             <span class="spanWord">拍照描述:</span>
             <span>{{nowItem.photoDescribe== 'null' ? '': nowItem.photoDescribe}}</span>
           </div>
         </el-col>
-      </el-row>
+      </el-row>-->
     </div>
     <div style="width: 50%;float: left;">
       <el-tabs v-model="activeName" type="card">

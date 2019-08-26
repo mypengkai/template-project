@@ -32,22 +32,22 @@
           <span>创建日期:</span>
           <el-date-picker
             v-model="queryData.starttime"
-            type="datetime"
-            placeholder="选择开始日期时间"
+            type="date"
+            placeholder="选择开始日期"
             size="small"
             style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
           ></el-date-picker>
           -
           <el-date-picker
             v-model="queryData.endtime"
-            type="datetime"
-            placeholder="选择结束日期时间"
+            type="date"
+            placeholder="选择结束日期"
             size="small"
             style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
           ></el-date-picker>
         </el-col>
 
@@ -57,7 +57,7 @@
 
     <div class="topBar">
       <el-row>
-        <el-col :span="5">
+        <el-col :span="18">
           <span>工序状态:</span>
           <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
             <el-option
@@ -69,7 +69,7 @@
           </el-select>
         </el-col>
 
-        <el-col :span="13">
+       <!-- <el-col :span="13">
           <span>验收类型:</span>
           <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
             <el-option
@@ -79,7 +79,7 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </el-col>
+        </el-col>-->
         <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
@@ -100,9 +100,9 @@
     </div>
 
     <el-table border class="textList" :data="tableData" height="68vh" fit>
-      <el-table-column prop="name1" label="分部分项" width=""></el-table-column>
+      <el-table-column prop="name1" label="分部分项" width="400"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="150" align="center"></el-table-column>
-      <el-table-column prop="processName" label="工序名称" width="200" align="center"></el-table-column>
+      <el-table-column prop="processName" label="工序名称" width="" align="center"></el-table-column>
       <el-table-column prop="shijizijianren" label="自检人" width="80" align="center"></el-table-column>
       <el-table-column prop="planSelfCheckTime" label="计划自检时间" width="110" align="center"></el-table-column>
       <el-table-column prop="realitySelfCheckTime" label="实际自检时间" width="150" align="center"></el-table-column>
@@ -124,7 +124,7 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="80" align="center">
+      <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button
@@ -217,11 +217,11 @@
           },
           {
             value: '2',
-            label: '已自检'
+            label: '已自检未验收'
           },
           {
             value: '3',
-            label: '已验收'
+            label: '已验收未通过'
           }
         ],
         dialogTableVisible: false,

@@ -18,13 +18,13 @@
         </el-button>
       </div>
       <span>发起日期:</span>
-      <el-date-picker v-model="sendData.starttime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
       -
-      <el-date-picker v-model="sendData.endtime" type="datetime" placeholder="选择日期时间" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd HH:mm:ss"
-                      format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small"
+                      style="min-width:180px" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"></el-date-picker>
     </div>
     <!-- 查询列表 -->
     <div>

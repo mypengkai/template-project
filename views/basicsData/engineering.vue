@@ -18,7 +18,7 @@
     <!-- 操作列表 -->
     <el-table ref="projectItemTreeTable" :data="dataList" class="textList" row-key="id" border
               lazy :load="loadNextProjectItemLayer" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
-      <el-table-column label="工程分部分项" align="left" prop="projectItem"></el-table-column>
+      <el-table-column label="分部分项" align="left" prop="projectItem"></el-table-column>
       <el-table-column label="编码" align="center" width="150" prop="id"></el-table-column>
       <el-table-column label="父编码" align="center" width="150" prop="pid"></el-table-column>
       <el-table-column label="起始桩号" align="center" width="150" prop="startStation"></el-table-column>
@@ -63,14 +63,14 @@
             <el-tree :data="orgUserGroupList" :props="defaultUserGroupProps" highlight-current :default-expand-all="true" @node-click="handleUserGroupNodeClick"/>
           </el-popover>
         </el-form-item>
-        <el-form-item label="工程分部分项:" prop="projectItem">
-          <el-input v-model="projectForm.projectItem" placeholder="请输入工程分部分项"/>
+        <el-form-item label="分部分项:" prop="projectItem">
+          <el-input v-model="projectForm.projectItem" placeholder="请输入分部分项"/>
         </el-form-item>
         <el-form-item label="编码:" prop="id">
           <el-input v-model="projectForm.id" placeholder="编码" :readonly="true"/>
         </el-form-item>
         <el-form-item label="父工程分部分项:" >
-          <el-input v-model="projectItem.value" placeholder="请选择工程分部分项" :readonly="true" />
+          <el-input v-model="projectItem.value" placeholder="请选择分部分项" :readonly="true" />
           <!--
           <el-input v-model="projectItem.value" @focus="InitProjectItemTree" placeholder="请选择工程分部分项" :readonly="true" suffix-icon="el-icon-arrow-down"/>
           <el-popover ref="userGroupPopover" v-model="projectItem.flag" placement="bottom-start" width="350" trigger="click">
