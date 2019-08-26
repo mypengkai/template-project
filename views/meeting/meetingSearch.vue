@@ -32,7 +32,7 @@
     <div class="topBar">
       <el-row>
         <el-col :span="6">
-           <span>会议等级:</span>
+           <span>金额等级:</span>
           <el-select v-model="sendData.moneyLevel" placeholder="请选择会议等级">
             <el-option
               v-for="item in options"
@@ -72,7 +72,7 @@
       <el-table-column prop="meeting_theme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meeting_address" label="会议地址" align="center"></el-table-column>
       <el-table-column prop="add_decrease_money" label="增减金额(万元)" align="center"></el-table-column>
-      <el-table-column label="会议等级" align="center">
+      <el-table-column label="金额等级" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.money_level==='one_level'">一级</template>
           <template v-else-if="scope.row.money_level==='two_level'">二级</template>

@@ -24,8 +24,8 @@
           />
         </el-col>
         <el-col :span="6">
-          <span>会议编码:</span>
-          <el-input placeholder="请输入会议编码" v-model="sendData.meetingSummaryNumber"></el-input>
+          <span>会议编号:</span>
+          <el-input placeholder="请输入会议编号" v-model="sendData.meetingSummaryNumber"></el-input>
         </el-col>
 
         <el-col :span="6">
@@ -37,8 +37,8 @@
     <div class="topBar">
       <el-row>
         <el-col :span="6">
-          <span>会议等级:</span>
-          <el-select v-model="sendData.moneyLevel" placeholder="请选择会议等级">
+          <span>金额等级:</span>
+          <el-select v-model="sendData.moneyLevel" placeholder="请选择金额等级">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -77,7 +77,7 @@
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meetingAddress" label="会议地址" align="center"></el-table-column>
       <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
-      <el-table-column label="会议等级" align="center">
+      <el-table-column label="金额等级" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.moneyLevel==='one_level'">一级</template>
           <template v-else-if="scope.row.moneyLevel==='two_level'">二级</template>
@@ -105,6 +105,13 @@
               icon="el-icon-search"
               circle
               @click="findApplyDetail(scope.row.meetingId)"
+            ></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="处理" placement="top">
+            <el-button
+              type="warning" size="small" icon="el-icon-edit"
+              circle
+              @click="dealMeet(scope.row)"
             ></el-button>
           </el-tooltip>
         </template>
@@ -136,6 +143,10 @@
     <el-dialog :visible.sync="dialogChangeDetailVisible" title="查看详情" fullscreen>
       <changeDetail :changeId="changeId" v-if="flag" />
     </el-dialog>
+    <!-- 会议纪要处理 -->
+     <el-dialog :visible.sync="dialogDealmeetVisible" title="会议纪要处理">
+        <dealMeet :nowItem="nowItem" v-if="flag" :moneyLevel="moneyLevel" @cancel="dialogDealmeetVisible=false"></dealMeet>
+    </el-dialog>
   </div>
 </template>
 
@@ -146,6 +157,7 @@ import project from "@/api/project";
 import change from "@/api/change";
 import createChange from "./components/createMeeting";
 import changeDetail from "./meetingDetail";
+import dealMeet from "./components/dealMeet"
 export default {
   inject: ["reload"],
   name: "sendChange",
@@ -193,13 +205,16 @@ export default {
       nowItem: "", //当前对象
       dialogChangeDetailVisible: false, //查看详情弹框
       changeId: "", //详情id
-      flag: false
+      flag: false,
+      dialogDealmeetVisible:false,
+      moneyLevel:'',
     };
   },
   components: {
     SelectTree,
     createChange,
-    changeDetail
+    changeDetail,
+    dealMeet
   },
   created() {
     this.query();
@@ -271,6 +286,16 @@ export default {
       this.$nextTick(() => {
         this.flag = true;
       });
+    },
+    //会议纪要处理
+    dealMeet(data){
+         this.moneyLevel = data.moneyLevel
+         this.nowItem = data.meetingId;
+         this.dialogDealmeetVisible = true
+         this.flag = false;
+         this.$nextTick(()=>{
+             this.flag = true;
+         })
     }
   }
 };

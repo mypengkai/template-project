@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar wrap-class="scrollbar-wrapper">
+  <el-scrollbar wrap-class="scrollbar-wrapper" >
     <el-menu
       unique-opened
       :show-timeout="200"
@@ -55,5 +55,6 @@ export default {
     height: 100%;
   }
 }
+
 </style>
 
