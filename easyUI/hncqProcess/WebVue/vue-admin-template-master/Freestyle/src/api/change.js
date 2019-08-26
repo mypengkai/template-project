@@ -27,12 +27,17 @@ export default {
   applyAddList(data){
     return request.post("/rest/meetingsummary/addMeetingApply",data)
   },
-  // 我的会议记要
+  // 我的参与记要
   applyMyList(data){
     return request.post("/rest/meetingsummary/examineList",data)
   },
   // 记要详情查看
   getApplySee(data){
     return request.post("/rest/meetingsummary/searchMeetingDetails",data)
-  }
+  },
+  //我的会议记要
+  myApply(data){
+     return request.post("/rest/meetingsummary/myApplyMeeting",data)
+  } 
+
 }
