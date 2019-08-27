@@ -1,7 +1,7 @@
 <template>
   <div class="dealMee">
     <el-form ref="form" :model="form" :rules="rules" label-width="150px">
-      <el-form-item label="审核人:" prop="name">
+      <el-form-item label="审核人:" prop="name" v-if="flag">
         <el-input
           placeholder="请选择审核人"
           v-model="form.name"
@@ -11,7 +11,7 @@
           <el-button slot="append" icon="el-icon-search" @click="checkMeetName"></el-button>
         </el-input>
       </el-form-item>
-      <el-form-item label="计划完成时间:" prop="plancompletionTime">
+      <el-form-item label="计划完成时间:" prop="plancompletionTime" v-if="flag">
         <el-date-picker
           type="date"
           placeholder="选择计划完成时间"
@@ -110,36 +110,46 @@ export default {
         moneyLevel: "" // 金额等级
       },
       usersData: [],
-      buttomName:"通过",        // 按钮名称
+      buttomName: "通过", // 按钮名称
       usersTotal: 0,
       dialogusersVisible: false,
       handleUser: null,
-       rules: {
-          name: [ { required: true, message: '请选择审核人', trigger: 'change' }, ],
-          plancompletionTime: [{ required: true, message: '请选择计划完成时间', trigger: 'change' } ],
-          checkExplain: [ { required: true, message: '请输入处理说明', trigger: 'blur' } ]
-        }
+      flag: true,
+      rules: {
+        name: [{ required: true, message: "请选择审核人", trigger: "change" }],
+        plancompletionTime: [
+          { required: true, message: "请选择计划完成时间", trigger: "change" }
+        ],
+        checkExplain: [
+          { required: true, message: "请输入处理说明", trigger: "blur" }
+        ]
+      }
     };
   },
   created() {
     this.form.meetingId = this.nowItem;
     this.users.moneyLevel = this.moneyLevel;
     let info = localStorage.getItem("userInfo");
-    let userinfo = JSON.parse(info) ;
+    let userinfo = JSON.parse(info);
     // 当前登录用户职位
     const zhiwei = userinfo.job_name_en;
-    //console.log(tool.money_position)
-    const money_position = tool.money_position;
+    let money_position = tool.money_position;
 
-    // 金额等级 职位 都想等 是完成
-    money_position.forEach(element => {
-          if(element.moneyLevel == this.moneyLevel && element.job_name_cn == zhiwei){
-                this.buttomName = "完成";
-          }else{
-               this.buttomName = "通过";
-          }
-    });
-
+    //debugger;
+    // 金额等级 职位 都想等 是完
+    for (var i = 0; i < money_position.length; i++) {
+      if (
+        money_position[i].moneyLevel == this.moneyLevel &&
+        money_position[i].job_name_cn == zhiwei
+      ) {
+        this.buttomName = "完成";
+        this.flag = false;
+        break;
+      } else {
+        this.buttomName = "通过";
+        this.flag = true;
+      }
+    }
   },
   methods: {
     checkRealname() {
@@ -155,7 +165,6 @@ export default {
     checkUser() {
       this.form.name = this.handleUser.realname;
       this.form.userId = this.handleUser.id;
-      //this.position = this.handleUser.
       this.dialogusersVisible = false; //弹框消失
     },
     checkMeetName() {
@@ -165,34 +174,29 @@ export default {
     initUsername() {
       user.getNextmeetUser(this.users).then(res => {
         this.usersData = res.data.data.data;
-        console.log(this.usersData,"this.usersData")
+        //console.log(this.usersData, "this.usersData");
       });
     },
     //提交
     onSubmit(form) {
-     this.form.isAdopt=form;
-     this.$refs['form'].validate((valid) => {
-          if (valid) {
-             change.dealApply(this.form).then(res => {
-        if (res.data.ok == true) {
-          this.$message({
-            message: "处理成功",
-            type: "warn"
+      this.form.isAdopt = form;
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          change.dealApply(this.form).then(res => {
+            if (res.data.ok == true) {
+              this.$message({
+                message: "处理成功",
+                type: "warn"
+              });
+              this.$emit("cancel"); //关闭弹框
+              this.$emit("comfirm");
+            }
           });
-           this.$emit("cancel"); //关闭弹框
-           this.$emit("comfirm")
+        } else {
+          console.log("error submit!!");
+          return false;
         }
       });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-
-
-
-
-     
     }
   }
 };
