@@ -2,7 +2,7 @@ import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import Vue from 'vue'
 import { getToken } from '@/utils/auth'
-import {queryButtonPermissionsByUser} from '@/api/login'
+import { queryButtonPermissionsByUser } from '@/api/login'
 
 const tool = {
   //环境自动切换 适应域名
@@ -90,15 +90,15 @@ tool.openView = (url) => {
   let { href } = router.resolve({ path: url });
   window.open(href, '_blank');
 }
-tool.Ltx=(btnName)=>{
-  Vue.nextTick(function(btnName){
-    queryButtonPermissionsByUser(binding.value).then(res=> {
+tool.Ltx = (btnName) => {
+  Vue.nextTick(function (btnName) {
+    queryButtonPermissionsByUser(binding.value).then(res => {
       return res.data.data;
     });
   });
 }
 
-tool.getUrlKey=(name)=>{
+tool.getUrlKey = (name) => {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
 }
 
@@ -128,8 +128,8 @@ tool.isEmptyStr = function (str) {
   }
 }
 
-tool.formatDate = function(dat, parttern) {
-  if(!parttern || parttern === '') parttern = defaultDatePattern
+tool.formatDate = function (dat, parttern) {
+  if (!parttern || parttern === '') parttern = defaultDatePattern
   let o = {
     'M+': dat.getMonth() + 1, // 月份
     'd+': dat.getDate(), // 日
@@ -149,19 +149,44 @@ tool.formatDate = function(dat, parttern) {
     '5': '/u4e94',
     '6': '/u516d'
   };
-  if(/(y+)/.test(parttern)) {
+  if (/(y+)/.test(parttern)) {
     parttern = parttern.replace(RegExp.$1, (dat.getFullYear() + '').substr(4 - RegExp.$1.length));
   }
-  if(/(E+)/.test(parttern)) {
+  if (/(E+)/.test(parttern)) {
     parttern = parttern.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? '/u661f/u671f' : '/u5468') : '') + week[dat.getDay() + '']);
   }
-  for(let k in o) {
-    if(new RegExp('(' + k + ')').test(parttern)) {
+  for (let k in o) {
+    if (new RegExp('(' + k + ')').test(parttern)) {
       parttern = parttern.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
     }
   }
   return parttern;
 }
+// 金额等级 职位
+tool.money_position = [
+  // 金额等级一级
+  {
+    moneyLevel: "one_level",
+    job_name_cn: "FuZongGong"
+  },
+  //金额等级二级
+  {
+    moneyLevel: "two_level",
+    job_name_cn: "FuJingLi"
+  },
+  //金额等级三级
+  {
+    moneyLevel: "three_level",
+    job_name_cn: "ZongJian"
+  },
+  //金额等级四级
+  {
+    moneyLevel: "four_level",
+    job_name_cn: "JingLi"
+  },
+]
+
+
 
 Vue.prototype.$tool = tool
 export default tool;

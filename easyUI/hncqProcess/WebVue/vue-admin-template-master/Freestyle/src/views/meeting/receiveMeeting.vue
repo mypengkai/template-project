@@ -145,7 +145,7 @@
     </el-dialog>
     <!-- 会议纪要处理 -->
      <el-dialog :visible.sync="dialogDealmeetVisible" title="会议纪要处理">
-        <dealMeet :nowItem="nowItem" v-if="flag" :moneyLevel="moneyLevel" @cancel="dialogDealmeetVisible=false"></dealMeet>
+        <dealMeet :nowItem="nowItem" v-if="flag" :moneyLevel="moneyLevel" @cancel="dialogDealmeetVisible=false" @comfirm="query()"></dealMeet>
     </el-dialog>
   </div>
 </template>
