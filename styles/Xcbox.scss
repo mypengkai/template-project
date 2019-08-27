@@ -8,7 +8,7 @@
 }
 
 .p20 {
-  padding: 5px;
+  padding: 20px;
 
 }
 
@@ -85,6 +85,7 @@
   th {
     background-color: #e8e8e8 !important;
     text-align: center !important;
+
     .cell {
       font-weight: bolder;
       color: #303133;
@@ -130,9 +131,11 @@
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.topBar{
-  //padding: 10px;
+
+.topBar {
+  padding: 5px;
 }
+
 .topBar {
   span {
     font-size: 0.8vw;
@@ -269,8 +272,9 @@
     // color: rgb(20, 101, 191)
     // color: rgb(20, 101, 191)
   }
+
   .acceptzh[data-v-67cd2b84] .el-input__inner,
-  .el-input--suffix .el-input__inner{
+  .el-input--suffix .el-input__inner {
     height: 32px;
   }
 
