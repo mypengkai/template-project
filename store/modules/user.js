@@ -52,7 +52,6 @@ const user = {
         })
       })
     },
-
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
@@ -65,7 +64,6 @@ const user = {
         })
       })
     },
-
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
@@ -88,7 +86,6 @@ const user = {
         resolve()
       })
     },
-
     //单点登录
     getinit({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
@@ -111,7 +108,6 @@ const user = {
         })
       })
     },
-
     // 获取用户信息
     GetPermissionList({ commit }) {
       return new Promise((resolve, reject) => {
