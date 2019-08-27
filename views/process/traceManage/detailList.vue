@@ -16,17 +16,17 @@
 
             <el-col :span="10" style="color:#409eff;margin-top:0.5vw;font-weight: bolder">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
-              <template v-if="item.type == 'log'">日志</template>
-              <template v-else-if="item.type == 'selfcheck'">自检</template>
-              <template v-else-if="item.type == 'notice'">通知</template>
-              <template v-else-if="item.type == 'command'">指令</template>
-              <template v-else-if="item.type== 'realcheck'">工序验收</template>
-              <template v-else-if="item.type == 'polling'">巡视</template>
-              <template v-else-if="item.type == 'sideStation'">旁站</template>
-              <template v-else-if="item.type == 'meeting'">会议纪要</template>
+              <template v-if="item.infoLogType == 'log'">日志</template>
+              <template v-else-if="item.infoLogType == 'selfcheck'">自检</template>
+              <template v-else-if="item.infoLogType == 'notice'">通知</template>
+              <template v-else-if="item.infoLogType == 'command'">指令</template>
+              <template v-else-if="item.infoLogType== 'realcheck'">工序验收</template>
+              <template v-else-if="item.infoLogType == 'polling'">巡视</template>
+              <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
+              <template v-else-if="item.infoLogType == 'meeting'">会议纪要</template>
             </el-col>
             <el-col :span="14">
-              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
+              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.infoLogCreateTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -67,16 +67,16 @@
           <el-row>
             <el-col :span="10" style="color:#409eff ; margin-top:0.5vw;font-weight: bolder">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
-              <template v-if="item.type == 'log'">日志</template>
-              <template v-else-if="item.type == 'selfcheck'">自检</template>
-              <template v-else-if="item.type == 'notice'">通知</template>
-              <template v-else-if="item.type== 'realcheck'">工序验收</template>
-              <template v-else-if="item.type == 'polling'">巡视</template>
-              <template v-else-if="item.type == 'command'">指令</template>
-              <template v-else-if="item.type == 'meeting'">会议纪要</template>
+              <template v-if="item.infoLogType == 'log'">日志</template>
+              <template v-else-if="item.infoLogType== 'realcheck'">工序验收</template>
+<!--              <template v-else-if="item.type == 'notice'">通知</template>-->
+              <template v-else-if="item.infoLogType == 'command'">指令</template>
+              <template v-else-if="item.infoLogType == 'polling'">巡视</template>
+              <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
+              <template v-else-if="item.infoLogType == 'meeting'">会议纪要</template>
             </el-col>
             <el-col :span="14">
-              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.createTime}}</div>
+              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.infoLogCreateTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>

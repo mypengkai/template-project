@@ -9,7 +9,8 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img src="../../../../static/timg.jpg" alt class="user-avatar">
-          <span style="display: inline-block;width: 100px;height: 40px;color:#000;vertical-align: inherit;">{{userName}}</span>
+          <span
+            style="display: inline-block;width: 100px;height: 40px;color:#000;vertical-align: inherit;">{{userName}}</span>
           <i class="el-icon-caret-bottom"/>
 
         </div>
@@ -124,6 +125,13 @@
     mounted() {
       this.fn()
       this.getuserName()
+      let nowUserId = localStorage.getItem('userId')
+      request.post('/rest/sysuser/chakan', { id: nowUserId }).then(res => {
+        this.userName = res.data.data.realname
+        let userInfo = JSON.stringify(res.data.data)
+        localStorage.setItem('userInfo', userInfo)
+
+      })
     },
     methods: {
       getuserName() {
@@ -208,7 +216,7 @@
       // 请求接口(登录人信息)
       fn() {
         return request.post('/rest/sysuser/searchSelfMsg').then(res => {
-          localStorage.setItem("userId",res.data.data.id)
+          localStorage.setItem('userId', res.data.data.id)
           if (res.data.respCode == 0) {
             this.uesrList = res.data.data
           }
@@ -315,7 +323,7 @@
 
   .el-icon-caret-bottom {
     /*position: absolute;*/
-    right:0px;
+    right: 0px;
     top: 1.5vw;
     font-size: 12px;
   }

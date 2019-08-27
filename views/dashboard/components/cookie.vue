@@ -26,19 +26,10 @@
           </div>
         </div>
       </el-col>
-     <!-- <el-col :span="6">
-        <div class="grid-content">
-          <div class="noComplete1">
-            <p class="p1 ng-binding">{{data.toBeProcessed}}</p>
-            <p class="p2">通知待处理</p>
-          </div>
-        </div>
-      </el-col>-->
-
       <el-col :span="6">
         <div class="grid-content">
           <div class="noComplete4">
-            <p class="p1 ng-binding">0</p>
+            <p class="p1 ng-binding">{{data.toBeMeeting}}</p>
             <p class="p2">会议待处理</p>
           </div>
         </div>
@@ -60,7 +51,8 @@
         data: {
           toBeSelfChecked: '',
           toBeChecked: '',
-          toBeProcessed: ''
+          toBeProcessed: '',
+          toBeMeeting: ''
         }
       }
     },

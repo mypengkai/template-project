@@ -28,7 +28,7 @@
               </el-select>
               -->
           <span>巡视人/旁站人:</span>
-          <el-input style="width: 200px;" v-model="queryData.userId" placeholder="请输入名字" size="small"></el-input>
+          <el-input style="width: 200px;" v-model="queryData.realName" placeholder="请输入名字" size="small"></el-input>
           <!--  <el-form-item label="巡视人/旁站人:">
 
             </el-form-item>-->
@@ -37,23 +37,23 @@
         <el-col :span="10">
           <span>创建日期:</span>
           <el-date-picker
-            v-model="queryData.starttime"
-            type="datetime"
-            placeholder="选择开始日期时间"
+            v-model="queryData.startTime"
+            type="date"
+            placeholder="选择开始日期"
             size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
+            style="min-width:120px"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
           ></el-date-picker>
           -
           <el-date-picker
-            v-model="queryData.endtime"
-            type="datetime"
-            placeholder="选择结束日期时间"
+            v-model="queryData.endTime"
+            type="date"
+            placeholder="选择结束日期"
             size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
+            style="min-width:120px"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
           ></el-date-picker>
         </el-col>
         <el-col :span="4">
@@ -75,7 +75,7 @@
       </el-row>
     </div>
     <el-table class="textList" :data="tableData" border style="width: 100%;margin-top:20px" height="70vh" fit>
-      <el-table-column prop="realname" label="姓名" align="center"></el-table-column>
+      <el-table-column prop="realname" label="巡视人/旁站人" align="center"></el-table-column>
       <el-table-column prop="pollingNumber" label="巡视次数" align="center" width="300"></el-table-column>
       <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width="300"></el-table-column>
       <el-table-column prop="commandpollingrangeNumber" label="巡视发起指令次数" align="center" width="300"></el-table-column>
@@ -118,8 +118,8 @@
           //查询条件
           userGroupId: '',
           realName: '',
-          starttime: '', // 开始时间
-          endtime: '', // 结束时间
+          startTime: '', // 开始时间
+          endTime: '', // 结束时间
           userName: '', // 姓名
           pageNo: 1, // 当前页
           pageSize: 10, // 每页条数
@@ -177,9 +177,11 @@
       query() {
         request
           .post('/rest/Patrol/patrolStatistics', {
-            userid: this.queryData.userId,
+            realName: this.queryData.realName,
             pageNo: this.queryData.pageNo,
-            pageSize: this.queryData.pageSize
+            pageSize: this.queryData.pageSize,
+            endTime: this.queryData.endTime,
+            startTime: this.queryData.startTime
           })
           .then(res => {
             console.log(res.data.data)

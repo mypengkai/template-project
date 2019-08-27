@@ -25,15 +25,14 @@
       <p>湖南常祁高速验收凭证</p>
       <el-table :data="tableData" style="width: 100%" height="65vh" border class="textList">
         <!-- <el-table-column label="承包单位: 湖南长祁高速"> -->
-        <el-table-column prop="projectName" label="分部分项"></el-table-column>
-        <el-table-column prop="processNumber" label="打印编码" width="120"></el-table-column>
-        <el-table-column prop="Station" label="桩号" width="120"></el-table-column>
-        <!-- </el-table-column> -->
-        <!-- <el-table-column label="监理单位：湖南长祁高速"> -->
-        <el-table-column prop="processname" label="工序名称" width="300"></el-table-column>
-        <el-table-column prop="realitychecktime" label="验收时间" width="200"></el-table-column>
-        <el-table-column prop="realname" label="验收人" width="120"></el-table-column>
-        <el-table-column prop="checkdescribe" label="验收说明" width="120"></el-table-column>
+        <el-table-column prop="projectName" label="分部分项" width="550"></el-table-column>
+        <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
+        <el-table-column prop="processname" label="工序名称"></el-table-column>
+        <el-table-column prop="processNumber" label="打印编码" width="120" align="center"></el-table-column>
+
+        <el-table-column prop="realitychecktime" label="验收时间" width="150" align="center"></el-table-column>
+        <el-table-column prop="realname" label="验收人" width="100" align="center"></el-table-column>
+        <el-table-column prop="checkdescribe" label="验收说明" width="150" align="center"></el-table-column>
         <!-- </el-table-column> -->
       </el-table>
     </div>

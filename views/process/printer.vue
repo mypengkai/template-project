@@ -1,9 +1,9 @@
 <template>
   <div class="printer">
-    <div class="printerHeader">
+    <div class="topBar">
       <el-row>
-        <el-col :span="5">
-          <el-form :inline="true" class="grid-content" style="font-size:.8vw">
+        <el-col :span="6">
+          <el-form :inline="true" class="grid-content">
             <el-form-item label="组织机构：">
               <!--              <select-tree :options="userGroupOption" v-on:noDe="projectOnClick" :props="projectItem"/>-->
               <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
@@ -13,7 +13,7 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="6">
           <el-form :inline="true" class="grid-content">
             <el-form-item label="分部分项：">
               <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
@@ -22,7 +22,7 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <div class="grid-content">
             <span>日期：</span>
             <el-date-picker
@@ -45,7 +45,7 @@
 
       </el-row>
       <el-row>
-        <el-col :span="5">
+        <el-col :span="6">
           <el-form label-width="80px" :model="form">
             <el-form-item label="打印状态:">
               <el-select v-model="form.type" placeholder="请选择" size="small">
@@ -106,17 +106,18 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        max-height="500"
+        height="67vh"
         border
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="50" align="center" v-if="form.type==0"></el-table-column>
-        <el-table-column prop="projectName" label="分部分项"></el-table-column>
-        <el-table-column prop="Station" label="桩号" width="120"></el-table-column>
-        <el-table-column prop="processname" label="工序名称" width="200"></el-table-column>
+        <el-table-column prop="projectName" label="分部分项" width="500"></el-table-column>
+        <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
+        <el-table-column prop="processname" label="工序名称"></el-table-column>
+        <el-table-column prop="processNumber" label="打印编码" width="100"></el-table-column>
         <el-table-column prop="realitychecktime" label="验收时间" width="150" align="center"></el-table-column>
         <el-table-column prop="realname" label="验收人" width="100" align="center"></el-table-column>
-        <el-table-column prop="checkdescribe" label="验收说明" width="120"></el-table-column>
+        <el-table-column prop="checkdescribe" label="验收说明" width="150"></el-table-column>
       </el-table>
     </div>
     <!-- 分页 -->
@@ -299,6 +300,12 @@
 </script>
 <style lang="scss" scoped>
   .printer {
-    padding: 20px;
+    padding: 10px;
+  }
+ /deep/ .el-input--suffix .el-input__inner{
+    height: 30px;
+  }
+  .el-form-item{
+    margin-bottom: 0px;
   }
 </style>

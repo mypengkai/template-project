@@ -29,8 +29,8 @@
     <!-- 查询列表 -->
     <div>
       <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
-        <el-table-column prop="projectitem" label="分部分项"></el-table-column>
-        <el-table-column prop="station" label="桩号" width="180" align="center"></el-table-column>
+        <el-table-column prop="projectitem" label="分部分项" width="500"></el-table-column>
+        <el-table-column prop="station" label="桩号" align="center"></el-table-column>
         <!--<el-table-column label="指令类型" width="110" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.commandType==='1'">安全</template>

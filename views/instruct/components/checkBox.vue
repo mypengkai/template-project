@@ -3,6 +3,7 @@
     <el-form :model="form" label-width="120px">
       <!-- 新增 -->
       <div :class="{reverseAddBox:nowItem=='add'}">
+
         <el-row>
           <el-col :span="12">
             <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
@@ -22,24 +23,28 @@
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="工序类型：" prop="processMDictId" v-if="nowItem =='add'">
-                <el-select v-model="form.processMDictId" placeholder="请选择工序类型" @change="processTypeChangeProcess">
-                  <el-option v-for="item in processMDictOption" :key="item.id" :label="item.processType"
-                             :value="item.id"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="工序：" prop="processSDictId" v-if="nowItem =='add'">
-                <el-select v-model="form.processDictId" placeholder="请选择工序">
-                  <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-col :span="12">
+            <!--    <el-form-item label="工序类型：" prop="processMDictId" v-if="nowItem =='add'">
+                  <el-select v-model="form.processMDictId" placeholder="请选择工序类型" @change="processTypeChangeProcess">
+                    <el-option v-for="item in processMDictOption" :key="item.id" :label="item.processType"
+                               :value="item.id"/>
+                  </el-select>
+                </el-form-item>-->
+
+
+            <el-form-item label="工序类型：" prop="processSDictId" v-if="nowItem =='add'">
+              <!--     <el-select v-model="form.processDictId" placeholder="请选择工序">
+                     <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
+                   </el-select>-->
+
+              <el-select v-model="form.processDictId" placeholder="请选择工序" style="width: 40%;">
+                <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
+              </el-select>
+            </el-form-item>
+
+          </el-col>
           <el-col :span="12">
             <el-form-item style="width:20vw" label="接收人：" v-if="nowItem =='add'" prop="receiveUserName">
               <el-input v-model="form.receiveUserName" :disabled="true">
@@ -47,33 +52,34 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <div class="TimeAndType" v-if="nowItem =='add'">
-              <el-form-item label="计划检查时间：" v-if="nowItem =='add'" prop="planTime">
-                <el-date-picker v-model="form.planCheckTime" type="date" placeholder="选择日期："
-                                value-format="yyyy-MM-dd"></el-date-picker>
-              </el-form-item>
-            </div>
-          </el-col>
-
         </el-row>
+
         <el-row>
           <el-col :span="12">
-            <el-form-item style="width:28vw" label="指令内容：" v-if="nowItem =='add'">
-              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
+            <el-form-item label="计划检查时间：" v-if="nowItem =='add'" prop="planTime">
+              <el-date-picker v-model="form.planCheckTime" type="date" placeholder="选择日期："
+                              value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
           </el-col>
-
           <el-col :span="12">
-            <div class="TimeAndType" v-if="nowItem =='add'">
-              <el-form-item label="计划完成时间：" v-if="nowItem =='add'" prop="planTime">
-                <el-date-picker v-model="form.planFinishTime" type="date" placeholder="选择日期："
-                                value-format="yyyy-MM-dd"></el-date-picker>
-              </el-form-item>
-            </div>
+            <el-form-item label="计划完成时间：" v-if="nowItem =='add'" prop="planTime">
+              <el-date-picker v-model="form.planFinishTime" type="date" placeholder="选择日期："
+                              value-format="yyyy-MM-dd"></el-date-picker>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
+
+          <el-row>
+            <el-col :span="24">
+              <el-form-item style="width:28vw" label="指令内容：" v-if="nowItem =='add'">
+                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
+              </el-form-item>
+            </el-col>
+
+          </el-row>
+
+
           <el-col :span="12">
             <el-form-item label="图片选择：" v-if="nowItem =='add'" prop>
               <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers"
@@ -687,10 +693,14 @@
           this.initProcessByTypeId(this.processMDictOption[0].id)
         })
       },
-      initProcessByTypeId(processTypeId) {   // 初始化新增工序通过工序类型id
+      initProcessByTypeId(codeid) {   // 初始化新增工序通过工序类型id
         this.processSDictOption = []  //先清空
-        request.post('/rest/process/getList', { processTypeId: processTypeId }).then(res => {
-          this.processSDictOption = res.data.data.data
+        /* request.post('/rest/process/getList', { processTypeId: processTypeId }).then(res => {
+           this.processSDictOption = res.data.data.data
+         })*/
+        this.processSDictOption.unshift({ process: '全部' })
+        request.post('/rest/processCheck/numberSdData', { codeid: codeid }).then(res => {
+          this.processSDictOption = res.data.data
         })
       },
       processTypeChangeProcess(data) {    // 点击新增工序--工序类型改变工序

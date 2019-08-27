@@ -27,22 +27,22 @@
           <span>日期:</span>
           <el-date-picker
             v-model="queryData.startTime"
-            type="datetime"
-            placeholder="选择开始日期时间"
+            type="date"
+            placeholder="选择开始日期"
             size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
+            style="min-width:120px"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
           ></el-date-picker>
           -
           <el-date-picker
             v-model="queryData.endTime"
-            type="datetime"
-            placeholder="选择结束日期时间"
+            type="date"
+            placeholder="选择结束日期"
             size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
+            style="min-width:120px"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
           ></el-date-picker>
         </el-col>
 
@@ -77,9 +77,9 @@
       </el-row>
 
     </div>
-    <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:10px" height="68vh">
-      <el-table-column prop="departname" label="单位" min-width="80"></el-table-column>
-      <el-table-column prop="realname" label="姓名" min-width="80"></el-table-column>
+    <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:10px" height="70vh">
+      <el-table-column prop="departname" label="组织机构" min-width="80"></el-table-column>
+      <el-table-column prop="realname" label="用户姓名" min-width="80"></el-table-column>
       <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
       <el-table-column prop="CheckNumber" label="验收" min-width="80"></el-table-column>
       <!-- <el-table-column prop="date" label="日志" min-width="80"></el-table-column> -->
