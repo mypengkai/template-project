@@ -61,7 +61,7 @@
 
       <el-row>
         <el-col :span="12">
-          <el-form-item label="组织机构:">
+          <el-form-item label="组织机构:" prop="departId">
             <el-select
               v-model="myApplyChangeForm.departId"
               placeholder="请选择"
@@ -77,7 +77,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="分部分项:">
+          <el-form-item label="分部分项:" prop="projectItemId">
             <select-tree
               clearable
               :options="projectItemTreeOption"
@@ -113,7 +113,7 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="会议主持人:">
+          <el-form-item label="会议主持人:" prop="meetingName">
             <el-input
               placeholder="请选择会议主持人"
               v-model="myApplyChangeForm.meetingName"
@@ -125,7 +125,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="会议记录人:">
+          <el-form-item label="会议记录人:" prop="meetingNoteName">
             <el-input
               placeholder="请选择会议记录人"
               v-model="myApplyChangeForm.meetingNoteName"
@@ -138,7 +138,7 @@
         </el-col>
       </el-row>
 
-      <el-form-item label="审核人:">
+      <el-form-item label="审核人:" prop="handleUserName">
         <el-input
           placeholder="请选择审核人"
           v-model="myApplyChangeForm.handleUserName"
@@ -149,7 +149,7 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item label="抄送人:">
+      <el-form-item label="抄送人:" prop="copyUserName">
         <el-input
           placeholder="请选择抄送人"
           v-model="myApplyChangeForm.copyUserName"
@@ -162,7 +162,7 @@
 
       <el-row>
         <el-col :span="12">
-          <el-form-item label="开会时间:">
+          <el-form-item label="开会时间:" prop="meetingDatetime">
             <el-date-picker
               v-model="myApplyChangeForm.meetingDatetime"
               type="date"
@@ -175,7 +175,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="计划完成时间:">
+          <el-form-item label="计划完成时间:" prop="plancompletionTime">
             <el-date-picker
               v-model="myApplyChangeForm.plancompletionTime"
               type="date"
@@ -218,8 +218,7 @@
       <el-form-item>
         <div style="display: flex;justify-content:flex-end">
           <el-button @click="$emit('cancel')">取 消</el-button>
-          <el-button type="primary" @click="submitForm()">确 定</el-button>
-        
+          <el-button type="primary" @click="submitForm('myApplyChangeForm')">确 定</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -441,7 +440,7 @@ export default {
         meetingSummaryNumber: "", // 变更编号
         departId: "", //组织机构id
         projectItemId: "", //工程分部分项i
-        projectItem:'',
+        projectItem: "",
         userId: "", //下一个审核人id
         makeCopy: "", //抄送人id
         changeToken: "1", // 申请
@@ -468,12 +467,19 @@ export default {
       },
       type: "", // 弹框类型
       rules: {
-        addDecreaseMoney: [
-          { required: true, message: "请输入预估金额", trigger: "blur" }
-        ],
-        addDecreaseMoney: [
-          { required: true, trigger: "blur", validate: checkAmountMoney }
-        ]
+        addDecreaseMoney: [{ required: true, message: "请输入增减金额", trigger: "blur" } ],
+        meetingTheme: [ { required: true, message: "请输入会议主题", trigger: "blur" } ],
+        meetingAddress: [{ required: true, message: "请输入会议地点", trigger: "change" } ],
+        addDecreaseNumber: [{ required: true, message: "请输入增减数量", trigger: "blur" } ],
+        departId: [{ required: true, message: "请选择组织机构", trigger: "change" }  ],
+        projectItemId: [ { required: true, message: "请选择分部分项", trigger: "change" } ],
+        meetingName: [{ required: true, message: "请选择会议主持人", trigger: "change" }  ],
+        meetingNoteName: [ { required: true, message: "请选择会议记录人", trigger: "change" } ],
+        handleUserName: [{ required: true, message: "请选择审核人", trigger: "change" } ],
+        copyUserName: [{ required: true, message: "请选择抄送人", trigger: "change" } ],
+        meetingDatetime: [ { required: true, message: "请选择开会时间", trigger: "change" }  ],
+        plancompletionTime: [ { required: true, message: "请选择计划完成时间", trigger: "change" }  ]
+         
       }, //表单校验规则
       userGroupDefaultProps: {
         // 组织机构树显示
@@ -531,16 +537,14 @@ export default {
     SelectTree,
     changeSelectPerson
   },
-  props: {
-    nowItem: {
-      type: String,
-      required: true
-    },
-  },
+  // props: {
+  //   nowItem: {
+  //     type: String,
+  //     required: true
+  //   },
+
+  // },
   watch: {
-    nowItem(newVal) {
-        console.log(newVal);
-    },
     myApplyChangeForm: {
       handler(newVal, oldVal) {
         if (this.$tool.isNotEmptyStr(newVal.addDecreaseMoney)) {
@@ -548,14 +552,11 @@ export default {
         }
       },
       deep: true
-    },
+    }
   },
   created() {
     this.initUserGrouptTree();
     this.getChangeName();
-    //this.initDealMeet();
-    //this.myApplyChangeForm = this.formData;
-    
   },
   methods: {
     //记要名称
@@ -744,106 +745,102 @@ export default {
       this.handleQueryParam.moneyLevel = this.myApplyChangeForm.moneyLevel;
     },
     submitForm(form) {
-      if (this.myApplyChangeForm.meetingTheme == "") {
-        this.$message({
-          message: "请输入会议主题",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.meetingAddress == "") {
-        this.$message({
-          message: "请输入会议地点",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.addDecreaseMoney == "") {
-        this.$message({
-          message: "请输入增减金额",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.departId == "") {
-        this.$message({
-          message: "请选择组织机构",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.projectItemId == "") {
-        this.$message({
-          message: "请选择分部分项",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.meetingName == "") {
-        this.$message({
-          message: "请选择会议主持人",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.meetingNoteName == "") {
-        this.$message({
-          message: "请选择会议记录人",
-          type: "warn"
-        });
-        return false;
-      }
-
-      if (this.myApplyChangeForm.userId == "") {
-        this.$message({
-          message: "请选择审核人",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.makeCopy == "") {
-        this.$message({
-          message: "请选择抄送人",
-          type: "warn"
-        });
-        return false;
-      }
-
-      if (this.myApplyChangeForm.meetingDatetime == "") {
-        this.$message({
-          message: "请选择会议时间",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.myApplyChangeForm.plancompletionTime == "") {
-        this.$message({
-          message: "请选择计划时间",
-          type: "warn"
-        });
-        return false;
-      }
-
-      change.applyAddList(this.myApplyChangeForm).then(res => {
-        this.$message({
-          message: "创建成功",
-          type: "success"
-        });
-        this.myApplyChangeForm = "";
-        this.$emit("cancel"); //关闭弹框
-        this.$emit("comfirm"); //确认
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          change.applyAddList(this.myApplyChangeForm).then(res => {
+            this.$message({
+              message: "创建成功",
+              type: "success"
+            });
+            this.myApplyChangeForm = "";
+            this.$emit("cancel"); //关闭弹框
+            this.$emit("comfirm"); //确认
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
       });
-    },
-    // // 处理数据回填
-    // initDealMeet(){
-    //     change.getApplySee({ meetingId: this.nowItem }).then(res=>{
-    //           this.myApplyChangeForm = res.data.data.MeetingInfo;
-    //           console.log(this.myApplyChangeForm)
-    //           this.myApplyChangeForm.meetingName = this.myApplyChangeForm.meetingHostName;
-    //           this.myApplyChangeForm.meetingNoteName = this.myApplyChangeForm.meetingNoteTakerName;
-    //     })
+    }
+    // if (this.myApplyChangeForm.meetingTheme == "") {
+    //   this.$message({
+    //     message: "请输入会议主题",
+    //     type: "warn"
+    //   });
+    //   return false;
     // }
-  
+    // if (this.myApplyChangeForm.meetingAddress == "") {
+    //   this.$message({
+    //     message: "请输入会议地点",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+    // if (this.myApplyChangeForm.addDecreaseMoney == "") {
+    //   this.$message({
+    //     message: "请输入增减金额",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+    // if (this.myApplyChangeForm.departId == "") {
+    //   this.$message({
+    //     message: "请选择组织机构",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+    // if (this.myApplyChangeForm.projectItemId == "") {
+    //   this.$message({
+    //     message: "请选择分部分项",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+    // if (this.myApplyChangeForm.meetingName == "") {
+    //   this.$message({
+    //     message: "请选择会议主持人",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+    // if (this.myApplyChangeForm.meetingNoteName == "") {
+    //   this.$message({
+    //     message: "请选择会议记录人",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+
+    // if (this.myApplyChangeForm.userId == "") {
+    //   this.$message({
+    //     message: "请选择审核人",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+    // if (this.myApplyChangeForm.makeCopy == "") {
+    //   this.$message({
+    //     message: "请选择抄送人",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+
+    // if (this.myApplyChangeForm.meetingDatetime == "") {
+    //   this.$message({
+    //     message: "请选择会议时间",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
+    // if (this.myApplyChangeForm.plancompletionTime == "") {
+    //   this.$message({
+    //     message: "请选择计划时间",
+    //     type: "warn"
+    //   });
+    //   return false;
+    // }
   }
 };
 </script>

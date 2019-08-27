@@ -13,7 +13,7 @@
             ></el-option>
           </el-select>
         </el-col>
-        
+
         <el-col :span="6">
           <span>分部分项:</span>
           <select-tree
@@ -24,7 +24,7 @@
             ref="getSelectData"
           />
         </el-col>
-         <el-col :span="6" style="margin-left:25%">
+        <el-col :span="6" style="margin-left:25%">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
@@ -41,12 +41,11 @@
             type="primary"
             icon="el-icon-circle-plus-outline"
             class="pan-btn light-blue-btn"
-            @click="apply('add')"
+            @click="apply()"
           >创建</el-button>
         </el-col>
       </el-row>
     </div>
-   
 
     <!-- 查询列表 -->
     <el-table
@@ -90,9 +89,17 @@
               @click="findApplyDetail(scope.row.id)"
             ></el-button>
           </el-tooltip>
-           <el-tooltip class="item" effect="dark" content="修改" placement="top" v-if="scope.row.changeToken==='1'">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="修改"
+            placement="top"
+            v-if="scope.row.changeToken==='1'"
+          >
             <el-button
-              type="warning" size="small" icon="el-icon-edit"
+              type="warning"
+              size="small"
+              icon="el-icon-edit"
               circle
               @click="dealMeet(scope.row.id)"
             ></el-button>
@@ -115,12 +122,25 @@
 
     <!-- 弹框 -->
     <el-dialog
-      :title="nowItem=='add' ? '创建会议记要' : '修改变更' "
+      title="创建会议记要"
       :visible.sync="dialogFormVisible"
       class="dialogBox"
       width="80%"
     >
-      <createChange :nowItem="nowItem"   @cancel="dialogFormVisible=false" @comfirm="query" v-if="creatFlag" />
+      <createChange
+        @cancel="dialogFormVisible=false"
+        @comfirm="query"
+        v-if="creatFlag"
+      />
+    </el-dialog>
+    <!-- 修改 -->
+    <el-dialog title="修改变更" :visible.sync="dialogdealMeetVisible" class="dialogBox" >
+      <amendMeet
+        :nowItem="nowItem"
+        @cancel="dialogdealMeetVisible=false"
+        @comfirm="query"
+        v-if="amandFlag"
+      />
     </el-dialog>
 
     <!-- 查看弹框 -->
@@ -137,7 +157,7 @@ import project from "@/api/project";
 import change from "@/api/change";
 import createChange from "./components/createMeeting";
 import changeDetail from "./meetingDetail";
-
+import amendMeet from "./components/amendMeet"
 export default {
   inject: ["reload"],
   name: "sendChange",
@@ -155,7 +175,7 @@ export default {
         departId: "", //部门id
         projectItemId: "", // 分部分项id
         pageNo: 1, // 当前页
-        pageSize: 10, // 每页条数
+        pageSize: 10 // 每页条数
       },
       myApplyChangePageList: [], //我申请的变更
       dialogFormVisible: false, //默认弹框不显示
@@ -163,13 +183,16 @@ export default {
       dialogChangeDetailVisible: false, //查看详情弹框
       changeId: "", //详情id
       flag: false,
-      creatFlag:false
+      creatFlag: false,
+      amandFlag:false,
+      dialogdealMeetVisible: false
     };
   },
   components: {
     SelectTree,
     createChange,
     changeDetail,
+    amendMeet
   },
   created() {
     this.query();
@@ -228,15 +251,13 @@ export default {
       // 重置按钮
       this.reload();
     },
-    apply(item) {
+    apply() {
       //申请
-      this.nowItem = item;
-      console.log(this.nowItem)
       this.dialogFormVisible = true; //显示弹框
       this.creatFlag = false;
-      this.$nextTick(()=>{
-          this.creatFlag = true;
-      })
+      this.$nextTick(() => {
+        this.creatFlag = true;
+      });
     },
     findApplyDetail(item) {
       //查看详情
@@ -248,12 +269,12 @@ export default {
       });
     },
     // 修改
-    dealMeet(id){
-      this.changeId = id;
-      this.dialogFormVisible = true;
-      this.flag = false;
+    dealMeet(data) {
+      this.nowItem = data;
+      this.dialogdealMeetVisible = true;
+      this.amandFlag = false;
       this.$nextTick(() => {
-        this.flag = true;
+        this.amandFlag = true;
       });
     }
   }
