@@ -30,8 +30,8 @@
     <!-- 查询列表 -->
     <div>
       <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
-        <el-table-column prop="project" label="分部分项"></el-table-column>
-        <el-table-column prop="Station" label="桩号" width="180" align="center"></el-table-column>
+        <el-table-column prop="project" label="分部分项" width="555"></el-table-column>
+        <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
         <!--<el-table-column label="指令类型" width="110" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.commandType==='1'">安全</template>

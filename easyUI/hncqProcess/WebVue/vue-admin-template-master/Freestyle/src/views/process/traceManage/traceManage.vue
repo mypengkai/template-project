@@ -6,7 +6,8 @@
           <el-form :inline="true" class="grid-content" style="font-size:.8vw">
             <el-form-item label="组织机构：">
               <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
-                <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
+                <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                           :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -14,13 +15,14 @@
         <el-col :span="5" v-if="tabPosition == 'first'">
           <el-form :inline="true" class="grid-content">
             <el-form-item label="分部分项：">
-                <!--     <select-tree
-                       :options="projectItemOptions"
-                       v-on:noDe="handleCheckChangeUnit"
-                       :props="defaultPropsProject"
-                     />projectItemOptions
-                   </el-form-item>-->
-                <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick"/>
+              <!--     <select-tree
+                     :options="projectItemOptions"
+                     v-on:noDe="handleCheckChangeUnit"
+                     :props="defaultPropsProject"
+                   />projectItemOptions
+                 </el-form-item>-->
+              <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                           v-on:noDe="projectItemOnClick"/>
             </el-form-item>
           </el-form>
         </el-col>
@@ -69,13 +71,11 @@
           <div class="grid-content" id="gridAdd">
             <span>类型：</span>
             <el-radio-group v-model="searchType">
-              <el-radio label>全部</el-radio>
-<!--              <el-radio label="log">日志</el-radio>-->
-<!--              <el-radio label="notice">通知</el-radio>-->
+              <!--              <el-radio label="">全部</el-radio>-->
+              <el-radio label="realcheck">工序验收</el-radio>
               <el-radio label="command">指令</el-radio>
               <el-radio label="polling">巡视</el-radio>
               <el-radio label="sideStation">旁站</el-radio>
-              <el-radio label="realcheck">工序验收</el-radio>
               <el-radio label="meeting">会议纪要</el-radio>
               <!-- <el-radio label="selfcheck">自检</el-radio>-->
             </el-radio-group>
@@ -138,6 +138,7 @@
     },
     data() {
       return {
+        // radio: 'realcheck',
         userGroupDefaultProps: {  //组织机构tree props
           children: 'children',
           label: 'name'
@@ -148,7 +149,7 @@
         },
         department: '',
         departmentProject: '',
-        searchType: '',
+        searchType: 'realcheck',
         tabPosition: 'first',
         dateFrom: '', //日期
         dateTo: '',
@@ -185,7 +186,9 @@
     created() {
       this.initUserGroup()
       this.projecQuery()
+      // this.projecQueryAll()
       this.peopleQuery()
+      // this.peopleQueryAll()
     },
     mounted() {
     },
@@ -214,32 +217,32 @@
       projectItemOnClick(data) {
         this.form.projectId = data.id
       },
-/*
+      /*
 
-      //选中的数据(tree)
-      noDe(data, checked, indeterminate) {
-        if (data.children.length > 0) {
-          this.from.projectName == ''
-          this.$message({
-            message: '组织机构只能选择标段'
-          })
-          return false
-        }
-        if (data.children.length = 0) {
-          this.from.projectName = data.name
-          this.from.projectId = data.id
-        }
-        // 工程查询
-        request
-          .post('/rest/projectItemInfo/getList', {
-            orgId: this.from.projectId,
-            'X-AUTH-TOKEN': token
-          })
-          .then(res => {
-            this.projectItemOptions = res.data.data
-          })
-      },
-*/
+            //选中的数据(tree)
+            noDe(data, checked, indeterminate) {
+              if (data.children.length > 0) {
+                this.from.projectName == ''
+                this.$message({
+                  message: '组织机构只能选择标段'
+                })
+                return false
+              }
+              if (data.children.length = 0) {
+                this.from.projectName = data.name
+                this.from.projectId = data.id
+              }
+              // 工程查询
+              request
+                .post('/rest/projectItemInfo/getList', {
+                  orgId: this.from.projectId,
+                  'X-AUTH-TOKEN': token
+                })
+                .then(res => {
+                  this.projectItemOptions = res.data.data
+                })
+            },
+      */
 
       handleCheckChangeUnit(data) {
         this.from.unitsName = data.projectItem
@@ -254,19 +257,52 @@
           this.peopleQuery()
         }
       },
+      /*      projecQueryAll() {
+              // 工程查询
+              request.post('/rest/mark/ThisList', {
+                pageNo: 1,
+                pageSize: 10,
+                startTime: this.dateFrom, // 起始时间
+                endTime: this.dateTo, // 结束时间
+                projectid: this.from.unitsId, //工程ID
+                orderby: this.active + 1, // 筛选(时间，类型，人员)
+                type: '' // 工程   人员
+              })
+                .then(res => {
+                  this.conentOptions = res.data.data.data
+
+                })
+            },*/
+      /*      peopleQueryAll() {
+              // 人员查询
+              request.post('/rest/mark/ThisList', {
+                pageNo: 1,
+                pageSize: 10,
+                startTime: this.dateFrom,
+                endTime: this.dateTo,
+                searchname: this.username,
+                orderby: this.active + 1,
+                type: ''
+              })
+                .then(res => {
+
+                  this.userOptions = res.data.data.data
+                  // console.log(this.userOptions, "this.userOptions");
+                })
+            },*/
+
       projecQuery() {
         // 工程查询
-        request
-          .post('/rest/mark/chakan', {
-            'X-AUTH-TOKEN': token,
-            pageNo: 1,
-            pageSize: 10,
-            startTime: this.dateFrom, // 起始时间
-            endTime: this.dateTo, // 结束时间
-            projectid: this.from.unitsId, //工程ID
-            orderby: this.active + 1, // 筛选(时间，类型，人员)
-            type: this.searchType // 工程   人员
-          })
+        request.post('/rest/mark/chakan', {
+          'X-AUTH-TOKEN': token,
+          pageNo: 1,
+          pageSize: 10,
+          startTime: this.dateFrom, // 起始时间
+          endTime: this.dateTo, // 结束时间
+          projectid: this.from.unitsId, //工程ID
+          orderby: this.active + 1, // 筛选(时间，类型，人员)
+          type: this.searchType // 工程   人员
+        })
           .then(res => {
             this.conentOptions = res.data.data.data
 
@@ -274,18 +310,18 @@
       },
       peopleQuery() {
         // 人员查询
-        request
-          .post('/rest/mark/chakan', {
-            'X-AUTH-TOKEN': token,
-            pageNo: 1,
-            pageSize: 10,
-            startTime: this.dateFrom,
-            endTime: this.dateTo,
-            searchname: this.username,
-            orderby: this.active + 1,
-            type: this.searchType
-          })
+        request.post('/rest/mark/chakan', {
+          'X-AUTH-TOKEN': token,
+          pageNo: 1,
+          pageSize: 10,
+          startTime: this.dateFrom,
+          endTime: this.dateTo,
+          searchname: this.username,
+          orderby: this.active + 1,
+          type: this.searchType
+        })
           .then(res => {
+
             this.userOptions = res.data.data.data
             // console.log(this.userOptions, "this.userOptions");
           })
