@@ -71,58 +71,30 @@
           <th>变更理由</th>
           <td>{{changeInfo.changeReason}}</td>
         </tr>
-
-        <tr>
-          <th>抄送人</th>
-          <td>{{Newmeetnames}}</td>
-          <th>创建时间</th>
-          <td>{{Newmeettimes}}</td>
-          <th>计划完成时间</th>
-          <td>{{Newplantimes}}</td>
-        </tr>
-        <!-- <tr v-for="(node,index) in newChangInfo.role" :key="index">
-          <template v-if="node.state==0">
-            <th>发起人</th>
-            <td>{{node.userName}}</td>
-            <th>创建时间</th>
-            <td>{{node.createTime}}</td>
-            <th>计划完成时间</th>
-            <td>{{node.plancompletionTime}}</td>
-          </template>
-          <template v-if="node.state==2">
-            <th>备案人</th>
-            <td>{{node.userName}}</td>
-            <th>创建时间</th>
-            <td>{{node.createTime}}</td>
-            <th>计划完成时间</th>
-            <td>{{node.plancompletionTime}}</td>
-          </template>
-        </tr> -->
       </table>
-      <el-timeline>
+      <el-timeline class="elTimeline">
         <el-timeline-item
           :timestamp="node.createTime"
           placement="top"
-          v-for="(node,index) in newChangInfo.role" 
+          v-for="(node,index) in newChangInfo.role"
           :key="index"
-         
         >
-          <el-card  v-if="node.state==2">
+          <el-card v-if="node.state==2">
             <h4>审核人：{{node.userName}}</h4>
             <p>处理时间：{{node.createTime}}</p>
             <p>计划完成时间：{{node.createTime}}</p>
           </el-card>
-          <el-card  v-if="node.state==0">
+          <el-card v-if="node.state==0">
             <h4>发起人:{{node.userName}}</h4>
             <p>创建时间：{{node.createTime}}</p>
             <p>计划完成时间：{{node.createTime}}</p>
           </el-card>
-          <el-card  v-if="node.state==1">
+          <el-card v-if="node.state==1">
             <h4>备案人：{{node.userName}}</h4>
             <p>处理时间：{{node.createTime}}</p>
             <p>计划完成时间：{{node.createTime}}</p>
           </el-card>
-          <el-card  v-if="node.state==3">
+          <el-card v-if="node.state==3">
             <h4>抄送人：{{node.userName}}</h4>
             <p>处理时间：{{node.createTime}}</p>
             <p>计划完成时间：{{node.createTime}}</p>
@@ -133,7 +105,7 @@
 
     <div class="block">
       <el-timeline>
-        <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="primary">
+        <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key">
           <table
             border="0"
             cellspacing="0"
@@ -204,43 +176,36 @@
               <th>变更理由</th>
               <td>{{item.publicData.changeReason}}</td>
             </tr>
-
-            <tr>
-              <th>抄送人</th>
-              <td>{{Oldmeetnames}}</td>
-              <th>创建时间</th>
-              <td>{{Oldmeettimes}}</td>
-              <th>计划完成时间</th>
-              <td>{{Oldplantimes}}</td>
-            </tr>
-
-            <tr v-for="(value,index) in item.role" :key="index">
-              <template v-if="value.state==0">
-                <th>发起人</th>
-                <td>{{value.userName}}</td>
-                <th>创建时间</th>
-                <td>{{value.createTime}}</td>
-                <th>计划完成时间</th>
-                <td>{{value.plancompletionTime}}</td>
-              </template>
-              <template v-if="value.state==2">
-                <th>备案人</th>
-                <td>{{value.userName}}</td>
-                <th>创建时间</th>
-                <td>{{value.createTime}}</td>
-                <th>计划完成时间</th>
-                <td>{{value.plancompletionTime}}</td>
-              </template>
-              <template v-if="value.state==1">
-                <th>审核人</th>
-                <td>{{value.userName}}</td>
-                <th>处理时间</th>
-                <td>{{value.createTime}}</td>
-                <th>计划完成时间</th>
-                <td>{{value.plancompletionTime}}</td>
-              </template>
-            </tr>
           </table>
+          <el-timeline class="elTimeline">
+            <el-timeline-item
+              :timestamp="node.createTime"
+              placement="top"
+              v-for="(node,index) in item.role"
+              :key="index"
+            >
+              <el-card v-if="node.state==2">
+                <h4>审核人：{{node.userName}}</h4>
+                <p>处理时间：{{node.createTime}}</p>
+                <p>计划完成时间：{{node.createTime}}</p>
+              </el-card>
+              <el-card v-if="node.state==0">
+                <h4>发起人:{{node.userName}}</h4>
+                <p>创建时间：{{node.createTime}}</p>
+                <p>计划完成时间：{{node.createTime}}</p>
+              </el-card>
+              <el-card v-if="node.state==1">
+                <h4>备案人：{{node.userName}}</h4>
+                <p>处理时间：{{node.createTime}}</p>
+                <p>计划完成时间：{{node.createTime}}</p>
+              </el-card>
+              <el-card v-if="node.state==3">
+                <h4>抄送人：{{node.userName}}</h4>
+                <p>处理时间：{{node.createTime}}</p>
+                <p>计划完成时间：{{node.createTime}}</p>
+              </el-card>
+            </el-timeline-item>
+          </el-timeline>
         </el-timeline-item>
       </el-timeline>
     </div>
@@ -283,47 +248,47 @@ export default {
         for (let key in res.data.data.log) {
           if (key === "0") {
             this.newChangInfo = res.data.data.log[key];
-            let newArray = this.newChangInfo.role;
-            let meetingName = "";
-            let statetime = "";
-            let plantime = "";
-            newArray.forEach(element => {
-              if (element.state == 3) {
-                meetingName += element.userName + ",";
-                statetime = element.createTime;
-                plantime = element.plancompletionTime;
-              }
-            });
-            this.Newmeettimes = statetime;
-            this.Newmeetnames = meetingName.substring(
-              0,
-              meetingName.length - 1
-            );
-            this.Newplantimes = plantime;
+            // let newArray = this.newChangInfo.role;
+            // let meetingName = "";
+            // let statetime = "";
+            // let plantime = "";
+            // newArray.forEach(element => {
+            //   if (element.state == 3) {
+            //     meetingName += element.userName + ",";
+            //     statetime = element.createTime;
+            //     plantime = element.plancompletionTime;
+            //   }
+            // });
+            // this.Newmeettimes = statetime;
+            // this.Newmeetnames = meetingName.substring(
+            //   0,
+            //   meetingName.length - 1
+            // );
+            // this.Newplantimes = plantime;
           } else {
             this.historyChangeInfoKey.push(index);
             this.historyChangeInfo.push(res.data.data.log[key]);
 
-            this.historyChangeInfo.forEach(value => {
-              let OmeetingName = "";
-              let Ostatetime = "";
-              let Oplantimes = "";
-              let items = value.role;
+            // this.historyChangeInfo.forEach(value => {
+            //   let OmeetingName = "";
+            //   let Ostatetime = "";
+            //   let Oplantimes = "";
+            //   let items = value.role;
 
-              items.forEach(vm => {
-                if (vm.state == 3) {
-                  OmeetingName += vm.userName + ",";
-                  Ostatetime = vm.createTime;
-                  Oplantimes = vm.plancompletionTime;
-                }
-              });
-              this.Oldmeettimes = Ostatetime;
-              this.Oldmeetnames = OmeetingName.substring(
-                0,
-                OmeetingName.length - 1
-              );
-              this.Oldplantimes = Oplantimes;
-            });
+            //   items.forEach(vm => {
+            //     if (vm.state == 3) {
+            //       OmeetingName += vm.userName + ",";
+            //       Ostatetime = vm.createTime;
+            //       Oplantimes = vm.plancompletionTime;
+            //     }
+            //   });
+            //   this.Oldmeettimes = Ostatetime;
+            //   this.Oldmeetnames = OmeetingName.substring(
+            //     0,
+            //     OmeetingName.length - 1
+            //   );
+            //   this.Oldplantimes = Oplantimes;
+            // });
             index++;
           }
         }
@@ -383,8 +348,15 @@ td {
 .current {
   padding: 0 0 0 73px;
 }
+/deep/.el-card__body {
+  padding: 0 20px;
+}
 .detail {
-  height: 100%;
+  height: 80vh;
+  padding: 0 30px;
   overflow-x: hidden;
+  .elTimeline {
+    padding: 10px 40px;
+  }
 }
 </style>

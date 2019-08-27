@@ -42,6 +42,9 @@ export default {
   // 收到记要处理
   dealApply(data){
     return request.post("/rest/meetingsummary/meetingExamine",data)
+  },
+  // 修改会议记要
+  amendApply(data){
+    return request.post("/rest/meetingsummary/updateMeetingApply",data)
   }
-
 }

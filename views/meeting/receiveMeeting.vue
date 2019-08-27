@@ -107,7 +107,7 @@
               @click="findApplyDetail(scope.row.meetingId)"
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="处理" placement="top">
+          <el-tooltip class="item" effect="dark" content="处理" placement="top" v-if="scope.row.changeToken !='7'">
             <el-button
               type="warning" size="small" icon="el-icon-edit"
               circle
@@ -193,7 +193,7 @@ export default {
       sendData: {
         departId: "", //部门id
         projectCode: "", // 分部分项id
-        isAwaitExamine: "1", // 待审核，已审核
+        isAwaitExamine: "0", // 待审核，已审核
         meetingTheme: "", // 会议记要名称
         pageNo: 1, // 当前页
         pageSize: 10, // 每页条数
