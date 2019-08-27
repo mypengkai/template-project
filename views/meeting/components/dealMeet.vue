@@ -1,7 +1,7 @@
 <template>
   <div class="dealMee">
-    <el-form ref="form" :model="form" label-width="150px">
-      <el-form-item label="审核人:">
+    <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+      <el-form-item label="审核人:" prop="name">
         <el-input
           placeholder="请选择审核人"
           v-model="form.name"
@@ -11,17 +11,7 @@
           <el-button slot="append" icon="el-icon-search" @click="checkMeetName"></el-button>
         </el-input>
       </el-form-item>
-      <el-form-item label="处理结果:">
-        <el-select v-model="form.isAdopt" placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="计划完成时间:">
+      <el-form-item label="计划完成时间:" prop="plancompletionTime">
         <el-date-picker
           type="date"
           placeholder="选择计划完成时间"
@@ -30,7 +20,7 @@
           format="yyyy-MM-dd"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="处理说明:">
+      <el-form-item label="处理说明:" prop="checkExplain">
         <el-input :rows="4" type="textarea" v-model="form.checkExplain" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="备注:">
@@ -39,7 +29,8 @@
       <el-form-item>
         <div style="display:flex;justify-content:flex-end">
           <el-button @click="$emit('cancel')">取消</el-button>
-          <el-button type="primary" @click="onSubmit">确定</el-button>
+          <el-button type="warning" @click="onSubmit('0')">不通过</el-button>
+          <el-button type="primary" @click="onSubmit('1')">{{buttomName}}</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -91,6 +82,7 @@
 <script>
 import user from "@/api/user.js";
 import change from "@/api/change.js";
+import tool from "@/utils/common.js";
 export default {
   props: {
     moneyLevel: {
@@ -111,16 +103,6 @@ export default {
         plancompletionTime: "", // 计划完成时间
         remarks: ""
       },
-      options: [
-        {
-          value: "0",
-          label: "通过"
-        },
-        {
-          value: "1",
-          label: "不通过"
-        }
-      ],
       users: {
         username: "", // 人名
         pageNo: 1,
@@ -128,14 +110,36 @@ export default {
         moneyLevel: "" // 金额等级
       },
       usersData: [],
+      buttomName:"通过",        // 按钮名称
       usersTotal: 0,
       dialogusersVisible: false,
-      handleUser: null
+      handleUser: null,
+       rules: {
+          name: [ { required: true, message: '请选择审核人', trigger: 'change' }, ],
+          plancompletionTime: [{ required: true, message: '请选择计划完成时间', trigger: 'change' } ],
+          checkExplain: [ { required: true, message: '请输入处理说明', trigger: 'blur' } ]
+        }
     };
   },
   created() {
     this.form.meetingId = this.nowItem;
     this.users.moneyLevel = this.moneyLevel;
+    let info = localStorage.getItem("userInfo");
+    let userinfo = JSON.parse(info) ;
+    // 当前登录用户职位
+    const zhiwei = userinfo.job_name_en;
+    //console.log(tool.money_position)
+    const money_position = tool.money_position;
+
+    // 金额等级 职位 都想等 是完成
+    money_position.forEach(element => {
+          if(element.moneyLevel == this.moneyLevel && element.job_name_cn == zhiwei){
+                this.buttomName = "完成";
+          }else{
+               this.buttomName = "通过";
+          }
+    });
+
   },
   methods: {
     checkRealname() {
@@ -151,6 +155,7 @@ export default {
     checkUser() {
       this.form.name = this.handleUser.realname;
       this.form.userId = this.handleUser.id;
+      //this.position = this.handleUser.
       this.dialogusersVisible = false; //弹框消失
     },
     checkMeetName() {
@@ -160,47 +165,34 @@ export default {
     initUsername() {
       user.getNextmeetUser(this.users).then(res => {
         this.usersData = res.data.data.data;
+        console.log(this.usersData,"this.usersData")
       });
     },
     //提交
-    onSubmit() {
-      if (this.form.name == "") {
-        this.$message({
-          message: "请选择审核人",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.form.plancompletionTime == "") {
-        this.$message({
-          message: "请选择计划完成时间",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.form.isAdopt == "") {
-        this.$message({
-          message: "请选择处理结果",
-          type: "warn"
-        });
-        return false;
-      }
-      if (this.form.checkExplain == "") {
-        this.$message({
-          message: "请输入处理原因",
-          type: "warn"
-        });
-        return false;
-      }
-      change.dealApply(this.form).then(res => {
+    onSubmit(form) {
+     this.form.isAdopt=form;
+     this.$refs['form'].validate((valid) => {
+          if (valid) {
+             change.dealApply(this.form).then(res => {
         if (res.data.ok == true) {
           this.$message({
             message: "处理成功",
             type: "warn"
           });
            this.$emit("cancel"); //关闭弹框
+           this.$emit("comfirm")
         }
       });
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+
+
+
+
+     
     }
   }
 };

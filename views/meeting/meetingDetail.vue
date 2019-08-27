@@ -74,7 +74,7 @@
       </table>
       <el-timeline class="elTimeline">
         <el-timeline-item
-          :timestamp="node.createTime"
+         
           placement="top"
           v-for="(node,index) in newChangInfo.role"
           :key="index"
@@ -179,7 +179,7 @@
           </table>
           <el-timeline class="elTimeline">
             <el-timeline-item
-              :timestamp="node.createTime"
+             
               placement="top"
               v-for="(node,index) in item.role"
               :key="index"
@@ -199,7 +199,7 @@
                 <p>处理时间：{{node.createTime}}</p>
                 <p>计划完成时间：{{node.createTime}}</p>
               </el-card>
-              <el-card v-if="node.state==3">
+              <el-card v-if="node.state==3" >
                 <h4>抄送人：{{node.userName}}</h4>
                 <p>处理时间：{{node.createTime}}</p>
                 <p>计划完成时间：{{node.createTime}}</p>
@@ -228,12 +228,6 @@ export default {
       historyChangeInfoKey: [],
       historyChangeInfo: [], //历史的变更记录
       newChangInfo: [], //新的变更记录
-      Newmeetnames: "", // 最新抄送人
-      Newmeettimes: "", // 创建时间
-      Newplantimes: "", // 计划时间
-      Oldmeetnames: "", // 历史抄送人
-      Oldmeettimes: "",
-      Oldplantimes: ""
     };
   },
   created() {

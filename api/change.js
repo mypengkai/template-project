@@ -46,5 +46,9 @@ export default {
   // 修改会议记要
   amendApply(data){
     return request.post("/rest/meetingsummary/updateMeetingApply",data)
+  },
+  // 删除接口
+  detailApply(data){
+     return request.post("/rest/meetingsummary/deleteMeeting",data)
   }
 }

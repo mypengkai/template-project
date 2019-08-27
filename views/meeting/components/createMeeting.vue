@@ -420,18 +420,6 @@ import tool from "@/utils/common.js";
 export default {
   name: "createChange",
   data() {
-    const checkAmountMoney = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("变更金额不能为空"));
-      } else {
-        const reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          return callback(new Error("请输入正确的变更金额"));
-        }
-      }
-    };
     return {
       myApplyChangeForm: {
         moneyLevel: "", //金额等级
@@ -537,13 +525,6 @@ export default {
     SelectTree,
     changeSelectPerson
   },
-  // props: {
-  //   nowItem: {
-  //     type: String,
-  //     required: true
-  //   },
-
-  // },
   watch: {
     myApplyChangeForm: {
       handler(newVal, oldVal) {
@@ -762,85 +743,6 @@ export default {
         }
       });
     }
-    // if (this.myApplyChangeForm.meetingTheme == "") {
-    //   this.$message({
-    //     message: "请输入会议主题",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.meetingAddress == "") {
-    //   this.$message({
-    //     message: "请输入会议地点",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.addDecreaseMoney == "") {
-    //   this.$message({
-    //     message: "请输入增减金额",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.departId == "") {
-    //   this.$message({
-    //     message: "请选择组织机构",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.projectItemId == "") {
-    //   this.$message({
-    //     message: "请选择分部分项",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.meetingName == "") {
-    //   this.$message({
-    //     message: "请选择会议主持人",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.meetingNoteName == "") {
-    //   this.$message({
-    //     message: "请选择会议记录人",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-
-    // if (this.myApplyChangeForm.userId == "") {
-    //   this.$message({
-    //     message: "请选择审核人",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.makeCopy == "") {
-    //   this.$message({
-    //     message: "请选择抄送人",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-
-    // if (this.myApplyChangeForm.meetingDatetime == "") {
-    //   this.$message({
-    //     message: "请选择会议时间",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
-    // if (this.myApplyChangeForm.plancompletionTime == "") {
-    //   this.$message({
-    //     message: "请选择计划时间",
-    //     type: "warn"
-    //   });
-    //   return false;
-    // }
   }
 };
 </script>

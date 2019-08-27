@@ -104,6 +104,21 @@
               @click="dealMeet(scope.row.id)"
             ></el-button>
           </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="删除"
+            placement="top"
+            v-if="scope.row.yesOrNoDelete==false"
+          >
+            <el-button
+              type="danger"
+              size="small"
+              icon="el-icon-delete"
+              circle
+              @click="openDel(scope.row.id)"
+            ></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -121,20 +136,11 @@
     ></el-pagination>
 
     <!-- 弹框 -->
-    <el-dialog
-      title="创建会议记要"
-      :visible.sync="dialogFormVisible"
-      class="dialogBox"
-      width="80%"
-    >
-      <createChange
-        @cancel="dialogFormVisible=false"
-        @comfirm="query"
-        v-if="creatFlag"
-      />
+    <el-dialog title="创建会议纪要" :visible.sync="dialogFormVisible" class="dialogBox" width="80%">
+      <createChange @cancel="dialogFormVisible=false" @comfirm="query" v-if="creatFlag" />
     </el-dialog>
     <!-- 修改 -->
-    <el-dialog title="修改变更" :visible.sync="dialogdealMeetVisible" class="dialogBox" >
+    <el-dialog title="修改会议纪要" :visible.sync="dialogdealMeetVisible" class="dialogBox">
       <amendMeet
         :nowItem="nowItem"
         @cancel="dialogdealMeetVisible=false"
@@ -146,6 +152,7 @@
     <!-- 查看弹框 -->
     <el-dialog :visible.sync="dialogChangeDetailVisible" title="查看详情" fullscreen>
       <changeDetail :changeId="changeId" v-if="flag" />
+      <!-- <detailsView :changeId="changeId" v-if="flag"></detailsView> -->
     </el-dialog>
   </div>
 </template>
@@ -157,7 +164,8 @@ import project from "@/api/project";
 import change from "@/api/change";
 import createChange from "./components/createMeeting";
 import changeDetail from "./meetingDetail";
-import amendMeet from "./components/amendMeet"
+import amendMeet from "./components/amendMeet";
+// import detailsView from "./components/detailsView"
 export default {
   inject: ["reload"],
   name: "sendChange",
@@ -184,7 +192,7 @@ export default {
       changeId: "", //详情id
       flag: false,
       creatFlag: false,
-      amandFlag:false,
+      amandFlag: false,
       dialogdealMeetVisible: false
     };
   },
@@ -193,6 +201,7 @@ export default {
     createChange,
     changeDetail,
     amendMeet
+    // detailsView
   },
   created() {
     this.query();
@@ -276,6 +285,28 @@ export default {
       this.$nextTick(() => {
         this.amandFlag = true;
       });
+    },
+    openDel(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          change.detailApply({ meetingid: id }).then(res => {
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+            this.query();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   }
 };
