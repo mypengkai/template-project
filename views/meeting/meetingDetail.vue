@@ -90,9 +90,22 @@
               <p>计划完成时间:{{item.plancompletionTime}}</p>
               <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
               <p class="imgBox">影像资料：
-                    <viewer :images="item.fileinfos">
-                         <img v-for="(src,index) in item.fileinfos" :src="src.filePath" :key="index"/>
-                   </viewer>
+                   <ul v-for="(node, key) in item.fileinfos" :key="key">
+                    <li>
+                      <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                         <!-- <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
+                                  @click="pictureShow(item.fileinfos)"></el-image> -->
+                                    <viewer :images="item.fileinfos">
+                                        <img v-for="(item,index) in item.fileinfos" :src="item.filePath" :key="index" style="width:100%;height:100%"/>
+                                  </viewer>      
+                       </template> 
+                      
+                      <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                        <video :src="node.filePath" style="width: 100px; height: 100px;"
+                              @click="videoPlayerShow(node)"></video>
+                      </template>
+                    </li>
+                   </ul>
               </p>
             </el-timeline-item>
           </el-timeline>
@@ -193,9 +206,21 @@
                   <p>计划完成时间:{{item.plancompletionTime}}</p>
                   <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
                   <p class="imgBox">影像资料：
-                       <viewer :images="item.fileinfos">
-                         <img v-for="(src,index) in item.fileinfos" :src="src.filePath" :key="index"/>
-                      </viewer>
+                        <ul>
+                          <li v-for="(node, key) in item.fileinfos" :key="key">
+                            <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                              <!-- <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
+                                        @click="pictureShow(item.fileinfos)"></el-image> -->
+                                  <viewer :images="item.fileinfos">
+                                        <img v-for="(item,index) in item.fileinfos" :src="item.filePath" :key="index" style="width:100%;height:100%"/>
+                                  </viewer>      
+                            </template>
+                            <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                              <video :src="node.filePath" style="width: 100px; height: 100px;"
+                                    @click="videoPlayerShow(node)"></video>
+                            </template>
+                          </li>
+                       </ul>
                   </p>
                 </el-timeline-item>
               </el-timeline>
@@ -207,6 +232,16 @@
         <el-button type="primary" icon="el-icon-arrow-up" circle @click="toTop"></el-button>
   </el-collapse-item>
 </el-collapse>  
+
+
+    <!-- 视屏 -->
+    <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
+      <video-player class="video-player vjs-custom-skin"
+                    ref="videoPlayer"
+                    :playsinline="true"
+                    :options="playerOptions"
+      ></video-player>
+    </el-dialog>
   </div>
 </template>
 
@@ -225,7 +260,32 @@ export default {
       changeInfo: {}, //变更记录
       historyChangeInfoKey: [],
       historyChangeInfo: [], //历史的变更记录
-      newChangInfo: [] //新的变更记录
+      newChangInfo: [], //新的变更记录
+      vedioinnerVisible:false,
+         playerOptions: {
+          playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+          autoplay: true, //如果true,浏览器准备好时开始回放。
+          muted: false, // 默认情况下将会消除任何音频。
+          loop: false, // 导致视频一结束就重新开始。
+          preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+          language: 'zh-CN',
+          aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+          fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+          sources: [{
+            src: '',
+            type: 'video/mp4'
+
+          }],
+          poster: '', //你的封面地址
+          width: document.documentElement.clientWidth, //播放器宽度
+          notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+          controlBar: {
+            timeDivider: true,
+            durationDisplay: true,
+            remainingTimeDisplay: false,
+            fullscreenToggle: true  //全屏按钮
+          }
+        },
     };
   },
   created() {
@@ -251,7 +311,15 @@ export default {
     // 回到顶部
     toTop(){
         meetTop.scrollIntoView();
-    }
+    },
+
+     videoPlayerShow(node) {
+        this.playerOptions.sources[0] = {
+          src: node.filePath,
+          type: 'video/mp4'
+        }
+        this.vedioinnerVisible = true
+      }
   }
 };
 </script>
