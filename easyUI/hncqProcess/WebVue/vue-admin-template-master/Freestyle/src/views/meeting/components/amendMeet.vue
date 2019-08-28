@@ -504,7 +504,6 @@ export default {
         children: "children",
         label: "projectItem"
       },
-      orgId: "", // 当前组织机构id
       dialogHandleFormVisible: false, //是否弹出选择备案或者审核人
       dialogCopyPersonFormVisible: false, //选择抄送人弹框
       dialogusersVisible: false, // 会议记录人
@@ -590,11 +589,11 @@ export default {
     },
     // 获取组织机构id
     checkDepart() {
-      this.orgId = this.myApplyChangeForm.departId;
+      let orgId = this.myApplyChangeForm.departId;
       this.users.userGroupId = this.myApplyChangeForm.departId;
       // 分部分项数据
       Organization.getProjectItemFromLayer({
-        userGroupId: this.orgId,
+        userGroupId: orgId,
         pId: "0"
       }).then(res => {
         this.projectItemTreeOption = res.data.data;
@@ -604,10 +603,10 @@ export default {
     },
     // 获取分部分项
     getProject() {
-      this.orgId = localStorage.getItem("orgId");
+      let orgId = localStorage.getItem("orgId");
       //console.log(this.orgId)
       Organization.getProjectItemFromLayer({
-        userGroupId: this.orgId,
+        userGroupId: orgId,
         pId: "0"
       }).then(res => {
         this.projectItemTreeOption = res.data.data;
@@ -799,6 +798,7 @@ export default {
         if (res.data.ok == true) {
           this.myApplyChangeForm = res.data.data.MeetingInfo;
           localStorage.setItem("orgId", this.myApplyChangeForm.departId);
+
           this.myApplyChangeForm.meetingName = this.myApplyChangeForm.meetingHostName;
           this.myApplyChangeForm.meetingNoteName = this.myApplyChangeForm.meetingNoteTakerName;
           this.$refs.getSelectData.placeholder = this.myApplyChangeForm.projectItem;

@@ -152,7 +152,6 @@
     <!-- 查看弹框 -->
     <el-dialog :visible.sync="dialogChangeDetailVisible" title="查看详情" fullscreen>
       <changeDetail :changeId="changeId" v-if="flag" />
-      <!-- <detailsView :changeId="changeId" v-if="flag"></detailsView> -->
     </el-dialog>
   </div>
 </template>
@@ -165,7 +164,7 @@ import change from "@/api/change";
 import createChange from "./components/createMeeting";
 import changeDetail from "./meetingDetail";
 import amendMeet from "./components/amendMeet";
-// import detailsView from "./components/detailsView"
+
 export default {
   inject: ["reload"],
   name: "sendChange",
@@ -200,8 +199,7 @@ export default {
     SelectTree,
     createChange,
     changeDetail,
-    amendMeet
-    // detailsView
+    amendMeet,
   },
   created() {
     this.query();

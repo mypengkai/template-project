@@ -1,5 +1,6 @@
 <template>
   <div class="demo-image__preview detail">
+    <el-tag  id="meetTop">当前会议纪要</el-tag>
     <div class="current">
       <table
         border="0"
@@ -7,7 +8,6 @@
         cellpadding="0"
         style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;"
       >
-        <caption>当前会议纪要</caption>
         <tr>
           <th>会议编号</th>
           <td>{{changeInfo.meetingSummaryNumber}}</td>
@@ -27,7 +27,7 @@
         <tr>
           <th>增减金额(万元)</th>
           <td>{{changeInfo.addDecreaseMoney}}</td>
-          <th>会议等级</th>
+          <th>金额等级</th>
           <td>
             <template v-if="changeInfo.moneyLevel==='one_level'">一级</template>
             <template v-else-if="changeInfo.moneyLevel==='two_level'">二级</template>
@@ -42,7 +42,7 @@
           <td>{{changeInfo.meetingHostName}}</td>
           <th>会议记录人</th>
           <td>{{changeInfo.meetingNoteTakerName}}</td>
-          <th>会议时间</th>
+          <th>开会时间</th>
           <td>{{changeInfo.meetingDatetime}}</td>
         </tr>
         <tr>
@@ -59,60 +59,58 @@
           </td>
         </tr>
         <tr>
-          <th>会议等级</th>
-          <td>
-            <template v-if="changeInfo.moneyLevel=='one_level'">一级</template>
-            <template v-else-if="changeInfo.moneyLevel=='two_level'">二级</template>
-            <template v-else-if="changeInfo.moneyLevel=='three_level'">三级</template>
-            <template v-else-if="changeInfo.moneyLevel=='four_level'">四级</template>
-          </td>
+          <th>申请人</th>
+          <td>{{changeInfo.applyUserName}}</td>
           <th>会议内容</th>
           <td>{{changeInfo.sceneSummaryContent}}</td>
           <th>变更理由</th>
           <td>{{changeInfo.changeReason}}</td>
         </tr>
       </table>
-      <el-timeline class="elTimeline">
-        <el-timeline-item
-         
-          placement="top"
-          v-for="(node,index) in newChangInfo.role"
-          :key="index"
-        >
-          <el-card v-if="node.state==2">
-            <h4>审核人：{{node.userName}}</h4>
-            <p>处理时间：{{node.createTime}}</p>
-            <p>计划完成时间：{{node.createTime}}</p>
-          </el-card>
-          <el-card v-if="node.state==0">
-            <h4>发起人:{{node.userName}}</h4>
-            <p>创建时间：{{node.createTime}}</p>
-            <p>计划完成时间：{{node.createTime}}</p>
-          </el-card>
-          <el-card v-if="node.state==1">
-            <h4>备案人：{{node.userName}}</h4>
-            <p>处理时间：{{node.createTime}}</p>
-            <p>计划完成时间：{{node.createTime}}</p>
-          </el-card>
-          <el-card v-if="node.state==3">
-            <h4>抄送人：{{node.userName}}</h4>
-            <p>处理时间：{{node.createTime}}</p>
-            <p>计划完成时间：{{node.createTime}}</p>
-          </el-card>
-        </el-timeline-item>
-      </el-timeline>
+      <div class="roleName">
+        <p>
+          抄送人：
+          <span v-for="(node,index) in newChangInfo.role" :key="index">
+            <template v-if="node.state==3">{{node.userName}}</template>
+          </span>
+        </p>
+        <p>
+          流程:
+          <el-timeline>
+            <el-timeline-item
+              v-if="item.state !=3 && item.state !=0"
+              v-for="(item, index) in newChangInfo.role"
+              :key="index"
+              :type="item.state==1? 'primary' :'danger' "
+            >
+              <p>处理时间:{{item.createTime}}</p>
+              <p
+                :style="{'color':(item.state == 1 ? 'red' :'blue')}"
+              >{{item.state==1 ? "审核人" : "备案人" }}: {{item.userName}}</p>
+              <p>计划完成时间:{{item.plancompletionTime}}</p>
+              <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
+              <p class="imgBox">影像资料：
+                    <viewer :images="item.fileinfos">
+                         <img v-for="(src,index) in item.fileinfos" :src="src.filePath" :key="index"/>
+                   </viewer>
+              </p>
+            </el-timeline-item>
+          </el-timeline>
+        </p>
+      </div>
     </div>
-
+    <!-- 历史记录 -->
+  <el-collapse accordion v-if="historyChangeInfo.length > 0">
+  <el-collapse-item title="历史会议纪要">
     <div class="block">
       <el-timeline>
-        <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key">
+        <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger">
           <table
             border="0"
             cellspacing="0"
             cellpadding="0"
             style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;"
           >
-            <caption>历史会议纪要</caption>
             <tr>
               <th>会议编号</th>
               <td>{{item.publicData.meetingSummaryNumber}}</td>
@@ -132,7 +130,7 @@
             <tr>
               <th>增减金额(万元)</th>
               <td>{{item.publicData.addDecreaseMoney}}</td>
-              <th>会议等级</th>
+              <th>金额等级</th>
               <td>
                 <template v-if="item.publicData.moneyLevel==='one_level'">一级</template>
                 <template v-else-if="item.publicData.moneyLevel==='two_level'">二级</template>
@@ -147,7 +145,7 @@
               <td>{{item.publicData.meetingHostName}}</td>
               <th>会议记录人</th>
               <td>{{item.publicData.meetingNoteTakerName}}</td>
-              <th>会议时间</th>
+              <th>开会时间</th>
               <td>{{item.publicData.meetingDatetime}}</td>
             </tr>
             <tr>
@@ -164,51 +162,51 @@
               </td>
             </tr>
             <tr>
-              <th>会议等级</th>
-              <td>
-                <template v-if="item.publicData.moneyLevel=='one_level'">一级</template>
-                <template v-else-if="item.publicData.moneyLevel=='two_level'">二级</template>
-                <template v-else-if="item.publicData.moneyLevel=='three_level'">三级</template>
-                <template v-else-if="item.publicData.moneyLevel=='four_level'">四级</template>
-              </td>
+              <th>申请人</th>
+              <td>{{changeInfo.applyUserName}}</td>
               <th>会议内容</th>
               <td>{{item.publicData.sceneSummaryContent}}</td>
               <th>变更理由</th>
               <td>{{item.publicData.changeReason}}</td>
             </tr>
           </table>
-          <el-timeline class="elTimeline">
-            <el-timeline-item
-             
-              placement="top"
-              v-for="(node,index) in item.role"
-              :key="index"
-            >
-              <el-card v-if="node.state==2">
-                <h4>审核人：{{node.userName}}</h4>
-                <p>处理时间：{{node.createTime}}</p>
-                <p>计划完成时间：{{node.createTime}}</p>
-              </el-card>
-              <el-card v-if="node.state==0">
-                <h4>发起人:{{node.userName}}</h4>
-                <p>创建时间：{{node.createTime}}</p>
-                <p>计划完成时间：{{node.createTime}}</p>
-              </el-card>
-              <el-card v-if="node.state==1">
-                <h4>备案人：{{node.userName}}</h4>
-                <p>处理时间：{{node.createTime}}</p>
-                <p>计划完成时间：{{node.createTime}}</p>
-              </el-card>
-              <el-card v-if="node.state==3" >
-                <h4>抄送人：{{node.userName}}</h4>
-                <p>处理时间：{{node.createTime}}</p>
-                <p>计划完成时间：{{node.createTime}}</p>
-              </el-card>
-            </el-timeline-item>
-          </el-timeline>
+          <div class="roleName">
+            <p>
+              抄送人：
+              <span v-for="(node,index) in item.role" :key="index">
+                <template v-if="node.state==3">{{node.userName}}</template>
+              </span>
+            </p>
+            <p>
+              流程:
+              <el-timeline id="timeline">
+                <el-timeline-item
+                  v-if="item.state !=3 && item.state !=0"
+                  v-for="(item, index) in newChangInfo.role"
+                  :key="index"
+                  :type="item.state==1? 'primary' :'danger' "
+                >
+                  <p>处理时间:{{item.createTime}}</p>
+                  <p
+                    :style="{'color':(item.state == 1 ? 'red' :'blue')}"
+                  >{{item.state==1 ? "审核人" : "备案人" }}: {{item.userName}}</p>
+                  <p>计划完成时间:{{item.plancompletionTime}}</p>
+                  <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
+                  <p class="imgBox">影像资料：
+                       <viewer :images="item.fileinfos">
+                         <img v-for="(src,index) in item.fileinfos" :src="src.filePath" :key="index"/>
+                      </viewer>
+                  </p>
+                </el-timeline-item>
+              </el-timeline>
+            </p>
+          </div>
         </el-timeline-item>
       </el-timeline>
     </div>
+       <el-button type="primary" @click="toTop">回到顶部</el-button>
+  </el-collapse-item>
+</el-collapse>  
   </div>
 </template>
 
@@ -227,7 +225,7 @@ export default {
       changeInfo: {}, //变更记录
       historyChangeInfoKey: [],
       historyChangeInfo: [], //历史的变更记录
-      newChangInfo: [], //新的变更记录
+      newChangInfo: [] //新的变更记录
     };
   },
   created() {
@@ -242,52 +240,17 @@ export default {
         for (let key in res.data.data.log) {
           if (key === "0") {
             this.newChangInfo = res.data.data.log[key];
-            // let newArray = this.newChangInfo.role;
-            // let meetingName = "";
-            // let statetime = "";
-            // let plantime = "";
-            // newArray.forEach(element => {
-            //   if (element.state == 3) {
-            //     meetingName += element.userName + ",";
-            //     statetime = element.createTime;
-            //     plantime = element.plancompletionTime;
-            //   }
-            // });
-            // this.Newmeettimes = statetime;
-            // this.Newmeetnames = meetingName.substring(
-            //   0,
-            //   meetingName.length - 1
-            // );
-            // this.Newplantimes = plantime;
           } else {
             this.historyChangeInfoKey.push(index);
             this.historyChangeInfo.push(res.data.data.log[key]);
-
-            // this.historyChangeInfo.forEach(value => {
-            //   let OmeetingName = "";
-            //   let Ostatetime = "";
-            //   let Oplantimes = "";
-            //   let items = value.role;
-
-            //   items.forEach(vm => {
-            //     if (vm.state == 3) {
-            //       OmeetingName += vm.userName + ",";
-            //       Ostatetime = vm.createTime;
-            //       Oplantimes = vm.plancompletionTime;
-            //     }
-            //   });
-            //   this.Oldmeettimes = Ostatetime;
-            //   this.Oldmeetnames = OmeetingName.substring(
-            //     0,
-            //     OmeetingName.length - 1
-            //   );
-            //   this.Oldplantimes = Oplantimes;
-            // });
             index++;
           }
         }
-        //console.log(this.historyChangeInfo);
       });
+    },
+    // 回到顶部
+    toTop(){
+        meetTop.scrollIntoView();
     }
   }
 };
@@ -342,6 +305,11 @@ td {
 .current {
   padding: 0 0 0 73px;
 }
+ul {
+  li {
+    list-style: none;
+  }
+}
 /deep/.el-card__body {
   padding: 0 20px;
 }
@@ -352,5 +320,52 @@ td {
   .elTimeline {
     padding: 10px 40px;
   }
+  .imgBox{
+     ul{
+        overflow: hidden;
+        li{
+          float: left;
+          width:100px;
+          height:100px;
+          margin: 10px;
+          img{
+            width:100%;
+            height:100%;
+          }
+        }
+     }
+  }
+}
+/deep/.el-collapse-item__header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 48px;
+    line-height: 48px;
+    background-color: #FFF;
+    color: red;
+    cursor: pointer;
+    border-bottom: 1px solid #EBEEF5;
+    font-size: 13px;
+    font-weight: 500;
+    -webkit-transition: border-bottom-color .3s;
+    transition: border-bottom-color .3s;
+    outline: 0;
+}
+/deep/.el-timeline .el-timeline-item:last-child .el-timeline-item__tail {
+    display: block; 
+}
+#timeline{
+    >.el-timeline-item:last-child .el-timeline-item__tail {
+         display: block !important; 
+   }
+}
+button{
+   text-align: right;
+   margin-left: 80%;
+   margin-top: 20px;
 }
 </style>

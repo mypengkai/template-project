@@ -18,6 +18,28 @@ require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
 
+// 图片预览
+import Viewer from "v-viewer";
+import "viewerjs/dist/viewer.css";
+Vue.use(Viewer);
+Viewer.setDefaults({
+    zIndexInline: 2017,
+    inline: true,
+    button: true,
+    navbar: true,
+    title: true,
+    toolbar: true,
+    tooltip: true,
+    movable: true,
+    zoomable: true,
+    rotatable: true,
+    scalable: true,
+    transition: true,
+    fullscreen: false,
+    keyboard: true,
+    url: "data-source"
+});
+
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
