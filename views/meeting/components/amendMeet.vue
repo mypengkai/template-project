@@ -556,9 +556,6 @@ export default {
     }
   },
   watch: {
-    nowItem(newVal) {
-      console.log(newVal);
-    },
     myApplyChangeForm: {
       handler(newVal, oldVal) {
         if (this.$tool.isNotEmptyStr(newVal.addDecreaseMoney)) {
@@ -604,7 +601,6 @@ export default {
     // 获取分部分项
     getProject() {
       let orgId = localStorage.getItem("orgId");
-      //console.log(this.orgId)
       Organization.getProjectItemFromLayer({
         userGroupId: orgId,
         pId: "0"

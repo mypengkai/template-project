@@ -160,7 +160,7 @@ import changeDetail from "./meetingDetail";
 import dealMeet from "./components/dealMeet"
 export default {
   inject: ["reload"],
-  name: "sendChange",
+  name: "receiveMeeting",
   data() {
     return {
       projectItemDefaultProps: {

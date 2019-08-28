@@ -143,7 +143,7 @@ import createChange from "./components/createMeeting";
 import changeDetail from "./meetingDetail";
 export default {
   inject: ["reload"],
-  name: "meetSearch",
+  name: "meetingSearch",
   data() {
     return {
       projectItemDefaultProps: {
