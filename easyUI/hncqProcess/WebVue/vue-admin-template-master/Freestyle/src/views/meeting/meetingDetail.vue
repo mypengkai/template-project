@@ -85,7 +85,7 @@
             >
               <p>处理时间:{{item.createTime}}</p>
               <p
-                :style="{'color':(item.state == 1 ? 'red' :'blue')}"
+                :style="{'color':(item.state == 1 ? 'blue' :'red')}"
               >{{item.state==1 ? "审核人" : "备案人" }}: {{item.userName}}</p>
               <p>计划完成时间:{{item.plancompletionTime}}</p>
               <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
@@ -188,7 +188,7 @@
                 >
                   <p>处理时间:{{item.createTime}}</p>
                   <p
-                    :style="{'color':(item.state == 1 ? 'red' :'blue')}"
+                    :style="{'color':(item.state == 1 ? 'blue' :'red')}"
                   >{{item.state==1 ? "审核人" : "备案人" }}: {{item.userName}}</p>
                   <p>计划完成时间:{{item.plancompletionTime}}</p>
                   <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
@@ -204,7 +204,7 @@
         </el-timeline-item>
       </el-timeline>
     </div>
-       <el-button type="primary" @click="toTop">回到顶部</el-button>
+        <el-button type="primary" icon="el-icon-arrow-up" circle @click="toTop"></el-button>
   </el-collapse-item>
 </el-collapse>  
   </div>
@@ -310,6 +310,13 @@ ul {
     list-style: none;
   }
 }
+.roleName{
+    p{
+      span{
+         padding:0 5px;
+      }
+    }
+}
 /deep/.el-card__body {
   padding: 0 20px;
 }
@@ -365,7 +372,7 @@ ul {
 }
 button{
    text-align: right;
-   margin-left: 80%;
+   margin-left: 90%;
    margin-top: 20px;
 }
 </style>

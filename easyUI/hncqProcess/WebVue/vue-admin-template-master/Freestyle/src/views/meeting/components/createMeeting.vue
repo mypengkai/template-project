@@ -233,9 +233,9 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请选择" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请选择" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
       </div>
       <el-table
         ref="changeSingleTable"
@@ -264,8 +264,8 @@
         @current-change="initDparentUser()"
       ></el-pagination>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="checkUser">确 认</el-button>
         <el-button @click="dialogusersVisible=false">取 消</el-button>
+        <el-button type="primary" @click="checkUser">确 认</el-button>
       </div>
     </el-dialog>
     <!-- 会议记录人 -->
@@ -278,9 +278,9 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请选择" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请选择" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
       </div>
       <el-table
         ref="changeSingleTable"
@@ -309,8 +309,8 @@
         @current-change="initDparentUser()"
       ></el-pagination>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="checkNoteName">确 认</el-button>
         <el-button @click="dialogNoteNameVisible=false">取 消</el-button>
+        <el-button type="primary" @click="checkNoteName">确 认</el-button>
       </div>
     </el-dialog>
 
@@ -348,8 +348,8 @@
         @current-change="loadNextJobUserList()"
       ></el-pagination>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="subimtHandlerPerson">确 认</el-button>
-        <el-button @click="dialogHandleFormVisible=false">取 消</el-button>
+         <el-button @click="dialogHandleFormVisible=false">取 消</el-button>
+         <el-button type="primary" @click="subimtHandlerPerson">确 认</el-button>
       </div>
     </el-dialog>
 
@@ -400,10 +400,9 @@
         @size-change="handleCopyPersonSizeChange"
         @current-change="initCopyUsersList()"
       ></el-pagination>
-
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="subimtCopyPerson">确 认</el-button>
         <el-button @click="dialogCopyPersonFormVisible=false">取 消</el-button>
+        <el-button type="primary" @click="subimtCopyPerson">确 认</el-button>
       </div>
     </el-dialog>
   </div>
@@ -466,8 +465,7 @@ export default {
         handleUserName: [{ required: true, message: "请选择审核人", trigger: "change" } ],
         copyUserName: [{ required: true, message: "请选择抄送人", trigger: "change" } ],
         meetingDatetime: [ { required: true, message: "请选择开会时间", trigger: "change" }  ],
-        plancompletionTime: [ { required: true, message: "请选择计划完成时间", trigger: "change" }  ]
-         
+        plancompletionTime: [ { required: true, message: "请选择计划完成时间", trigger: "change" }  ]  
       }, //表单校验规则
       userGroupDefaultProps: {
         // 组织机构树显示
@@ -485,7 +483,7 @@ export default {
       dialogNoteNameVisible: false,
       userGroupTree: [], // 组织机构树
       projectItemTreeOption: [], // 分部分项树
-
+      // 会议记录人
       users: {
         userGroupId: "", // 组织机构id
         realname: "", // 姓名
@@ -502,6 +500,7 @@ export default {
       handleUser: null, // 当前选中的会议人
       handlePersonData: [], //处理人集合
       handlerPersonTotal: 0, //集合长度
+      // 审核人
       handleQueryParam: {
         username: "", //用户名
         pageNo: 1,
@@ -510,6 +509,7 @@ export default {
       },
       copyUserGroupTree: [], //处理人组织机构Tree
       copyPersonData: [], //处理人数据列表
+      // 抄送人
       copyQueryParam: {
         userGroupId: "", //组织机构
         realname: "", //姓名
