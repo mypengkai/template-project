@@ -96,7 +96,7 @@ const user = {
             setToken(token)
             commit('SET_TOKEN', token)//token
             resolve()
-          }else{
+          } else {
             this.$message({
               message: res.data.message,
               type: 'error'

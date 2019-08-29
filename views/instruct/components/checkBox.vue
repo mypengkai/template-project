@@ -9,7 +9,7 @@
             <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
               <!--              <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleCheckChange"/>-->
 
-              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+              <el-select v-model="form.userGroupId" placeholder="请选择" @change="userGroupOnChange">
                 <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname"
                            :value="item.id"></el-option>
               </el-select>
@@ -32,13 +32,10 @@
                                :value="item.id"/>
                   </el-select>
                 </el-form-item>-->
-
-
             <el-form-item label="工序类型：" prop="processSDictId" v-if="nowItem =='add'">
               <!--     <el-select v-model="form.processDictId" placeholder="请选择工序">
                      <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
                    </el-select>-->
-
               <el-select v-model="form.processDictId" placeholder="请选择工序" style="width: 40%;">
                 <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
               </el-select>
@@ -101,12 +98,12 @@
           </el-row>-->
         <div style="overflow:auto;">
           <el-row>
-            <el-col :span="12">
-              <el-form-item style="width:22vw" label="分部分项：" v-if="nowItem !=='add'">
-                <el-input type="textarea" autosize readonly v-model="form.projectItem"></el-input>
+            <el-col :span="18">
+              <el-form-item style="width:100%;" label="分部分项：" v-if="nowItem !=='add'">
+                <el-input type="textarea" readonly v-model="form.projectItem" style="min-height: 60px;"></el-input>
               </el-form-item>
               <el-form-item style="width:22vw" label="计划检查时间：" v-if="nowItem !=='add'">
-                <el-input type="textarea" autosize readonly v-model="form.planTime"></el-input>
+                <el-input autosize readonly v-model="form.planTime"></el-input>
               </el-form-item>
               <el-form-item style="width:22vw" label="创建时间：" v-if="nowItem !=='add'">
                 <el-input readonly v-model="form.createTime"></el-input>
@@ -124,9 +121,46 @@
                   <el-timeline :reverse="reverse">
                     <el-timeline-item v-for="(activity, index) in activities" :key="index"
                                       :icon="convertIcon(activity, 'icon')"
-                                      :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')"
-                                      :timestamp="activity.finishTime">
-                      {{activity.name}} 指令描述 : {{ activity.remark }}
+                                      :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')">
+                      <!--                      :timestamp="activity.createTime"-->
+                      <div style="font-weight: bolder"> {{activity.createTime}}</div>
+                      <div>
+                        指令操作人: {{activity.realname}}
+                      </div>
+                      <div>
+                        指令描述: {{ activity.remark }}
+                      </div>
+                      <div>
+                        <span>音像资料:</span>
+                        <template>
+                          <ul v-if="activity.files !== mull" v-for="(node, key) in activity.files" :key="key">
+                            <li style="margin-left:10px;float: left">
+                              <template v-if="node.fileType==='jpg' ||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                                <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
+                                          @click="pictureShows(activity.files)"></el-image>
+                              </template>
+                              <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                                <div class="video-box">
+                                  <video id="video" style="width:100px;height:100px">
+                                    <source :src="node.filePath" type="video/mp4">
+                                  </video>
+                                  <div class="video-img" @click="videoPlayerShow(node)"></div>
+                                </div>
+
+                                <el-dialog title="影像资料" width="50%" :visible.sync="vedioinnerVisible" append-to-body>
+                                  <!--      <viewer :imgList="processPicture"></viewer>-->
+                                  <video-player class="video-player vjs-custom-skin"
+                                                ref="videoPlayer" :playsinline="true" :options="playerOptions"
+                                  ></video-player>
+                                </el-dialog>
+
+                              </template>
+                            </li>
+
+                          </ul>
+                          <div style="clear:both"></div>
+                        </template>
+                      </div>
                     </el-timeline-item>
                   </el-timeline>
                 </div>
@@ -134,7 +168,7 @@
             </el-col>
 
             <el-col :span="12">
-              <div style="overflow:hidden;" v-if="nowItem !=='add' && finishPictureOfCommand.length>0 ">
+              <div style="overflow:hidden;" v-if="finishPictureOfCommand.length>100 ">
                 <div class="fl faqi">
                   <span class="accomplish">发起指令</span>
                   <el-tabs v-model="activeName">
@@ -174,7 +208,7 @@
             </el-col>
             <el-col :span="12">
               <!-- 指令发送 -->
-              <div v-if="nowItem !=='add' && finishPictureOfCommand.length===0 " class="pictureContent">
+              <div v-if="nowItem !=='add' && finishPictureOfCommand.length===100 " class="pictureContent">
                 <el-tabs type="border-card" v-model="tabPosition">
                   <el-tab-pane label="影像资料" name="first">
                     <div class="imgContation">
@@ -200,7 +234,7 @@
       </div>
       <div class="tar" style=" right: 40%;position: absolute;bottom: 10px;padding: 10px">
         <el-button type="primary"
-                   v-if="nowItem !=='add' && $route.name=='instructReceive' && finishPictureOfCommand.length===0 "
+                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="innerBtn"
                    @click="innerTranspondDialog = true">转发指令
         </el-button>
         <el-button type="primary"
@@ -215,6 +249,11 @@
                    v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="finishBtn"
                    @click="finishDialog=true">复核指令
         </el-button>
+        <el-button type="primary"
+                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="modifyBtn"
+                   @click="modifyDialog=true">修改指令
+        </el-button>
+        <el-button v-if="nowItem=='add'" @click="close()">取 消</el-button>
         <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
       </div>
     </el-form>
@@ -223,9 +262,14 @@
     <!-- 接收人弹框 -->
     <el-dialog class="dialogBox" width="45%" title="选择接收人" :visible.sync="acceptUserDialog" append-to-body>
       <div class="topBar">
-        <span>接收人组织机构:</span>
-        <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
-                     v-on:noDe="handleReceiveUserGroupCheckChange"/>
+        <span>组织机构筛选:</span>
+        <el-select v-model="receiveData.userGroupId" placeholder="请选择" @change="handleReceiveUserGroupCheckChange">
+          <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname"
+                     :value="item.id"></el-option>
+        </el-select>
+
+        <!-- <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
+                      v-on:noDe="handleReceiveUserGroupCheckChange"/>-->
       </div>
       <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="50vh"
                 @current-change="handleCurrentChange">
@@ -298,7 +342,7 @@
       </div>
     </el-dialog>
 
-    <!-- 指令完成 -->
+    <!-- 指令完成modifytBtn -->
     <el-dialog class="dialogBox" width="40%" title="指令完成" :visible.sync="soonFinishDialog" append-to-body>
       <el-form :model="soonFinishForm" label-width="130px">
         <!--  <el-form-item label="指定人：" prop="transpondName">
@@ -332,19 +376,18 @@
       </div>
     </el-dialog>
 
-
     <!-- 指令复核 -->
-    <el-dialog class="dialogBox" width="40%" title="指令完成" :visible.sync="finishDialog" append-to-body>
+    <el-dialog class="dialogBox" width="40%" title="指令复核" :visible.sync="finishDialog" append-to-body>
       <el-form :model="finishForm" label-width="130px">
         <!--  <el-form-item label="指定人：" prop="transpondName">
             <el-input readonly v-model="transpondForm.transpondName">
               <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
             </el-input>
           </el-form-item>-->
-        <el-form-item label="计划完成时间：" prop="planTime">
-          <el-date-picker v-model="finishForm.planFinishTime" type="date" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd"></el-date-picker>
-        </el-form-item>
+        <!-- <el-form-item label="计划完成时间：" prop="planTime">
+           <el-date-picker v-model="finishForm.planFinishTime" type="date" placeholder="选择日期时间："
+                           value-format="yyyy-MM-dd"></el-date-picker>
+         </el-form-item>-->
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="finishForm.remark"></el-input>
         </el-form-item>
@@ -364,6 +407,44 @@
       <div class="tar">
         <el-button @click="finishDialog = false">取 消</el-button>
         <el-button type="primary" @click="finishCommand">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 指令完成modifytBtn -->
+    <el-dialog class="dialogBox" width="40%" title="指令修改" :visible.sync="modifyDialog" append-to-body>
+      <el-form :model="modifyForm" label-width="130px">
+        <el-form-item label="指定人：" prop="transpondName">
+          <el-input readonly v-model="modifyForm.receiveUserName">
+            <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('receive')"></el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="计划检查时间：" prop="planTime">
+          <el-date-picker v-model="modifyForm.planCheckTime" type="date" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="计划完成时间：" prop="planTime">
+          <el-date-picker v-model="modifyForm.planFinishTime" type="date" placeholder="选择日期时间："
+                          value-format="yyyy-MM-dd"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="modifyForm.remark"></el-input>
+        </el-form-item>
+
+        <el-form-item label="图片选择：" prop>
+          <el-upload class="avatar-uploader" ref="uploadModify" :action="uploadUrlModify" name="files"
+                     :headers="headers"
+                     list-type="picture-card"
+                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="modifyForm">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisibleModify">
+            <img width="50%" :src="dialogImageUrlModify" alt="图片">
+          </el-dialog>
+        </el-form-item>
+      </el-form>
+      <div class="tar">
+        <el-button @click="modifyDialog = false">取 消</el-button>
+        <el-button type="primary" @click="modifyCommand">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -408,10 +489,12 @@
         returnDialog: false,
         soonFinishDialog: false,
         finishDialog: false,
+        modifyDialog: false,
         returnBtn: true,
+        innerBtn: true,
         soonFinishBtn: true,
-        finishBtn: true,
-
+        finishBtn: false,
+        modifyBtn: false,
         reverse: false,   //转发
         activeName: 'first',   //发起指令的tab
         activeName1: 'first',   //收到指令的tab
@@ -427,23 +510,34 @@
             remark: ''
           }
         ],
-        activitiesIcon: [{// 完成指令的人
-          size: 'large',
-          type: 'success',
-          icon: 'el-icon-check'
-        }, {  // 正在处理中
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-loading'
-        }, { // 转发人
-          size: 'large',
-          type: 'info',
-          icon: 'el-icon-refresh'
-        }, {  // 发出指令的人
+        activitiesIcon: [{// 发出指令的人
           size: 'large',
           type: 'primary',
           icon: 'el-icon-location-outline'
-        }],
+        }, {  // 转发人
+          size: 'large',
+          type: 'warning',
+          icon: 'el-icon-refresh'
+        }, { // 正在处理
+          size: 'large',
+          type: 'primary',
+          icon: 'el-icon-loading'
+        }, {  // 完成指令的人
+          size: 'large',
+          type: 'success',
+          icon: 'el-icon-check'
+        }, {  // 复核的
+          size: 'large',
+          type: 'primary',
+          icon: 'el-icon-s-check'
+        }, {
+          size: 'large',
+          type: 'danger',
+          icon: 'el-icon-refresh-left'
+
+        }
+
+        ],
         // 参考图标
         activities2: [{
           content: '发出指令',
@@ -461,16 +555,22 @@
           type: 'primary',
           icon: 'el-icon-loading'
         }, {
-          content: '完成指令',
+          content: '退回',
           timestamp: '',
-          type: 'success',
-          icon: 'el-icon-check'
-        }, {
-          content: '复核指令',
-          timestamp: '',
-          type: 'success',
-          icon: 'el-icon-star-off'
-        }],
+          type: 'danger',
+          icon: 'el-icon-refresh-left'
+        },
+          {
+            content: '完成指令',
+            timestamp: '',
+            type: 'success',
+            icon: 'el-icon-check'
+          }, {
+            content: '复核指令',
+            timestamp: '',
+            type: 'primary',
+            icon: 'el-icon-s-check'
+          }],
         answer: '', // 转发响应变量
         nowType: 0,
         activeIndex: '1',
@@ -482,10 +582,12 @@
         uploadUrlReturn: process.env.BASE_API + '/rest/command/returnCommand',
         uploadUrlSoonFinish: process.env.BASE_API + '/rest/command/soonFinishCommand',
         uploadUrlFinish: process.env.BASE_API + '/rest/command/finishCommand',
+        uploadUrlModify: process.env.BASE_API + '/rest/command/modifyCommand',
         dialogImageUrl: '',
         dialogImageUrlReturn: '',
         dialogImageUrlSoonFinish: '',
         dialogImageUrlFinish: '',
+        dialogImageUrlModify: '',
         commcheckList: [], // 预览图片信息
         planTime: '',
         headers: {
@@ -537,6 +639,14 @@
           commandid: '', // 指令用户表id
           remark: '', // 备注
           planFinishTime: ''
+        },
+        modifyForm: {
+          commandid: '', // 指令用户表id
+          remark: '', // 备注
+          planCheckTime: '',
+          planFinishTime: '',
+          ReceiveUserid: '',
+          transpondName: ''
         },
         // 指令内容框框
         commandUser: {
@@ -605,7 +715,31 @@
         dialogVisibleReturn: false, // 上传图片
         dialogVisibleSoonFinish: false, // 上传图片
         dialogVisibleFinish: false, // 上传图片
-        orgId: ''
+        dialogVisibleModify: false, // 上传图片
+        orgId: '',
+        playerOptions: {
+          playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+          autoplay: true, //如果true,浏览器准备好时开始回放。
+          muted: false, // 默认情况下将会消除任何音频。
+          loop: false, // 导致视频一结束就重新开始。
+          preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+          language: 'zh-CN',
+          aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+          fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+          sources: [{
+            type: 'video/mp4',//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
+            src: '' //url地址
+          }],
+          poster: '', //你的封面地址
+          notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+          controlBar: {
+            timeDivider: true,
+            durationDisplay: true,
+            remainingTimeDisplay: false,
+            fullscreenToggle: true  //全屏按钮
+          }
+        },
+        vedioinnerVisible: false
 
       }
     },
@@ -622,44 +756,62 @@
       initForm() {
         if (this.nowItem == 'add') {
           this.initUserGroupTree()  //初始化组织机构
-          this.initProcessTypeDict()
-          return
-        }
-        let ObCopyData = this.$tool.ObCopy(this.nowItem) //复制nowItem传来的值 处理复杂类型
-        this.form = ObCopyData // 第一层查看
-        this.activities = ObCopyData.commandUser
-        this.transpondForm.commanduserId = ObCopyData.commanduserId // 转发指令
+        } else {
+          let ObCopyData = this.$tool.ObCopy(this.nowItem) //复制nowItem传来的值 处理复杂类型
+          this.form = ObCopyData // 第一层查看
+          this.activities = ObCopyData.commandUsers
+          this.transpondForm.commanduserId = ObCopyData.commanduserId // 转发指令
+          this.returnForm.commandid = ObCopyData.id //退回指令
+          this.soonFinishForm.commandid = ObCopyData.id // 完成指令
+          this.finishForm.commandid = ObCopyData.id // 复核指令
+          this.modifyForm.commandid = ObCopyData.id // 修改指令
+          // this.pictureOfCommand = ObCopyData.commandUsers[0].files
+          // this.finishPictureOfCommand = ObCopyData.commandUsers[0].files
+          console.log('ObCopyDataaaaaaaaaa', ObCopyData)
+          let nowUserId = localStorage.getItem('userId')
+          //处理按钮显示与否
+          /* -1 发起人
+             0 转发
+             1 完成
+             2 复核
+             3 退回*/
+          if (ObCopyData.state == '-1' || ObCopyData.state == '0') {
+            this.innerBtn = true
+            this.returnBtn = true
+            this.soonFinishBtn = true
+            this.finishBtn = false
+            if (nowUserId == ObCopyData.sponsor) {
+              this.soonFinishBtn = false
+              this.finishBtn = false
+            }
 
-        this.returnForm.commandid = ObCopyData.commandinfoid //退回指令
-        this.soonFinishForm.commandid = ObCopyData.commandinfoid // 完成指令
-        this.finishForm.commandid = ObCopyData.commandinfoid // 复核指令
-        this.pictureOfCommand = ObCopyData.pictureOfCommand
-        this.finishPictureOfCommand = ObCopyData.finishPictureOfCommand
-        console.log('ObCopyData', ObCopyData)
-        let nowUserId = localStorage.getItem('userId')
-        //处理按钮显示与否
-        if (ObCopyData.commandState == '-1' || ObCopyData.commandState == '0') {
-          this.returnBtn = true
-          this.soonFinishBtn = true
-          this.finishBtn = false
-          if (nowUserId == ObCopyData.createUserId) {
+          } else if (ObCopyData.state == '3') {
+            this.innerBtn = false
+            this.returnBtn = false
             this.soonFinishBtn = false
-            this.finishBtn = true
-
+            this.finishBtn = false
+            if (nowUserId == ObCopyData.sponsor) {
+              this.innerBtn = false
+              this.returnBtn = false
+              this.soonFinishBtn = false
+              this.finishBtn = false
+              this.modifyBtn = true
+            }
+          } else if (ObCopyData.state == '2') {
+            this.innerBtn = false
+            this.returnBtn = true
+            this.soonFinishBtn = false
+            this.finishBtn = false
+            if (nowUserId == ObCopyData.sponsor) {
+              this.finishBtn = true
+            }
+          } else if (ObCopyData.state == '1') {
+            this.innerBtn = false
+            this.returnBtn = false
+            this.soonFinishBtn = false
+            this.finishBtn = false
           }
-        } else if (ObCopyData.commandState == '2') {
-          this.returnBtn = true
-          this.soonFinishBtn = false
-          this.finishBtn = false
-          if (nowUserId == ObCopyData.createUserId) {
-            this.finishBtn = true
-          }
-        } else if (ObCopyData.commandState == '1') {
-          this.returnBtn = false
-          this.soonFinishBtn = false
-          this.finishBtn = false
         }
-
       },
       initUserGroupTree() {   // 初始化组织机构树
         Organization.userGroupSelect().then(res => {
@@ -685,19 +837,18 @@
       projectItemOnClick(data) {
         // 获取分部分项id
         this.form.projectItemId = data.id
+        this.initProcessByTypeId(data.id)
+
       },
 
-      initProcessTypeDict() {  // 初始化新增工序类型input框数据
-        request.post('/rest/processType/getList').then(res => {
-          this.processMDictOption = res.data.data.data
-          this.initProcessByTypeId(this.processMDictOption[0].id)
-        })
-      },
+      /*   initProcessTypeDict() {  // 初始化新增工序类型input框数据
+           request.post('/rest/processType/getList').then(res => {
+             this.processMDictOption = res.data.data.data
+             this.initProcessByTypeId(this.processMDictOption[0].id)
+           })
+         },*/
       initProcessByTypeId(codeid) {   // 初始化新增工序通过工序类型id
         this.processSDictOption = []  //先清空
-        /* request.post('/rest/process/getList', { processTypeId: processTypeId }).then(res => {
-           this.processSDictOption = res.data.data.data
-         })*/
         this.processSDictOption.unshift({ process: '全部' })
         request.post('/rest/processCheck/numberSdData', { codeid: codeid }).then(res => {
           this.processSDictOption = res.data.data
@@ -727,32 +878,58 @@
       },
       convertIcon(activity, type) {
         // 发出指令的人
-        if (activity.commandStagePeople == 1) {
+        /* -1 发起人
+         0 转发
+         1 完成
+         2 复核
+         3 退回*/
+        if (activity.userRole == 1) {
           if (type === 'icon') {
             return this.activitiesIcon[3].icon
           } else if (type === 'type') {
             return this.activitiesIcon[3].type
           }
-        } else if (activity.commandStagePeople == 2) {
+        } else if (activity.userRole == null) {
           //转发指令的人
           if (type === 'icon') {
             return this.activitiesIcon[2].icon
           } else if (type === 'type') {
             return this.activitiesIcon[2].type
           }
-        } else if (activity.commandStagePeople == 3) {
+        } else if (activity.userRole == 3) {
           // 正在处理指令
           if (type === 'icon') {
             return this.activitiesIcon[1].icon
           } else if (type === 'type') {
             return this.activitiesIcon[1].type
           }
-        } else if (activity.commandStagePeople == 4) {
+        } else if (activity.userRole == -1) {
           //完成指令的人
           if (type === 'icon') {
             return this.activitiesIcon[0].icon
           } else if (type === 'type') {
             return this.activitiesIcon[0].type
+          }
+        } else if (activity.userRole == 0) {
+          //完成指令的人
+          if (type === 'icon') {
+            return this.activitiesIcon[1].icon
+          } else if (type === 'type') {
+            return this.activitiesIcon[1].type
+          }
+        } else if (activity.userRole == 2) {
+          //完成指令的人
+          if (type === 'icon') {
+            return this.activitiesIcon[4].icon
+          } else if (type === 'type') {
+            return this.activitiesIcon[4].type
+          }
+        } else if (activity.userRole == 3) {
+          //完成指令的人
+          if (type === 'icon') {
+            return this.activitiesIcon[5].icon
+          } else if (type === 'type') {
+            return this.activitiesIcon[5].type
           }
         }
       },
@@ -768,12 +945,13 @@
         this.form.projectItemName = data.name
       },
       alertAcceptUserDialog(state) {  //弹出接收人对话框
+        this.receiveData = {}
         this.dialogState = state
         this.receiveUserList()
         this.acceptUserDialog = true
       },
       handleReceiveUserGroupCheckChange(data) {   //选择接收人后的组织机构弹框
-        this.receiveData.userGroupId = data.id
+        this.receiveData.userGroupId = data
         this.receiveUserList()
       },
       _comfirm() {  //提交
@@ -794,18 +972,18 @@
             })
             return false
           }
-          if (this.form.processDictId === '' || this.form.processDictId === '' || this.form.processDictId === undefined) {
-            this.$message({
-              showClose: true,
-              message: '请选择工序类型',
-              type: 'warning'
-            })
-            return false
-          }
+          /*    if (this.form.processDictId === '' || this.form.processDictId === '' || this.form.processDictId === undefined) {
+                this.$message({
+                  showClose: true,
+                  message: '请选择工序类型',
+                  type: 'warning'
+                })
+                return false
+              }*/
           if (this.form.ReceiveUserid === '' || this.form.ReceiveUserid === '' || this.form.ReceiveUserid === undefined) {
             this.$message({
               showClose: true,
-              message: '请选择工序类型',
+              message: '请选择接收人',
               type: 'warning'
             })
             return false
@@ -823,8 +1001,19 @@
         this.$emit('cancel')
         this.reload()
       },
+      close() {
+        this.$emit('cancel')
+      },
       transpondCommand() {  // 转发指令
         if (this.transpondForm.transpondName == '') {
+          this.$message({
+            showClose: true,
+            message: '请输入指定人',
+            type: 'warning'
+          })
+          return false
+        }
+        if (this.modifyForm.transpondName == '') {
           this.$message({
             showClose: true,
             message: '请输入指定人',
@@ -848,67 +1037,37 @@
         })
       },
       returnCommand() {  // 退回指令
-        // instruct.returnCommand(this.returnForm).then(res => {
-        /*       let _message = res.data.message
-               if (_message == '成功') {
-                 this.answer = 'success'
-               } else {
-                 this.answer = 'error'
-               }
-               this.$message({
-                 type: this.answer,
-                 message: _message
-               })*/
         this.$refs.uploadReturn.submit()
         this.$emit('cancel')
-        this.reload()
+        this.reset()
         // })
       },
       soonFinishCommand() {  // 完成指令
-        /*     instruct.soonFinishCommand(this.soonFinishForm).then(res => {
-               let _message = res.data.message
-               if (_message == '成功') {
-                 this.answer = 'success'
-               } else {
-                 this.answer = 'error'
-               }
-               this.$message({
-                 type: this.answer,
-                 message: _message
-               })
-               this.$emit('cancel')
-               this.reload()
-             })*/
         this.$refs.uploadSoonFinish.submit()
         this.$emit('cancel')
-        this.reload()
+        this.reset()
       },
       finishCommand() {  // 完成指令
-        /*     instruct.soonFinishCommand(this.soonFinishForm).then(res => {
-               let _message = res.data.message
-               if (_message == '成功') {
-                 this.answer = 'success'
-               } else {
-                 this.answer = 'error'
-               }
-               this.$message({
-                 type: this.answer,
-                 message: _message
-               })
-               this.$emit('cancel')
-               this.reload()
-             })*/
         this.$refs.uploadFinish.submit()
         this.$emit('cancel')
-        this.reload()
+        this.reset()
+      },
+      modifyCommand() {  // 完成指令
+        this.$refs.uploadModify.submit()
+        this.$emit('cancel')
+        this.reset()
       },
       handleCurrentChange(val) {   //确认接收人
         if (this.dialogState === 'receive') {
           this.form.ReceiveUserid = val.id // 新增传接收人id
+          this.modifyForm.ReceiveUserid = val.id // 新增传接收人id
           this.form.receiveUserName = val.username // 新增接收人id名回填
+          this.modifyForm.receiveUserName = val.username // 新增接收人id名回填
         } else if (this.dialogState === 'transpond') {
           this.transpondForm.zhidingren = val.id // 新增传接收人id
+          this.modifyForm.zhidingren = val.id // 新增传接收人id
           this.transpondForm.transpondName = val.username // 新增接收人id名回填
+          this.modifyForm.transpondName = val.username // 新增接收人id名回填
         }
         this.acceptUserDialog = false
       },
@@ -933,24 +1092,49 @@
           S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
         )
       },
-      //图片预览  (发起人)
-      actionImg(item, index) {
+      /*      //图片预览  (发起人)
+            actionImg(item) {
+              let array = []
+              array.push(item)
+              this.commcheckList = array
+              this.dialogcommcheck = true
+              this.pictureOfCommand.splice(index, 1)
+              this.pictureOfCommand.unshift(item)
+            },
+            //图片预览(接收人)
+            actionImgs(item) {
+              let array = []
+              array.push(item)
+              this.commcheckList = array
+              this.dialogcommchecks = true
+              this.finishPictureOfCommand.splice(index, 1)
+              this.finishPictureOfCommand.unshift(item)
+            },*/
+      pictureShows(node) {
 
-        let array = []
-        array.push(item)
-        this.commcheckList = array
+        let newArr = []
+        for (let i = 0; i < node.length; i++) {
+          if (node[i].fileType == 'jpg' || node[i].fileType == 'png' || node[i].fileType == 'jpeg') {
+            newArr.push(node[i])
+          }
+        }
+        this.pictureOfCommand = newArr
+        // this.zhuanghao = this.currentProcess.zhuanghao
         this.dialogcommcheck = true
-        this.pictureOfCommand.splice(index, 1)
-        this.pictureOfCommand.unshift(item)
       },
-      //图片预览(接收人)
-      actionImgs(item, index) {
-        let array = []
-        array.push(item)
-        this.commcheckList = array
-        this.dialogcommchecks = true
-        this.finishPictureOfCommand.splice(index, 1)
-        this.finishPictureOfCommand.unshift(item)
+      videoPlayerShow(node) {
+        this.playerOptions.sources = []
+        let newArrVedio = []
+        for (let i = 0; i < node.length; i++) {
+          if (node.fileType == 'mp4' || node.fileType == 'mov') {
+            newArrVedio.push(node)
+          }
+        }
+        this.playerOptions.sources[0] = {
+          src: node.filePath,
+          type: 'video/mp4'
+        }
+        this.vedioinnerVisible = true
       }
     }
   }
@@ -1025,6 +1209,10 @@
     font-size: 14px;
   }
 
+  .el-form-item {
+    margin-bottom: 0px;
+  }
+
   /deep/ .el-input {
     font-size: 0.7vw;
   }
@@ -1053,6 +1241,7 @@
   }
   .reference {
     width: 100%;
+    margin-top: 10px;
 
   .el-timeline {
     margin-left: -2vw;
@@ -1170,5 +1359,36 @@
     bottom: 0;
     left: 50%;
     background: #ccc;
+  }
+
+  /deep/ .reverseBox[data-v-d793087e] .el-textarea__inner {
+    height: 60px;
+    min-height: 60px;
+  }
+
+  li {
+    list-style-type: none;
+  }
+
+  .video-box {
+    position: relative;
+  }
+
+  .video-box video {
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  .video-box .video-img {
+    text-align: center;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    background: url(../../../imgs/play.png) no-repeat;
+    background-size: 50% 50%;
+    cursor: pointer
   }
 </style>

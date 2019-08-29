@@ -18,8 +18,9 @@ export default {
     initForm() {
       if (this.nowItem == "add") return;
       this.form = this.$tool.ObCopy(this.nowItem); //复制nowItem传来的值
-      if (this.form.finishPictureOfCommand.length > 0) {
-        let formData = this.form.finishPictureOfCommand[0];
+      if (this.form.commandUsers[0].files.length > 0) {
+        // commandUsers[0].files
+        let formData = this.form.commandUsers[0].files[0];
 
         var map = new BMap.Map("newallmap"); //创建地图实例
         var point = new BMap.Point(formData.lgt, formData.lat); //经纬度坐标
