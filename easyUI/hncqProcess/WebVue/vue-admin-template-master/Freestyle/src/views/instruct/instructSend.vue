@@ -29,7 +29,7 @@
     <!-- 查询列表 -->
     <div>
       <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
-        <el-table-column prop="projectitem" label="分部分项" width="500"></el-table-column>
+        <el-table-column prop="projectitem" label="分部分项" width="555"></el-table-column>
         <el-table-column prop="station" label="桩号" align="center"></el-table-column>
         <!--<el-table-column label="指令类型" width="110" align="center">
           <template slot-scope="scope">
@@ -42,13 +42,13 @@
         <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
         <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
         <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
-        <el-table-column label="状态" width="100" align="center">
+        <el-table-column label="状态" width="120" align="center">
           <template slot-scope="scope">
-            <template v-if="scope.row.state=='-1'">待处理</template>
-            <template v-else-if="scope.row.state=='0'">转发</template>
-            <template v-else-if="scope.row.state=='1'">已完成</template>
-            <template v-else-if="scope.row.state=='2'">待复核</template>
-            <template v-else-if="scope.row.state=='3'">退回</template>
+            <template v-if="scope.row.state=='-1'">已发起,待处理</template>
+            <template v-else-if="scope.row.state=='0'">已转发</template>
+            <template v-else-if="scope.row.state=='1'">已复核</template>
+            <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
+            <template v-else-if="scope.row.state=='3'">已退回,待修改</template>
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
@@ -69,7 +69,7 @@
     </el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog width="60%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
   </div>
@@ -110,8 +110,8 @@
           starttime: '', // 开始时间
           endtime: '', // 结束时间
           pageNo: 1, // 当前页
-          pageSize: 10, // 每页条数
-          Mark: 1 //  标记：1：发送、2：接收
+          pageSize: 10 // 每页条数
+          // Mark: 1 //  标记：1：发送、2：接收
         },
 
         nowItem: '',
@@ -157,6 +157,7 @@
       },
       async actionItem(id) {  // 查询单个请求
         let { data } = await api.searchOne({ id })
+        console.log('datassssssssss', data)
         this.nowItem = data.data
         this.dialogFormVisible = true
       },

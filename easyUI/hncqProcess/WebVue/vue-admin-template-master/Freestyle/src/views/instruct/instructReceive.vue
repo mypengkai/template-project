@@ -28,8 +28,8 @@
     <!-- 查询列表 -->
     <div>
       <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
-        <el-table-column prop="projectitem" label="分部分项" width="500"></el-table-column>
-        <el-table-column prop="station" label="桩号"  align="center"></el-table-column>
+        <el-table-column prop="projectitem" label="分部分项" width="555"></el-table-column>
+        <el-table-column prop="station" label="桩号" align="center"></el-table-column>
         <!--<el-table-column label="指令类型" width="110" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.commandType==='1'">安全</template>
@@ -41,24 +41,34 @@
         <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
         <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
         <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
-        <el-table-column label="状态" width="100" align="center">
+        <el-table-column label="状态" width="120" align="center">
           <template slot-scope="scope">
-              <template v-if="scope.row.state=='-1'">待处理</template>
-              <template v-else-if="scope.row.state=='0'">转发</template>
-              <template v-else-if="scope.row.state=='1'">已完成</template>
-              <template v-else-if="scope.row.state=='2'">待复核</template>
-              <template v-else-if="scope.row.state=='3'">退回</template>
+            <template v-if="scope.row.state=='-1'">已发起,待处理</template>
+            <template v-else-if="scope.row.state=='0'">已转发</template>
+            <template v-else-if="scope.row.state=='1'">已复核</template>
+            <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
+            <template v-else-if="scope.row.state=='3'">已退回,待修改</template>
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
+           <!-- <el-button
+              type="warning"
+              icon="el-icon-edit"
+              size="small"
+              content="修改"
+              circle
+              @click="editItem(scope.row.commandId)"
+            ></el-button>-->
             <el-button
               type="primary"
               icon="el-icon-search"
               size="small"
+              content="查看"
               circle
               @click="actionItem(scope.row.commandId)"
             ></el-button>
+
           </template>
         </el-table-column>
       </el-table>
@@ -112,8 +122,16 @@
           starttime: '', // 开始时间
           endtime: '', // 结束时间
           pageNo: 1, // 当前页
-          pageSize: 6, // 每页条数
-          Mark: 2 //  标记：1：发送、2：接收
+          pageSize: 10 // 每页条数
+          // Mark: 2 //  标记：1：发送、2：接收
+        },
+        modifyData: {
+          departId: '', //部门id
+          projectItemId: '', // 分部分项id
+          starttime: '', // 开始时间
+          endtime: '', // 结束时间
+          pageNo: 1, // 当前页
+          pageSize: 10 // 每页条数
         },
         nowItem: '',
         userGroupId: '',
@@ -135,6 +153,13 @@
         console.log(this.nowItem)
         this.dialogFormVisible = true
 
+      },
+      editItem() {
+        // let { data } = await api.searchOne({ id })
+
+       /* api.modifyCommand(this.modifyData).then(res => {
+          // this.getList = res.data.data.data
+        })*/
       },
       _searchList() {  //查询列表
         api.myCommandReceive(this.sendData).then(res => {

@@ -74,6 +74,7 @@
     <el-dialog class="dialogBox" width="45%" title="选择用户" :visible.sync="acceptUserDialog" append-to-body>
       <div class="topBar">
         <span>组织机构:</span>
+
         <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
                      v-on:noDe="handleReceiveUserGroupCheckChange"/>
       </div>

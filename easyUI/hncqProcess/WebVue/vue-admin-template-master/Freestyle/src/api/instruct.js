@@ -29,6 +29,9 @@ export default {
   searchOne(data) {
     return request.post('/rest/command/searchOne', data)
   },
+  modifyCommand(data) {
+    return request.post('/rest/command/modifyCommand', data)
+  },
   // 发送指令
   addCommand(data) {
     return request.post('/rest/command/addCommand', data)
