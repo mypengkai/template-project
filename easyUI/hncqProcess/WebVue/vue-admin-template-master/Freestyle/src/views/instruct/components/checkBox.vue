@@ -1134,6 +1134,7 @@
           src: node.filePath,
           type: 'video/mp4'
         }
+        this.poster = node.filePath.split('.')[0] + 'jpg'
         this.vedioinnerVisible = true
       }
     }
