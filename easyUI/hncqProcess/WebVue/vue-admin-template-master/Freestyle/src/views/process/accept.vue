@@ -154,9 +154,9 @@
         <el-dialog :visible.sync="setCheckPersonDialogFormVisible" width="50%" title="选中验收人" :append-to-body="true">
           <div class="topBar">
             <span>姓名:</span>
-            <el-input v-model="pageForm.realname" placeholder="请输入内容"/>
+            <el-input style="width: 150px;" v-model="pageForm.realname" placeholder="请输入内容"/>
             <span>职务:</span>
-            <el-input v-model="pageForm.position" placeholder="请输入内容"/>
+            <el-input style="width: 150px;" v-model="pageForm.position" placeholder="请输入内容"/>
             <div class="rl">
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
                          @click="selectCheckPerson(currentSelectedState)">查询
@@ -343,18 +343,18 @@
       <el-dialog :visible.sync="setCheckPersonDialogFormVisible" width="50%" title="选中验收人" :append-to-body="true">
         <div class="topBar">
           <span>姓名:</span>
-          <el-input v-model="pageForm.realname" placeholder="请输入内容"/>
+          <el-input style="width: 150px;" v-model="pageForm.realname" placeholder="请输入内容"/>
           <span>职务:</span>
-          <el-input v-model="pageForm.position" placeholder="请输入内容"/>
+          <el-input style="width: 150px;" v-model="pageForm.position" placeholder="请输入内容"/>
           <div class="rl">
-            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+            <el-button type="primary" size="small" class="pan-btn light-blue-btn" icon="el-icon-search"
                        @click="selectCheckPerson(currentSelectedState)">查询
             </el-button>
-            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+            <el-button type="primary" size="small" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
             </el-button>
           </div>
         </div>
-        <el-table border :data="checkPersonData" class="textList" height="40vh">
+        <el-table border :data="checkPersonData" class="textList" height="45vh">
           <el-table-column fixed="left" label width="80">
             <template slot-scope="scope">
               <input type="radio" name="Fruit" @click="listenCheck(scope, $event)">
@@ -370,13 +370,12 @@
                        @size-change="handleSizeChange" @current-change="selectCheckPerson(currentSelectedState)"/>
 
         <div slot="footer" class="dialog-footer">
-          <el-button class="btnSizes" @click="setCheckPersonDialogFormVisible = false">取 消</el-button>
-          <el-button class="btnSizes" type="primary" @click="comfirmSelectedPerson()">确 定</el-button>
+          <el-button class="btnSizes"  @click="setCheckPersonDialogFormVisible = false">取 消</el-button>
+          <el-button class="btnSizes"  type="primary" @click="comfirmSelectedPerson()">确 定</el-button>
         </div>
       </el-dialog>
 
       <el-form ref="apponitCheckFrom" :model="apponitCheckFrom" :rules="apponitCheckFromRules" label-width="125px">
-
         <el-form-item label="自检人" prop="planSelfCheckPerson">
           <el-input readonly="true" v-model="apponitCheckFrom.planSelfCheckPerson" autocomplete="off" style="width:80%">
             <el-button slot="append" icon="el-icon-search" @click="selectCheckPerson('construction')"></el-button>
@@ -769,6 +768,7 @@
         this.selectCheckPerson(this.currentSelectedState)
       },
       listenCheck(data, e) {  // 监听验收人单选框
+        debugger
         this.even = e
         if (this.currentSelectedState === 'supervisor') {
           this.apponitCheckFrom.planCheckPerson = data.row.username
@@ -1049,11 +1049,11 @@
   }
   }
   }
-  .btnSizes {
+ /* .btnSizes {
     font-size: 0.8vw !important;
     padding: 0.8vw !important;
   }
-
+*/
   .navBar {
     display: flex;
     justify-content: space-between;

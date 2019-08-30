@@ -184,8 +184,8 @@
   }
 
   /deep/ .el-input__inner {
-    height: 25px;
-    line-height: 40px;
+    height: 30px;
+    line-height: 30px;
     width: 181%;
   }
 }
@@ -214,11 +214,6 @@
     margin-right: 10px;
     margin-bottom: 10px;
   }
-
-  .el-input__inner {
-    line-height: 39px;
-  }
-
   .el-textarea {
     width: 40%;
   }
@@ -262,8 +257,8 @@
     color: #606266;
     display: inline-block;
     font-size: inherit;
-    height: 40px;
-    line-height: 40px;
+    height: 30px;
+    line-height: 30px;
     outline: 0;
     padding: 0 15px;
     -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
@@ -273,13 +268,19 @@
     // color: rgb(20, 101, 191)
   }
 
-  .acceptzh[data-v-67cd2b84] .el-input__inner,
+  /deep/.acceptzh[data-v-67cd2b84] .el-input__inner,
   .el-input--suffix .el-input__inner {
-    height: 32px;
+    height: 30px;
   }
 
   /deep/ .el-dialog.is-fullscreen {
     overflow: hidden;
 
+  }
+  /deep/ .el-input--suffix .el-input__inner{
+    height: 30px;
+  }
+  /deep/ input[type='text']{
+    height: 30px;
   }
 }
