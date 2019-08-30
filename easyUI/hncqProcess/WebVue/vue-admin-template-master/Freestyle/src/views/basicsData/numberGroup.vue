@@ -30,7 +30,7 @@
         <el-table-column align="center" prop="groupName" label="组名"/>
         <el-table-column align="center" prop="groupUser" label="组员"/>
         <el-table-column align="center" prop="createTime" label="创建时间"/>
-        <el-table-column align="center" prop="createName" label="创建人"/>
+        <el-table-column align="center" prop="realname" label="创建人"/>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
             <!--            <el-button type="warning" size="small" icon="el-icon-edit" circle @click="Edit(scope.row)"/>-->
@@ -48,7 +48,7 @@
     </el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog fullscreen="" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog fullscreen :lock-scroll="true" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
   </div>
@@ -234,9 +234,9 @@
     background-color: #fff;
   }
 
-  .dialogBox {
-    margin-top: -7vh;
-  }
+/*  .dialogBox {
+    margin-top: -2vh;
+  }*/
 
   .mybox {
 
