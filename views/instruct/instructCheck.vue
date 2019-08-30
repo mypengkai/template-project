@@ -29,7 +29,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
         <el-table-column prop="project" label="分部分项" width="555"></el-table-column>
         <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
         <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>

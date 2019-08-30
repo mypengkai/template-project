@@ -12,7 +12,7 @@
       </el-row>
     </div>
     <el-table :data="menuList" class="textList" border row-key="id" :default-expand-all="false"
-              :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
+              :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="78vh">
       <el-table-column label="菜单名称" height="250" align="left">
         <template slot-scope="scope">{{ scope.row.meta.title }}</template>
       </el-table-column>
