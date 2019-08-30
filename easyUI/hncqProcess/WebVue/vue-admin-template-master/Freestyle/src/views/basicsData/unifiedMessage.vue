@@ -48,7 +48,7 @@
     <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="72vh" stripe highlight-current-row
               border>
       <!--      <el-table-column prop="type" label="类型" align="center"/>-->
-      <el-table-column label="类型" align="center">
+      <el-table-column label="类型" align="center" width="100">
         <template slot-scope="scope">
           <template v-if="scope.row.type=='selfcheck'">自检</template>
           <template v-else-if="scope.row.type=='notice'">通知</template>
@@ -60,9 +60,9 @@
         </template>
       </el-table-column>
       <el-table-column prop="text" label="内容" align="center"/>
-      <el-table-column prop="realname" label="创建人" align="center"/>
-      <el-table-column prop="createtime" label="创建时间" align="center"/>
-      <el-table-column min-width="120" fixed="right" label="操作" align="center">
+      <el-table-column prop="realname" label="创建人" align="center" width="120"/>
+      <el-table-column prop="createtime" label="创建时间" align="center" width="150"/>
+      <el-table-column min-width="120" fixed="right" label="操作" align="center" width="150">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
             <el-button v-ltx="'processingUpdate'" type="warning" size="small" icon="el-icon-edit" circle
@@ -91,7 +91,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="内容：">
-          <el-input v-model="formData.text"/>
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="formData.text"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

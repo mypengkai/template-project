@@ -70,7 +70,7 @@
         <td colspan="3" height="400px">
           <div class="block">
             <template v-if="currentProcess.SelfCheckFile!==null">
-              <el-timeline v-for="(item, index) in currentProcess.SelfCheckFile" :key="index">
+              <el-timeline  v-for="(item, index) in currentProcess.SelfCheckFile" :key="index">
                 <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px;text-align: left">
                   <el-card>
                     <h4 style="text-align: left;">完成状态:{{item.isadopt=='1'?'通过':'不通过'}}</h4>
