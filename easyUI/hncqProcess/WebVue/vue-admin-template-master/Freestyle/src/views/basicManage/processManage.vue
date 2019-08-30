@@ -17,7 +17,7 @@
     </div>
 
     <!-- 数据列表 -->
-    <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="68vh" stripe highlight-current-row
+    <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="72vh" stripe highlight-current-row
               border>
       <el-table-column prop="seq" label="序号" align="center"/>
       <el-table-column prop="process" label="工序" align="center"/>
@@ -71,7 +71,7 @@
     inject: ['reload'],
     data() {
       return {
-        tableData: null,
+        tableData: [],
         form: {
           process: '',
           remark: '',
