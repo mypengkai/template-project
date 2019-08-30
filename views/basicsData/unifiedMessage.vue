@@ -2,14 +2,14 @@
   <div class="p20">
     <!-- 选择区域 -->
     <div class="topBar p20">
-      <el-col :span="5">
+      <el-col :span="4.5">
         <span>类型:</span>
         <el-select v-model="formUnified.type" placeholder="请选择" size="small">
           <el-option v-for="item in checkStateOptions" :key="item.value" :label="item.label"
                      :value="item.value"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="4.5">
         <span>内容：</span>
         <el-input
           size="small"
@@ -17,13 +17,12 @@
           placeholder="请输入内容"
           v-model="formUnified.text"
           clearable
-          style="width: 200px"
+          style="width:150px"
         ></el-input>
 
       </el-col>
 
-
-      <el-col :span="8">
+      <el-col :span="8.5">
         <div class="grid-content">
           <span>创建日期：</span>
           <el-date-picker v-model="formUnified.startTime" type="date" size="small" value-format="yyyy-MM-dd"
@@ -34,7 +33,7 @@
         </div>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="5.5">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="initTable()">查询
         </el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
@@ -46,7 +45,7 @@
     </div>
 
     <!-- 数据列表 -->
-    <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="72vh" stripe highlight-current-row
+    <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="68vh" stripe highlight-current-row
               border>
       <!--      <el-table-column prop="type" label="类型" align="center"/>-->
       <el-table-column label="类型" align="center">
@@ -63,7 +62,7 @@
       <el-table-column prop="text" label="内容" align="center"/>
       <el-table-column prop="realname" label="创建人" align="center"/>
       <el-table-column prop="createtime" label="创建时间" align="center"/>
-      <el-table-column min-width="150" fixed="right" label="操作" align="center">
+      <el-table-column min-width="120" fixed="right" label="操作" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
             <el-button v-ltx="'processingUpdate'" type="warning" size="small" icon="el-icon-edit" circle
@@ -200,7 +199,7 @@
       addText() {  //新增
         this.dialogVisible = true
         this.dialogTitle = '新增'
-        this.formUnified = {}
+        this.formData = {}
       },
       editText(row) {
         // this.dialogTitle = ''
