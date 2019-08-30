@@ -208,11 +208,10 @@
   .p20 {
     background-color: #ecf5ff;
   }
-  .search {
+ /* .search {
     float: left;
     margin-bottom: 10px;
-
-  }
+  }*/
   .el-input {
     width: 200px;
   }

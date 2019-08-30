@@ -1,9 +1,9 @@
 <template>
   <div class="p20">
-    <div class="search">
+    <div class="topBar">
       <el-row>
         <el-col :span="5" v-if="tabPosition == 'first'">
-          <el-form :inline="true" class="grid-content" style="font-size:.8vw">
+          <el-form :inline="true" class="grid-content">
             <el-form-item label="组织机构：">
               <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
                 <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
@@ -116,6 +116,7 @@
   import request from '@/utils/request'
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import Organization from '@/api/Organization'
+
   export default {
     name: 'TraceManage',
     inject: ['reload'],
@@ -163,7 +164,7 @@
           projectId: '', //单位id
           unitsName: '', //单位工程
           unitsId: '' //工程ID
-        },
+        }
       }
     },
     watch: {},
@@ -200,8 +201,8 @@
       // 获取分部分项id
       projectItemOnClick(data) {
         console.log(data)
-        this.from.projectId = data.id;
-        
+        this.from.projectId = data.id
+
       },
       /*
 
@@ -231,7 +232,7 @@
       */
 
       handleCheckChangeUnit(data) {
-        console.log(data,"data111")
+        console.log(data, 'data111')
         this.from.unitsName = data.projectItem
         this.from.unitsId = data.id
       },
@@ -321,22 +322,20 @@
 </script>
 
 <style lang="scss" scoped>
-  .p20 {
+/*  .p20 {
+    padding: 20px;
     height: 100%;
-    width: 100%;
-    font-size: 0.8vw;
-  }
+  }*/
 
-  .inputName {
-    width: 20%;
-    height: 100%;
-    text-indent: 10px;
-  }
+  /* .inputName {
+     width: 20%;
+     height: 100%;
+     text-indent: 10px;
+   }*/
 
   .grid-content {
     height: 40px;
     line-height: 40px;
-    width: 100%;
     font-size: 14px;
     font-weight: bold;
     color: #606266;
@@ -353,12 +352,6 @@
   }
 
   /deep/ .el-form-item__label {
-    font-size: 14px;
-    font-weight: 400;
-    color: #000;
-  }
-
-  /deep/ .grid-content {
     font-size: 14px;
     font-weight: 400;
     color: #000;

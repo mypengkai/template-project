@@ -1,7 +1,9 @@
 <template>
   <div class="printerCheck">
-    <el-row>
-      <el-col :span="5">
+    <div class="topBar">
+
+      <el-row>
+        <el-col :span="6">
       <span>
         <el-form label-width="80px" :inline="true">
           <el-form-item label="打印编码:">
@@ -9,8 +11,8 @@
           </el-form-item>
         </el-form>
       </span>
-      </el-col>
-      <el-col :span="5">
+        </el-col>
+        <el-col :span="5">
       <span>
         <el-button
           type="primary"
@@ -19,11 +21,13 @@
           @click="queryPrint"
         >查询</el-button>
       </span>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </div>
+
     <div class="printCheckConent" v-if="isShow">
       <p>湖南常祁高速验收凭证</p>
-      <el-table :data="tableData" style="width: 100%" height="65vh" border class="textList">
+      <el-table :data="tableData" style="width: 100%" height="64vh" border class="textList">
         <!-- <el-table-column label="承包单位: 湖南长祁高速"> -->
         <el-table-column prop="projectName" label="分部分项" width="550"></el-table-column>
         <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
@@ -99,8 +103,7 @@
 </script>
 <style lang="scss" scoped>
   .printerCheck {
-    padding: 20px;
-
+    padding:0 20px;
   .printerCheckTop {
     display: -webkit-flex; /* Safari */
     display: flex;

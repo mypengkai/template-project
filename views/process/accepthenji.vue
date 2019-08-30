@@ -2,7 +2,7 @@
   <div class="acceptzh">
     <div class="topBar">
       <el-row>
-        <el-col :span="5">
+        <el-col :span="6">
           <span>组织机构:</span>
           <!-- <select-tree
              :options="userGroupOption"
@@ -14,7 +14,7 @@
                        :value="item.id"></el-option>
           </el-select>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="6">
           <span>分部分项:</span>
           <select-tree clearable :options="projectItemTreeOption" ref="getSelectData" :props="projectItemDefaultProp"
                        v-on:noDe="projectItemOnClick"/>
@@ -28,7 +28,7 @@
         </el-col>
 
 
-        <el-col :span="12">
+        <el-col :span="10">
           <span>创建日期:</span>
           <el-date-picker
             v-model="queryData.starttime"
@@ -99,7 +99,7 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" height="68vh" fit>
+    <el-table border class="textList" :data="tableData" height="66vh" fit>
       <el-table-column prop="name1" label="分部分项" width="400"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="150" align="center"></el-table-column>
       <el-table-column prop="processName" label="工序名称" width="" align="center"></el-table-column>

@@ -77,7 +77,7 @@
     </el-form>
 
     <!-- 用户弹框 -->
-      <el-dialog style="margin-top: 5vh;" class="dialogBox" :lock-scroll="true" width="45%" title="选择用户"
+      <el-dialog style="margin-top: 5vh;height: 600px" class="dialogBox" :lock-scroll="true" width="45%" title="选择用户"
                  :visible.sync="acceptUserDialog"
                  append-to-body>
         <div class="topBar">
