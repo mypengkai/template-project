@@ -350,7 +350,8 @@
             <el-button type="primary" size="small" class="pan-btn light-blue-btn" icon="el-icon-search"
                        @click="selectCheckPerson(currentSelectedState)">查询
             </el-button>
-            <el-button type="primary" size="small" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+            <el-button type="primary" size="small" class="pan-btn light-blue-btn" icon="el-icon-refresh"
+                       @click="reset()">重置
             </el-button>
           </div>
         </div>
@@ -370,8 +371,8 @@
                        @size-change="handleSizeChange" @current-change="selectCheckPerson(currentSelectedState)"/>
 
         <div slot="footer" class="dialog-footer">
-          <el-button class="btnSizes"  @click="setCheckPersonDialogFormVisible = false">取 消</el-button>
-          <el-button class="btnSizes"  type="primary" @click="comfirmSelectedPerson()">确 定</el-button>
+          <el-button class="btnSizes" @click="setCheckPersonDialogFormVisible = false">取 消</el-button>
+          <el-button class="btnSizes" type="primary" @click="comfirmSelectedPerson()">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -383,8 +384,10 @@
         </el-form-item>
 
         <el-form-item label="自检时间" prop="planSelfCheckTime">
-          <el-date-picker :editable="false" v-model="apponitCheckFrom.planSelfCheckTime" type="date" placeholder="选择日期"
-                          style="width:80%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"/>
+          <el-date-picker :clearable="false" :editable="false" v-model="apponitCheckFrom.planSelfCheckTime" type="date"
+                          placeholder="选择日期"
+                          style="width:80%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+                          :picker-options="startTime"/>
         </el-form-item>
         <el-form-item label="验收人" prop="planCheckPerson">
           <el-input readonly="true" v-model="apponitCheckFrom.planCheckPerson" autocomplete="off" style="width:80%">
@@ -394,8 +397,10 @@
 
         </el-form-item>
         <el-form-item label="验收时间" prop="planCheckTime">
-          <el-date-picker :editable="false" v-model="apponitCheckFrom.planCheckTime" type="date" placeholder="选择日期"
-                          style="width:80%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"/>
+          <el-date-picker :clearable="false" :editable="false" v-model="apponitCheckFrom.planCheckTime" type="date"
+                          placeholder="选择日期"
+                          style="width:80%" value-format="yyyy-MM-dd" format="yyyy-MM-dd" :picker-options="endTime"
+          />
         </el-form-item>
 
       </el-form>
@@ -436,6 +441,33 @@
 
       }
       return {
+
+        /*只能选择今天以后
+          afterToday: {
+            disabledDate(time) {
+              return time.getTime() < Date.now() - 8.64e7//如果没有后面的-8.64e7就是不可以选择今天的
+            }
+          },*/
+
+        startTime: {//结束时间不能大于开始时间
+          disabledDate: (time) => {
+            if (this.apponitCheckFrom.planCheckTime) {
+              return time.getTime() > new Date(this.apponitCheckFrom.planCheckTime).getTime()
+
+            } else {//还没有选择结束时间的时候，让他只能选择今天之后的时间包括今天
+              return time.getTime() < Date.now() - 8.64e7
+            }
+
+          }
+        },
+        endTime: {
+          disabledDate: (time) => {
+            if (this.apponitCheckFrom.planSelfCheckTime) {
+              return time.getTime() < new Date(this.apponitCheckFrom.planSelfCheckTime).getTime() - 1 * 24 * 60 * 60 * 1000//可以选择同一天
+
+            }
+          }
+        },
         userGroupDefaultProps: {   // 组织机构树显示
           children: 'children',
           label: 'name'
@@ -768,7 +800,7 @@
         this.selectCheckPerson(this.currentSelectedState)
       },
       listenCheck(data, e) {  // 监听验收人单选框
-        debugger
+      debugger
         this.even = e
         if (this.currentSelectedState === 'supervisor') {
           this.apponitCheckFrom.planCheckPerson = data.row.username
@@ -1049,11 +1081,11 @@
   }
   }
   }
- /* .btnSizes {
-    font-size: 0.8vw !important;
-    padding: 0.8vw !important;
-  }
-*/
+  /* .btnSizes {
+     font-size: 0.8vw !important;
+     padding: 0.8vw !important;
+   }
+ */
   .navBar {
     display: flex;
     justify-content: space-between;
