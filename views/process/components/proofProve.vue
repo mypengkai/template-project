@@ -3,17 +3,17 @@
     <div class="printCheckConent">
       <el-table :data="formData" style="width:100%;" border>
         <el-table-column label="湖南常祁高速验收凭证">
-          <el-table-column prop="projectName" label="分部分项"></el-table-column>
-          <el-table-column prop="Station" label="桩号"></el-table-column>
-          <el-table-column prop="processname" label="工序名称"></el-table-column>
-          <el-table-column prop="realitychecktime" label="验收时间"></el-table-column>
-          <el-table-column prop="realname" label="验收人"></el-table-column>
-          <el-table-column prop="checkdescribe" label="验收说明"></el-table-column>
+          <el-table-column prop="projectName" label="分部分项" align="center"></el-table-column>
+          <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
+          <el-table-column prop="processname" label="工序名称" align="center"></el-table-column>
+          <el-table-column prop="realitychecktime" label="验收时间" align="center"></el-table-column>
+          <el-table-column prop="realname" label="验收人" align="center"></el-table-column>
+          <el-table-column prop="checkdescribe" label="验收说明" align="center"></el-table-column>
         </el-table-column>
       </el-table>
     </div>
     <div class="printerCheckfooter">
-      <el-button type="info" @click="close">取消</el-button>
+      <el-button  @click="close">取消</el-button>
       <el-button type="primary" @click="drPrint">打印</el-button>
     </div>
   </div>

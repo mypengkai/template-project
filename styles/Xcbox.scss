@@ -278,4 +278,8 @@
     height: 32px;
   }
 
+  /deep/ .el-dialog.is-fullscreen {
+    overflow: hidden;
+
+  }
 }

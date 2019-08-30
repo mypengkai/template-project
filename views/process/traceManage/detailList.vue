@@ -68,12 +68,13 @@
             <el-col :span="10" style="color:#409eff ; margin-top:0.5vw;font-weight: bolder">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
               <!-- <template v-if="item.infoLogType == 'log'">日志</template> -->
-              <template v-if="item.infoLogType== 'realcheck'">工序验收</template>
+              <template v-if="item.infoLogType== 'processCheck'">工序验收</template>
               <!--              <template v-else-if="item.type == 'notice'">通知</template>-->
               <template v-else-if="item.infoLogType == 'command'">指令</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
               <template v-else-if="item.infoLogType == 'meeting'">变更纪要</template>
+
             </el-col>
             <el-col :span="14">
               <div
@@ -118,7 +119,7 @@
       <meetingDetail :changeId="meetId" v-if="hackReset"></meetingDetail>
     </el-dialog>
     <!--工序查看-->
-    <el-dialog fullscreen title="查看详情" :visible.sync="dialogTableVisibleRealcheck">
+    <el-dialog fullscreen title="工序详情" :visible.sync="dialogTableVisibleRealcheck">
       <processCheck :processInfoId="processInfoId" :realList="realList" v-if="hackReset"></processCheck>
     </el-dialog>
     <!-- 旁站 -->

@@ -2,19 +2,19 @@
   <div class="p20">
     <div class="topBar">
       <el-row>
-        <el-col :span="5" v-if="tabPosition == 'first'">
+        <el-col :span="6" v-if="tabPosition == 'first'">
           <el-form :inline="true" class="grid-content">
-            <el-form-item label="组织机构：">
+              <span>组织机构：</span>
               <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
                 <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                            :value="item.id"></el-option>
               </el-select>
-            </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="5" v-if="tabPosition == 'first'">
+        <el-col :span="6" v-if="tabPosition == 'first'">
           <el-form :inline="true" class="grid-content">
-            <el-form-item label="分部分项：">
+              <span>分部分项：</span>
+
               <!--     <select-tree
                      :options="projectItemOptions"
                      v-on:noDe="handleCheckChangeUnit"
@@ -23,7 +23,6 @@
                  </el-form-item>-->
               <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
                            v-on:noDe="projectItemOnClick"/>
-            </el-form-item>
           </el-form>
         </el-col>
         <!-- ========================================== -->
@@ -47,7 +46,7 @@
           </div>
         </el-col>
         <!-- ===================================== -->
-        <el-col :span="12">
+        <el-col :span="8">
           <el-row>
             <div class="grid-content">
               <span>日期：</span>
