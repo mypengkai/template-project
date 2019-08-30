@@ -1,81 +1,42 @@
 <template>
   <div class="demo-image__preview detail">
-    <el-tag  id="meetTop">当前变更纪要</el-tag>
+    <em  id="meetTop"></em>
     <div class="current">
-      <table
-        border="0"
-        cellspacing="0"
-        cellpadding="0"
-        style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;"
-      >
-        <tr>
-          <th>会议编号</th>
-          <td>{{changeInfo.meetingSummaryNumber}}</td>
-          <th>会议主题</th>
-          <td>{{changeInfo.meetingTheme}}</td>
-          <th>会议地点</th>
-          <td>{{changeInfo.meetingAddress}}</td>
-        </tr>
-        <tr>
-          <th>组织机构</th>
-          <td>{{changeInfo.departname}}</td>
-          <th>分部分项</th>
-          <td>{{changeInfo.projectItem}}</td>
-          <th>桩号</th>
-          <td>{{(changeInfo.startStation!==null && changeInfo.startStation!=="" && changeInfo.startStation!==undefined && changeInfo.endStation!==null && changeInfo.endStation!=="" && changeInfo.endStation!==undefined) ? (changeInfo.startStation+'~'+changeInfo.endStation) : ''}}</td>
-        </tr>
-        <tr>
-          <th>增减金额(万元)</th>
-          <td>{{changeInfo.addDecreaseMoney}}</td>
-          <th>变更等级</th>
-          <td>
-            <template v-if="changeInfo.moneyLevel==='one_level'">一级</template>
-            <template v-else-if="changeInfo.moneyLevel==='two_level'">二级</template>
-            <template v-else-if="changeInfo.moneyLevel==='three_level'">三级</template>
-            <template v-else-if="changeInfo.moneyLevel==='four_level'">四级</template>
-          </td>
-          <th>金额计算式</th>
-          <td>{{changeInfo.formulaCalculatingAmount}}</td>
-        </tr>
-        <tr>
-          <th>会议主持人</th>
-          <td>{{changeInfo.meetingHostName}}</td>
-          <th>会议记录人</th>
-          <td>{{changeInfo.meetingNoteTakerName}}</td>
-          <th>开会时间</th>
-          <td>{{changeInfo.meetingDatetime}}</td>
-        </tr>
-        <tr>
-          <th>增减数量</th>
-          <td>{{changeInfo.addDecreaseNumber}}</td>
-          <th>数量计算式</th>
-          <td>{{changeInfo.quantitativeFormulas}}</td>
-          <th>变更状态</th>
-          <td>
-            <template v-if="changeInfo.changeToken=='1'">申请</template>
-            <template v-else-if="changeInfo.changeToken=='2'">审核</template>
-            <template v-else-if="changeInfo.changeToken=='3'">备案</template>
-            <template v-else-if="changeInfo.changeToken=='7'">完成</template>
-          </td>
-        </tr>
-        <tr>
-          <th>申请人</th>
-          <td>{{changeInfo.applyUserName}}</td>
-          <th>会议内容</th>
-          <td>{{changeInfo.sceneSummaryContent}}</td>
-          <th>变更理由</th>
-          <td>{{changeInfo.changeReason}}</td>
-        </tr>
-      </table>
+      <ol>
+        <li><span>会议编号:</span><i>{{changeInfo.meetingSummaryNumber}}</i></li>
+        <li><span>会议主题:</span><i>{{changeInfo.meetingTheme}}</i></li>
+        <li><span>会议地点:</span><i>{{changeInfo.meetingAddress}}</i></li>
+        <li><span>组织机构:</span><i>{{changeInfo.departname}}</i></li>
+        <li><span>分部分项:</span><i>{{changeInfo.projectItem}}</i></li>
+        <li><span>桩号:</span><i>{{(changeInfo.startStation!==null && changeInfo.startStation!=="" && changeInfo.startStation!==undefined && changeInfo.endStation!==null && changeInfo.endStation!=="" && changeInfo.endStation!==undefined) ? (changeInfo.startStation+'~'+changeInfo.endStation) : ''}}</i></li>
+        <li><span>增减金额(万元):</span><i>{{changeInfo.addDecreaseMoney}}</i></li>
+        <li><span>变更等级:</span><i v-if="changeInfo.moneyLevel==='one_level'">一级</i>
+            <i v-else-if="changeInfo.moneyLevel==='two_level'">二级</i>
+            <i v-else-if="changeInfo.moneyLevel==='three_level'">三级</i>
+            <i v-else-if="changeInfo.moneyLevel==='four_level'">四级</i></li>
+        <li><span>金额计算式:</span><i>{{changeInfo.formulaCalculatingAmount}}</i></li>
+        <li><span>会议主持人:</span><i>{{changeInfo.meetingHostName}}</i></li>
+        <li><span>会议记录人:</span><i>{{changeInfo.meetingNoteTakerName}}</i></li>
+        <li><span>开会时间:</span><i>{{changeInfo.meetingDatetime}}</i></li>
+        <li><span>增减数量:</span><i>{{changeInfo.addDecreaseNumber}}</i></li>
+        <li><span>数量计算式:</span><i>{{changeInfo.quantitativeFormulas}}</i></li>
+        <li><span>变更状态:</span><i v-if="changeInfo.changeToken=='1'">申请</i>
+            <i v-else-if="changeInfo.changeToken=='2'">审核</i>
+            <i v-else-if="changeInfo.changeToken=='3'">备案</i>
+            <i v-else-if="changeInfo.changeToken=='7'">完成</i></li>
+        <li><span>申请人:</span><i>{{changeInfo.applyUserName}}</i></li>
+        <li><span>会议内容:</span><i>{{changeInfo.sceneSummaryContent}}</i></li>
+        <li><span>变更理由:</span><i>{{changeInfo.changeReason}}</i></li>   
+      </ol>
       <div class="roleName">
         <p>
-          抄送人：
-          <span v-for="(node,index) in newChangInfo.role" :key="index">
+          <span>抄送人：</span>
+          <i v-for="(node,index) in newChangInfo.role" :key="index">
             <template v-if="node.state==3">{{node.userName}}</template>
-          </span>
+          </i>
         </p>
         <p>
-          流程:
+          <span>流程:</span>
           <el-timeline>
             <el-timeline-item
               v-if="item.state !=3 && item.state !=0"
@@ -86,7 +47,7 @@
               <p>处理时间:{{item.createTime}}</p>
               <p
                 :style="{'color':(item.state == 1 ? 'blue' :'red')}"
-              >{{item.state==1 ? "审核人" : "备案人" }}: {{item.userName}}</p>
+              >{{item.state==1 ? "审核人" : "备案人" }}: {{item.userName}}
               <p>计划完成时间:{{item.plancompletionTime}}</p>
               <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
               <p class="imgBox">影像资料：
@@ -116,80 +77,41 @@
     <div class="block">
       <el-timeline>
         <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger">
-          <table
-            border="0"
-            cellspacing="0"
-            cellpadding="0"
-            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;"
-          >
-            <tr>
-              <th>会议编号</th>
-              <td>{{item.publicData.meetingSummaryNumber}}</td>
-              <th>会议主题</th>
-              <td>{{item.publicData.meetingTheme}}</td>
-              <th>会议地点</th>
-              <td>{{item.publicData.meetingAddress}}</td>
-            </tr>
-            <tr>
-              <th>组织机构</th>
-              <td>{{item.publicData.departname}}</td>
-              <th>分部分项</th>
-              <td>{{item.publicData.projectItem}}</td>
-              <th>桩号</th>
-              <td>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</td>
-            </tr>
-            <tr>
-              <th>增减金额(万元)</th>
-              <td>{{item.publicData.addDecreaseMoney}}</td>
-              <th>变更等级</th>
-              <td>
-                <template v-if="item.publicData.moneyLevel==='one_level'">一级</template>
-                <template v-else-if="item.publicData.moneyLevel==='two_level'">二级</template>
-                <template v-else-if="item.publicData.moneyLevel==='three_level'">三级</template>
-                <template v-else-if="item.publicData.moneyLevel==='four_level'">四级</template>
-              </td>
-              <th>金额计算式</th>
-              <td>{{item.publicData.formulaCalculatingAmount}}</td>
-            </tr>
-            <tr>
-              <th>会议主持人</th>
-              <td>{{item.publicData.meetingHostName}}</td>
-              <th>会议记录人</th>
-              <td>{{item.publicData.meetingNoteTakerName}}</td>
-              <th>开会时间</th>
-              <td>{{item.publicData.meetingDatetime}}</td>
-            </tr>
-            <tr>
-              <th>增减数量</th>
-              <td>{{item.publicData.addDecreaseNumber}}</td>
-              <th>数量计算式</th>
-              <td>{{item.publicData.quantitativeFormulas}}</td>
-              <th>变更状态</th>
-              <td>
-                <template v-if="item.publicData.changeToken=='1'">申请</template>
-                <template v-else-if="item.publicData.changeToken=='2'">审核</template>
-                <template v-else-if="item.publicData.changeToken=='3'">备案</template>
-                <template v-else-if="item.publicData.changeToken=='7'">完成</template>
-              </td>
-            </tr>
-            <tr>
-              <th>申请人</th>
-              <td>{{item.publicData.applyUserName}}</td>
-              <th>会议内容</th>
-              <td>{{item.publicData.sceneSummaryContent}}</td>
-              <th>变更理由</th>
-              <td>{{item.publicData.changeReason}}</td>
-            </tr>
-          </table>
+           <ol>
+              <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
+              <li><span>会议主题:</span><i>{{item.publicData.meetingTheme}}</i></li>
+              <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>
+              <li><span>组织机构:</span><i>{{item.publicData.departname}}</i></li>
+              <li><span>分部分项:</span><i>{{item.publicData.projectItem}}</i></li>
+              <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>
+              <li><span>增减金额(万元):</span><i>{{item.publicData.addDecreaseMoney}}</i></li>
+              <li><span>变更等级:</span><i v-if="item.publicData.moneyLevel==='one_level'">一级</i>
+                  <i v-else-if="item.publicData.moneyLevel==='two_level'">二级</i>
+                  <i v-else-if="item.publicData.moneyLevel==='three_level'">三级</i>
+                  <i v-else-if="item.publicData.moneyLevel==='four_level'">四级</i></li>
+              <li><span>金额计算式:</span><i>{{item.publicData.formulaCalculatingAmount}}</i></li>
+              <li><span>会议主持人:</span><i>{{item.publicData.meetingHostName}}</i></li>
+              <li><span>会议记录人:</span><i>{{item.publicData.meetingNoteTakerName}}</i></li>
+              <li><span>开会时间:</span><i>{{item.publicData.meetingDatetime}}</i></li>
+              <li><span>增减数量:</span><i>{{item.publicData.addDecreaseNumber}}</i></li>
+              <li><span>数量计算式:</span><i>{{item.publicData.quantitativeFormulas}}</i></li>
+              <li><span>变更状态:</span><i v-if="item.publicData.changeToken=='1'">申请</i>
+                  <i v-else-if="item.publicData.changeToken=='2'">审核</i>
+                  <i v-else-if="item.publicData.changeToken=='3'">备案</i>
+                  <i v-else-if="item.publicData.changeToken=='7'">完成</i></li>
+              <li><span>申请人:</span><i>{{item.publicData.applyUserName}}</i></li>
+              <li><span>会议内容:</span><i>{{item.publicData.sceneSummaryContent}}</i></li>
+              <li><span>变更理由:</span><i>{{item.publicData.changeReason}}</i></li>   
+          </ol>
           <div class="roleName">
             <p>
-              抄送人：
-              <span v-for="(node,index) in item.role" :key="index">
+            <span>抄送人：</span>
+              <i v-for="(node,index) in item.role" :key="index">
                 <template v-if="node.state==3">{{node.userName}}</template>
-              </span>
+              </i>
             </p>
             <p>
-              流程:
+              <span>流程:</span>
               <el-timeline id="timeline">
                 <el-timeline-item
                   v-if="item.state !=3 && item.state !=0"
@@ -347,56 +269,52 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-row {
-  margin-bottom: 20px;
 
-  & :last-child {
-    margin-bottom: 0;
-  }
-}
-.el-col {
-  border-radius: 4px;
-}
-
-.bg-purple-dark {
-  background: #99a9bf;
-}
-
-.bg-purple {
-  background: #d3dce6;
-}
-
-.bg-purple-light {
-  background: #e5e9f2;
-}
-
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-  text-align: center;
-}
-
-th {
-  background-color: #f5f5f5;
-  color: #000;
-  border: 1px solid #ddd;
-}
-
-td {
-  border: 1px solid #ddd;
-}
 .block {
   margin-top: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
+  ol{
+      li{
+         height: 30px;
+         span{
+            font-size: 16px;
+            font-weight: bold;
+           width: 150px;
+           display: inline-block;
+         }
+         i{
+            font-size: 16px;
+            font-style: normal;
+           
+         }
+      }
+   }
 }
 .current {
-  padding: 0 0 0 73px;
+  margin: 0 30px;
+   ol{
+      li{
+         height: 30px;
+         span{
+            font-size: 16px;
+            font-weight: bold;
+            width: 150px;
+            display: inline-block;
+            color: #333;
+           
+         }
+         i{
+            font-size: 16px;
+            font-style: normal;
+         }
+      }
+   }
 }
-ul {
+ul, ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
   li {
     list-style: none;
   }
@@ -404,7 +322,13 @@ ul {
 .roleName{
     p{
       span{
+        font-size: 16px;
+        font-weight: bold;
+      }
+      i{
          padding:0 5px;
+         font-size: 16px;
+         font-style: normal;
       }
     }
 }
@@ -415,9 +339,6 @@ ul {
   height: 80vh;
   padding: 0 30px;
   overflow-x: hidden;
-  .elTimeline {
-    padding: 10px 40px;
-  }
   .imgBox{
      ul{
         overflow: hidden;

@@ -733,6 +733,7 @@ export default {
               message: "创建成功",
               type: "success"
             });
+            localStorage.setItem("orgId",this.myApplyChangeForm.departId);
             this.myApplyChangeForm = "";
             this.$emit("cancel"); //关闭弹框
             this.$emit("comfirm"); //确认
