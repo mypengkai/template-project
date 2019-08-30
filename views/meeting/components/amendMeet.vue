@@ -231,80 +231,41 @@
     <div class="block">
       <el-timeline>
         <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger">
-          <table
-            border="0"
-            cellspacing="0"
-            cellpadding="0"
-            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;"
-          >
-            <tr>
-              <th>会议编号</th>
-              <td>{{item.publicData.meetingSummaryNumber}}</td>
-              <th>会议主题</th>
-              <td>{{item.publicData.meetingTheme}}</td>
-              <th>会议地点</th>
-              <td>{{item.publicData.meetingAddress}}</td>
-            </tr>
-            <tr>
-              <th>组织机构</th>
-              <td>{{item.publicData.departname}}</td>
-              <th>分部分项</th>
-              <td>{{item.publicData.projectItem}}</td>
-              <th>桩号</th>
-              <td>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</td>
-            </tr>
-            <tr>
-              <th>增减金额(万元)</th>
-              <td>{{item.publicData.addDecreaseMoney}}</td>
-              <th>变更等级</th>
-              <td>
-                <template v-if="item.publicData.moneyLevel==='one_level'">一级</template>
-                <template v-else-if="item.publicData.moneyLevel==='two_level'">二级</template>
-                <template v-else-if="item.publicData.moneyLevel==='three_level'">三级</template>
-                <template v-else-if="item.publicData.moneyLevel==='four_level'">四级</template>
-              </td>
-              <th>金额计算式</th>
-              <td>{{item.publicData.formulaCalculatingAmount}}</td>
-            </tr>
-            <tr>
-              <th>会议主持人</th>
-              <td>{{item.publicData.meetingHostName}}</td>
-              <th>会议记录人</th>
-              <td>{{item.publicData.meetingNoteTakerName}}</td>
-              <th>开会时间</th>
-              <td>{{item.publicData.meetingDatetime}}</td>
-            </tr>
-            <tr>
-              <th>增减数量</th>
-              <td>{{item.publicData.addDecreaseNumber}}</td>
-              <th>数量计算式</th>
-              <td>{{item.publicData.quantitativeFormulas}}</td>
-              <th>变更状态</th>
-              <td>
-                <template v-if="item.publicData.changeToken=='1'">申请</template>
-                <template v-else-if="item.publicData.changeToken=='2'">审核</template>
-                <template v-else-if="item.publicData.changeToken=='3'">备案</template>
-                <template v-else-if="item.publicData.changeToken=='7'">完成</template>
-              </td>
-            </tr>
-            <tr>
-              <th>申请人</th>
-              <td>{{item.publicData.applyUserName}}</td>
-              <th>会议内容</th>
-              <td>{{item.publicData.sceneSummaryContent}}</td>
-              <th>变更理由</th>
-              <td>{{item.publicData.changeReason}}</td>
-            </tr>
-          </table>
+           <ol>
+              <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
+              <li><span>会议主题:</span><i>{{item.publicData.meetingTheme}}</i></li>
+              <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>
+              <li><span>组织机构:</span><i>{{item.publicData.departname}}</i></li>
+              <li><span>分部分项:</span><i>{{item.publicData.projectItem}}</i></li>
+              <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>
+              <li><span>增减金额(万元):</span><i>{{item.publicData.addDecreaseMoney}}</i></li>
+              <li><span>变更等级:</span><i v-if="item.publicData.moneyLevel==='one_level'">一级</i>
+                  <i v-else-if="item.publicData.moneyLevel==='two_level'">二级</i>
+                  <i v-else-if="item.publicData.moneyLevel==='three_level'">三级</i>
+                  <i v-else-if="item.publicData.moneyLevel==='four_level'">四级</i></li>
+              <li><span>金额计算式:</span><i>{{item.publicData.formulaCalculatingAmount}}</i></li>
+              <li><span>会议主持人:</span><i>{{item.publicData.meetingHostName}}</i></li>
+              <li><span>会议记录人:</span><i>{{item.publicData.meetingNoteTakerName}}</i></li>
+              <li><span>开会时间:</span><i>{{item.publicData.meetingDatetime}}</i></li>
+              <li><span>增减数量:</span><i>{{item.publicData.addDecreaseNumber}}</i></li>
+              <li><span>数量计算式:</span><i>{{item.publicData.quantitativeFormulas}}</i></li>
+              <li><span>变更状态:</span><i v-if="item.publicData.changeToken=='1'">申请</i>
+                  <i v-else-if="item.publicData.changeToken=='2'">审核</i>
+                  <i v-else-if="item.publicData.changeToken=='3'">备案</i>
+                  <i v-else-if="item.publicData.changeToken=='7'">完成</i></li>
+              <li><span>申请人:</span><i>{{item.publicData.applyUserName}}</i></li>
+              <li><span>会议内容:</span><i>{{item.publicData.sceneSummaryContent}}</i></li>
+              <li><span>变更理由:</span><i>{{item.publicData.changeReason}}</i></li>   
+          </ol>
           <div class="roleName">
             <p>
-              抄送人：
-              <span v-for="(node,index) in item.role" :key="index">
+            <span>抄送人：</span>
+              <i v-for="(node,index) in item.role" :key="index">
                 <template v-if="node.state==3">{{node.userName}}</template>
-              </span>
+              </i>
             </p>
             <p>
-              流程:
+              <span>流程:</span>
               <el-timeline id="timeline">
                 <el-timeline-item
                   v-if="item.state !=3 && item.state !=0"
@@ -321,10 +282,8 @@
                   <p class="imgBox">影像资料：
                         <ul>
                           <li v-for="(node, key) in item.fileinfos" :key="key">
-                            <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                                  <viewer :images="item.fileinfos">
-                                        <img v-for="(item,index) in item.fileinfos" :src="item.filePath" :key="index" style="width:100%;height:100%"/>
-                                  </viewer>      
+                            <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                                <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px"> 
                             </template>
                             <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
                               <video :src="node.filePath" style="width: 100px; height: 100px;"
@@ -345,6 +304,11 @@
 </el-collapse>  
 
 
+
+   <!-- 视屏 -->
+   <el-dialog title="图片预览" width="60%" :visible.sync="dialogpicture" append-to-body>
+      <viewer :imgList="processPicture"></viewer>
+    </el-dialog>
     <!-- 视屏 -->
     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
       <video-player class="video-player vjs-custom-skin"
@@ -597,6 +561,8 @@ export default {
          historyChangeInfoKey: [],
          historyChangeInfo: [], //历史的变更记录
          newChangInfo:[],
+          dialogpicture:false,
+          processPicture:[],
          playerOptions: {
           playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
           autoplay: true, //如果true,浏览器准备好时开始回放。
@@ -952,11 +918,25 @@ export default {
         }
       });
     },
-    // 回到顶部
+     // 回到顶部
     toTop(){
         meetTop.scrollIntoView();
     },
-
+      pictureShow(node) {
+      //图片预览
+      let newArr = [];
+      for (let i = 0; i < node.length; i++) {
+        if (
+          node[i].fileType == "jpg" ||
+          node[i].fileType == "png" ||
+          node[i].fileType == "jpeg"
+        ) {
+          newArr.push(node[i]);
+        }
+      }
+      this.processPicture = newArr;
+      this.dialogpicture = true;
+    },
      videoPlayerShow(node) {
         this.playerOptions.sources[0] = {
           src: node.filePath,
@@ -1051,13 +1031,39 @@ export default {
   .roleName{
     p{
       span{
+          font-weight: bold;
+      }
+      i{
          padding:0 5px;
+         
       }
     }
 }
 .backButton{
-    text-align: right;
+   text-align: right;
    margin-left: 90%;
    margin-top: 20px;
+}
+ul, ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  li {
+    list-style: none;
+  }
+}
+ i{        
+    font-style: normal;
+   }
+.block{
+   ol{
+     li{
+       span{
+          width: 120px;
+          display: inline-block;
+          font-weight: bold;
+       }
+     }
+   }
 }
 </style>
