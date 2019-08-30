@@ -80,7 +80,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="分部分项:" prop="projectItemId">
-            <select-tree
+            <select-tree 
               clearable
               :options="projectItemTreeOption"
               :props="projectItemDefaultProps"
@@ -259,7 +259,8 @@
                                       <i v-else-if="item.publicData.changeToken=='7'">完成</i></li>
                                   <li><span>申请人:</span><i>{{item.publicData.applyUserName}}</i></li>
                                   <li><span>会议内容:</span><i>{{item.publicData.sceneSummaryContent}}</i></li>
-                                  <li><span>变更理由:</span><i>{{item.publicData.changeReason}}</i></li>   
+                                  <li><span>变更理由:</span><i>{{item.publicData.changeReason}}</i></li>  
+                                  <li><span>备注:</span><i>{{item.publicData.remarks}}</i></li> 
                               </ol>
                               <div class="roleName">
                                 <p>
