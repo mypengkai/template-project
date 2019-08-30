@@ -545,17 +545,17 @@
         ],
         // 参考图标
         activities2: [{
-          content: '发出指令',
+          content: '发出',
           timestamp: '',
           type: 'primary',
           icon: 'el-icon-location-outline'
         }, {
-          content: '转发指令',
+          content: '转发',
           timestamp: '',
           type: 'warning',
           icon: 'el-icon-refresh'
         }, {
-          content: '正在处理指令',
+          content: '正在处理',
           timestamp: '',
           type: 'primary',
           icon: 'el-icon-loading'
@@ -566,12 +566,12 @@
           icon: 'el-icon-refresh-left'
         },
           {
-            content: '完成指令',
+            content: '完成',
             timestamp: '',
             type: 'success',
             icon: 'el-icon-check'
           }, {
-            content: '复核指令',
+            content: '复核',
             timestamp: '',
             type: 'primary',
             icon: 'el-icon-s-check'

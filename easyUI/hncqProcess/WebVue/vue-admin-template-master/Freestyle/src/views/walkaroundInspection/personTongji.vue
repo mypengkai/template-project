@@ -12,7 +12,7 @@
 
         <el-col :span="5">
           <span>用户姓名:</span>
-          <el-input style="width: 200px;" v-model="queryData.realName" placeholder="请输入用户姓名" size="small"></el-input>
+          <el-input style="width: 150px;" v-model="queryData.realName" placeholder="请输入用户姓名" size="small"></el-input>
           <!-- <span>姓名:</span>
            <el-select v-model="queryData.userId" placeholder="请选择">
              <el-option

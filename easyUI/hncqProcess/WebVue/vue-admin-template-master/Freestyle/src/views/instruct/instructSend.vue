@@ -1,50 +1,56 @@
 <template>
   <div class="p20">
     <div class="topBar">
-      <span>组织机构:</span>
-      <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
-        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                   :value="item.id"></el-option>
-      </el-select>
-      <span>分部分项:</span>
-      <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
-                   v-on:noDe="projectItemOnClick"/>
-      <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
-        </el-button>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
-                   @click="action('add')">新增
-        </el-button>
-      </div>
-      <span>发起日期:</span>
-      <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"></el-date-picker>
-      -
-      <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"></el-date-picker>
+      <e-row>
+        <el-col :span="4.5">
+          <span>组织机构:</span>
+          <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+            <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                       :value="item.id"></el-option>
+          </el-select>
+        </el-col>
+
+        <el-col :span="4.5">
+          <span>分部分项:</span>
+          <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                       v-on:noDe="projectItemOnClick"/>
+        </el-col>
+        <el-col :span="7.5">
+          <span>发起日期:</span>
+          <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small"
+                          style="min-width:180px" value-format="yyyy-MM-dd"
+                          format="yyyy-MM-dd"></el-date-picker>
+          -
+          <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small"
+                          style="min-width:180px" value-format="yyyy-MM-dd"
+                          format="yyyy-MM-dd"></el-date-picker>
+        </el-col>
+        <el-col :span="5.5">
+            <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
+            </el-button>
+            <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+            </el-button>
+            <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
+                       @click="action('add')">新增
+            </el-button>
+        </el-col>
+
+      </e-row>
+
     </div>
     <!-- 查询列表 -->
     <div>
       <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
         <el-table-column prop="projectitem" label="分部分项" width="555"></el-table-column>
         <el-table-column prop="station" label="桩号" align="center"></el-table-column>
-        <!--<el-table-column label="指令类型" width="110" align="center">
-          <template slot-scope="scope">
-            <template v-if="scope.row.commandType==='1'">安全</template>
-            <template v-else-if="scope.row.commandType==='2'">纸质</template>
-            <template v-else-if="scope.row.commandType==='3'">口头</template>
-          </template>
-        </el-table-column>-->
         <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
         <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
         <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
         <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
         <el-table-column label="状态" width="120" align="center">
           <template slot-scope="scope">
-            <template v-if="scope.row.state=='-1'"><span style="background-image: url('flag-blue.png');"></span>已发起,待处理</template>
+            <template v-if="scope.row.state=='-1'"><span style="background-image: url('flag-blue.png');"></span>已发起,待处理
+            </template>
             <template v-else-if="scope.row.state=='0'">已转发</template>
             <template v-else-if="scope.row.state=='1'">已复核</template>
             <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
