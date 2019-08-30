@@ -29,19 +29,16 @@
 
             <el-col :span="24">
               <el-form-item style="width:20vw" label="分部分项：" v-if="nowItem =='add'">
-
                 <!--<select-tree :isCheckbox="true" :isCheckOtherNode="false" clearable :options="projectItemTreeOptions"
                              ref="getSelectData"
                              :props="projectItemDefaultProp"
                              v-on:noDe="projectItemOnClick"/>-->
-
                 <div style="height:65vh;overflow-y:auto;border:1px solid #ccc;border-radius: 5px">
                   <el-tree :data="setProjectItemKey" :props="defaultSetKeyProjectItemProps" lazy show-checkbox
                            node-key="id"
                            :load="loadNextLayer" highlight-current
                            :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>
                 </div>
-
               </el-form-item>
             </el-col>
 
@@ -80,35 +77,36 @@
     </el-form>
 
     <!-- 用户弹框 -->
-    <el-dialog class="dialogBox" width="45%" title="选择用户" :visible.sync="acceptUserDialog" append-to-body>
-      <div class="topBar">
-        <span>组织机构:</span>
+      <el-dialog style="margin-top: 5vh;" class="dialogBox" :lock-scroll="true" width="45%" title="选择用户"
+                 :visible.sync="acceptUserDialog"
+                 append-to-body>
+        <div class="topBar">
+          <span>组织机构:</span>
 
-        <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
-                     v-on:noDe="handleReceiveUserGroupCheckChange"/>
-      </div>
-      <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="65vh"
-                @selection-change="handleSelectionChange">
-        <!--        @current-change="handleCurrentChange"-->
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column prop="username" label="姓名"></el-table-column>
-        <el-table-column prop="zhiwei" label="职务"></el-table-column>
-        <el-table-column prop="mobilePhone" label="电话"></el-table-column>
-      </el-table>
-      <div class="tar" style="margin: 10px">
-        <el-button @click="acceptUserDialog = false">取消</el-button>
-        <el-button type="primary" @click="toggleSelection()">确定</el-button>
-      </div>
+          <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
+                       v-on:noDe="handleReceiveUserGroupCheckChange"/>
+        </div>
+        <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="65vh"
+                  @selection-change="handleSelectionChange">
+          <!--        @current-change="handleCurrentChange"-->
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column prop="username" label="姓名"></el-table-column>
+          <el-table-column prop="zhiwei" label="职务"></el-table-column>
+          <el-table-column prop="mobilePhone" label="电话"></el-table-column>
+        </el-table>
+        <div class="tar" style="margin: 10px">
+          <el-button @click="acceptUserDialog = false">取消</el-button>
+          <el-button type="primary" @click="toggleSelection()">确定</el-button>
+        </div>
 
-      <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[10,20,30]"
-                     :page-size="receiveData.pageSize"
-                     layout="total, sizes, prev, pager, next, jumper" @current-change="receiveUserList()"
-                     :total="total"></el-pagination>
-    </el-dialog>
-
+        <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[10,20,30]"
+                       :page-size="receiveData.pageSize"
+                       layout="total, sizes, prev, pager, next, jumper" @current-change="receiveUserList()"
+                       :total="total"></el-pagination>
+      </el-dialog>
   </div>
 </template>
 
@@ -407,6 +405,8 @@
 
 <style lang="scss" scoped>
   .checkBox {
+    height: 100%;
+    overflow-y: auto;
     overflow-x: hidden;
   }
 
@@ -619,4 +619,5 @@
     left: 50%;
     background: #ccc;
   }
+
 </style>
