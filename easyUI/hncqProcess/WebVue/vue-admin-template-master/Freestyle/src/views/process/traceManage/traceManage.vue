@@ -67,7 +67,7 @@
               <el-radio label="command">指令</el-radio>
               <el-radio label="polling">巡视</el-radio>
               <el-radio label="sideStation">旁站</el-radio>
-              <el-radio label="meeting">会议纪要</el-radio>
+              <el-radio label="meeting">变更纪要</el-radio>
             </el-radio-group>
           </div>
         </el-col>

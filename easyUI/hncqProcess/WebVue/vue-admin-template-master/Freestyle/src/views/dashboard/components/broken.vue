@@ -34,7 +34,7 @@
           let polling = testData.polling
           let process = testData.process
           let sideStation = testData.sideStation
-          let testDataX = ['工序验收', '巡视', '旁站', '指令', '会议纪要']
+          let testDataX = ['工序验收', '巡视', '旁站', '指令', '变更纪要']
           let testDataY = [process, polling, sideStation, command, meeting]
 
           this.ioi(testDataX, testDataY)

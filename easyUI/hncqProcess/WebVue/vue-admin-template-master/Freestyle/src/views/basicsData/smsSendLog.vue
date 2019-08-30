@@ -47,7 +47,7 @@
           通知
         </template>
         <template v-else-if="scope.row.type==='meeting'">
-          会议纪要
+          变更纪要
         </template>
       </template>
       </el-table-column>

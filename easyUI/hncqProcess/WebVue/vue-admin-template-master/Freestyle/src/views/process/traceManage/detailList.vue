@@ -20,7 +20,7 @@
               <template v-else-if="item.infoLogType== 'processCheck'">工序验收</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
-              <template v-else-if="item.infoLogType == 'meeting'">会议纪要</template>
+              <template v-else-if="item.infoLogType == 'meeting'">变更纪要</template>
             </el-col>
             <el-col :span="14">
               <div
@@ -73,7 +73,7 @@
               <template v-else-if="item.infoLogType == 'command'">指令</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
-              <template v-else-if="item.infoLogType == 'meeting'">会议纪要</template>
+              <template v-else-if="item.infoLogType == 'meeting'">变更纪要</template>
             </el-col>
             <el-col :span="14">
               <div
@@ -113,7 +113,7 @@
       <pollingCheck :targetID="targetID" v-if="hackReset"></pollingCheck>
     </el-dialog>
     <!-- 会议 -->
-    <el-dialog title="会议纪要详情" :visible.sync="dialogTableVisibleMeeting" fullscreen>
+    <el-dialog title="变更纪要详情" :visible.sync="dialogTableVisibleMeeting" fullscreen>
       <meetingDetail :changeId="meetId" v-if="hackReset"></meetingDetail>
     </el-dialog>
     <!--工序查看-->
