@@ -90,7 +90,7 @@
               <p>计划完成时间:{{item.plancompletionTime}}</p>
               <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
               <p class="imgBox">影像资料：
-                     <ul >      
+                     <ul >
                         <li v-for="(node, key) in item.fileinfos" :key="key">
                           <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
                                <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px">
@@ -207,7 +207,7 @@
                         <ul>
                           <li v-for="(node, key) in item.fileinfos" :key="key">
                             <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                                <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px"> 
+                                <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px">
                             </template>
                             <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
                               <video :src="node.filePath" style="width: 100px; height: 100px;"
@@ -225,7 +225,7 @@
     </div>
         <el-button type="primary" icon="el-icon-arrow-up" circle @click="toTop"></el-button>
   </el-collapse-item>
-</el-collapse>  
+</el-collapse>
 
 
     <!-- 视屏 -->
@@ -295,7 +295,7 @@ export default {
         },
     };
   },
-  
+
   created() {
     this.initChangeDetail();
     console.log(this.changeId)
@@ -454,11 +454,11 @@ ul {
     outline: 0;
 }
 /deep/.el-timeline .el-timeline-item:last-child .el-timeline-item__tail {
-    display: block; 
+    display: block;
 }
 #timeline{
     >.el-timeline-item:last-child .el-timeline-item__tail {
-         display: block !important; 
+         display: block !important;
    }
 }
 button{

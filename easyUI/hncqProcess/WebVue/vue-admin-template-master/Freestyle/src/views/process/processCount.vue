@@ -91,7 +91,7 @@
 
     <!--    <div v-if="dialogTableVisible" class="Cztab">-->
     <el-dialog :visible.sync="dialogTableVisible" title="查看工序">
-      <el-table border :data="chakanData" height="68vh" class="textList">
+      <el-table border :data="chakanData" height="66vh" class="textList">
         <el-table-column type="index" width="50" align="center" label="序号"></el-table-column>
         <el-table-column prop="processName" label="工序名称" align="center"/>
         <el-table-column prop="planSelfCheckTime" label="自检时间" align="center"/>
@@ -115,7 +115,7 @@
             <template v-else>新增</template>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="180" align="center">
+        <el-table-column fixed="right" label="操作" width="80" align="center">
           <template slot-scope="scope">
             <!-- 指定验收 -->
             <!-- <el-tooltip v-if="scope.row.adopt===null && scope.row.state1===0" class="item" effect="dark"

@@ -15,7 +15,7 @@
           </el-select>
 
         </el-col>-->
-        <el-col :span="5">
+        <el-col :span="6">
           <!--    <span>姓名:</span>
               &lt;!&ndash;<el-input v-model="queryData.userId" placeholder="请输入姓名"></el-input>&ndash;&gt;
               <el-select v-model="queryData.userId" placeholder="请选择">
@@ -28,7 +28,7 @@
               </el-select>
               -->
           <span>巡视人/旁站人:</span>
-          <el-input style="width: 200px;" v-model="queryData.realName" placeholder="请输入名字" size="small"></el-input>
+          <el-input  v-model="queryData.realName" placeholder="请输入名字" size="small"></el-input>
           <!--  <el-form-item label="巡视人/旁站人:">
 
             </el-form-item>-->
@@ -74,12 +74,12 @@
         </el-col>
       </el-row>
     </div>
-    <el-table class="textList" :data="tableData" border style="width: 100%;margin-top:20px" height="70vh" fit>
-      <el-table-column prop="realname" label="巡视人/旁站人" align="center"></el-table-column>
-      <el-table-column prop="pollingNumber" label="巡视次数" align="center" width="300"></el-table-column>
-      <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width="300"></el-table-column>
-      <el-table-column prop="commandpollingrangeNumber" label="巡视发起指令次数" align="center" width="300"></el-table-column>
-      <el-table-column prop="commandsideStationNumber" label="旁站发起指令次数" align="center" width="300"></el-table-column>
+    <el-table class="textList" :data="tableData" border style="width: 100%;margin-top:20px" height="68vh" fit>
+      <el-table-column prop="realname" label="巡视人/旁站人" align="center" width=""></el-table-column>
+      <el-table-column prop="pollingNumber" label="巡视次数" align="center" width="200"></el-table-column>
+      <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width="200"></el-table-column>
+      <el-table-column prop="commandpollingrangeNumber" label="巡视发起指令次数" align="center" width="200"></el-table-column>
+      <el-table-column prop="commandsideStationNumber" label="旁站发起指令次数" align="center" width="200"></el-table-column>
     </el-table>
     <!-- 分页条 -->
     <el-pagination
