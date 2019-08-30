@@ -170,7 +170,15 @@
   import viewer from '@/components/viewer'
 
   export default {
-    props: ['realList', 'processInfoId'],
+   // props: ['realList', 'processInfoId'],
+    props:{
+        realList:{
+          type:Object
+        },
+        processInfoId:{
+            type:String
+        }
+    },
     components: {
       viewer
     },

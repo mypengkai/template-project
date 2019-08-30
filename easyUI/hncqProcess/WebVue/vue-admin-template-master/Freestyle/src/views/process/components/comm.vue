@@ -202,6 +202,7 @@ export default {
   },
   watch: {
     commandId(val) {
+      console.log(val)
       this.flag = true;
       this.flags = true;
       this.$nextTick(() => {
@@ -227,6 +228,7 @@ export default {
         .then(res => {
           if (res.data.respCode == "0") {
             this.commList = res.data.data;
+            console.log(res.data.data,"this.commList")
           }
           this.form.projectItem = this.commList.projectItem;
           this.form.createTime = this.commList.createTime;

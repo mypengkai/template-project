@@ -37,8 +37,8 @@
     <div class="topBar">
       <el-row>
         <el-col :span="6">
-          <span>金额等级:</span>
-          <el-select v-model="sendData.moneyLevel" placeholder="请选择金额等级">
+          <span>变更等级:</span>
+          <el-select v-model="sendData.moneyLevel" placeholder="请选择变更等级">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -77,12 +77,12 @@
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meetingAddress" label="会议地址" align="center"></el-table-column>
       <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
-      <el-table-column label="金额等级" align="center">
+      <el-table-column label="变更等级" align="center">
         <template slot-scope="scope">
-          <template v-if="scope.row.moneyLevel==='one_level'">一级</template>
-          <template v-else-if="scope.row.moneyLevel==='two_level'">二级</template>
-          <template v-else-if="scope.row.moneyLevel==='three_level'">三级</template>
-          <template v-else-if="scope.row.moneyLevel==='four_level'">四级</template>
+           <el-tag  type="info" v-if="scope.row.moneyLevel==='one_level'">一级</el-tag>
+          <el-tag  type="success" v-else-if="scope.row.moneyLevel==='two_level'">二级</el-tag>
+            <el-tag type="warning" v-else-if="scope.row.moneyLevel==='three_level'">三级</el-tag> 
+            <el-tag  type="danger" v-else-if="scope.row.moneyLevel==='four_level'">四级</el-tag> 
         </template>
       </el-table-column>
       <el-table-column prop="shenqingrename" label="申请人" align="center"></el-table-column>
@@ -129,22 +129,12 @@
       @size-change="handleSizeChange"
       @current-change="query()"
     ></el-pagination>
-
-    <!-- 弹框 -->
-    <el-dialog
-      :title="nowItem=='add' ? '创建会议记要' : '修改变更' "
-      :visible.sync="dialogFormVisible"
-      class="dialogBox"
-    >
-      <createChange :nowItem="nowItem" @cancel="dialogFormVisible=false" @comfirm="query" />
-    </el-dialog>
-
     <!-- 查看弹框 -->
     <el-dialog :visible.sync="dialogChangeDetailVisible" title="查看详情" fullscreen>
       <changeDetail :changeId="changeId" v-if="flag" />
     </el-dialog>
     <!-- 会议纪要处理 -->
-     <el-dialog :visible.sync="dialogDealmeetVisible" title="会议纪要处理">
+     <el-dialog :visible.sync="dialogDealmeetVisible" title="变更纪要处理">
         <dealMeet :nowItem="nowItem" v-if="flag" :moneyLevel="moneyLevel" @cancel="dialogDealmeetVisible=false" @comfirm="query()"></dealMeet>
     </el-dialog>
   </div>
@@ -155,7 +145,6 @@ import Organization from "@/api/Organization";
 import SelectTree from "@/components/SelectTree/syncSelectTree.vue";
 import project from "@/api/project";
 import change from "@/api/change";
-import createChange from "./components/createMeeting";
 import changeDetail from "./meetingDetail";
 import dealMeet from "./components/dealMeet"
 export default {
@@ -212,7 +201,6 @@ export default {
   },
   components: {
     SelectTree,
-    createChange,
     changeDetail,
     dealMeet
   },

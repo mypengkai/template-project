@@ -59,12 +59,12 @@
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meetingAddress" label="会议地址" align="center"></el-table-column>
       <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
-      <el-table-column label="金额等级" align="center">
+      <el-table-column label="变更等级" align="center">
         <template slot-scope="scope">
-          <template v-if="scope.row.moneyLevel==='one_level'">一级</template>
-          <template v-else-if="scope.row.moneyLevel==='two_level'">二级</template>
-          <template v-else-if="scope.row.moneyLevel==='three_level'">三级</template>
-          <template v-else-if="scope.row.moneyLevel==='four_level'">四级</template>
+           <el-tag  type="info" v-if="scope.row.moneyLevel==='one_level'">一级</el-tag>
+           <el-tag  type="success" v-else-if="scope.row.moneyLevel==='two_level'">二级</el-tag> 
+            <el-tag type="warning" v-else-if="scope.row.moneyLevel==='three_level'">三级</el-tag> 
+            <el-tag  type="danger" v-else-if="scope.row.moneyLevel==='four_level'">四级</el-tag> 
         </template>
       </el-table-column>
       <el-table-column prop="createrealname" label="申请人" align="center"></el-table-column>
@@ -136,11 +136,11 @@
     ></el-pagination>
 
     <!-- 弹框 -->
-    <el-dialog title="创建会议纪要" :visible.sync="dialogFormVisible" class="dialogBox" width="80%">
+    <el-dialog title="创建变更纪要" :visible.sync="dialogFormVisible" class="dialogBox" width="80%">
       <createChange @cancel="dialogFormVisible=false" @comfirm="query" v-if="creatFlag" />
     </el-dialog>
     <!-- 修改 -->
-    <el-dialog title="修改会议纪要" :visible.sync="dialogdealMeetVisible" class="dialogBox">
+    <el-dialog title="修改变更纪要" :visible.sync="dialogdealMeetVisible" class="dialogBox">
       <amendMeet
         :nowItem="nowItem"
         @cancel="dialogdealMeetVisible=false"
