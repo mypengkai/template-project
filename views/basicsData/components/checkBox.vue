@@ -12,30 +12,39 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
-                <el-select  v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:14vw;">
-                  <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                             :value="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item style="width:20vw" label="分部分项：" v-if="nowItem =='add'">
-
-                <select-tree :isCheckbox="true" :isCheckOtherNode="false" clearable :options="projectItemTreeOptions" ref="getSelectData"
-                             :props="projectItemDefaultProp"
-                             v-on:noDe="projectItemOnClick"/>
-
-                <!--                <select-tree :options="projectItemTree" :props="projectTree" v-on:noDe="handleProjectItemOnClick"/>-->
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
               <el-form-item v-show="true" style="width:20vw" label="组员：">
                 <el-input v-model="userNames">
                   <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('receive')"></el-button>
                 </el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="24">
+              <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
+                <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" style="width:14vw;">
+                  <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                             :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="24">
+              <el-form-item style="width:20vw" label="分部分项：" v-if="nowItem =='add'">
+
+                <!--<select-tree :isCheckbox="true" :isCheckOtherNode="false" clearable :options="projectItemTreeOptions"
+                             ref="getSelectData"
+                             :props="projectItemDefaultProp"
+                             v-on:noDe="projectItemOnClick"/>-->
+
+                <div style="height:65vh;overflow-y:auto;border:1px solid #ccc;border-radius: 5px">
+                  <el-tree :data="setProjectItemKey" :props="defaultSetKeyProjectItemProps" lazy show-checkbox
+                           node-key="id"
+                           :load="loadNextLayer" highlight-current
+                           :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>
+                </div>
+
+              </el-form-item>
+            </el-col>
+
             <el-col :span="24">
               <el-form-item v-show="false" style="width:20vw" label="手机号：">
                 <el-input type="textarea" v-model="phoneNumbers">
@@ -53,7 +62,7 @@
             <el-col :span="24">
               <el-table :data="formData" style="width:100%;" border height="55vh">
                 <el-table-column label="">
-                  <el-table-column prop="username" label="用户名姓名"></el-table-column>
+                  <el-table-column prop="username" label="用户姓名"></el-table-column>
                   <el-table-column prop="zhiwei" label="职位"></el-table-column>
                   <el-table-column prop="mobilePhone" label="手机号码"></el-table-column>
                 </el-table-column>
@@ -78,7 +87,7 @@
         <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
                      v-on:noDe="handleReceiveUserGroupCheckChange"/>
       </div>
-      <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="50vh"
+      <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="65vh"
                 @selection-change="handleSelectionChange">
         <!--        @current-change="handleCurrentChange"-->
         <el-table-column
@@ -109,7 +118,7 @@
   import processInfo from '@/api/process.js'
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import viewer from '@/components/viewer'
-  import Organization from '@/api/Organization.js'
+  import Organization from '@/api/Organization'
 
   export default {
     inject: ['reload'],
@@ -117,9 +126,19 @@
       SelectTree,
       viewer
     },
+    watch: {
+      filterText(val) {
+        this.$refs.setKeyProjectItemTree.filter(val)
+      }
+    },
     props: ['nowItem'],
     data() {
       return {
+        defaultSetKeyProjectItemProps: {
+          children: 'id',
+          label: 'projectItem',
+          isLeaf: 'leaf'
+        },
         userNames: '',
         phoneNumbers: '',
         groupUserIds: '',
@@ -207,7 +226,9 @@
           children: 'id',
           label: 'projectItem',
           isLeaf: 'leaf'
-        }
+        },
+        setProjectItemKey: [], //分部分项
+        setProjectItemOrgId: ''  //设置关键工序中的组织机构id
 
       }
     },
@@ -268,18 +289,40 @@
       },
       userGroupOnChange(data) {   //选择标段改动
         this.orgId = data
-        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+        /*   Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
 
-          this.projectItemTreeOptions = res.data.data
-          this.$refs.getSelectData.labelModel = ''
+                 this.projectItemTreeOptions = res.data.data
+                 this.$refs.getSelectData.labelModel = ''
+               })*/
+
+        Organization.getAllProjectItemTree({ userGroupId: data, pId: '0' }).then(res => {
+          this.setProjectItemKey = res.data.data
         })
       },
+
+      // getAllProjectItemTree
       loadNextNode(node, resolve) {  //异步获取下一级节点数据
         if (node.level > 0) {
           Organization.getProjectItemFromLayer({ userGroupId: this.selectedUserGroup, pId: node.data.id }).then(res => {
             resolve(res.data.data)
           })
         }
+      },
+      loadNextLayer(node, resolve) {  //异步加载下一级分部分项
+        if (node.level > 0) {
+          Organization.getAllProjectItemTree({ userGroupId: this.orgId, pId: node.data.id }).then(res => {
+            resolve(res.data.data)
+          })
+        }
+      },
+      loadNextProjectItemLayer(tree, treeNode, resolve) {  //异步加载列表中分部分项
+        api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: tree.id }).then(res => {
+          resolve(res.data.data)
+        })
+      },
+      filterNode(value, data, node) {  //过滤分部分项
+        if (!value) return true
+        return data.label.indexOf(value) !== -1
       },
       projectItemOnClick(data) {  // 分部分项选择后的数据
         this.form.projectItemId = data.id
@@ -296,15 +339,44 @@
         this.receiveData.userGroupId = data.id
         this.receiveUserList()
       },
+      submitSetKeyProjectItem() {  //设置关键工序
+        let ids = this.$refs.setKeyProjectItemTree.getCheckedKeys()
+        let paramIds = ''
+        for (let id of ids) {
+          paramIds += id + ','
+        }
+        if (this.$tool.isEmptyStr(paramIds)) {
+          this.$message({
+            type: 'warn',
+            message: '请选择需要设置的分部分项'
+          })
+        } else {
+          api.setKeyProjectItemByIds({ ids: paramIds + this.getSelectedKeyIds }).then(res => {
+            this.$message({
+              type: 'success',
+              message: '设置成功'
+            })
+            this.dialogSetPartKeyVisible = false
+          })
+        }
+      },
       addProcessFunction(formName) {
+        let ids = this.$refs.setKeyProjectItemTree.getCheckedKeys()
+        let paramIds = ''
+        for (let id of ids) {
+          paramIds += id + ','
+        }
+
         const fromData = {
           organizationId: this.form.userGroupId,
-          groupId: this.form.projectItemId,
+          // groupId: this.form.projectItemId,
+          groupId: paramIds,
           groupName: this.groupName,
           groupUserId: this.groupUserIds,
           groupUser: this.userNames,
           phoneNumber: this.phoneNumbers
         }
+
         this.$refs[formName].validate((valid) => {
           if (valid) {
             request.post('/rest/NumberGroup/addgroup', fromData).then(res => {
@@ -322,7 +394,6 @@
 
         })
       },
-
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
         this.dialogVisible = true
@@ -336,7 +407,6 @@
 
 <style lang="scss" scoped>
   .checkBox {
-    height: 60vh;
     overflow-x: hidden;
   }
 
