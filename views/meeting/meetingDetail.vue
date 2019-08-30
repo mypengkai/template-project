@@ -1,6 +1,6 @@
 <template>
   <div class="demo-image__preview detail">
-    <el-tag  id="meetTop">当前会议纪要</el-tag>
+    <el-tag  id="meetTop">当前变更纪要</el-tag>
     <div class="current">
       <table
         border="0"
@@ -112,7 +112,7 @@
     </div>
     <!-- 历史记录 -->
   <el-collapse accordion v-if="historyChangeInfo.length > 0">
-  <el-collapse-item title="历史会议纪要">
+  <el-collapse-item title="历史变更纪要">
     <div class="block">
       <el-timeline>
         <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger">

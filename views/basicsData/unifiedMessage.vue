@@ -57,7 +57,7 @@
           <template v-else-if="scope.row.type=='realcheck'">工序验收</template>
           <template v-else-if="scope.row.type=='polling'">巡视</template>
           <template v-else-if="scope.row.type=='sideStation'">旁站</template>
-          <template v-else-if="scope.row.type=='meeting'">会议纪要</template>
+          <template v-else-if="scope.row.type=='meeting'">变更纪要</template>
         </template>
       </el-table-column>
       <el-table-column prop="text" label="内容" align="center"/>
@@ -151,7 +151,7 @@
           label: '旁站'
         }, {
           value: 'meeting',
-          label: '会议纪要'
+          label: '变更纪要'
         }]
       }
     },

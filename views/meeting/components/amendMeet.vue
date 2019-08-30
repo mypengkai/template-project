@@ -227,7 +227,7 @@
 
         <!-- 历史记录 -->
 <el-collapse accordion v-if="historyChangeInfo.length > 0">
-  <el-collapse-item title="历史会议纪要">
+  <el-collapse-item title="历史变更纪要">
     <div class="block">
       <el-timeline>
         <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger">
