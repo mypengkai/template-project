@@ -110,7 +110,8 @@
     </el-dialog>
     <!-- 巡视查看 -->
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
-      <pollingCheck :targetID="targetID" v-if="hackReset"></pollingCheck>
+      <!-- <pollingCheck :targetID="targetID" v-if="hackReset"></pollingCheck> -->
+      <CheckPicture :nowItem="nowItem" v-if="hackReset"></CheckPicture>
     </el-dialog>
     <!-- 会议 -->
     <el-dialog title="变更纪要详情" :visible.sync="dialogTableVisibleMeeting" fullscreen>
@@ -176,7 +177,7 @@ export default {
       processInfoId: "", // 验收数据
       hackReset: false,
       meetId: "", // 会议id
-      nowItem: [], // 旁站数据
+      nowItem: [], // 旁站数据 巡视
       commandList: {} // 指令数据
     };
   },
@@ -220,8 +221,11 @@ export default {
       }
       //巡视查看
       if (item.infoLogType == "polling") {
-        this.dialogTableVisiblePolling = true;
-        this.targetID = item.infoLogId;
+        request.post("/rest/Patrol/chakan/" + item.infoLogId).then(res => {
+          this.nowItem = res.data.data;
+          this.dialogTableVisiblePolling = true;
+        });
+
         this.hackReset = false;
         this.$nextTick(() => {
           this.hackReset = true;
