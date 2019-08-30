@@ -483,7 +483,12 @@
       Map,
       viewer
     },
-    props: ['nowItem'],
+    // props: ['nowItem'],
+    props:{
+        nowItem:{
+          type:Object
+        }
+    },
     data() {
       return {
         returnDialog: false,
@@ -747,7 +752,7 @@
       this.initForm()
       this.receiveUserList()
       this.form.batchNo = this.createUUID()  //生成批处理id
-
+      console.log(this.nowItem)
     },
     methods: {
       reset() {  // 重置按钮

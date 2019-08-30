@@ -5,7 +5,7 @@
         <el-col :span="5" v-if="tabPosition == 'first'">
           <el-form :inline="true" class="grid-content" style="font-size:.8vw">
             <el-form-item label="组织机构：">
-              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
                 <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                            :value="item.id"></el-option>
               </el-select>
@@ -57,27 +57,17 @@
             </div>
           </el-row>
         </el-col>
-
-        <!-- <el-col :span="2">
-          <div class="grid-content">
-            <span>
-              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-zoom-out">导出</el-button>
-            </span>
-          </div>
-        </el-col> -->
       </el-row>
       <el-row>
         <el-col :span="18">
           <div class="grid-content" id="gridAdd">
             <span>类型：</span>
             <el-radio-group v-model="searchType">
-              <!--              <el-radio label="">全部</el-radio>-->
-              <el-radio label="realcheck">工序验收</el-radio>
+              <el-radio label="processCheck">工序验收</el-radio>
               <el-radio label="command">指令</el-radio>
               <el-radio label="polling">巡视</el-radio>
               <el-radio label="sideStation">旁站</el-radio>
               <el-radio label="meeting">会议纪要</el-radio>
-              <!-- <el-radio label="selfcheck">自检</el-radio>-->
             </el-radio-group>
           </div>
         </el-col>
@@ -123,12 +113,9 @@
 
 <script>
   import list from './detailList'
-  import { getToken } from '@/utils/auth'
   import request from '@/utils/request'
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import Organization from '@/api/Organization'
-
-  let token = localStorage.getItem('myToken')
   export default {
     name: 'TraceManage',
     inject: ['reload'],
@@ -149,7 +136,7 @@
         },
         department: '',
         departmentProject: '',
-        searchType: 'realcheck',
+        searchType: 'processCheck',
         tabPosition: 'first',
         dateFrom: '', //日期
         dateTo: '',
@@ -177,9 +164,6 @@
           unitsName: '', //单位工程
           unitsId: '' //工程ID
         },
-        headers: {
-          'X-AUTH-TOKEN': getToken()
-        }
       }
     },
     watch: {},
@@ -215,7 +199,9 @@
       },
       // 获取分部分项id
       projectItemOnClick(data) {
-        this.form.projectId = data.id
+        console.log(data)
+        this.from.projectId = data.id;
+        
       },
       /*
 
@@ -245,6 +231,7 @@
       */
 
       handleCheckChangeUnit(data) {
+        console.log(data,"data111")
         this.from.unitsName = data.projectItem
         this.from.unitsId = data.id
       },
@@ -294,24 +281,22 @@
       projecQuery() {
         // 工程查询
         request.post('/rest/mark/chakan', {
-          'X-AUTH-TOKEN': token,
           pageNo: 1,
           pageSize: 10,
           startTime: this.dateFrom, // 起始时间
           endTime: this.dateTo, // 结束时间
-          projectid: this.from.unitsId, //工程ID
+          projectid: this.from.projectId, //工程ID
           orderby: this.active + 1, // 筛选(时间，类型，人员)
           type: this.searchType // 工程   人员
         })
           .then(res => {
             this.conentOptions = res.data.data.data
-
+            //console.log(this.conentOptions)
           })
       },
       peopleQuery() {
         // 人员查询
         request.post('/rest/mark/chakan', {
-          'X-AUTH-TOKEN': token,
           pageNo: 1,
           pageSize: 10,
           startTime: this.dateFrom,

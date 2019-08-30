@@ -27,7 +27,7 @@
         <tr>
           <th>增减金额(万元)</th>
           <td>{{changeInfo.addDecreaseMoney}}</td>
-          <th>金额等级</th>
+          <th>变更等级</th>
           <td>
             <template v-if="changeInfo.moneyLevel==='one_level'">一级</template>
             <template v-else-if="changeInfo.moneyLevel==='two_level'">二级</template>
@@ -90,22 +90,20 @@
               <p>计划完成时间:{{item.plancompletionTime}}</p>
               <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
               <p class="imgBox">影像资料：
-                   <ul v-for="(node, key) in item.fileinfos" :key="key">
-                    <li>
-                      <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                         <!-- <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
-                                  @click="pictureShow(item.fileinfos)"></el-image> -->
-                                    <viewer :images="item.fileinfos">
-                                        <img v-for="(item,index) in item.fileinfos" :src="item.filePath" :key="index" style="width:100%;height:100%"/>
-                                  </viewer>      
-                       </template> 
-                      
-                      <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                        <video :src="node.filePath" style="width: 100px; height: 100px;"
-                              @click="videoPlayerShow(node)"></video>
-                      </template>
-                    </li>
-                   </ul>
+                     <ul >      
+                        <li v-for="(node, key) in item.fileinfos" :key="key">
+                          <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                               <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px">
+                          </template>
+                          <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                            <video
+                              :src="node.filePath"
+                              style="width: 100px; height: 100px;"
+                              @click="videoPlayerShow(node)"
+                            ></video>
+                          </template>
+                        </li>
+                      </ul>
               </p>
             </el-timeline-item>
           </el-timeline>
@@ -143,7 +141,7 @@
             <tr>
               <th>增减金额(万元)</th>
               <td>{{item.publicData.addDecreaseMoney}}</td>
-              <th>金额等级</th>
+              <th>变更等级</th>
               <td>
                 <template v-if="item.publicData.moneyLevel==='one_level'">一级</template>
                 <template v-else-if="item.publicData.moneyLevel==='two_level'">二级</template>
@@ -176,7 +174,7 @@
             </tr>
             <tr>
               <th>申请人</th>
-              <td>{{changeInfo.applyUserName}}</td>
+              <td>{{item.publicData.applyUserName}}</td>
               <th>会议内容</th>
               <td>{{item.publicData.sceneSummaryContent}}</td>
               <th>变更理由</th>
@@ -208,12 +206,8 @@
                   <p class="imgBox">影像资料：
                         <ul>
                           <li v-for="(node, key) in item.fileinfos" :key="key">
-                            <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                              <!-- <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
-                                        @click="pictureShow(item.fileinfos)"></el-image> -->
-                                  <viewer :images="item.fileinfos">
-                                        <img v-for="(item,index) in item.fileinfos" :src="item.filePath" :key="index" style="width:100%;height:100%"/>
-                                  </viewer>      
+                            <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                                <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px"> 
                             </template>
                             <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
                               <video :src="node.filePath" style="width: 100px; height: 100px;"
@@ -235,6 +229,12 @@
 
 
     <!-- 视屏 -->
+   <el-dialog title="图片预览" width="60%" :visible.sync="dialogpicture" append-to-body>
+      <viewer :imgList="processPicture"></viewer>
+    </el-dialog>
+
+
+
     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
       <video-player class="video-player vjs-custom-skin"
                     ref="videoPlayer"
@@ -247,6 +247,7 @@
 
 <script>
 import change from "@/api/change";
+import viewer from "@/components/viewer";
 export default {
   name: "changeDetail",
   props: {
@@ -255,13 +256,19 @@ export default {
       default: ""
     }
   },
+  components:{
+      viewer
+  },
   data() {
     return {
       changeInfo: {}, //变更记录
       historyChangeInfoKey: [],
       historyChangeInfo: [], //历史的变更记录
       newChangInfo: [], //新的变更记录
+
       vedioinnerVisible:false,
+      dialogpicture:false,
+      processPicture:[],
          playerOptions: {
           playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
           autoplay: true, //如果true,浏览器准备好时开始回放。
@@ -288,8 +295,10 @@ export default {
         },
     };
   },
+  
   created() {
     this.initChangeDetail();
+    console.log(this.changeId)
   },
   methods: {
     initChangeDetail() {
@@ -312,7 +321,21 @@ export default {
     toTop(){
         meetTop.scrollIntoView();
     },
-
+      pictureShow(node) {
+      //图片预览
+      let newArr = [];
+      for (let i = 0; i < node.length; i++) {
+        if (
+          node[i].fileType == "jpg" ||
+          node[i].fileType == "png" ||
+          node[i].fileType == "jpeg"
+        ) {
+          newArr.push(node[i]);
+        }
+      }
+      this.processPicture = newArr;
+      this.dialogpicture = true;
+    },
      videoPlayerShow(node) {
         this.playerOptions.sources[0] = {
           src: node.filePath,

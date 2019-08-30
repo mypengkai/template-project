@@ -1,5 +1,7 @@
 <template>
   <div class="crestedBox">
+    <!-- 锚点 -->
+    <p id="meetTop"></p>
     <el-form
       class="reverseBox"
       ref="myApplyChangeForm"
@@ -79,7 +81,6 @@
         <el-col :span="12">
           <el-form-item label="分部分项:" prop="projectItemId">
             <select-tree
-              v-model="myApplyChangeForm.projectItem"
               clearable
               :options="projectItemTreeOption"
               :props="projectItemDefaultProps"
@@ -223,6 +224,141 @@
         </div>
       </el-form-item>
     </el-form>
+
+        <!-- 历史记录 -->
+<el-collapse accordion v-if="historyChangeInfo.length > 0">
+  <el-collapse-item title="历史会议纪要">
+    <div class="block">
+      <el-timeline>
+        <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger">
+          <table
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;"
+          >
+            <tr>
+              <th>会议编号</th>
+              <td>{{item.publicData.meetingSummaryNumber}}</td>
+              <th>会议主题</th>
+              <td>{{item.publicData.meetingTheme}}</td>
+              <th>会议地点</th>
+              <td>{{item.publicData.meetingAddress}}</td>
+            </tr>
+            <tr>
+              <th>组织机构</th>
+              <td>{{item.publicData.departname}}</td>
+              <th>分部分项</th>
+              <td>{{item.publicData.projectItem}}</td>
+              <th>桩号</th>
+              <td>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</td>
+            </tr>
+            <tr>
+              <th>增减金额(万元)</th>
+              <td>{{item.publicData.addDecreaseMoney}}</td>
+              <th>变更等级</th>
+              <td>
+                <template v-if="item.publicData.moneyLevel==='one_level'">一级</template>
+                <template v-else-if="item.publicData.moneyLevel==='two_level'">二级</template>
+                <template v-else-if="item.publicData.moneyLevel==='three_level'">三级</template>
+                <template v-else-if="item.publicData.moneyLevel==='four_level'">四级</template>
+              </td>
+              <th>金额计算式</th>
+              <td>{{item.publicData.formulaCalculatingAmount}}</td>
+            </tr>
+            <tr>
+              <th>会议主持人</th>
+              <td>{{item.publicData.meetingHostName}}</td>
+              <th>会议记录人</th>
+              <td>{{item.publicData.meetingNoteTakerName}}</td>
+              <th>开会时间</th>
+              <td>{{item.publicData.meetingDatetime}}</td>
+            </tr>
+            <tr>
+              <th>增减数量</th>
+              <td>{{item.publicData.addDecreaseNumber}}</td>
+              <th>数量计算式</th>
+              <td>{{item.publicData.quantitativeFormulas}}</td>
+              <th>变更状态</th>
+              <td>
+                <template v-if="item.publicData.changeToken=='1'">申请</template>
+                <template v-else-if="item.publicData.changeToken=='2'">审核</template>
+                <template v-else-if="item.publicData.changeToken=='3'">备案</template>
+                <template v-else-if="item.publicData.changeToken=='7'">完成</template>
+              </td>
+            </tr>
+            <tr>
+              <th>申请人</th>
+              <td>{{item.publicData.applyUserName}}</td>
+              <th>会议内容</th>
+              <td>{{item.publicData.sceneSummaryContent}}</td>
+              <th>变更理由</th>
+              <td>{{item.publicData.changeReason}}</td>
+            </tr>
+          </table>
+          <div class="roleName">
+            <p>
+              抄送人：
+              <span v-for="(node,index) in item.role" :key="index">
+                <template v-if="node.state==3">{{node.userName}}</template>
+              </span>
+            </p>
+            <p>
+              流程:
+              <el-timeline id="timeline">
+                <el-timeline-item
+                  v-if="item.state !=3 && item.state !=0"
+                  v-for="(item, index) in newChangInfo.role"
+                  :key="index"
+                  :type="item.state==1? 'primary' :'danger' "
+                >
+                  <p>处理时间:{{item.createTime}}</p>
+                  <p
+                    :style="{'color':(item.state == 1 ? 'blue' :'red')}"
+                  >{{item.state==1 ? "审核人" : "备案人" }}: {{item.userName}}</p>
+                  <p>计划完成时间:{{item.plancompletionTime}}</p>
+                  <p>{{item.state==1 ? "审核意见" : "备案意见"}}：{{item.checkexplain}}</p>
+                  <p class="imgBox">影像资料：
+                        <ul>
+                          <li v-for="(node, key) in item.fileinfos" :key="key">
+                            <template v-if="node.fileType==='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                                  <viewer :images="item.fileinfos">
+                                        <img v-for="(item,index) in item.fileinfos" :src="item.filePath" :key="index" style="width:100%;height:100%"/>
+                                  </viewer>      
+                            </template>
+                            <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                              <video :src="node.filePath" style="width: 100px; height: 100px;"
+                                    @click="videoPlayerShow(node)"></video>
+                            </template>
+                          </li>
+                       </ul>
+                  </p>
+                </el-timeline-item>
+              </el-timeline>
+            </p>
+          </div>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
+        <el-button type="primary" icon="el-icon-arrow-up" circle @click="toTop" class="backButton"></el-button>
+  </el-collapse-item>
+</el-collapse>  
+
+
+    <!-- 视屏 -->
+    <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
+      <video-player class="video-player vjs-custom-skin"
+                    ref="videoPlayer"
+                    :playsinline="true"
+                    :options="playerOptions"
+      ></video-player>
+    </el-dialog>
+
+
+
+
+
+
 
     <!-- 选择会议记录人 -->
     <el-dialog
@@ -407,6 +543,7 @@
         <el-button @click="dialogCopyPersonFormVisible=false">取 消</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -455,6 +592,35 @@ export default {
         quantitativeFormulas: "", // 数量计算式
         changeReason: "" // 变更理由
       },
+    //  历史记录
+         vedioinnerVisible:false,
+         historyChangeInfoKey: [],
+         historyChangeInfo: [], //历史的变更记录
+         newChangInfo:[],
+         playerOptions: {
+          playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+          autoplay: true, //如果true,浏览器准备好时开始回放。
+          muted: false, // 默认情况下将会消除任何音频。
+          loop: false, // 导致视频一结束就重新开始。
+          preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+          language: 'zh-CN',
+          aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+          fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+          sources: [{
+            src: '',
+            type: 'video/mp4'
+
+          }],
+          poster: '', //你的封面地址
+          width: document.documentElement.clientWidth, //播放器宽度
+          notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+          controlBar: {
+            timeDivider: true,
+            durationDisplay: true,
+            remainingTimeDisplay: false,
+            fullscreenToggle: true  //全屏按钮
+          }
+        },
 
       rules: {
         addDecreaseMoney: [
@@ -568,9 +734,9 @@ export default {
   created() {
     this.initUserGrouptTree();
     this.getChangeName();
-    this.initDealMeet();
-    this.getProject();
+     this.initDealMeet();
     this.myApplyChangeForm.meetingId = this.nowItem;
+    this.getProject();
   },
   methods: {
     //记要名称
@@ -596,7 +762,6 @@ export default {
         this.projectItemTreeOption = res.data.data;
         this.$refs.getSelectData.labelModel = "";
       });
-      //
     },
     // 获取分部分项
     getProject() {
@@ -606,7 +771,6 @@ export default {
         pId: "0"
       }).then(res => {
         this.projectItemTreeOption = res.data.data;
-        this.$refs.getSelectData.labelModel = "";
       });
     },
 
@@ -788,33 +952,51 @@ export default {
         }
       });
     },
-    // // 处理数据回填
+    // 回到顶部
+    toTop(){
+        meetTop.scrollIntoView();
+    },
+
+     videoPlayerShow(node) {
+        this.playerOptions.sources[0] = {
+          src: node.filePath,
+          type: 'video/mp4'
+        }
+        this.vedioinnerVisible = true
+      },
+
+
+    // 处理数据回填
     initDealMeet() {
       change.getApplySee({ meetingId: this.nowItem }).then(res => {
         if (res.data.ok == true) {
           this.myApplyChangeForm = res.data.data.MeetingInfo;
-          localStorage.setItem("orgId", this.myApplyChangeForm.departId);
+          localStorage.setItem("orgId", res.data.data.MeetingInfo.departId);
 
           this.myApplyChangeForm.meetingName = this.myApplyChangeForm.meetingHostName;
           this.myApplyChangeForm.meetingNoteName = this.myApplyChangeForm.meetingNoteTakerName;
           this.$refs.getSelectData.placeholder = this.myApplyChangeForm.projectItem;
-          let logs = res.data.data.log[0].role;
-          let copynames = "";
-          // let checknames = "";
-
-          logs.forEach(element => {
-            if (element.state == 3) {
-              copynames += element.userName + ",";
-            }
-            // if (element.state == 1) {
-            //   checknames = element.userName;
-            // }
-          });
-          this.myApplyChangeForm.copyUserName = copynames.substring(
-            0,
-            copynames.length - 1
-          );
-          // this.myApplyChangeForm.handleUserName = checknames;
+            let logs = res.data.data.log[0].role;
+            let copynames = "";
+            logs.forEach(element => {
+              if (element.state == 3) {
+                copynames += element.userName + ",";
+              }
+            });
+            this.myApplyChangeForm.copyUserName = copynames.substring(
+              0,
+              copynames.length - 1
+            );
+        let index = 0;
+        for (let key in res.data.data.log) {
+          if (key === "0") {
+            this.newChangInfo = res.data.data.log[key]; 
+          } else {
+            this.historyChangeInfoKey.push(index);
+            this.historyChangeInfo.push(res.data.data.log[key]);
+            index++;
+          }
+        }
         }
       });
     }
@@ -822,10 +1004,60 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .crestedBox {
   height: 60vh;
   padding-right: 30px;
   overflow-x: hidden;
+
+}
+/deep/.el-collapse-item__header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 48px;
+    line-height: 48px;
+    background-color: #FFF;
+    color: red;
+    cursor: pointer;
+    border-bottom: 1px solid #EBEEF5;
+    font-size: 13px;
+    font-weight: 500;
+    -webkit-transition: border-bottom-color .3s;
+    transition: border-bottom-color .3s;
+    outline: 0;
+}
+/deep/.el-timeline .el-timeline-item:last-child .el-timeline-item__tail {
+    display: block; 
+}
+ .imgBox{
+     ul{
+        overflow: hidden;
+        li{
+          float: left;
+          width:100px;
+          height:100px;
+          margin: 10px;
+          img{
+            width:100%;
+            height:100%;
+          }
+        }
+     }
+  }
+  .roleName{
+    p{
+      span{
+         padding:0 5px;
+      }
+    }
+}
+.backButton{
+    text-align: right;
+   margin-left: 90%;
+   margin-top: 20px;
 }
 </style>

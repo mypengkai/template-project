@@ -9,24 +9,24 @@
         @click="pictureLook(item)"
       >
         <div class="pictureBox">
-          <img :src="item.filePath" alt>
+          <img :src="item.filePath" alt />
         </div>
         <div class="p20-contation">
           <el-row>
-
             <el-col :span="10" style="color:#409eff;margin-top:0.5vw;font-weight: bolder">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
-              <template v-if="item.infoLogType == 'log'">日志</template>
-              <template v-else-if="item.infoLogType == 'selfcheck'">自检</template>
-              <template v-else-if="item.infoLogType == 'notice'">通知</template>
-              <template v-else-if="item.infoLogType == 'command'">指令</template>
-              <template v-else-if="item.infoLogType== 'realcheck'">工序验收</template>
+
+              <template v-if="item.infoLogType == 'command'">指令</template>
+              <template v-else-if="item.infoLogType== 'processCheck'">工序验收</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
               <template v-else-if="item.infoLogType == 'meeting'">会议纪要</template>
             </el-col>
             <el-col :span="14">
-              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.infoLogCreateTime}}</div>
+              <div
+                class="grid-content bg-purple timeOut"
+                style="color:#409eff"
+              >{{item.infoLogCreateTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -61,22 +61,25 @@
         @click="pictureLook(item)"
       >
         <div class="pictureBox">
-          <img :src="item.filePath" alt>
+          <img :src="item.filePath" alt />
         </div>
         <div class="p20-contation">
           <el-row>
             <el-col :span="10" style="color:#409eff ; margin-top:0.5vw;font-weight: bolder">
               <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
-              <template v-if="item.infoLogType == 'log'">日志</template>
-              <template v-else-if="item.infoLogType== 'realcheck'">工序验收</template>
-<!--              <template v-else-if="item.type == 'notice'">通知</template>-->
+              <!-- <template v-if="item.infoLogType == 'log'">日志</template> -->
+              <template v-if="item.infoLogType== 'realcheck'">工序验收</template>
+              <!--              <template v-else-if="item.type == 'notice'">通知</template>-->
               <template v-else-if="item.infoLogType == 'command'">指令</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
               <template v-else-if="item.infoLogType == 'meeting'">会议纪要</template>
             </el-col>
             <el-col :span="14">
-              <div class="grid-content bg-purple timeOut" style="color:#409eff">{{item.infoLogCreateTime}}</div>
+              <div
+                class="grid-content bg-purple timeOut"
+                style="color:#409eff"
+              >{{item.infoLogCreateTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -102,164 +105,164 @@
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
     <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%" class="dialogBox">
-      <comm :commandId="commandId" v-if="hackReset"></comm>
+      <!-- <comm :commandId="commandId" v-if="hackReset"></comm> -->
+      <checkBox :nowItem="commandList" v-if="hackReset"></checkBox>
     </el-dialog>
     <!-- 巡视查看 -->
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
-      <pollingCheck :targetID="targetID"></pollingCheck>
+      <pollingCheck :targetID="targetID" v-if="hackReset"></pollingCheck>
     </el-dialog>
-    <!-- 通知查看 -->
- <!--   <el-dialog title="通知详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
-      <pollingCheck :targetID="targetID"></pollingCheck>
-    </el-dialog>-->
-    <!-- 会议查看 -->
-    <el-dialog title="会议纪要详情" :visible.sync="dialogTableVisibleMeeting" width="60%" class="dialogBox">
+    <!-- 会议 -->
+    <el-dialog title="会议纪要详情" :visible.sync="dialogTableVisibleMeeting" fullscreen>
+      <meetingDetail :changeId="meetId" v-if="hackReset"></meetingDetail>
     </el-dialog>
-    <!--验收查看-->
-    <el-dialog
-      fullscreen
-      title="查看详情"
-      :visible.sync="dialogTableVisibleRealcheck"
-    >
-      <processCheck :realList="realList" :processInfoId="processInfoId"></processCheck>
+    <!--工序查看-->
+    <el-dialog fullscreen title="查看详情" :visible.sync="dialogTableVisibleRealcheck">
+      <processCheck :processInfoId="processInfoId" :realList="realList" v-if="hackReset"></processCheck>
     </el-dialog>
-    <!-- 自检查看 -->
-    <el-dialog
-      fullscreen
-      title="查看详情"
-      :visible.sync="dialogTableVisibleSelfcheck"
-    >
-      <processCheck :realList="selfList"></processCheck>
-    </el-dialog>
-    <!-- 日志查看 -->
-    <el-dialog
-      title="日志详情"
-      :visible.sync="dialogTableVisiblelogcheck"
-      width="60%"
-      class="dialogBox"
-    >
-      <logCheck :targetID="targetID"></logCheck>
+    <!-- 旁站 -->
+    <el-dialog title="旁站详情" :visible.sync="dialogTableVisibleSelfcheck">
+      <CheckPicture :nowItem="nowItem" v-if="hackReset"></CheckPicture>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import request from '@/utils/request'
-  import comm from '@/views/process/components/comm'
-  import logCheck from '@/views/process/components/logCheck'
-  import pollingCheck from '@/views/process/components/pollingCheck'
-  import processCheck from '@/views/process/components/processCheck'
-  import realcheck from '@/views/process/components/realcheck'
+import request from "@/utils/request";
+import comm from "@/views/process/components/comm";
+import logCheck from "@/views/process/components/logCheck";
+import pollingCheck from "@/views/process/components/pollingCheck";
+import processCheck from "@/views/process/components/processCheck";
+import realcheck from "@/views/process/components/realcheck";
+import meetingDetail from "@/views/meeting/meetingDetail";
+import CheckPicture from "@/views/walkaroundInspection/components/CheckPicture";
+import checkBox from "@/views/instruct/components/checkBox";
+export default {
+  inject: ["reload"],
+  name: "DetailList",
+  props: {
+    traceType: {
+      type: Number,
+      default: 1
+    },
+    conentOptions: {}, //工程数据
+    userOptions: {} //人员数据
+  },
+  components: {
+    logCheck,
+    pollingCheck,
+    comm,
+    realcheck,
+    processCheck,
+    meetingDetail,
+    CheckPicture,
+    checkBox
+  },
+  data() {
+    return {
+      dialogTableVisibleCommied: false, //指令
+      dialogTableVisiblePolling: false, //巡视
+      dialogTableVisibleNotice: false, //通知
+      dialogTableVisibleMeeting: false, //会议
+      dialogTableVisibleSelfcheck: false, // 旁站
+      dialogTableVisiblelogcheck: false, //日志
+      dialogTableVisibleRealcheck: false, // 验收
+      targetID: "", // 点击每一项的ID
+      commandId: "", // 指令查询ID
+      processList: {}, //自检验收信息
+      flag: false,
+      selfList: [], // 自检数据
+      realList: {}, // 工序数据
+      processInfoId: "", // 验收数据
+      hackReset: false,
+      meetId: "", // 会议id
+      nowItem: [], // 旁站数据
+      commandList: {} // 指令数据
+    };
+  },
+  created() {},
+  mounted() {},
+  computed: {
+    title() {
+      return this.traceType === 1 ? "工程痕迹管理" : "人员痕迹管理";
+    }
+  },
 
-  export default {
-    inject: ['reload'],
-    name: 'DetailList',
-    props: {
-      traceType: {
-        type: Number,
-        default: 1
-      },
-      conentOptions: {}, //工程数据
-      userOptions: {} //人员数据
-    },
-    components: {
-      logCheck,
-      pollingCheck,
-      comm,
-      realcheck,
-      processCheck
-    },
-    data() {
-      return {
-        dialogTableVisibleCommied: false, //指令
-        dialogTableVisiblePolling: false, //巡视
-        dialogTableVisibleNotice: false, //通知
-        dialogTableVisibleMeeting: false, //会议
-        dialogTableVisibleSelfcheck: false, // 自检
-        dialogTableVisiblelogcheck: false, //日志
-        dialogTableVisibleRealcheck: false, // 验收
-        targetID: '', // 点击每一项的ID
-        commandId: '', // 指令查询ID
-        processList: {}, //自检验收信息
-        flag: false,
-        selfList: [], // 自检数据
-        realList: [], // 验收数据
-        processInfoId: '', // 验收数据
-        hackReset: false
+  methods: {
+    //查看详细
+    pictureLook(item) {
+      //指令
+      if (item.infoLogType == "command") {
+        request
+          .post("/rest/command/searchOne", { id: item.infoLogProcessId })
+          .then(res => {
+            this.commandList = res.data.data;
+            this.dialogTableVisibleCommied = true;
+          });
+
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        });
       }
-    },
-    created() {
-    },
-    mounted() {
-
-    },
-    computed: {
-      title() {
-        return this.traceType === 1 ? '工程痕迹管理' : '人员痕迹管理'
+      //旁站
+      if (item.infoLogType == "sideStation") {
+        request.post("/rest/Patrol/chakan/" + item.infoLogId).then(res => {
+          if (res.data.ok) {
+            this.nowItem = res.data.data;
+            this.dialogTableVisibleSelfcheck = true;
+          }
+        });
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        });
       }
-    },
-
-    methods: {
-      //查看图片详细
-      pictureLook(item) {
-        this.targetID = item.id
-        //指令
-        if (item.type == 'command') {
-          this.dialogTableVisibleCommied = true
-          this.commandId = item.commandId
-          this.hackReset = false
-          this.$nextTick(() => {
-            this.hackReset = true
+      //巡视查看
+      if (item.infoLogType == "polling") {
+        this.dialogTableVisiblePolling = true;
+        this.targetID = item.infoLogId;
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        });
+      }
+      // 工序
+      if (item.infoLogType == "processCheck") {
+        this.processInfoId = item.infoLogProcessId;
+        request
+          .post("/rest/processCheck/getProcessDetail", {
+            id: item.infoLogProcessId
           })
-        }
-        //日志
-        if (item.type == 'log') {
-          this.dialogTableVisiblelogcheck = true
-        }
-        //巡视查看
-        if (item.type == 'polling') {
-          this.dialogTableVisiblePolling = true
-        }
-        if (item.type == 'notice') {
-          this.dialogTableVisibleNotice = true
-        }
-        if (item.type == 'notice') {
-          this.dialogTableVisibleMeeting = true
-        }
-        // 工序验收
-        if (item.type == 'realcheck') {
-          this.processInfoId = item.processId
-          request.post('/rest/processCheck/getProcessDetail', { id: item.processId }).then(res => {
+          .then(res => {
             if (res.data.ok) {
-              this.realList = res.data.data
+              this.realList = res.data.data;
             }
-          })
-          this.dialogTableVisibleRealcheck = true
-        }
-        // 自检
-        if (item.type == 'selfcheck') {
-          this.dialogTableVisibleSelfcheck = true
-          request
-            .post('/rest/processCheck/getProcessDetail', {
-              id: item.processId
-            })
-            .then(res => {
-              if (res.data.respCode == '0') {
-                let array = []
-                array.push(res.data.data)
-                this.selfList = array
-              }
-            })
-        }
+          });
+        this.dialogTableVisibleRealcheck = true;
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        });
+      }
+      //会议纪要
+      if (item.infoLogType == "meeting") {
+        this.dialogTableVisibleMeeting = true;
+        this.meetId = item.infoLogProcessId;
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        });
       }
     }
   }
+};
 </script>
 
 <style lang="scss" scoped>
-  .conentlist {
-    margin: 0;
-    padding: 0;
+.conentlist {
+  margin: 0;
+  padding: 0;
 
   .conent {
     overflow: hidden;
@@ -269,80 +272,77 @@
     box-sizing: border-box;
     border: 1px solid transparent;
 
-  .pictureBox {
-    width: 100%;
-    background: url("./images/bkg007.png") no-repeat;
-    background-size: 100% 100%;
-    height: 230px;
+    .pictureBox {
+      width: 100%;
+      background: url("./images/bkg007.png") no-repeat;
+      background-size: 100% 100%;
+      height: 230px;
 
-  img {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
+    .p20-contation {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      box-sizing: border-box;
+      padding: 10px;
+      overflow: hidden;
 
-  }
-  .p20-contation {
-    border: 1px solid #ccc;
-    margin-top: 10px;
-    box-sizing: border-box;
-    padding: 10px;
-    overflow: hidden;
+      h3 {
+        font-size: 12px;
+        margin: 10px 0;
+        height: 25px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        font-weight: normal;
+      }
 
-  h3 {
-    font-size: 12px;
-    margin: 10px 0;
-    height: 25px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    font-weight: normal;
-  }
+      p {
+        font-size: 12px;
+      }
 
-  p {
-    font-size: 12px;
-  }
+      .timeOut {
+        overflow: hidden;
+        height: 18px;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
 
-  .timeOut {
-    overflow: hidden;
-    height: 18px;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-  }
+      .grid-content {
+        font-size: 0.8vw;
+        max-height: 1vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        margin: 0.5vw 0;
+        font-weight: normal;
+      }
 
-  .grid-content {
-    font-size: 0.8vw;
-    max-height: 1vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    margin: 0.5vw 0;
-    font-weight: normal;
-  }
+      .spanOne {
+        float: left;
+        font-size: 1vw;
+        height: 1vw;
+        color: red;
+      }
 
-  .spanOne {
-    float: left;
-    font-size: 1vw;
-    height: 1vw;
-    color: red;
-  }
-
-  .spanTwo {
-    float: right;
-    font-size: 20px;
-  }
-
-  }
+      .spanTwo {
+        float: right;
+        font-size: 20px;
+      }
+    }
   }
   .conent:hover {
     border: 1px solid #409eff;
   }
-
-  }
+}
 </style>
