@@ -173,7 +173,7 @@
             unifiedMessage.addUnifiedApply(this.formData).then(res => {
               if (res.data.ok) {
                 this.$message({
-                  message: '恭喜你，新增成功！',
+                  message: '恭喜你，操作成功！',
                   type: 'success'
                 })
                 this.dialogVisible = false
@@ -203,6 +203,7 @@
         this.formUnified = {}
       },
       editText(row) {
+        // this.dialogTitle = ''
         this.formData = {
           type: row.type,
           text: row.text,

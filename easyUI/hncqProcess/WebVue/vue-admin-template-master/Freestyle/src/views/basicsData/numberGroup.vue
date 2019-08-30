@@ -2,18 +2,18 @@
   <div class="p20">
     <div class="topBar">
       <span>组织机构:</span>
-<!--      <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>-->
+      <!--      <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupChange"/>-->
       <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
         <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                    :value="item.id"></el-option>
       </el-select>
       <span>分部分项:</span>
 
-      <select-tree clearable lazy show-checkbox  :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
+      <select-tree clearable lazy show-checkbox :options="projectItemTreeOptions" ref="getSelectData"
+                   :props="projectItemDefaultProp"
                    v-on:noDe="projectItemOnClick"/>
-<!--
-      <el-tree :data="projectItemTreeOptions" :props="projectItemDefaultProp" lazy show-checkbox node-key="id" :load="loadNextLayer" highlight-current
-               :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>-->
+      <!--      <el-tree :data="projectItemTreeOptions" :props="projectItemDefaultProp" lazy show-checkbox node-key="id" :load="loadNextLayer" highlight-current
+                     :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>-->
 
       <div class="rl">
         <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
@@ -33,7 +33,7 @@
         <el-table-column align="center" prop="createName" label="创建人"/>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-<!--            <el-button type="warning" size="small" icon="el-icon-edit" circle @click="Edit(scope.row)"/>-->
+            <!--            <el-button type="warning" size="small" icon="el-icon-edit" circle @click="Edit(scope.row)"/>-->
             <el-button type="danger" size="small" icon="el-icon-delete" circle @click="Delete(scope.row)"/>
           </template>
         </el-table-column>
@@ -48,7 +48,7 @@
     </el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog fullscreen="" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
   </div>
@@ -96,7 +96,7 @@
         innerVisible: false, // 组织机构弹框
         projectVisible: false, // 工程分项弹框
 
-        userGroupOption:[],
+        userGroupOption: [],
         projectItemTreeOptions: [], // 分部分项树
         userGroupId: '',
         orgId: '',
@@ -106,10 +106,9 @@
           isLeaf: 'leaf'
         },
         defaultUserGroupProps: {
-          children: "children",
-          label: "name"
-        },
-
+          children: 'children',
+          label: 'name'
+        }
 
       }
     },
@@ -181,7 +180,7 @@
           remark: this.form.remark,
           checkNum: this.checkNum,
           seq: this.seq
-        };
+        }
         this.$refs[formName].validate((valid) => {
           if (valid) {
             request.post('/rest/processCheck/addProcess', fromData).then(res => {
@@ -189,13 +188,13 @@
                 this.$message({
                   message: '恭喜你，新增成功',
                   type: 'success'
-                });
+                })
                 this.loadAppointProcessList()
                 this.dialogFormVisible = false
               }
             })
           }
-        });
+        })
       },
       handleSizeChange(val) {
         this.sendData.pageSize = val

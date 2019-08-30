@@ -86,13 +86,13 @@
           <el-table-column fixed="right" label="操作" width="180" align="center">
             <template slot-scope="scope">
               <!-- 指定验收 -->
-              <el-tooltip v-if="scope.row.checktype!==0 && scope.row.checktype!==4" class="item" effect="dark"
+              <el-tooltip v-if="scope.row.adopt===null && scope.row.state1===0" class="item" effect="dark"
                           content="指定验收计划" placement="top">
                 <el-button :id="scope.$index" type="success" size="small" icon="el-icon-edit-outline" circle
                            @click="appointCheckPlan(scope)"/>
 
               </el-tooltip>
-              <el-tooltip v-if="scope.row.state1!==3 || scope.row.adopt!=='1'" class="item" effect="dark"
+              <el-tooltip v-if="scope.row.adopt===null && scope.row.state1===1" class="item" effect="dark"
                           content="修改验收计划" placement="top">
                 <el-button :id="scope.$index" type="warning" size="small" icon="el-icon-edit" circle
                            @click="appointCheckPlan(scope)"/>
@@ -617,12 +617,12 @@
         })
 
       },
-      initProcessTypeDict() {  // 初始化新增工序类型input框数据
-        request.post('/rest/processType/getList').then(res => {
-          this.processMDictOption = res.data.data.data
-          this.initProcessByTypeId(this.processMDictOption[0].id)
-        })
-      },
+      /*      initProcessTypeDict() {  // 初始化新增工序类型input框数据
+              request.post('/rest/processType/getList').then(res => {
+                this.processMDictOption = res.data.data.data
+                this.initProcessByTypeId(this.processMDictOption[0].id)
+              })
+            },*/
       initProcessByTypeId(codeid) {   // 初始化新增工序通过工序类型id
         this.processSDictOption = []  //先清空
         this.processSDictOption.unshift({ process: '全部' })
@@ -656,7 +656,6 @@
           this.treeFrom = res.data.data
           this.iscomplete = res.data.data.iscomplete
           this.treeFrom.state1 = res.data.data.state1 === '1' ? '已指定验收' : '未指定验收'
-
         })
       },
       loadAppointProcessList() {   //加载指定工序列表

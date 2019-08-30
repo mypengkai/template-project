@@ -17,10 +17,13 @@ export default {
   getProjectItemFromLayer(data) {
     return request.post('/rest/projectItemInfo/getProjectBQItemById', data)
   },
- // 标段下的人员
- getUserName(data){
-   return request.post("/rest/processCheck/notDeletedUser",data)
- }
+  // 标段下的人员
+  getUserName(data) {
+    return request.post('/rest/processCheck/notDeletedUser', data)
+  },
+  getAllProjectItemTree(data) {   //异步获取组织机构
+    return request.post('/rest/projectItemInfo/getProjectBQItemByIdNotZroe', data)
+  }
 }
 
 
