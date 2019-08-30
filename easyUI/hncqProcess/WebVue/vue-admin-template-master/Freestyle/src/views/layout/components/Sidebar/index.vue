@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar wrap-class="scrollbar-wrapper" >
+  <el-scrollbar wrap-class="scrollbar-wrapper">
     <el-menu
       unique-opened
       :show-timeout="200"
@@ -29,32 +29,43 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import SidebarItem from "./SidebarItem";
+  import { mapGetters } from 'vuex'
+  import SidebarItem from './SidebarItem'
 
-export default {
-  components: { SidebarItem },
-  computed: {
-    ...mapGetters(["sidebar"]),
-    routes() {
-      return this.$store.state.permission.routers;
-    },
-    isCollapse() {
-      return !this.sidebar.opened;
+  export default {
+    components: { SidebarItem },
+    computed: {
+      ...mapGetters(['sidebar']),
+      routes() {
+        return this.$store.state.permission.routers
+      },
+      isCollapse() {
+        return !this.sidebar.opened
+      }
     }
   }
-};
 </script>
 <style lang="scss" scoped>
-.a1 {
-  height: 8.5vh;
-  text-align: center;
-  vertical-align: middle;
+  .a1 {
+    height: 8.5vh;
+    text-align: center;
+    vertical-align: middle;
+
   img {
     width: 100%;
     height: 100%;
   }
-}
+
+  }
+/*  /deep/ #app .sidebar-container .scrollbar-wrapper{
+    height: 100vh!important;
+    overflow: hidden;
+  }*/
+  /deep/ .el-scrollbar__wrap{
+    height: 100vh!important;
+    overflow: hidden;
+
+  }
 
 </style>
 
