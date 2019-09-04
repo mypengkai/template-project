@@ -80,10 +80,11 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" style="width: 100%;" height="60vh">
+    <el-table border class="textList" :data="tableData" style="width: 100%;" height="66vh">
       <el-table-column prop="name1" label="分部分项" ></el-table-column>
       <el-table-column prop="Station" label="桩号" align="center" width="100"></el-table-column>
       <el-table-column prop="processName" label="工序名称" align="center" width="100"></el-table-column>
+     <el-table-column prop="createTime" label="创建时间" align="center" width="100"></el-table-column>
       <el-table-column prop="jihuazijianren" label="自检人" width="100" align="center"></el-table-column>
       <el-table-column prop="planSelfCheckTime" label="自检时间" width="100" align="center"></el-table-column>
       <el-table-column prop="jihuayanshouren" label="验收人" width="100" align="center"></el-table-column>

@@ -133,11 +133,14 @@
         <el-form-item label="工序验收次数" prop="checkNum">
           <el-input-number v-model="checkNum" controls-position="right" :min="1" :max="100" size="small"></el-input-number>
         </el-form-item>
+         <el-button type="success" class="checkButton" style="padding:2px;margin-left:50px;"  @click="checkRemark">快捷回复</el-button>
         <el-form-item label="备注" prop="remark">
+         
           <el-input :rows="4" v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+          
         </el-form-item>
       </el-form>
-       <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+       
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="addProcessFunction('addProcessForm')">确 定</el-button>
@@ -146,7 +149,7 @@
 
 
     <!-- 补录工序弹框 -->
-    <el-dialog :visible.sync="dialogFormVisibleBL" title="补录工序" width="70%" lock-scroll>
+    <el-dialog :visible.sync="dialogFormVisibleBL" title="补录工序" width="70%" lock-scroll >
       <div class="blgx">
         <el-dialog :visible.sync="setCheckPersonDialogFormVisible" width="50%" title="选中验收人" :append-to-body="true">
           <div class="topBar">
@@ -313,11 +316,13 @@
 
           <el-row>
             <el-col :span="24">
+              <el-button type="success" class="checkButton" style="padding:2px;margin-left:50px;"  @click="checkRemark">快捷回复</el-button>
               <el-form-item label="备注:" prop="remark">
                 <el-input :rows="4" v-model="formData.remark" type="textarea" placeholder="请输入内容"/>
               </el-form-item>
             </el-col>
-            <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+
+             
           </el-row>
            
         </el-form>
@@ -333,7 +338,7 @@
     <!-- 编辑指定验收弹框 -->
     <el-dialog :visible.sync="appointCheckDialogFormVisible" title="指定验收计划" width="40%">
       <!-- 设置验收或者自检人弹框 -->
-      <el-dialog :visible.sync="setCheckPersonDialogFormVisible" width="50%" title="选中验收人" :append-to-body="true">
+      <el-dialog :visible.sync="setCheckPersonDialogFormVisible" width="50%" :title="title" :append-to-body="true">
         <div class="topBar">
           <span>姓名:</span>
           <el-input style="width: 150px;" v-model="pageForm.realname" placeholder="请输入内容" size="small"/>
@@ -406,7 +411,7 @@
     </el-dialog>
 
     <!-- 自动回复 -->
-     <el-dialog :visible.sync="dialogRemark" title="自动回复" width="40%">
+     <el-dialog :visible.sync="dialogRemark" title="自动回复">
         <remark @setRemark="getRemark" @cancel="dialogRemark=false" :type="'selfcheck'"></remark>
     </el-dialog>
   </div>
@@ -457,6 +462,7 @@
             }
           }
         },
+        title:'选择验收人',
         userGroupDefaultProps: {   // 组织机构树显示
           children: 'children',
           label: 'name'
@@ -488,7 +494,6 @@
         projectItemId: '',  //工程分部分项id
         userGroupId: '',  //从下拉列表中选中的usergroupid
         userGroupIdBL: '',  //从下拉列表中选中的usergroupid
-        codeid:'',
         selectedUserGroup: '',  //选中的用户组织机构
         selectedUserGroupBL: '',  //选中的用户组织机构
         tableData: [],  // 操作列表table值
@@ -504,6 +509,7 @@
           projectType: '',  // 工程类型
           state1: ''  // 上面状态值
         },
+        codeid:'',
         // 图片详情弹框数据
         imgForm: {
           describe: '',
@@ -625,11 +631,26 @@
         iscomplete: ''
       }
     },
+    watch:{
+        dialogFormVisibleBL: function (val,oldVla) {
+                    if (this.$refs['supplementProcessForm'] != undefined) {
+                        this.$refs["supplementProcessForm"].resetFields();
+                    }
+                },
+        appointCheckDialogFormVisible:function(val,oldVla){
+               if (this.$refs['apponitCheckFrom'] != undefined) {
+                        this.$refs["apponitCheckFrom"].resetFields();
+                 }
+        },   
+         dialogFormVisible:function(val,oldVla){
+               if (this.$refs['addProcessForm'] != undefined) {
+                        this.$refs["addProcessForm"].resetFields();
+                 }
+        },             
+      },
+
     mounted() {
       this.initUserGroup();
-      this.$nextTick(()=>{
-          this.initProcessByTypeId();
-      })
     },
     created() {
       let nowUserId = localStorage.getItem('userId')
@@ -648,10 +669,9 @@
 
       },
       initProcessByTypeId(codeid) {   // 初始化新增工序通过工序类型id
-        console.log(codeid,"codeid")
         this.processSDictOption = []  //先清空
         this.processSDictOption.unshift({ process: '全部' })
-        request.post('/rest/processCheck/numberSdData', { codeid: codeid }).then(res => {
+        request.post('/rest/processCheck/numberSdData', { codeid:codeid }).then(res => {
           this.processSDictOption = res.data.data
         })
       },
@@ -679,7 +699,6 @@
           this.projectItem = res.data.data.projectItem
           this.departname = res.data.data.departname
           this.treeFrom = res.data.data;
-          this.codeid = this.treeFrom.id; 
           this.iscomplete = res.data.data.iscomplete
           this.treeFrom.state1 = res.data.data.state1 === '1' ? '已指定验收' : '未指定验收'
         })
@@ -697,11 +716,10 @@
       handleNodeClick(data) {
         this.projectItemId = ''
         //展示选中的分部分项
-        this.overState(data.id)
+        this.overState(data.id);
+        this.codeid = data.id
         this.showSelectedProjectItemInfo(data.id)
-
         this.projectItemId = data.id
-
         if (data.id.split('_')[1].length == 18) {
           this.addProcessBtn = true
         } else {
@@ -722,8 +740,16 @@
         } //清空
         this.initProcessByTypeId(this.treeFrom.id)
         this.showSelectedProjectItemInfo(this.treeFrom.id)
-
       },
+       backupProcess() {   //补录工序
+        this.dialogFormVisibleBL = true;
+        this.initProcessByTypeId(this.treeFrom.id);
+        // this.clearUploadedImage();
+        // this.formData = {}; //清空
+      },
+
+
+
       addProcessFunction(formName) {  // 新增工序
         const fromData = {
           userGroupId: this.userGroupId,
@@ -765,6 +791,7 @@
         this.setCheckPersonDialogFormVisible = true
         this.checkPersonData = []
         if (type === 'supervisor') {   //监理
+          this.title = "选择验收人"
           this.currentSelectedState = 'supervisor'
           request.get('/rest/organizate/depart/' + this.userGroupId).then(res => {
             request.post('/rest/processCheck/notDeletedUser', {
@@ -779,6 +806,7 @@
             })
           })
         } else if (type === 'construction') {  //施工
+          this.title = "选择自检人"
           this.currentSelectedState = 'construction'
           request.post('/rest/processCheck/notDeletedUser', {
             pageNo: this.pageForm.pageNo, pageSize: this.pageForm.pageSize,
@@ -869,8 +897,9 @@
       },
       // 重置按钮
       reset() {
-        this.pageForm.realname = ''
-        this.pageForm.position = ''
+        this.pageForm.realname = '';
+        this.pageForm.position = '';
+        this.selectCheckPerson(this.currentSelectedState);
       },
      // 自动回复备注
      checkRemark(){
@@ -886,12 +915,7 @@
       checkBeforeUplad(file) {  //验收图片上传之前
         this.leakRepairUploadForm.append('files[]', file)
       },
-      backupProcess() {   //补录工序
-        this.dialogFormVisibleBL = true
-        this.formData = {} //清空
-        this.clearUploadedImage()
-        this.initProcessByTypeId(this.treeFrom.id)
-      },
+     
       subimitSupplementProcessFunction(form) {  //补录工序
         this.formData.userGroupId = this.userGroupId
         this.formData.projectItemId = this.projectItemId
@@ -951,14 +975,13 @@
           }
         })
       },
-      overProcess(codeid) {
-        console.log(codeid,"codeid")
-        this.$confirm('此操作将完成该分项,再无法新增或补录工序!', '提示', {
+      overProcess() {
+        this.$confirm('此操作将完成该分项,完成后将无法新增和补录工序!', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          request.post('/rest/processCheck/itemComplete', { codeid: codeid }).then(res => {
+          request.post('/rest/processCheck/itemComplete', { codeid: this.codeid }).then(res => {
             if (res.data.data != 'false') {
               this.overProcessBtn = false
               this.addProcessBtn = false
@@ -1114,6 +1137,6 @@
     margin: 0 8px 8px 0;
     display: inline-block;
 }
-  
+
 
 </style>

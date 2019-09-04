@@ -20,12 +20,12 @@
         </el-col>
 
 
-        <el-col :span="10">
-          <span>创建日期:</span>
+        <el-col :span="12">
+          <span>计划验收时间:</span>
           <el-date-picker
             v-model="queryData.starttime"
             type="date"
-            placeholder="选择开始日期"
+            placeholder="请选择"
             size="small"
             style="min-width:180px"
             value-format="yyyy-MM-dd"
@@ -35,7 +35,7 @@
           <el-date-picker
             v-model="queryData.endtime"
             type="date"
-            placeholder="选择结束日期"
+            placeholder="请选择"
             size="small"
             style="min-width:180px"
             value-format="yyyy-MM-dd"
@@ -79,10 +79,11 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" height="60vh" fit>
+    <el-table border class="textList" :data="tableData" height="66vh" fit>
       <el-table-column prop="name1" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="100" align="center"></el-table-column>
       <el-table-column prop="processName" label="工序名称" width="100" align="center"></el-table-column>
+      <!-- <el-table-column prop="planCheckTime" label="创建时间" width="100" align="center"></el-table-column>  -->
       <el-table-column prop="shijizijianren" label="自检人" width="80" align="center"></el-table-column>
       <el-table-column prop="planSelfCheckTime" label="计划自检时间" width="100" align="center"></el-table-column>
       <el-table-column prop="realitySelfCheckTime" label="实际自检时间" width="100" align="center"></el-table-column>
@@ -104,7 +105,7 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="100" align="center">
+      <el-table-column fixed="right" label="操作" width="50" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button
