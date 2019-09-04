@@ -26,7 +26,7 @@
                           format="yyyy-MM-dd"></el-date-picker>
         </el-col>
         <el-col :span="5.5">
-            <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
+            <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList()">查询
             </el-button>
             <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
             </el-button>
@@ -40,13 +40,12 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
         <el-table-column prop="projectitem" label="分部分项"></el-table-column>
         <el-table-column prop="station" label="桩号" align="center"></el-table-column>
         <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
         <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
         <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
-        <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
         <el-table-column label="状态" width="120" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.state=='-1'"><span style="background-image: url('flag-blue.png');"></span>已发起,待处理
@@ -75,8 +74,8 @@
     </el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="60%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
+    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
+      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox>
     </el-dialog>
   </div>
 </template>
@@ -131,8 +130,8 @@
       }
     },
     created() {
-      this._searchList()
-      this.initUserGroup()
+      this.getinit();
+      this.initUserGroup();
     },
     methods: {
       action(val) {
@@ -163,20 +162,21 @@
       },
       async actionItem(id) {  // 查询单个请求
         let { data } = await api.searchOne({ id })
-        console.log('datassssssssss', data)
         this.nowItem = data.data
         this.dialogFormVisible = true
       },
-      _searchList() {  // 列表请求
-        api.myCommandPerson(this.sendData).then(res => {
-          console.log(res,"res")
+      getinit(){
+          api.myCommandPerson(this.sendData).then(res => {
           this.total = res.data.data.totalCount
           this.sendCommandList = res.data.data.data
         })
       },
+      _searchList() {  // 列表请求
+         this.getinit();
+      },
       handleSizeChange(val) {
         this.sendData.pageSize = val
-        this._searchList()
+        this.getinit()
       },
       handleUserGroupChange(data) {  // 组织机构树点击事件
         this.projectItemTree = []  //清空数据

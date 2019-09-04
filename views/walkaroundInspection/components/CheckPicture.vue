@@ -279,7 +279,7 @@ export default {
 
 <style lang="scss" scoped>
 .reverseBox {
-  height: 60vh;
+  height: 70vh;
   padding: 0 20px;
   overflow-y: auto;
 
@@ -304,13 +304,12 @@ export default {
   ul {
     padding: 0;
     margin: 0;
-
     li {
       list-style: none;
       float: left;
       width: 12vh;
       height: 12vh;
-
+      margin: 5px;
       img {
         width: 100%;
         height: 100%;

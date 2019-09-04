@@ -20,27 +20,19 @@
                       style="min-width:180px" value-format="yyyy-MM-dd"
                       format="yyyy-MM-dd"></el-date-picker>
       <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
+        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList()">查询
         </el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
         <el-table-column prop="projectitem" label="分部分项"></el-table-column>
         <el-table-column prop="station" label="桩号" align="center"></el-table-column>
-        <!--<el-table-column label="指令类型" width="110" align="center">
-          <template slot-scope="scope">
-            <template v-if="scope.row.commandType==='1'">安全</template>
-            <template v-else-if="scope.row.commandType==='2'">纸质</template>
-            <template v-else-if="scope.row.commandType==='3'">口头</template>
-          </template>
-        </el-table-column>-->
         <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
         <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
         <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
-        <!--        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>-->
         <el-table-column label="状态" width="120" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.state=='-1'">已发起,待处理</template>
@@ -52,14 +44,6 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-           <!-- <el-button
-              type="warning"
-              icon="el-icon-edit"
-              size="small"
-              content="修改"
-              circle
-              @click="editItem(scope.row.commandId)"
-            ></el-button>-->
             <el-button
               type="primary"
               icon="el-icon-search"
@@ -68,6 +52,14 @@
               circle
               @click="actionItem(scope.row.commandId)"
             ></el-button>
+               <!-- <el-button
+              type="success"
+              icon="el-icon-edit"
+              size="small"
+              content="处理"
+              circle
+              @click="editItem(scope.row.commandId)"
+            ></el-button> -->
 
           </template>
         </el-table-column>
@@ -81,7 +73,7 @@
 
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
+      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()"></checkBox>
     </el-dialog>
 
   </div>
@@ -139,33 +131,28 @@
       }
     },
     created() {
-      this.initUserGroup()
-      this._searchList()
+      this.initUserGroup();
+      this.getinit();
     },
     methods: {
       handleSizeChange(val) {
         this.sendData.pageSize = val
-        this._searchList()
+        this.getinit()
       },
       async actionItem(id) {  // 查询单个请求
         let { data } = await api.searchOne({ id })
         this.nowItem = data.data
-        console.log(this.nowItem)
         this.dialogFormVisible = true
 
       },
-      editItem() {
-        // let { data } = await api.searchOne({ id })
-
-       /* api.modifyCommand(this.modifyData).then(res => {
-          // this.getList = res.data.data.data
-        })*/
-      },
-      _searchList() {  //查询列表
-        api.myCommandReceive(this.sendData).then(res => {
+      getinit(){
+          api.myCommandPerson(this.sendData).then(res => {
           this.total = res.data.data.totalCount
-          this.getList = res.data.data.data
+          this.sendCommandList = res.data.data.data
         })
+      },
+      _searchList() {  // 列表请求
+         this.getinit();
       },
       initUserGroup() {   //初始化组织机构树
         Organization.userGroupSelect().then(res => {
@@ -206,7 +193,7 @@
     watch: {
       dialogFormVisible(val) {
         !val && (this.nowItem = '')
-      }
+      },
     }
   }
 </script>

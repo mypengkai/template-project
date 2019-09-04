@@ -56,7 +56,7 @@
       </el-row>
 
     </div>
-    <el-table :data="tableData" border class="textList" style="width: 100%;" height="70vh">
+    <el-table :data="tableData" border class="textList" style="width: 100%;" height="72vh">
       <el-table-column prop="departname" label="组织机构" min-width="80"></el-table-column>
       <el-table-column prop="realname" label="用户姓名" min-width="80"></el-table-column>
       <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>

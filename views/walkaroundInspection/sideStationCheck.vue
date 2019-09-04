@@ -33,14 +33,17 @@
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table border  class="textList" :data="sideStationPollingPageList" style="width: 100%" height="70vh">
+    <el-table border  class="textList" :data="sideStationPollingPageList" style="width: 100%" height="72vh">
+      <el-table-column prop="projectItem" label="组织机构"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
+      <el-table-column prop="projectItem" label="旁站人" width="100"></el-table-column>
+      <el-table-column prop="projectItem" label="职位" width="100"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="100"></el-table-column>
       <el-table-column prop="describe" label="巡视描述"></el-table-column>
       <el-table-column prop="photoLocation" label="拍照地点"></el-table-column>
-      <el-table-column prop="createTime" align="center" width="200" label="创建时间"></el-table-column>
+      <el-table-column prop="createTime" align="center" width="150" label="创建时间"></el-table-column>
       <el-table-column prop="realname" align="center" label="巡视人" width="100"></el-table-column>
-      <el-table-column fixed="right" align="center" label="操作" width="200">
+      <el-table-column fixed="right" align="center" label="操作" width="100">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top">
             <el-button type="primary" size="small" icon="el-icon-search" circle @click="action(scope.row)"></el-button>

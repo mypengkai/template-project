@@ -32,7 +32,7 @@
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table class="textList" border :data="pollingPageList" style="width: 100%" height="70vh">
+    <el-table class="textList" border :data="pollingPageList" style="width: 100%" height="72vh">
       <el-table-column prop="realname" label="巡视人" align="center" width="100"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号"></el-table-column>
