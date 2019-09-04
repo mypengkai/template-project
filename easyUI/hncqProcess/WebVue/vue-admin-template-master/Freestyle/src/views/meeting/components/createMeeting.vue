@@ -236,6 +236,14 @@
         <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
         <span>职位：</span>
         <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+        <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="query">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+              </el-button>
+            </div>
+
       </div>
       <el-table
         ref="changeSingleTable"
@@ -253,8 +261,6 @@
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        class="pageList mt1"
-        background
         :page-sizes="[10,20,30]"
         :page-size="users.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
@@ -281,6 +287,13 @@
         <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
         <span>职位：</span>
         <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+         <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="query">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+              </el-button>
+            </div>
       </div>
       <el-table
         ref="changeSingleTable"
@@ -298,7 +311,7 @@
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        class="pageList mt1"
+        class="pageList"
         background
         :page-sizes="[10,20,30]"
         :page-size="users.pageSize"
@@ -337,7 +350,7 @@
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        class="pageList mt1"
+        class="pageList"
         background
         :page-sizes="[10,20,30]"
         :page-size="handleQueryParam.pageSize"
@@ -375,6 +388,13 @@
             :value="item.id"
           ></el-option>
         </el-select>
+         <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="queryCopy">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="resetCopy()">重置
+              </el-button>
+            </div>
       </div>
       <el-table
         ref="multipleTable"
@@ -390,7 +410,7 @@
         <el-table-column prop="mobilePhone" label="电话" align="center" show-overflow-tooltip></el-table-column>
       </el-table>
       <el-pagination
-        class="pageList mt1"
+        class="pageList"
         background
         :page-sizes="[10,20,30]"
         :page-size="copyQueryParam.pageSize"
@@ -546,6 +566,21 @@ export default {
     this.today();
   },
   methods: {
+    queryCopy(){
+        this.initCopyUsersList();
+    },
+    resetCopy(){
+        this.copyQueryParam.userGroupId = '';
+        this.initCopyUsersList();
+    },
+    query(){
+        this.initDparentUser();
+    },
+    reset(){
+        this.users.realname = "";
+        this.users.position ="";
+        this.initDparentUser();
+    },
     today(){
          let nowTime = new Date();
          this.myApplyChangeForm.meetingDatetime = nowTime.toLocaleDateString().replace(/\//g, "-");
@@ -760,10 +795,17 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .crestedBox {
   height: 60vh;
   padding-right: 30px;
   overflow-x: hidden;
+}
+/deep/.el-pagination {
+    white-space: nowrap;
+    padding: 2px 5px;
+    color: #303133;
+    font-weight: 700;
+    margin-top: 10px;
 }
 </style>

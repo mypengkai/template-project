@@ -331,7 +331,7 @@
 
 
 
-    <!-- 选择会议记录人 -->
+   <!-- 选择会议记录人 -->
     <el-dialog
       width="70%"
       title="会议主持人"
@@ -341,9 +341,17 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请选择" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请选择" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+        <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="query">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+              </el-button>
+            </div>
+
       </div>
       <el-table
         ref="changeSingleTable"
@@ -361,8 +369,6 @@
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        class="pageList mt1"
-        background
         :page-sizes="[10,20,30]"
         :page-size="users.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
@@ -372,8 +378,8 @@
         @current-change="initDparentUser()"
       ></el-pagination>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="checkUser">确 认</el-button>
         <el-button @click="dialogusersVisible=false">取 消</el-button>
+        <el-button type="primary" @click="checkUser">确 认</el-button>
       </div>
     </el-dialog>
     <!-- 会议记录人 -->
@@ -386,9 +392,16 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请选择" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请选择" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+         <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="query">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+              </el-button>
+            </div>
       </div>
       <el-table
         ref="changeSingleTable"
@@ -406,7 +419,7 @@
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        class="pageList mt1"
+        class="pageList"
         background
         :page-sizes="[10,20,30]"
         :page-size="users.pageSize"
@@ -417,8 +430,8 @@
         @current-change="initDparentUser()"
       ></el-pagination>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="checkNoteName">确 认</el-button>
         <el-button @click="dialogNoteNameVisible=false">取 消</el-button>
+        <el-button type="primary" @click="checkNoteName">确 认</el-button>
       </div>
     </el-dialog>
 
@@ -445,7 +458,7 @@
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        class="pageList mt1"
+        class="pageList"
         background
         :page-sizes="[10,20,30]"
         :page-size="handleQueryParam.pageSize"
@@ -456,8 +469,8 @@
         @current-change="loadNextJobUserList()"
       ></el-pagination>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="subimtHandlerPerson">确 认</el-button>
-        <el-button @click="dialogHandleFormVisible=false">取 消</el-button>
+         <el-button @click="dialogHandleFormVisible=false">取 消</el-button>
+         <el-button type="primary" @click="subimtHandlerPerson">确 认</el-button>
       </div>
     </el-dialog>
 
@@ -483,6 +496,13 @@
             :value="item.id"
           ></el-option>
         </el-select>
+         <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="queryCopy">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="resetCopy()">重置
+              </el-button>
+            </div>
       </div>
       <el-table
         ref="multipleTable"
@@ -498,7 +518,7 @@
         <el-table-column prop="mobilePhone" label="电话" align="center" show-overflow-tooltip></el-table-column>
       </el-table>
       <el-pagination
-        class="pageList mt1"
+        class="pageList"
         background
         :page-sizes="[10,20,30]"
         :page-size="copyQueryParam.pageSize"
@@ -508,10 +528,9 @@
         @size-change="handleCopyPersonSizeChange"
         @current-change="initCopyUsersList()"
       ></el-pagination>
-
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="subimtCopyPerson">确 认</el-button>
         <el-button @click="dialogCopyPersonFormVisible=false">取 消</el-button>
+        <el-button type="primary" @click="subimtCopyPerson">确 认</el-button>
       </div>
     </el-dialog>
 
@@ -712,6 +731,25 @@ export default {
     this.getProject();
   },
   methods: {
+    queryCopy(){
+        this.initCopyUsersList();
+    },
+    resetCopy(){
+        this.copyQueryParam.userGroupId = '';
+        this.initCopyUsersList();
+    },
+    query(){
+        this.initDparentUser();
+    },
+    reset(){
+        this.users.realname = "";
+        this.users.position ="";
+        this.initDparentUser();
+    },
+
+
+
+
     //记要名称
     getChangeName() {
       let currentDate = tool.formatDate(new Date(), "yyyyMMddHHmmss");
@@ -1081,5 +1119,12 @@ ul, ol {
 }
 .conent{
    overflow: hidden;
+}
+/deep/.el-pagination {
+    white-space: nowrap;
+    padding: 2px 5px;
+    color: #303133;
+    font-weight: 700;
+    margin-top: 10px;
 }
 </style>
