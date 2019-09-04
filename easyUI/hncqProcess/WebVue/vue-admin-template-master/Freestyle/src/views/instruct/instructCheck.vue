@@ -22,14 +22,14 @@
                       style="min-width:180px" value-format="yyyy-MM-dd"
                       format="yyyy-MM-dd"></el-date-picker>
       <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
+        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList()">查询
         </el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
         <el-table-column prop="project" label="分部分项"></el-table-column>
         <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
         <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
@@ -60,7 +60,7 @@
                    @size-change="handleSizeChange" :total="total"></el-pagination>
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
+      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()"></checkBox>
     </el-dialog>
   </div>
 </template>
@@ -115,7 +115,7 @@
     },
     created() {
       this.initUserGroup()
-      this._searchList()
+      this.getinit()
     },
     methods: {
       async actionItem(id) {  // 查询单个请求
@@ -125,13 +125,16 @@
       },
       handleSizeChange(val) {
         this.sendData.pageSize = val
-        this._searchList()
+        this.getinit()
+      },
+      getinit(){
+          api.myCommandPerson(this.sendData).then(res => {
+          this.total = res.data.data.totalCount
+          this.sendCommandList = res.data.data.data
+        })
       },
       _searchList() {  // 列表请求
-        api.getList(this.sendData).then(res => {
-          this.total = res.data.data.totalCount
-          this.getList = res.data.data.data
-        })
+         this.getinit();
       },
 
       initUserGroup() {   // 初始化组织机构树
