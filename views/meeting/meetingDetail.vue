@@ -81,7 +81,7 @@
                    <div v-if="historyChangeInfo.length==0">暂无历史变更纪要</div>
                   <div class="block" v-else>
                       <el-timeline >
-                        <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger">
+                        <el-timeline-item v-for="(item, key) in historyChangeInfo" :key="key" type="danger" :timestamp="item.publicData.createTime" placement="top">
                             <div class="conent">
                                 <ol>
                                   <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
@@ -294,13 +294,13 @@ export default {
       li{
          height: 30px;
          span{
-            font-size: 16px;
+           
             font-weight: bold;
             width: 150px;
             display: inline-block;
          }
          i{
-            font-size: 16px;
+           
             font-style: normal;
            
          }
@@ -317,13 +317,13 @@ export default {
       li{
          height: 30px;
          span{
-            font-size: 16px;
+            
             font-weight: bold;
             width: 150px;
             display: inline-block;
          }
          i{
-            font-size: 16px;
+            
             font-style: normal;
          }
       }
@@ -344,12 +344,11 @@ ul, ol {
     overflow-x: hidden;
     p{
       span{
-        font-size: 16px;
+       
         font-weight: bold;
       }
       i{
          padding:0 5px;
-         font-size: 16px;
          font-style: normal;
       }
     }

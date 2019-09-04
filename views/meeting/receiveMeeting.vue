@@ -1,5 +1,5 @@
 <template>
-  <div class="acceptzh">
+  <div class="p20">
     <div class="topBar">
       <el-row>
         <el-col :span="6">
@@ -71,7 +71,7 @@
       border
       :data="myApplyChangePageList"
       style="width: 100%"
-      height="70vh"
+      height="60vh"
     >
       <el-table-column prop="meetingSummaryNumber" label="会议编码" align="center"></el-table-column>
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
@@ -79,10 +79,10 @@
       <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
       <el-table-column label="变更等级" align="center">
         <template slot-scope="scope">
-           <el-tag  type="info" v-if="scope.row.moneyLevel==='one_level'">一级</el-tag>
-          <el-tag  type="success" v-else-if="scope.row.moneyLevel==='two_level'">二级</el-tag>
-            <el-tag type="warning" v-else-if="scope.row.moneyLevel==='three_level'">三级</el-tag> 
-            <el-tag  type="danger" v-else-if="scope.row.moneyLevel==='four_level'">四级</el-tag> 
+            <span v-if="scope.row.moneyLevel==='one_level'" style="color：#909399">一级</span>  
+           <span v-else-if="scope.row.moneyLevel==='two_level'" style="color:#85CE61">二级</span>  
+           <span v-else-if="scope.row.moneyLevel==='three_level'" style="color:#EBB563">三级</span>  
+           <span v-else-if="scope.row.moneyLevel==='four_level'" style="color:#F789D2">四级</span>  
         </template>
       </el-table-column>
       <el-table-column prop="shenqingrename" label="申请人" align="center"></el-table-column>

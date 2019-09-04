@@ -1,23 +1,28 @@
 <template>
   <div class="p20">
-    <!-- 选择区域 -->
     <div class="topBar">
-      <span>工序:</span>
-      <el-input v-model="queryParamData.process" size="small" placeholder="请输入工序"/>
-      <span>工序编码:</span>
-      <el-input v-model="queryParamData.code" size="small" placeholder="请输入工序编码"/>
-      <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="initTable()">查询
-        </el-button>
+      <el-row>
+        <el-col :span="6">
+         <span>工序:</span>
+         <el-input v-model="queryParamData.process" size="small" placeholder="请输入工序"/>
+        </el-col>
+        
+        <el-col :span="6">
+          <span>工序编码:</span>
+          <el-input v-model="queryParamData.code" size="small" placeholder="请输入工序编码"/>
+        </el-col>
+        <el-col :span="6">
+        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="initTable()">查询</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-circle-plus-outline" @click="addProcess">
-          新增
-        </el-button>
-      </div>
+        <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-circle-plus-outline" @click="addProcess"> 新增 </el-button>
+        </el-col>
+      </el-row>
     </div>
 
+  
+
     <!-- 数据列表 -->
-    <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="72vh" stripe highlight-current-row
+    <el-table :data="tableData" :row-style="{height: '0'}" class="textList" height="68vh" stripe highlight-current-row
               border>
       <el-table-column prop="seq" label="序号" align="center"/>
       <el-table-column prop="process" label="工序" align="center"/>
@@ -44,8 +49,8 @@
                    @current-change="initTable"/>
 
     <!--新增、修改弹框-->
-    <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="30%" append-to-body>
-      <el-form :model="form" ref="form" :rules="rules" label-width="120px">
+    <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="40%" append-to-body>
+      <el-form :model="form" ref="form" :rules="rules" label-width="100px">
         <el-form-item label="工序名称：" prop="process">
           <el-input v-model="form.process"/>
         </el-form-item>

@@ -1,17 +1,5 @@
 <template>
   <div class="viewer">
-    <!--<el-row>
-      <el-col :span="24">
-        <ul class="viewLeft" v-for="(item,index) in imgList" :key="index">
-            <li>图片名称：{{item.filename}}</li>
-            <li>图片格式：{{item.fileType}}</li>
-            <li>图片大小：{{item.fileSize}}</li>
-            <li>经度：{{item.lgt}}</li>
-            <li>纬度：{{item.lat}}</li>
-            <li>拍照位置：{{item.photoLocation}}</li>
-        </ul>
-      </el-col>
-    </el-row>-->
     <el-row>
       <el-col :span="24">
         <div class="viewLeft">
@@ -22,7 +10,6 @@
             <li>经度：{{item.lgt}}</li>
             <li>纬度：{{item.lat}}</li>
             <li>桩号：{{zhuanghao}}</li>
-
             <li>拍照地点：{{item.photoLocation}}</li>
           </ul>
         </div>
@@ -79,8 +66,7 @@ export default {
   .viewLeft {
     width: 30%;
     float: left;
-    height: 550px;
-
+    height: 50VH;
     ul {
       padding: 0;
       margin: 0;
@@ -94,7 +80,7 @@ export default {
   .viewRight {
     width: 70%;
     float: right;
-    height: 550px;
+    height: 50VH;
     .picBox{
         display: none
      }

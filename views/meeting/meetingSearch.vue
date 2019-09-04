@@ -1,6 +1,6 @@
 <template>
-  <div class="acceptzh">
-    <div class="topBar">
+  <div class="p20">
+    <!-- <div class="topBar">
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
@@ -58,15 +58,78 @@
           >重置</el-button>
         </el-col>
       </el-row>
-    </div>
+    </div> -->
+     <div class="topBar">
+      <el-row>
+        <el-col :span="6">
+          <span>组织机构:</span>
+          <el-select v-model="sendData.departId" placeholder="请选择" @change="checkDepart()">
+            <el-option
+              v-for="item in userGroupTree"
+              :key="item.id"
+              :label="item.departname"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="6">
+          <span>分部分项:</span>
+          <select-tree
+            clearable
+            :options="projectItemTreeOption"
+            :props="projectItemDefaultProps"
+            v-on:noDe="handleProjectItemChange"
+            ref="getSelectData"
+          />
+        </el-col>
+        <el-col :span="6">
+          <span>会议编号:</span>
+          <el-input placeholder="请输入会议编码" v-model="sendData.meetingSummaryNumber"></el-input>
+        </el-col>
 
+        <el-col :span="6">
+          <span>会议主题:</span>
+          <el-input placeholder="请输入会议主题" v-model="sendData.meetingTheme"></el-input>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="topBar">
+      <el-row>
+        <el-col :span="6">
+          <span>变更等级:</span>
+          <el-select v-model="sendData.moneyLevel" placeholder="请选择金额等级">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+
+        <el-col :span="6" style="margin-left:50%">
+          <el-button
+            class="pan-btn light-blue-btn"
+            type="primary"
+            icon="el-icon-search"
+            @click="query()"
+          >查询</el-button>
+          <el-button
+            type="primary"
+            class="pan-btn light-blue-btn"
+            icon="el-icon-refresh"
+            @click="reset()"
+          >重置</el-button>
+        </el-col>
+      </el-row>
+    </div>
     <!-- 查询列表 -->
     <el-table
       class="textList"
       border
       :data="myApplyChangePageList"
       style="width: 100%"
-      height="70vh"
+      height="60vh"
     >
       <el-table-column prop="meeting_summary_number" label="会议编号" align="center"></el-table-column>
       <el-table-column prop="meeting_theme" label="会议主题" align="center"></el-table-column>
@@ -74,10 +137,10 @@
       <el-table-column prop="add_decrease_money" label="增减金额(万元)" align="center"></el-table-column>
       <el-table-column label="变更等级" align="center">
         <template slot-scope="scope">
-           <el-tag  type="info" v-if="scope.row.money_level==='one_level'">一级</el-tag>
-           <el-tag  type="success" v-else-if="scope.row.money_level==='two_level'">二级</el-tag> 
-            <el-tag type="warning" v-else-if="scope.row.money_level==='three_level'">三级</el-tag> 
-            <el-tag  type="danger" v-else-if="scope.row.money_level==='four_level'">四级</el-tag> 
+           <span v-if="scope.row.money_level==='one_level'" style="color：#909399">一级</span>  
+           <span v-else-if="scope.row.money_level==='two_level'" style="color:#85CE61">二级</span>  
+           <span v-else-if="scope.row.money_level==='three_level'" style="color:#EBB563">三级</span>  
+           <span v-else-if="scope.row.money_level==='four_level'" style="color:#F789D2">四级</span>  
         </template>
       </el-table-column>
       <el-table-column prop="shenqingrenname" label="申请人" align="center"></el-table-column>
@@ -170,6 +233,7 @@ export default {
         pageNo: 1, // 当前页
         pageSize: 10, // 每页条数
         moneyLevel: "", // 金额等级
+        meetingSummaryNumber:'', // 会议编码
       },
       myApplyChangePageList: [], //我申请的变更
       dialogFormVisible: false, //默认弹框不显示

@@ -1,12 +1,11 @@
 <template>
-  <div class="printer">
-    <div class="topBar">
+  <div class="p20">
+    <!-- <div class="topBar">
       <el-row>
         <el-col :span="6">
           <el-form :inline="true" class="grid-content">
             <el-form-item label="组织机构：">
-              <!--              <select-tree :options="userGroupOption" v-on:noDe="projectOnClick" :props="projectItem"/>-->
-              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
+              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
                 <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                            :value="item.id"></el-option>
               </el-select>
@@ -17,14 +16,13 @@
           <el-form :inline="true" class="grid-content">
             <el-form-item label="分部分项：">
               <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
-                           v-on:noDe="projectItemOnClick"/>
-              <!--              <select-tree :options="partialData" v-on:noDe="partialClick" :props="partialItem"/>-->
+                           v-on:noDe="projectItemOnClick" size="small"/>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="10">
           <div class="grid-content">
-            <span>日期：</span>
+            <span>创建日期：</span>
             <el-date-picker
               v-model="form.startTime"
               type="date"
@@ -42,14 +40,14 @@
             />
           </div>
         </el-col>
-
       </el-row>
+      
       <el-row>
         <el-col :span="6">
           <el-form label-width="80px" :model="form">
             <el-form-item label="打印状态:">
               <el-select v-model="form.type" placeholder="请选择" size="small">
-                <el-option
+                <el-option 
                   v-for="item in options"
                   :key="item.type"
                   :label="item.label"
@@ -62,7 +60,7 @@
         <el-col :span="12">
           <el-form label-width="80px" :model="form">
             <el-form-item label="桩号:">
-              <el-input style="width: 200px;" v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
+              <el-input  v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
@@ -98,6 +96,105 @@
         </el-col>
       </el-row>
     </div>
+   -->
+     <div class="topBar">
+      <el-row>
+        <el-col :span="6">
+         <el-form :inline="true" class="grid-content">
+            <el-form-item label="组织机构：">
+              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
+                <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
+                           :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="6">
+         <el-form :inline="true" class="grid-content">
+            <el-form-item label="分部分项：">
+              <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
+                           v-on:noDe="projectItemOnClick" size="small"/>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="10">
+          <div class="grid-content">
+            <span>创建日期：</span>
+            <el-date-picker
+              v-model="form.startTime"
+              type="date"
+              size="small"
+              value-format="yyyy-MM-dd"
+              placeholder="选择开始日期"
+            />
+            -
+            <el-date-picker
+              v-model="form.endTime"
+              type="date"
+              size="small"
+              value-format="yyyy-MM-dd"
+              placeholder="选择结束日期"
+            />
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="topBar">
+      <el-row>
+        <el-col :span="6">
+         <el-form label-width="80px" :model="form">
+            <el-form-item label="打印状态:">
+              <el-select v-model="form.type" placeholder="请选择" size="small">
+                <el-option 
+                  v-for="item in options"
+                  :key="item.type"
+                  :label="item.label"
+                  :value="item.type"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-col>
+
+        <el-col :span="6" >
+          <el-form label-width="80px" :model="form">
+            <el-form-item label="桩号:">
+              <el-input  v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="6">
+            <span>
+              <el-button
+                type="primary"
+                class="pan-btn light-blue-btn"
+                icon="el-icon-search"
+                @click="querySelected"
+              >查询</el-button>
+            </span>
+            <span>
+              <el-button
+                type="primary"
+                class="pan-btn light-blue-btn"
+                icon="el-icon-refresh"
+                @click="reset()"
+              >重置</el-button>
+            </span>
+            <span>
+              <el-button
+                type="primary"
+                class="pan-btn light-blue-btn"
+                icon="el-icon-printer"
+                @click="printClick"
+                v-if="form.type ==0 && tableData.length>0"
+              >打印验收凭证</el-button>
+            </span>
+        </el-col>
+      </el-row>
+    </div>
+ 
+
+
 
     <div class="printerTable">
       <el-table
@@ -106,15 +203,17 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        height="66vh"
+        height="60vh"
         border
         @selection-change="handleSelectionChange"
       >
+        
         <el-table-column type="selection" width="50" align="center" v-if="form.type==0"></el-table-column>
-        <el-table-column prop="projectName" label="分部分项" width="500"></el-table-column>
-        <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
-        <el-table-column prop="processname" label="工序名称"></el-table-column>
         <el-table-column prop="processNumber" label="打印编码" width="100"></el-table-column>
+        <el-table-column prop="projectName" label="分部分项" ></el-table-column>
+        <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
+        <el-table-column prop="processname" label="工序名称" width="120"></el-table-column>
+       
         <el-table-column prop="realitychecktime" label="验收时间" width="150" align="center"></el-table-column>
         <el-table-column prop="realname" label="验收人" width="100" align="center"></el-table-column>
         <el-table-column prop="checkdescribe" label="验收说明" width="150"></el-table-column>
@@ -308,4 +407,9 @@
   .el-form-item{
     margin-bottom: 0px;
   }
+ /deep/.topBar .el-input {
+    width: 11vw;
+    margin-right: 0.8vw;
+    margin-bottom: 0;
+}
 </style>

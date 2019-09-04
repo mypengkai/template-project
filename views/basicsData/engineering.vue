@@ -1,7 +1,7 @@
 <template>
   <div class="p20" ref="projectContent">
     <!-- 选择区域 -->
-    <div class="topBar">
+    <!-- <div class="topBar">
       <span>组织机构:</span>
       <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
                    :default-expand-all="false" v-on:noDe="handleUserGroupCheckChange"
@@ -12,57 +12,64 @@
         <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setProjectItemKeyBtn">
           设置关键部位
         </el-button>
-        <!--
-        <el-button type="primary" icon="el-icon-download" class="pan-btn light-blue-btn" @click="projectTemplateDownLoad">下载模板</el-button>
-        <el-button type="primary" icon="el-icon-upload2" class="pan-btn light-blue-btn" @click="ImportProjectFromExcel">导入数据</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="projectAdd('add')">新增</el-button>
-        -->
       </div>
+    </div> -->
+     <div class="topBar">
+      <el-row>
+        <el-col :span="6">
+        <span>组织机构:</span>
+         <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
+                   :default-expand-all="false" v-on:noDe="handleUserGroupCheckChange"
+                   ref="ProjectItem_userGroup"/>
+        </el-col>
+        
+        <el-col :span="6">
+        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="initProjectList">查询
+        </el-button>
+        <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setProjectItemKeyBtn">
+          设置关键部位
+        </el-button>
+        </el-col>
+      </el-row>
     </div>
+
+
+
     <!-- 操作列表 -->
     <el-table ref="projectItemTreeTable" :data="dataList" class="textList" row-key="id" border
               lazy :load="loadNextProjectItemLayer" :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
               height="68vh">
       <el-table-column label="分部分项" align="left" prop="projectItem"></el-table-column>
-      <el-table-column label="编码" align="center" width="150" prop="id"></el-table-column>
-      <el-table-column label="父编码" align="center" width="150" prop="pid"></el-table-column>
-      <el-table-column label="起始桩号" align="center" width="150" prop="startStation"></el-table-column>
-      <el-table-column label="终止桩号" align="center" width="150" prop="endStation"></el-table-column>
-      <el-table-column label="是否关键部位" align="center">
+      <el-table-column label="编码" align="center" width="100" prop="id"></el-table-column>
+      <el-table-column label="父编码" align="center" width="100" prop="pid"></el-table-column>
+      <el-table-column label="起始桩号" align="center" width="100" prop="startStation"></el-table-column>
+      <el-table-column label="终止桩号" align="center" width="100" prop="endStation"></el-table-column>
+      <el-table-column label="是否关键分项" align="center" width="120">
         <template slot-scope="scope">
           <span v-if="scope.row.iskey==='0'">否</span>
           <span v-if="scope.row.iskey==='1'">是</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否完成" align="center">
+      <el-table-column label="是否完成分项" align="center" width="120">
         <template slot-scope="scope">
           <span v-if="scope.row.iscomplete==='0'">未</span>
           <span v-if="scope.row.iscomplete==='1'">已</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" width="150" prop="createTime"></el-table-column>
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <!--
-          <el-tooltip class="item" effect="dark" content="新增" placement="top">
-            <el-button v-ltx="'engineeringAdd'" type="success" size="small" icon="el-icon-plus" circle @click="projectAdd(scope.row)" />
-          </el-tooltip>
-          -->
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
             <el-button v-ltx="'engineeringUpdate'" type="warning" size="small" icon="el-icon-edit" circle
                        @click="updateProject(scope.row)"/>
           </el-tooltip>
-          <!--
-          <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button v-ltx="'engineeringDelete'" type="danger" size="small" icon="el-icon-delete" circle @click="deleteProject(scope.row)" />
-          </el-tooltip>
-          -->
         </template>
       </el-table-column>
     </el-table>
     <!-- 新增弹框 -->
     <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" class="dialogBox">
-      <el-form class="reverseBox" :model="projectForm" :rules="rules" ref="addProjectForm" label-width="120px">
+       <div class="projectBox">
+                <el-form class="reverseBox" :model="projectForm" :rules="rules" ref="addProjectForm" label-width="120px">
         <el-form-item label="组织机构:">
           <el-input v-model="userGroup.value" @focus="InitUserGroupTree" placeholder="请选择组织机构" :readonly="true"
                     suffix-icon="el-icon-arrow-down"/>
@@ -80,12 +87,6 @@
         </el-form-item>
         <el-form-item label="父工程分部分项:">
           <el-input v-model="projectItem.value" placeholder="请选择分部分项" :readonly="true"/>
-          <!--
-          <el-input v-model="projectItem.value" @focus="InitProjectItemTree" placeholder="请选择工程分部分项" :readonly="true" suffix-icon="el-icon-arrow-down"/>
-          <el-popover ref="userGroupPopover" v-model="projectItem.flag" placement="bottom-start" width="350" trigger="click">
-            <el-tree :data="projectItemTreeList" :props="defaultProjectTreeProps" highlight-current @node-click="handleProjectItemNodeClick"/>
-          </el-popover>
-          -->
         </el-form-item>
         <el-form-item label="父编码:">
           <el-input v-model="projectForm.pid" placeholder="请输入编码" :readonly="true"/>
@@ -108,18 +109,12 @@
             <el-input v-model="projectForm.lat" placeholder="请输入纬度"/>
           </el-col>
         </el-form-item>
-        <!--
-        <el-form-item label="工程类型:" >
-          <el-select v-model="projectForm.projectType" placeholder="请选择">
-            <el-option v-for="item in projectTypeDataList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-        -->
       </el-form>
       <div class="tar">
         <el-button @click="dialogFormVisible=false">取 消</el-button>
         <el-button type="primary" @click="onSubmit()">保 存</el-button>
       </div>
+       </div>
     </el-dialog>
 
     <!-- 数据上传 -->
@@ -154,13 +149,13 @@
 
     <!-- 设置关键部位 -->
     <el-dialog :visible.sync="dialogSetPartKeyVisible" title="设置关键工序" :fullscreen="true">
-      <el-form class="reverseBox" ref="setProjectItemKey" label-width="120px">
-        <el-form-item label="组织机构:">
+      <el-form class="reverseBox" ref="setProjectItemKey" label-width="120px" :rules="setProjectItemKeyRules">
+        <el-form-item label="组织机构:" prop="userGroupId">
           <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
                        :default-expand-all="false" v-on:noDe="handleSetKeyUserGroupCheckChange"
                        ref="setKeyProjectItem_userGroup"/>
         </el-form-item>
-        <el-form-item label="分部分项:">
+        <el-form-item label="分部分项:" prop="projectItem">
           <div style="height:66vh;overflow-y:auto;border:1px solid #ccc;border-radius: 5px">
             <el-tree :data="setProjectItemKey" :props="defaultSetKeyProjectItemProps" lazy show-checkbox node-key="id"
                      :load="loadNextLayer" highlight-current
@@ -527,5 +522,10 @@
 
   .buttomBox {
     text-align: right;
+  }
+  .projectBox{
+     height: 55vh;
+     padding:0 20px;
+     overflow-x: hidden;
   }
 </style>

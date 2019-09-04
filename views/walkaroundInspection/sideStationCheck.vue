@@ -1,11 +1,9 @@
 <template>
-  <div class="acceptzh">
+  <div class="p20">
     <div class="topBar">
       <el-row>
         <el-col :span="5">
           <span>组织机构:</span>
-          <!--         <select-tree  :options="userGroupTreeOptions" :props="userGroupDefaultProps"
-                                v-on:noDe="userGroupOnClick"  />-->
           <el-select v-model="sendData.orgId" placeholder="请选择" @change="userGroupOnChange">
             <el-option v-for="item in userGroupTreeOptions" :key="item.id" :label="item.departname"
                        :value="item.id"></el-option>
@@ -16,14 +14,7 @@
           <span>分部分项:</span>
           <select-tree  clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
                        v-on:noDe="projectItemOnClick"/>
-
-          <!--<select-tree  :options="projectItemTreeOptions" :props="projectItemDefaultProp"
-                       v-on:noDe="projectItemOnClick" />-->
         </el-col>
-        <!--    </el-row>
-          </div>
-          <div class="topBar">
-            <el-row>-->
         <el-col :span="10">
           <span>创建日期:</span>
           <el-date-picker v-model="sendData.startTime" type="date" placeholder="选择日期" size="small"
@@ -42,7 +33,7 @@
       </el-row>
     </div>
     <!-- 查询列表 -->
-    <el-table border borderclass="textList" :data="sideStationPollingPageList" style="width: 100%" height="73vh">
+    <el-table border  class="textList" :data="sideStationPollingPageList" style="width: 100%" height="70vh">
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
       <el-table-column prop="zhuanghao" label="桩号" width="100"></el-table-column>
       <el-table-column prop="describe" label="巡视描述"></el-table-column>

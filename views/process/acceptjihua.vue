@@ -1,5 +1,5 @@
 <template>
-  <div class="acceptzh">
+  <div class="p20">
     <div class="topBar">
       <el-row>
         <el-col :span="5">
@@ -80,15 +80,15 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" style="width: 100%;" height="66vh">
-      <el-table-column prop="name1" label="分部分项" width="450"></el-table-column>
-      <el-table-column prop="Station" label="桩号" align="center" width="150"></el-table-column>
-      <el-table-column prop="processName" label="工序名称" align="center" width=""></el-table-column>
+    <el-table border class="textList" :data="tableData" style="width: 100%;" height="60vh">
+      <el-table-column prop="name1" label="分部分项" ></el-table-column>
+      <el-table-column prop="Station" label="桩号" align="center" width="100"></el-table-column>
+      <el-table-column prop="processName" label="工序名称" align="center" width="100"></el-table-column>
       <el-table-column prop="jihuazijianren" label="自检人" width="100" align="center"></el-table-column>
       <el-table-column prop="planSelfCheckTime" label="自检时间" width="100" align="center"></el-table-column>
       <el-table-column prop="jihuayanshouren" label="验收人" width="100" align="center"></el-table-column>
       <el-table-column prop="planCheckTime" label="验收时间" width="100" align="center"></el-table-column>
-      <el-table-column label="状态" align="center" width="150">
+      <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <template v-if="scope.row.adopt===null || scope.row.adopt==='' || scope.row.adopt===undefined">
             <template v-if="scope.row.state===0">已指定工序,待指定计划</template>

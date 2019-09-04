@@ -1,5 +1,5 @@
 <template>
-  <div class="acceptzh">
+  <div class="p20">
     <div class="topBar">
       <el-row>
         <el-col :span="5">
@@ -13,18 +13,9 @@
         <el-col :span="5">
           <span>用户姓名:</span>
           <el-input style="width: 150px;" v-model="queryData.realName" placeholder="请输入用户姓名" size="small"></el-input>
-          <!-- <span>姓名:</span>
-           <el-select v-model="queryData.userId" placeholder="请选择">
-             <el-option
-               v-for="item in personList"
-               :key="item.id"
-               :label="item.username"
-               :value="item.id"
-             ></el-option>
-           </el-select>-->
         </el-col>
-        <el-col :span="8">
-          <span>日期:</span>
+        <el-col :span="10">
+          <span>创建日期:</span>
           <el-date-picker
             v-model="queryData.startTime"
             type="date"
@@ -45,19 +36,7 @@
             format="yyyy-MM-dd"
           ></el-date-picker>
         </el-col>
-
-        <!--<el-col :span="8">
-          <span>用户类型:</span>
-          <el-select v-model="queryData.personType" placeholder="请选择">
-            <el-option
-              v-for="item in jobTypeList"
-              :key="item.id"
-              :label="item.value"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-col>-->
-        <el-col :span="6">
+        <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
             type="primary"
@@ -77,18 +56,19 @@
       </el-row>
 
     </div>
-    <el-table :data="tableData" border class="textList" style="width: 100%;margin-top:10px" height="70vh">
+    <el-table :data="tableData" border class="textList" style="width: 100%;" height="70vh">
       <el-table-column prop="departname" label="组织机构" min-width="80"></el-table-column>
       <el-table-column prop="realname" label="用户姓名" min-width="80"></el-table-column>
       <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
       <el-table-column prop="CheckNumber" label="验收" min-width="80"></el-table-column>
-      <!-- <el-table-column prop="date" label="日志" min-width="80"></el-table-column> -->
+      <el-table-column prop="date" label="自检" min-width="80"></el-table-column>
       <el-table-column prop="ReceivedInstructNumber" label="收到指令" min-width="80"></el-table-column>
       <el-table-column prop="IssueInstructNumber" label="发出指令" min-width="80"></el-table-column>
       <el-table-column prop="CompleteInstructNumber" label="完成指令" min-width="80"></el-table-column>
-      <el-table-column prop="PatrolNumber" label="巡视统计" min-width="80"></el-table-column>
-      <!-- <el-table-column prop="date" label="在岗天数" min-width="80"></el-table-column>
-      <el-table-column prop="name" label="缺勤天数" min-width="80"></el-table-column>-->
+      <el-table-column prop="PatrolNumber" label="巡视次数" min-width="80"></el-table-column>
+      <el-table-column prop="date" label="旁站次数" min-width="80"></el-table-column>
+     
+      <el-table-column prop="name" label="视频" min-width="80"></el-table-column>
       <el-table-column prop="PhotoNumber" label="照片" min-width="80"></el-table-column>
     </el-table>
     <!-- 分页条 -->

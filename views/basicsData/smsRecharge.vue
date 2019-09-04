@@ -1,30 +1,29 @@
 <template>
   <div class="p20">
     <!--左边角色列表-->
-    <div class="topBar">
-      <span>组织机构:</span>
-      <el-input v-model="userGroup.value" class="filter-item" @focus="InitUserGroupTree" placeholder="请选择组织机构"  :readonly="true" suffix-icon="el-icon-more-outline"/>
-      <el-popover
-        ref="userGroupPopover"
-        v-model="userGroup.flag"
-        placement="left"
-        width="250"
-        trigger="click">
-        <el-tree
-          :data="orgUserGroupList"
-          :props="defaultUserGroupProps"
-          highlight-current
-          :default-expand-all="true"
-          @node-click="handleUserGroupNodeClick"
-        />
-      </el-popover>
-      <div class="rl">
-        <el-button type="primary" size="small" icon="el-icon-search" class="pan-btn light-blue-btn" @click="getSmsRechargeList()">查询</el-button>
-        <el-button type="primary" size="small" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="resetQueryParam()">重置</el-button>
-        <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" v-ltx="'addSmsRecharge'" @click="addSmsRecharge()">添加</el-button>
-      </div>
-    </div>
-    <el-table border :data="rechargeList" style="width: 100%" height="70vh" class="textList">
+       <el-row>
+           <el-col :span="6">
+                 <el-form  label-width="80px">
+                    <el-form-item label="组织机构:">
+                      <select-tree size="small"
+                        clearable
+                        :options="orgUserGroupList"
+                        :props="defaultUserGroupProps"
+                        v-on:noDe="handleRechargeUserGroupNodeClick"
+                        ref="getSelectData"
+                      />
+                    </el-form-item>
+                </el-form> 
+           </el-col>
+           <el-col :span="10">
+                 <div class="rl">
+                    <el-button type="primary" size="small" icon="el-icon-search" class="pan-btn light-blue-btn" @click="getSmsRechargeList()">查询</el-button>
+                    <el-button type="primary" size="small" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="resetQueryParam()">重置</el-button>
+                    <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" v-ltx="'addSmsRecharge'" @click="addSmsRecharge()">添加</el-button>
+                  </div>
+           </el-col>
+       </el-row>
+    <el-table border :data="rechargeList" style="width: 100%" height="68vh" class="textList">
       <el-table-column align="center" prop="departname" label="组织机构"/>
       <el-table-column align="center" prop="remainSmsNum" label="剩余短信"/>
       <el-table-column align="center" prop="sendSmsSuccessNum" label="发送成功"/>
@@ -45,26 +44,17 @@
     <!-- 新增/编辑对话框 -->
     <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" class="dialogBox">
       <el-form ref="rechargeForm" :model="rechargeForm" label-width="120px" :rules="rules">
-        <el-form-item label="组织机构:">
-          <el-input v-model="rechargeUserGroup.value" class="filter-item" @focus="InitRechargeUserGroupTree" placeholder="请选择组织机构"  :readonly="true" suffix-icon="el-icon-more-outline"/>
-          <el-popover
-            ref="rechargeUserGroupPopover"
-            v-model="rechargeUserGroup.flag"
-            placement="left"
-            width="250"
-            trigger="click">
-            <el-tree
-              :data="rechargeUserGroupList"
-              :props="defaultUserGroupProps"
-              highlight-current
-              :default-expand-all="true"
-              @node-click="handleRechargeUserGroupNodeClick"
-            />
-          </el-popover>
+        <el-form-item label="组织机构:" prop="departId">
+           <select-tree
+            clearable
+            :options="orgUserGroupList"
+            :props="defaultUserGroupProps"
+            v-on:noDe="handleRechargeUserGroupNodeClick"
+          />
         </el-form-item>
 
         <el-form-item label="剩余短信数量:" prop="remainSmsNum">
-          <el-input v-model.number="rechargeForm.remainSmsNum" @focus="rechargeUserGroup.flag=false"></el-input>
+          <el-input type="number" v-model.number="rechargeForm.remainSmsNum" @focus="rechargeUserGroup.flag=false"></el-input>
         </el-form-item>
 
         <el-col :span="8">
@@ -147,7 +137,6 @@ export default {
       orgUserGroupList: [], // 组织机构树
       userGroup:{
         value: '',
-        flag: false,
         selectedUserGroup: null  //选中的对象
       },
       dialogVisible: false,  //   新增/修改对话框是否显示
@@ -166,7 +155,8 @@ export default {
       rules: {  // 表单验证规则
         remainSmsNum: [{type: 'number', required: true, message: "请输入剩余短信数", trigger: "blur"}],
         warnMoney: [{type: 'number', required: true, message: "请输入提醒金额", trigger: "blur"}],
-        warnPhone: [{required: true,validator: checkPhone, trigger: 'blur'}]
+        warnPhone: [{required: true,validator: checkPhone, trigger: 'blur'}],
+        departId:[{required: true, message: "请选择组织机构", trigger: "change"}]
       },
       rechargeUserGroupList: [],  // 短信充值模块的组织机构
       rechargeUserGroup: {
@@ -179,6 +169,7 @@ export default {
   },
   created(){
     this.getSmsRechargeList();
+    this.InitUserGroupTree();
   },
   methods:{
     getSmsRechargeList(){  //根据条件查询---数据集合
@@ -200,15 +191,15 @@ export default {
     },
     InitUserGroupTree(){    //  初始化组织机构树
       organizationAPI.organizateTree(null).then(res => {
-        this.orgUserGroupList = res.data.data
+        this.orgUserGroupList = res.data.data;
+        console.log(this.orgUserGroupList,"this.orgUserGroupList")
       })
-      this.userGroup.flag=true;
     },
     handleUserGroupNodeClick(data){   //选择组织机构后的回选
       this.userGroup.selectedUserGroup=data;   //选中的数据对象
       this.userGroup.value=data.name;
       this.queryData.departid=data.id;
-      this.userGroup.flag=false;   //让其隐藏
+      this.rechargeForm.departid=data.id;
     },
     addSmsRecharge(){   //新增短信充值记录
       this.rechargeForm={};  //清空新增短信表单
@@ -246,25 +237,16 @@ export default {
       organizationAPI.organizateTree(null).then(res => {
         this.rechargeUserGroupList = res.data.data
       })
-      this.rechargeUserGroup.flag=true;
+      
     },
     handleRechargeUserGroupNodeClick(data){
       this.rechargeUserGroup.selectedRechargeUserGroup=data;
       this.rechargeUserGroup.value=data.name;
       this.rechargeForm.departId=data.id;
-      this.rechargeUserGroup.flag=false;  //隐藏
     },
-    saveRecharge(){   //保存
+    saveRecharge(rechargeForm){   //保存
       let that=this;
-      this.$refs['rechargeForm'].validate((valid) => {
-        let departIdValid = that.rechargeForm.departId;
-        if(departIdValid===null || departIdValid===undefined){
-          this.$message({
-            type: 'warn',
-            message: "组织机构必须选择"
-          });
-          return false;
-        }
+       this.$refs['rechargeForm'].validate((valid) => {
         if (valid) {
           let seleWarn = that.rechargeForm.isWarn;
           //  更改el-switch的值
@@ -289,6 +271,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+/deep/.el-form-item {
+     margin-bottom: 5px; 
+}
 </style>

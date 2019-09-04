@@ -1,5 +1,5 @@
 <template>
-  <div class="acceptzh">
+  <div class="p20">
     <div class="topBar">
       <el-row>
         <el-col :span="5">
@@ -15,29 +15,6 @@
                        v-on:noDe="projectItemOnClick"/>
 
         </el-col>
-
-        <!--<el-col :span="8">
-          <span>创建日期:</span>
-          <el-date-picker
-            v-model="queryData.starttime"
-            type="datetime"
-            placeholder="选择开始日期时间"
-            size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-          -
-          <el-date-picker
-            v-model="queryData.endtime"
-            type="datetime"
-            placeholder="选择结束日期时间"
-            size="small"
-            style="min-width:180px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            format="yyyy-MM-dd HH:mm:ss"
-          ></el-date-picker>
-        </el-col>-->
         <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
@@ -90,10 +67,12 @@
     ></el-pagination>
 
     <!--    <div v-if="dialogTableVisible" class="Cztab">-->
-    <el-dialog :visible.sync="dialogTableVisible" title="查看工序">
-      <el-table border :data="chakanData" height="66vh" class="textList">
+    <el-dialog :visible.sync="dialogTableVisible" title="查看工序" width="80%">
+      <el-table border :data="chakanData" height="60vh" class="textList">
         <el-table-column type="index" width="50" align="center" label="序号"></el-table-column>
         <el-table-column prop="processName" label="工序名称" align="center"/>
+        <el-table-column prop="planSelfCheckName" label="自检人" align="center"/>
+        <el-table-column prop="planCheckName" label="验收人" align="center"/>
         <el-table-column prop="planSelfCheckTime" label="自检时间" align="center"/>
         <el-table-column prop="planCheckTime" label="验收时间" align="center"/>
         <el-table-column label="状态" align="center">

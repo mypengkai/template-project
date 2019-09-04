@@ -1,38 +1,10 @@
 <template>
-  <div class="acceptzh">
+  <div class="p20">
     <div class="topBar">
       <el-row>
-        <!--<el-col :span="5">
-          <span>组织机构:</span>
-          <select-tree
-            :options="userGroupTreeOption"
-            :props="userGroupDefaultProp"
-            v-on:noDe="userGroupOnClick"
-          />
-          <el-select v-model="queryData.orgId" placeholder="请选择" @change="userGroupOnChange">
-            <el-option v-for="item in userGroupTreeOption" :key="item.id" :label="item.departname"
-                       :value="item.id"></el-option>
-          </el-select>
-
-        </el-col>-->
         <el-col :span="6">
-          <!--    <span>姓名:</span>
-              &lt;!&ndash;<el-input v-model="queryData.userId" placeholder="请输入姓名"></el-input>&ndash;&gt;
-              <el-select v-model="queryData.userId" placeholder="请选择">
-                <el-option
-                  v-for="item in personList"
-                  :key="item.id"
-                  :label="item.username"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-              -->
           <span>巡视人/旁站人:</span>
           <el-input  v-model="queryData.realName" placeholder="请输入名字" size="small"></el-input>
-          <!--  <el-form-item label="巡视人/旁站人:">
-
-            </el-form-item>-->
-
         </el-col>
         <el-col :span="10">
           <span>创建日期:</span>
@@ -74,7 +46,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-table class="textList" :data="tableData" border style="width: 100%;margin-top:20px" height="68vh" fit>
+    <el-table class="textList" :data="tableData" border style="width: 100%;" height="70vh" fit>
       <el-table-column prop="realname" label="巡视人/旁站人" align="center" width=""></el-table-column>
       <el-table-column prop="pollingNumber" label="巡视次数" align="center" width="200"></el-table-column>
       <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width="200"></el-table-column>

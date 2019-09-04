@@ -14,8 +14,6 @@
         <div class="p20-contation">
           <el-row>
             <el-col :span="10" style="color:#409eff;margin-top:0.5vw;font-weight: bolder">
-              <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
-
               <template v-if="item.infoLogType == 'command'">指令</template>
               <template v-else-if="item.infoLogType== 'processCheck'">工序验收</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
@@ -43,7 +41,6 @@
             </el-col>
           </el-row>
           <div class="spanOne" :style="{'color':(item.state == flag ? 'red' :'green')}">
-            <!-- 转码  0 ==> 未处理     1 ==>已完成 -->
             <template v-if="item.state == 0">未处理</template>
             <template v-else-if="item.state == 1">已完成</template>
           </div>
@@ -66,15 +63,11 @@
         <div class="p20-contation">
           <el-row>
             <el-col :span="10" style="color:#409eff ; margin-top:0.5vw;font-weight: bolder">
-              <!-- 转码 log =日志    selfcheck = 自检   realcheck  = 验收   polling = 巡视   command = 指令 -->
-              <!-- <template v-if="item.infoLogType == 'log'">日志</template> -->
               <template v-if="item.infoLogType== 'processCheck'">工序验收</template>
-              <!--              <template v-else-if="item.type == 'notice'">通知</template>-->
               <template v-else-if="item.infoLogType == 'command'">指令</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
               <template v-else-if="item.infoLogType == 'meeting'">变更纪要</template>
-
             </el-col>
             <el-col :span="14">
               <div
@@ -147,8 +140,12 @@ export default {
       type: Number,
       default: 1
     },
-    conentOptions: {}, //工程数据
-    userOptions: {} //人员数据
+    conentOptions: {
+       type:Array
+    }, //工程数据
+    userOptions: {
+       type:Array
+    } //人员数据
   },
   components: {
     logCheck,
@@ -182,7 +179,9 @@ export default {
       commandList: {} // 指令数据
     };
   },
-  created() {},
+  created() {
+      console.log(this.traceType)
+  },
   mounted() {},
   computed: {
     title() {
@@ -268,7 +267,6 @@ export default {
 .conentlist {
   margin: 0;
   padding: 0;
-
   .conent {
     overflow: hidden;
     width: 18%;
@@ -281,7 +279,7 @@ export default {
       width: 100%;
       background: url("./images/bkg007.png") no-repeat;
       background-size: 100% 100%;
-      height: 230px;
+      height: 150px;
 
       img {
         width: 100%;
