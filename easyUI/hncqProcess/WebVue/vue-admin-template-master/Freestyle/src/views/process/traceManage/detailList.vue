@@ -13,18 +13,19 @@
         </div>
         <div class="p20-contation">
           <el-row>
-            <el-col :span="10" style="color:#409eff;margin-top:0.5vw;font-weight: bolder">
+            <el-col :span="24" style="color:#409eff;margin-top:0.5vw;font-weight: bolder">
               <template v-if="item.infoLogType == 'command'">指令</template>
               <template v-else-if="item.infoLogType== 'processCheck'">工序验收</template>
               <template v-else-if="item.infoLogType == 'polling'">巡视</template>
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
               <template v-else-if="item.infoLogType == 'meeting'">变更纪要</template>
             </el-col>
-            <el-col :span="14">
+          </el-row>
+          <el-row>
+               <el-col :span="24">
               <div
                 class="grid-content bg-purple timeOut"
-                style="color:#409eff"
-              >{{item.infoLogCreateTime}}</div>
+              ><span>创建时间:</span>&nbsp;&nbsp;{{item.infoLogCreateTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -180,9 +181,9 @@ export default {
     };
   },
   created() {
-      console.log(this.traceType)
+     
   },
-  mounted() {},
+  
   computed: {
     title() {
       return this.traceType === 1 ? "工程痕迹管理" : "人员痕迹管理";

@@ -203,7 +203,7 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        height="60vh"
+        height="66vh"
         border
         @selection-change="handleSelectionChange"
       >

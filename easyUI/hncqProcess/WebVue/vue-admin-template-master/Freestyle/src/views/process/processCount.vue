@@ -35,11 +35,11 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" height="70vh">
+    <el-table border class="textList" :data="tableData" height="72vh">
       <el-table-column prop="projectitem" label="分部分项" width=""></el-table-column>
-      <el-table-column prop="allnumber" label="总数量" width="" align="center"></el-table-column>
-      <el-table-column prop="completenumber" label="完成数量" width="" align="center"></el-table-column>
-      <el-table-column prop="notcompletenumber" label="未完成数量" width="" align="center"></el-table-column>
+      <el-table-column prop="allnumber" label="总数量" width="100" align="center"></el-table-column>
+      <el-table-column prop="completenumber" label="完成数量" width="100" align="center"></el-table-column>
+      <el-table-column prop="notcompletenumber" label="未完成数量" width="100" align="center"></el-table-column>
       <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button
