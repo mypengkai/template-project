@@ -32,5 +32,9 @@ export default {
   },
   getAllProjectItemTree(data){   //异步获取组织机构
     return request.post('/rest/projectItemInfo/getProjectBQItemByIdNotZroe', data)
+  },
+  //统一回复
+  getAllResponse(data){
+    return request.post("/rest/Unified/searchUnifiedApply",data)
   }
 }

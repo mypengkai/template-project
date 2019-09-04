@@ -1,14 +1,10 @@
 <template>
-  <div class="acceptzh">
+  <div class="p20">
     <div class="topBar">
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
-          <!-- <select-tree
-             :options="userGroupOption"
-             :props="userGroupDefaultProp"
-             v-on:noDe="userGroupOnClick"
-           />-->
+         
           <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
             <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                        :value="item.id"></el-option>
@@ -19,11 +15,7 @@
           <select-tree clearable :options="projectItemTreeOption" ref="getSelectData" :props="projectItemDefaultProp"
                        v-on:noDe="projectItemOnClick"/>
 
-          <!-- <select-tree
-             :options="projectItemTreeOption"
-             :props="projectItemDefaultProp"
-             v-on:noDe="projectItemOnClick"
-           />-->
+    
 
         </el-col>
 
@@ -68,18 +60,6 @@
             ></el-option>
           </el-select>
         </el-col>
-
-       <!-- <el-col :span="13">
-          <span>验收类型:</span>
-          <el-select v-model="queryData.checkType" placeholder="请选择" size="small">
-            <el-option
-              v-for="item in checkTypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>-->
         <el-col :span="4">
           <el-button
             class="pan-btn light-blue-btn"
@@ -99,17 +79,17 @@
       </el-row>
     </div>
 
-    <el-table border class="textList" :data="tableData" height="66vh" fit>
-      <el-table-column prop="name1" label="分部分项" width="400"></el-table-column>
-      <el-table-column prop="zhuanghao" label="桩号" width="150" align="center"></el-table-column>
-      <el-table-column prop="processName" label="工序名称" width="" align="center"></el-table-column>
+    <el-table border class="textList" :data="tableData" height="60vh" fit>
+      <el-table-column prop="name1" label="分部分项"></el-table-column>
+      <el-table-column prop="zhuanghao" label="桩号" width="100" align="center"></el-table-column>
+      <el-table-column prop="processName" label="工序名称" width="100" align="center"></el-table-column>
       <el-table-column prop="shijizijianren" label="自检人" width="80" align="center"></el-table-column>
-      <el-table-column prop="planSelfCheckTime" label="计划自检时间" width="110" align="center"></el-table-column>
-      <el-table-column prop="realitySelfCheckTime" label="实际自检时间" width="150" align="center"></el-table-column>
+      <el-table-column prop="planSelfCheckTime" label="计划自检时间" width="100" align="center"></el-table-column>
+      <el-table-column prop="realitySelfCheckTime" label="实际自检时间" width="100" align="center"></el-table-column>
       <el-table-column prop="shijiyanshouren" label="验收人" width="80" align="center"></el-table-column>
-      <el-table-column prop="planCheckTime" label="计划验收时间" width="110" align="center"></el-table-column>
-      <el-table-column prop="realityCheckTime" label="实际验收时间" width="150" align="center"></el-table-column>
-      <el-table-column label="状态" align="center" width="140">
+      <el-table-column prop="planCheckTime" label="计划验收时间" width="100" align="center"></el-table-column>
+      <el-table-column prop="realityCheckTime" label="实际验收时间" width="100" align="center"></el-table-column>
+      <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <template
             v-if="scope.row.adopt===null || scope.row.adopt==='' || scope.row.adopt===undefined"

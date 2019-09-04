@@ -1,38 +1,14 @@
 <template>
-  <div
-    class="tags-view-container"
-    style="width:100%"
-  >
-    <scroll-pane
-      ref="scrollPane"
-      class="tags-view-wrapper"
-    >
-      <span class="fhBox"
-            @click="$router.push('/')"
-            v-if="flag">
-<!--  <i class="el-icon-s-home"></i>-->
-        首页
-        <!--  <span class="el-icon-close"/>-->
-
-      </span>
-      <router-link
-        v-for="tag in Array.from(visitedViews)"
-        ref="tag"
-        :class="isActive(tag)?'active':''"
-        :to="tag"
-        :key="tag.path"
-        tag="span"
-        class="tags-view-item"
-        @click.middle.native="closeSelectedTag(tag)"
-        @contextmenu.prevent.native="openMenu(tag,$event)">
-        {{ tag.title }}
-        <span class="el-icon-close"
-              @click.prevent.stop="closeSelectedTag(tag)"/>
+  <div class="tags-view-container" style="width:100%">
+    <scroll-pane ref="scrollPane" class="tags-view-wrapper">
+      <span class="fhBox" @click="$router.push('/')" v-if="flag">首页</span>
+      <router-link v-for="tag in Array.from(visitedViews)" ref="routerLinkTags" :class="isActive(tag)?'active':''" :to="tag"
+                     :key="tag.path" tag="span" class="tags-view-item" @click.middle.native="closeSelectedTag(tag)" @contextmenu.prevent.native="openMenu(tag,$event)">
+          {{ tag.title }}
+        <span class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
       </router-link>
     </scroll-pane>
-    <ul v-show="visible"
-        :style="{left:left+'px',top:top+'px'}"
-        class="contextmenu">
+    <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">重置</li>
       <li @click="closeSelectedTag(selectedTag)">关闭</li>
       <li @click="closeOthersTags">关闭其他</li>
@@ -42,121 +18,103 @@
 </template>
 
 <script>
-    import ScrollPane from "@/components/ScrollPane";
-    //import { generateTitle } from '@/utils/i18n'
+import ScrollPane from "@/components/ScrollPane";
 
-    export default {
-        inject: ["reload"],
-        components: {ScrollPane},
-        data() {
-            return {
-                visible: false,
-                top: 0,
-                left: 0,
-                selectedTag: {},
-                flag: true,
-            };
-        },
-        computed: {
-            visitedViews() {
-                return this.$store.state.tagsView.visitedViews;
-            }
-        },
-        watch: {
-            $route() {
-                this.addViewTags();
-                this.moveToCurrentTag();
-                // if (this.$route.path == "/dashboard") {
-                //   this.flag = false;
-                // }
-                // if (this.$route.path != "/dashboard") {
-                //   this.flag = true;
-                // }
-            },
-            visible(value) {
-                if (value) {
-                    document.body.addEventListener("click", this.closeMenu);
-                } else {
-                    document.body.removeEventListener("click", this.closeMenu);
-                }
-            }
-        },
-        mounted() {
-            this.addViewTags();
-        },
-        methods: {
-            //generateTitle, // generateTitle by vue-i18n
-            isActive(route) {
-                return route.path === this.$route.path;
-            },
-            addViewTags() {
-                const {name} = this.$route;
-                if (name) {
-                    this.$store.dispatch("addView", this.$route);
-                }
-                return false;
-            },
-            moveToCurrentTag() {
-                const tags = this.$refs.tag;
-                this.$nextTick(() => {
-                    for (const tag of tags) {
-                        if (tag.to.path === this.$route.path) {
-                            this.$refs.scrollPane.moveToTarget(tag.$el);
-                            // when query is different then update
-                            if (tag.to.fullPath !== this.$route.fullPath) {
-                                this.$store.dispatch("updateVisitedView", this.$route);
-                            }
-                            break;
-                        }
-                    }
-                });
-            },
-            refreshSelectedTag(view) {
-                // this.$store.dispatch('delCachedView', view).then(() => {
-                //   const { fullPath } = view
-                //   this.$nextTick(() => {
-                //     this.$router.replace({
-                //       path: '/redirect' + fullPath
-                //     })
-                //   })
-                // })
-                this.reload();
-            },
-            closeSelectedTag(view) {
-                this.$store.dispatch("delView", view).then(({visitedViews}) => {
-
-                    if (this.isActive(view)) {
-                        const latestView = visitedViews.slice(-1)[0];
-                        if (latestView) {
-                            this.$router.push(latestView);
-                        } else {
-                            this.$router.push("/");
-                        }
-                    }
-                });
-            },
-            closeOthersTags() {
-                this.$router.push(this.selectedTag);
-                this.$store.dispatch("delOthersViews", this.selectedTag).then(() => {
-                    this.moveToCurrentTag();
-                });
-            },
-            closeAllTags() {
-                this.$store.dispatch("delAllViews");
-                this.$router.push("/");
-            },
-            openMenu(tag, e) {
-                this.visible = true;
-                this.selectedTag = tag;
-                const offsetLeft = this.$el.getBoundingClientRect().left; // container margin left
-                this.left = e.clientX - offsetLeft + 15; // 15: margin right
-                this.top = e.clientY;
-            },
-            closeMenu() {
-                this.visible = false;
-            },
-        }
+export default {
+  inject: ["reload"],
+  components: {ScrollPane},
+  data() {
+    return {
+      visible: false,
+      top: 0,
+      left: 0,
+      selectedTag: {},
+      flag: true,
     };
+  },
+  computed: {
+    visitedViews() {
+      return this.$store.state.tagsView.visitedViews;
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.addViewTags();
+      this.moveToCurrentTag();
+    },
+    visible(value) {
+      if (value) {
+        document.body.addEventListener("click", this.closeMenu);
+      } else {
+        document.body.removeEventListener("click", this.closeMenu);
+      }
+    }
+  },
+  mounted() {
+    this.addViewTags();
+  },
+  methods: {
+    isActive(route) {
+      return route.path === this.$route.path
+    },
+    addViewTags() {
+      const {name} = this.$route;
+      if (name) {
+        this.$store.dispatch("addView", this.$route);
+      }
+      return false;
+    },
+    moveToCurrentTag() {
+      this.$nextTick(() => {
+        const tags = this.$refs.routerLinkTags;
+        for (const tag of tags) {
+          if (tag.to.path === this.$route.path) {
+            this.$refs.scrollPane.moveToTarget(tag.$el);
+            if (tag.to.fullPath !== this.$route.fullPath) {
+              this.$store.dispatch("updateVisitedView", this.$route);
+            }
+            break;
+          }
+         }
+      });
+    },
+    refreshSelectedTag(view) {
+      this.reload();
+    },
+    closeSelectedTag(view) {
+      this.$store.dispatch("delView", view).then(({visitedViews}) => {
+        if (this.isActive(view)) {
+          const latestView = visitedViews.slice(-1)[0];
+          if (latestView) {
+            this.$router.push(latestView);
+          } else {
+            this.$router.push("/");
+          }
+        }
+      });
+    },
+    closeOthersTags() {
+      this.$router.push(this.selectedTag);
+      this.$store.dispatch("delOthersViews", this.selectedTag).then(() => {
+        this.moveToCurrentTag();
+      });
+    },
+    closeAllTags() {
+      this.$store.dispatch("delAllViews");
+      this.$router.push("/");
+    },
+    openMenu(tag, e) {
+      this.visible = true;
+      this.selectedTag = tag;
+      const offsetLeft = this.$el.getBoundingClientRect().left; // container margin left
+      this.left = e.clientX - offsetLeft + 15; // 15: margin right
+      this.top = e.clientY;
+    },
+    closeMenu() {
+      this.visible = false;
+    },
+  }
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped type="text/scss">

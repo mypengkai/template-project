@@ -1,12 +1,12 @@
 <template>
   <div class="reverseBox">
-    <div style="width: 50%;float: left;">
+    <div style="width: 50%;float: left;padding:0 5px;">
       <el-row>
         <el-col :span="24">
-          <div class="divHeight" style="height: 60px;">
-            <span class="spanWord">分部分项:</span>
-            <span >{{nowItem.projectItem}}</span>
-          </div>
+           <div class="divHeight">
+              <span class="spanWord">分部分项:</span>
+              <span>{{nowItem.projectItem}}</span>
+          </div> 
         </el-col>
       </el-row>
       <el-row>
@@ -17,7 +17,9 @@
           </div>
         </el-col>
       </el-row>
-      <el-row>
+      <template v-if="nowItem.type==='polling'">
+
+           <el-row>
         <el-col :span="24">
           <div class="divHeight">
             <span class="spanWord">巡视人:</span>
@@ -33,6 +35,26 @@
           </div>
         </el-col>
       </el-row>
+      </template>
+     <template v-if="nowItem.type==='sideStation'">
+            <el-row>
+        <el-col :span="24">
+          <div class="divHeight">
+            <span class="spanWord">旁站人:</span>
+            <span>{{nowItem.createName}}</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <div class="divHeight">
+            <span class="spanWord">旁站时间:</span>
+            <span>{{nowItem.createTime}}</span>
+          </div>
+        </el-col>
+      </el-row>
+    </template> 
+
       <template v-if="nowItem.type==='polling'">
         <el-row>
           <el-col :span="24">
@@ -66,6 +88,14 @@
             </div>
           </el-col>
         </el-row>
+         <el-row>
+        <el-col :span="24">
+          <div class="divHeight">
+            <span class="spanWord">巡视描述:</span>
+            <span>{{nowItem.describe}}</span>
+          </div>
+        </el-col>
+      </el-row>
       </template>
       <template v-else-if="nowItem.type==='sideStation'">
         <el-row>
@@ -108,15 +138,18 @@
             </div>
           </el-col>
         </el-row>
-      </template>
-      <el-row>
+          <el-row>
         <el-col :span="24">
           <div class="divHeight">
-            <span class="spanWord">巡视描述:</span>
+            <span class="spanWord">旁站描述:</span>
             <span>{{nowItem.describe}}</span>
           </div>
         </el-col>
       </el-row>
+      </template>
+     
+      
+
       <el-row>
         <el-col :span="24">
           <div class="divHeight">
@@ -125,33 +158,14 @@
           </div>
         </el-col>
       </el-row>
-      <!-- <el-row>
-        <el-col :span="24">
-          <div class="divHeight">
-            <span class="spanWord">拍照描述:</span>
-            <span>{{nowItem.photoDescribe== 'null' ? '': nowItem.photoDescribe}}</span>
-          </div>
-        </el-col>
-      </el-row>-->
     </div>
-    <div style="width: 50%;float: right;">
+    <div style="width: 50%;float: right; padding:0 5px;">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="影像资料" name="image">
           <div class="condition">
-
             <ul v-for="(node, key) in nowItem.pictureOfCommand" :key="key">
-
               <li>
-                <!-- <img :src="node.filePath" alt="">  -->
-
                 <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                  <!-- <el-image
-                    style="width: 100px; height: 100px"
-                    :src="node.filePath"
-                    fit="fill"
-                    @click="pictureShow(nowItem.pictureOfCommand)"
-                  ></el-image> -->
-
                      <img :src="node.filePath" alt=""  @click="pictureShow(nowItem.pictureOfCommand)"   style=" display:block;  width: 100px; height: 100px">
                 </template>
                 <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
@@ -178,7 +192,6 @@
     </el-dialog>
 
     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
-      <!--      <viewer :imgList="processPicture"></viewer>-->
       <video-player
         class="video-player vjs-custom-skin"
         ref="videoPlayer"
@@ -266,7 +279,8 @@ export default {
 
 <style lang="scss" scoped>
 .reverseBox {
-  height: 68vh;
+  height: 60vh;
+  padding: 0 20px;
   overflow-y: auto;
 
   /deep/ .el-input__inner {
@@ -313,7 +327,12 @@ export default {
 }
 
 .divHeight {
-  line-height: 35px;
-  height: 35px;
+  // line-height: 35px;
+  // height: 35px;
+  margin: 5px 0;
+  span:first-child{
+      height: 35px;
+      display: inline-block;
+  }
 }
 </style>

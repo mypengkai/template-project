@@ -33,12 +33,12 @@
     <div class="content">
       <el-tabs type="border-card">
         <el-tab-pane label="工程痕迹管理">
-          <div style="height: 400px;">
+          <div >
             <list :trace-type="1"/>
           </div>
         </el-tab-pane>
         <el-tab-pane label="人员痕迹管理">
-          <div style="height: 200px;">
+          <div >
             <list :trace-type="2"/>
           </div>
         </el-tab-pane>

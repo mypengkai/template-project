@@ -27,8 +27,8 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
-        <el-table-column prop="projectitem" label="分部分项" width="555"></el-table-column>
+      <el-table border class="textList" :data="getList" style="width: 100%" height="68vh">
+        <el-table-column prop="projectitem" label="分部分项"></el-table-column>
         <el-table-column prop="station" label="桩号" align="center"></el-table-column>
         <!--<el-table-column label="指令类型" width="110" align="center">
           <template slot-scope="scope">
@@ -80,7 +80,7 @@
                    @size-change="handleSizeChange"></el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
 

@@ -14,13 +14,6 @@
         <el-col :span="6" v-if="tabPosition == 'first'">
           <el-form :inline="true" class="grid-content">
               <span>分部分项：</span>
-
-              <!--     <select-tree
-                     :options="projectItemOptions"
-                     v-on:noDe="handleCheckChangeUnit"
-                     :props="defaultPropsProject"
-                   />projectItemOptions
-                 </el-form-item>-->
               <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
                            v-on:noDe="projectItemOnClick"/>
           </el-form>
@@ -29,11 +22,6 @@
         <!-- 人员查询 -->
         <el-col :span="6" v-if="tabPosition == 'second'">
           <div class="grid-content">
-            <!-- <el-form inline>
-              <el-form-item label="姓名：">
-                <select-tree :options="projectItemOptions"  v-on:noDe="handleCheckChangeUnit" :props="defaultPropsProject"/>
-              </el-form-item>
-            </el-form>-->
             <span>姓名：</span>
             <el-input
               size="small"
@@ -46,20 +34,22 @@
           </div>
         </el-col>
         <!-- ===================================== -->
-        <el-col :span="8">
+        <el-col :span="10">
           <el-row>
             <div class="grid-content">
-              <span>日期：</span>
-              <el-date-picker v-model="dateFrom" type="date" size="small"/>
+              <span>创建日期：</span>
+              <el-date-picker v-model="dateFrom" type="date" size="small"  value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd" placeholder="请选择"/>
               -
-              <el-date-picker v-model="dateTo" type="date" size="small"/>
+              <el-date-picker v-model="dateTo" type="date" size="small"  value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd" placeholder="请选择"/>
             </div>
           </el-row>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="18">
-          <div class="grid-content" id="gridAdd">
+          <div class="grid-content">
             <span>类型：</span>
             <el-radio-group v-model="searchType">
               <el-radio label="processCheck">工序验收</el-radio>
@@ -94,15 +84,15 @@
       </el-row>
     </div>
     <div class="content">
-      <el-tabs type="border-card" v-model="tabPosition">
+      <el-tabs type="border-card" v-model="tabPosition" @tab-click="changeType">
         <el-tab-pane label="工程痕迹管理" name="first">
           <div class="conent-one">
-            <list :trace-type="1" :conentOptions="conentOptions"/>
+            <list :traceType="1" :conentOptions="conentOptions"/>
           </div>
         </el-tab-pane>
         <el-tab-pane label="人员痕迹管理" name="second">
           <div class="conent-one">
-            <list :trace-type="2" :userOptions="userOptions"/>
+            <list :traceType="2" :userOptions="userOptions"/>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -115,7 +105,6 @@
   import request from '@/utils/request'
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import Organization from '@/api/Organization'
-
   export default {
     name: 'TraceManage',
     inject: ['reload'],
@@ -125,7 +114,6 @@
     },
     data() {
       return {
-        // radio: 'realcheck',
         userGroupDefaultProps: {  //组织机构tree props
           children: 'children',
           label: 'name'
@@ -170,9 +158,7 @@
     created() {
       this.initUserGroup()
       this.projecQuery()
-      // this.projecQueryAll()
       this.peopleQuery()
-      // this.peopleQueryAll()
     },
     mounted() {
     },
@@ -199,39 +185,9 @@
       },
       // 获取分部分项id
       projectItemOnClick(data) {
-        console.log(data)
         this.from.projectId = data.id
-
       },
-      /*
-
-            //选中的数据(tree)
-            noDe(data, checked, indeterminate) {
-              if (data.children.length > 0) {
-                this.from.projectName == ''
-                this.$message({
-                  message: '组织机构只能选择标段'
-                })
-                return false
-              }
-              if (data.children.length = 0) {
-                this.from.projectName = data.name
-                this.from.projectId = data.id
-              }
-              // 工程查询
-              request
-                .post('/rest/projectItemInfo/getList', {
-                  orgId: this.from.projectId,
-                  'X-AUTH-TOKEN': token
-                })
-                .then(res => {
-                  this.projectItemOptions = res.data.data
-                })
-            },
-      */
-
       handleCheckChangeUnit(data) {
-        console.log(data, 'data111')
         this.from.unitsName = data.projectItem
         this.from.unitsId = data.id
       },
@@ -241,48 +197,24 @@
           this.projecQuery()
         }
         if (this.tabPosition == 'second') {
-          this.peopleQuery()
+           this.peopleQuery()
         }
       },
-      /*      projecQueryAll() {
-              // 工程查询
-              request.post('/rest/mark/ThisList', {
-                pageNo: 1,
-                pageSize: 10,
-                startTime: this.dateFrom, // 起始时间
-                endTime: this.dateTo, // 结束时间
-                projectid: this.from.unitsId, //工程ID
-                orderby: this.active + 1, // 筛选(时间，类型，人员)
-                type: '' // 工程   人员
-              })
-                .then(res => {
-                  this.conentOptions = res.data.data.data
-
-                })
-            },*/
-      /*      peopleQueryAll() {
-              // 人员查询
-              request.post('/rest/mark/ThisList', {
-                pageNo: 1,
-                pageSize: 10,
-                startTime: this.dateFrom,
-                endTime: this.dateTo,
-                searchname: this.username,
-                orderby: this.active + 1,
-                type: ''
-              })
-                .then(res => {
-
-                  this.userOptions = res.data.data.data
-                  // console.log(this.userOptions, "this.userOptions");
-                })
-            },*/
-
+      changeType(tab){
+         if(tab.name=='first'){
+              this.searchType ='processCheck',
+              this.projecQuery();
+         }else if(tab.name=='second'){
+              this.searchType ='processCheck',
+              this.peopleQuery();
+         }
+      },
       projecQuery() {
         // 工程查询
         request.post('/rest/mark/chakan', {
           pageNo: 1,
           pageSize: 10,
+         
           startTime: this.dateFrom, // 起始时间
           endTime: this.dateTo, // 结束时间
           projectid: this.from.projectId, //工程ID
@@ -290,8 +222,7 @@
           type: this.searchType // 工程   人员
         })
           .then(res => {
-            this.conentOptions = res.data.data.data
-            //console.log(this.conentOptions)
+            this.conentOptions = res.data.data.data;
           })
       },
       peopleQuery() {
@@ -301,14 +232,12 @@
           pageSize: 10,
           startTime: this.dateFrom,
           endTime: this.dateTo,
-          searchname: this.username,
+          searchName: this.username,
           orderby: this.active + 1,
           type: this.searchType
         })
           .then(res => {
-
             this.userOptions = res.data.data.data
-            // console.log(this.userOptions, "this.userOptions");
           })
       },
 
@@ -347,7 +276,7 @@
 
   .conent-one {
     overflow-y: auto;
-    height: 32vw;
+    height: 58vh;
   }
 
   /deep/ .el-form-item__label {

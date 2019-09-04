@@ -40,8 +40,8 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
-        <el-table-column prop="projectitem" label="分部分项" width="555"></el-table-column>
+      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="68vh">
+        <el-table-column prop="projectitem" label="分部分项"></el-table-column>
         <el-table-column prop="station" label="桩号" align="center"></el-table-column>
         <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
         <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
@@ -75,7 +75,7 @@
     </el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="60%" class="dialogBox" :title="nowItem=='add'?'新增':'查看'" :visible.sync="dialogFormVisible">
+    <el-dialog width="60%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem" @cancel="dialogFormVisible=false" @comfirm="_searchList"></checkBox>
     </el-dialog>
   </div>
@@ -169,6 +169,7 @@
       },
       _searchList() {  // 列表请求
         api.myCommandPerson(this.sendData).then(res => {
+          console.log(res,"res")
           this.total = res.data.data.totalCount
           this.sendCommandList = res.data.data.data
         })

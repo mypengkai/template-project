@@ -1,37 +1,31 @@
 <template>
-  <div class="printerCheck">
+  <div class="p20">
     <div class="topBar">
+          <el-row>
+               <el-col :span="6">
+                  <span>打印编码：</span>
+               <el-input v-model="form.processNumber" placeholder="请输入打印编码" size="small">
+               </el-input> 
+               </el-col>
+               <el-col :span="6">
+                     <el-button
+                      type="primary"
+                      class="pan-btn light-blue-btn"
+                      icon="el-icon-search"
+                      @click="queryPrint"
+                    >查询</el-button> 
+               </el-col>
+          </el-row>
 
-      <el-row>
-        <el-col :span="6">
-      <span>
-        <el-form label-width="80px" :inline="true">
-          <el-form-item label="打印编码:">
-            <el-input v-model="form.processNumber" placeholder="请输入打印编码"></el-input>
-          </el-form-item>
-        </el-form>
-      </span>
-        </el-col>
-        <el-col :span="5">
-      <span>
-        <el-button
-          type="primary"
-          class="pan-btn light-blue-btn"
-          icon="el-icon-search"
-          @click="queryPrint"
-        >查询</el-button>
-      </span>
-        </el-col>
-      </el-row>
       <div>
-        <span style="font-weight: bolder;font-size: 16px">湖南常祁高速验收凭证</span>
+        <span style="font-weight: bolder;font-size: 14px">湖南常祁高速验收凭证</span>
       </div>
     </div>
 
     <div class="printCheckConent" v-if="isShow">
-      <el-table :data="tableData" style="width: 100%" height="68vh" border class="textList">
+      <el-table :data="tableData" style="width: 100%" height="65vh" border class="textList">
         <!-- <el-table-column label="承包单位: 湖南长祁高速"> -->
-        <el-table-column prop="projectName" label="分部分项" width="550"></el-table-column>
+        <el-table-column prop="projectName" label="分部分项"></el-table-column>
         <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
         <el-table-column prop="processname" label="工序名称"></el-table-column>
         <el-table-column prop="processNumber" label="打印编码" width="120" align="center"></el-table-column>

@@ -165,12 +165,11 @@
           <el-form-item label="开会时间:" prop="meetingDatetime">
             <el-date-picker
               v-model="myApplyChangeForm.meetingDatetime"
-              type="date"
+              type="datetime"
               placeholder="选择开会时间"
               size="small"
               style="min-width:180px"
-              value-format="yyyy-MM-dd"
-              format="yyyy-MM-dd "
+              :picker-options="pickerOptions"
             ></el-date-picker>
           </el-form-item>
         </el-col>
@@ -184,6 +183,7 @@
               style="min-width:180px"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
+              :picker-options="pickerOptions"
             ></el-date-picker>
           </el-form-item>
         </el-col>
@@ -420,6 +420,11 @@ export default {
   name: "createChange",
   data() {
     return {
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now();   //这里就是设置当天后的日期不能被点击
+        },
+      },
       myApplyChangeForm: {
         moneyLevel: "", //金额等级
         addDecreaseMoney: "", //金额
@@ -538,8 +543,15 @@ export default {
   created() {
     this.initUserGrouptTree();
     this.getChangeName();
+    this.today();
   },
   methods: {
+    today(){
+         let nowTime = new Date();
+         this.myApplyChangeForm.meetingDatetime = nowTime.toLocaleDateString().replace(/\//g, "-");
+         this.myApplyChangeForm.plancompletionTime = nowTime.toLocaleDateString().replace(/\//g, "-");
+
+    },
     //记要名称
     getChangeName() {
       let currentDate = tool.formatDate(new Date(), "yyyyMMddHHmmss");

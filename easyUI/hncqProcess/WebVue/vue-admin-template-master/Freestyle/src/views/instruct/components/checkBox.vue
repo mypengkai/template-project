@@ -1,51 +1,40 @@
 <template>
   <div class=" checkBox">
-    <el-form :model="form" label-width="120px">
+    <el-form :model="form" ref="form" :rules="formRules" label-width="120px">
       <!-- 新增 -->
       <div :class="{reverseAddBox:nowItem=='add'}">
 
         <el-row>
           <el-col :span="12">
-            <el-form-item style="width:20vw" label="组织机构：" v-if="nowItem =='add'">
+            <el-form-item  label="组织机构：" v-if="nowItem =='add'" prop="userGroupId">
               <!--              <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleCheckChange"/>-->
 
-              <el-select v-model="form.userGroupId" placeholder="请选择" @change="userGroupOnChange">
+              <el-select style="width:16vw" v-model="form.userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
                 <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname"
                            :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item style="width:20vw" label="分部分项：" v-if="nowItem =='add'">
-              <select-tree clearable :options="projectItemTree" ref="getSelectData" :props="projectItemDefaultProp"
+            <el-form-item style="width:25vw" label="分部分项：" v-if="nowItem =='add'" prop="projectItemId">
+              <select-tree clearable :options="projectItemTree" ref="getSelectData" :props="projectItemDefaultProp" size="small"
                            v-on:noDe="projectItemOnClick"/>
-              <!--              <select-tree :options="projectItemTree" :props="projectTree" v-on:noDe="handleProjectItemOnClick"/>-->
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="12">
-            <!--    <el-form-item label="工序类型：" prop="processMDictId" v-if="nowItem =='add'">
-                  <el-select v-model="form.processMDictId" placeholder="请选择工序类型" @change="processTypeChangeProcess">
-                    <el-option v-for="item in processMDictOption" :key="item.id" :label="item.processType"
-                               :value="item.id"/>
-                  </el-select>
-                </el-form-item>-->
-            <el-form-item label="工序类型：" prop="processSDictId" v-if="nowItem =='add'">
-              <!--     <el-select v-model="form.processDictId" placeholder="请选择工序">
-                     <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
-                   </el-select>-->
-              <el-select v-model="form.processDictId" placeholder="请选择工序" style="width: 40%;">
+            <el-form-item  label="工序名称：" prop="processDictId" v-if="nowItem =='add'" >
+              <el-select style="width:16vw" v-model="form.processDictId" placeholder="请选择工序" size="small" >
                 <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
               </el-select>
             </el-form-item>
 
           </el-col>
           <el-col :span="12">
-            <el-form-item style="width:20vw" label="接收人：" v-if="nowItem =='add'" prop="receiveUserName">
-              <el-input v-model="form.receiveUserName" :disabled="true">
-                <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('receive')"></el-button>
+            <el-form-item style="width:25vw" label="接收人：" v-if="nowItem =='add'" prop="receiveUserName">
+              <el-input v-model="form.receiveUserName" size="small" @focus="alertAcceptUserDialog('receive')" clearable placeholder="请选择">
               </el-input>
             </el-form-item>
           </el-col>
@@ -53,33 +42,33 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="计划检查时间：" v-if="nowItem =='add'" prop="planTime">
+            <el-form-item label="计划检查时间：" v-if="nowItem =='add'" prop="planCheckTime">
               <el-date-picker v-model="form.planCheckTime" type="date" placeholder="选择日期："
-                              value-format="yyyy-MM-dd"></el-date-picker>
+                              value-format="yyyy-MM-dd" size="small"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="计划完成时间：" v-if="nowItem =='add'" prop="planTime">
+            <el-form-item label="计划完成时间：" v-if="nowItem =='add'" prop="planFinishTime">
               <el-date-picker v-model="form.planFinishTime" type="date" placeholder="选择日期："
-                              value-format="yyyy-MM-dd"></el-date-picker>
+                              value-format="yyyy-MM-dd" size="small"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+       
 
           <el-row>
             <el-col :span="24">
-              <el-form-item style="width:28vw" label="指令内容：" v-if="nowItem =='add'">
+              <el-form-item  style="width:52vw" label="指令内容：" v-if="nowItem =='add'">
                 <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
               </el-form-item>
             </el-col>
 
-          </el-row>
+        
 
 
-          <el-col :span="12">
-            <el-form-item label="图片选择：" v-if="nowItem =='add'" prop>
-              <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers"
+          <el-col :span="24">
+            <el-form-item label="图片选择：" v-if="nowItem =='add'">
+              <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :limit="5"
                          list-type="picture-card"
                          :auto-upload="false" :on-preview="handlePictureCardPreview" :data="form">
                 <i class="el-icon-plus"></i>
@@ -131,7 +120,7 @@
                         指令描述: {{ activity.remark }}
                       </div>
                       <div>
-                        <span>音像资料:</span>
+                        <span>影像资料:</span>
                         <template>
                           <ul v-if="activity.files !== mull" v-for="(node, key) in activity.files" :key="key">
                             <li style="margin-left:10px;float: left">
@@ -232,7 +221,7 @@
         </div>
 
       </div>
-      <div class="tar" style=" right: 40%;position: absolute;bottom: 10px;padding: 10px">
+      <div class="tar" style=" right:10%;position: absolute;bottom: 10px;padding: 10px">
         <el-button type="primary"
                    v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="innerBtn"
                    @click="innerTranspondDialog = true">转发指令
@@ -254,27 +243,32 @@
                    @click="modifyDialog=true">修改指令
         </el-button>
         <el-button v-if="nowItem=='add'" @click="close()">取 消</el-button>
-        <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('userFrom')">确 定</el-button>
+        <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('form')">确 定</el-button>
       </div>
     </el-form>
 
 
     <!-- 接收人弹框 -->
-    <el-dialog class="dialogBox" width="45%" title="选择接收人" :visible.sync="acceptUserDialog" append-to-body>
+    <el-dialog class="dialogBox" width="45%"  title="选择接收人" :visible.sync="acceptUserDialog" append-to-body>
       <div class="topBar">
-        <span>组织机构筛选:</span>
+        <span>组织机构:</span>
         <el-select v-model="receiveData.userGroupId" placeholder="请选择" @change="handleReceiveUserGroupCheckChange">
           <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname"
                      :value="item.id"></el-option>
         </el-select>
-
-        <!-- <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps"
-                      v-on:noDe="handleReceiveUserGroupCheckChange"/>-->
+         <span>姓名:</span>
+         <el-input v-model="receiveData.realname" placeholder="请输入姓名"></el-input>
+         <el-button
+            class="pan-btn light-blue-btn"
+            type="primary"
+            icon="el-icon-search"
+            @click="query()"
+          >查询</el-button>
       </div>
-      <el-table border :data="receiveUsersList" highlight-current-row style="width: 100%" height="50vh"
+      <el-table border :data="receiveUsersList" highlight-current-row height="50vh"
                 @current-change="handleCurrentChange">
         <el-table-column prop="username" label="姓名"></el-table-column>
-        <el-table-column prop="departname" label="职务"></el-table-column>
+        <el-table-column prop="zhiwei" label="职位"></el-table-column>
         <el-table-column prop="mobilePhone" label="电话"></el-table-column>
       </el-table>
 
@@ -287,12 +281,10 @@
     <el-dialog class="dialogBox" width="40%" title="指令转发" :visible.sync="innerTranspondDialog" append-to-body>
       <el-form :model="transpondForm" :rules="rulesform" label-width="130px">
         <el-form-item label="指定人：" prop="transpondName">
-          <el-input readonly v-model="transpondForm.transpondName">
-            <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
-          </el-input>
+          <el-input readonly v-model="transpondForm.transpondName" @focus="alertAcceptUserDialog('transpond')" clearable placeholder="请选择">
+        </el-input>
         </el-form-item>
-
-        <el-form-item label="计划完成时间：" prop="planTime">
+        <el-form-item label="计划完成时间：" prop="planFinishTime"> 
           <el-date-picker v-model="transpondForm.planFinishTime" type="date" placeholder="选择日期时间："
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
@@ -300,6 +292,9 @@
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="transpondForm.remark"></el-input>
         </el-form-item>
+
+        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+
       </el-form>
       <div class="tar">
         <el-button @click="innerTranspondDialog = false">取 消</el-button>
@@ -309,14 +304,8 @@
 
     <!-- 指令退回 -->
     <el-dialog class="dialogBox" width="40%" title="指令退回" :visible.sync="returnDialog" append-to-body>
-      <el-form :model="returnForm" label-width="130px">
-        <!-- <el-form-item label="指定人：" prop="transpondName">
-           <el-input readonly v-model="transpondForm.transpondName">
-             <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
-           </el-input>
-         </el-form-item>-->
-
-        <el-form-item label="计划完成时间：" prop="planTime">
+      <el-form :model="returnForm" label-width="130px" ref="returnForm" :rules="returnRules">
+        <el-form-item label="计划完成时间：" prop="planFinishTime">
           <el-date-picker v-model="returnForm.planFinishTime" type="date" placeholder="选择日期时间："
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
@@ -324,7 +313,10 @@
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="returnForm.remark"></el-input>
         </el-form-item>
-        <el-form-item label="图片选择：" prop>
+     
+        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+
+        <el-form-item label="图片选择：">
           <el-upload class="avatar-uploader" ref="uploadReturn" :action="uploadUrlReturn" name="files"
                      :headers="headers"
                      list-type="picture-card"
@@ -338,19 +330,14 @@
       </el-form>
       <div class="tar">
         <el-button @click="returnDialog = false">取 消</el-button>
-        <el-button type="primary" @click="returnCommand">确 定</el-button>
+        <el-button type="primary" @click="returnCommand('returnForm')">确 定</el-button>
       </div>
     </el-dialog>
 
     <!-- 指令完成modifytBtn -->
     <el-dialog class="dialogBox" width="40%" title="指令完成" :visible.sync="soonFinishDialog" append-to-body>
       <el-form :model="soonFinishForm" label-width="130px">
-        <!--  <el-form-item label="指定人：" prop="transpondName">
-            <el-input readonly v-model="transpondForm.transpondName">
-              <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
-            </el-input>
-          </el-form-item>-->
-        <el-form-item label="计划完成时间：" prop="planTime">
+        <el-form-item label="完成时间：" prop="planFinishTime">
           <el-date-picker v-model="soonFinishForm.planFinishTime" type="date" placeholder="选择日期时间："
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
@@ -358,7 +345,9 @@
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="soonFinishForm.remark"></el-input>
         </el-form-item>
 
-        <el-form-item label="图片选择：" prop>
+         <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+
+        <el-form-item label="图片选择：">
           <el-upload class="avatar-uploader" ref="uploadSoonFinish" :action="uploadUrlSoonFinish" name="files"
                      :headers="headers"
                      list-type="picture-card"
@@ -379,20 +368,14 @@
     <!-- 指令复核 -->
     <el-dialog class="dialogBox" width="40%" title="指令复核" :visible.sync="finishDialog" append-to-body>
       <el-form :model="finishForm" label-width="130px">
-        <!--  <el-form-item label="指定人：" prop="transpondName">
-            <el-input readonly v-model="transpondForm.transpondName">
-              <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('transpond')"></el-button>
-            </el-input>
-          </el-form-item>-->
-        <!-- <el-form-item label="计划完成时间：" prop="planTime">
-           <el-date-picker v-model="finishForm.planFinishTime" type="date" placeholder="选择日期时间："
-                           value-format="yyyy-MM-dd"></el-date-picker>
-         </el-form-item>-->
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="finishForm.remark"></el-input>
         </el-form-item>
 
-        <el-form-item label="图片选择：" prop>
+        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+
+
+        <el-form-item label="图片选择：">
           <el-upload class="avatar-uploader" ref="uploadFinish" :action="uploadUrlFinish" name="files"
                      :headers="headers"
                      list-type="picture-card"
@@ -413,24 +396,25 @@
     <!-- 指令完成modifytBtn -->
     <el-dialog class="dialogBox" width="40%" title="指令修改" :visible.sync="modifyDialog" append-to-body>
       <el-form :model="modifyForm" label-width="130px">
-        <el-form-item label="指定人：" prop="transpondName">
-          <el-input readonly v-model="modifyForm.receiveUserName">
-            <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog('receive')"></el-button>
+        <el-form-item label="指定人：" prop="receiveUserName">
+          <el-input readonly v-model="modifyForm.receiveUserName" @focus="alertAcceptUserDialog('receive')" clearable placeholder="请选择">
           </el-input>
         </el-form-item>
-        <el-form-item label="计划检查时间：" prop="planTime">
+        <el-form-item label="计划检查时间：" prop="planCheckTime">
           <el-date-picker v-model="modifyForm.planCheckTime" type="date" placeholder="选择日期时间："
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
-        <el-form-item label="计划完成时间：" prop="planTime">
+        <el-form-item label="计划完成时间：" prop="planFinishTime">
           <el-date-picker v-model="modifyForm.planFinishTime" type="date" placeholder="选择日期时间："
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="modifyForm.remark"></el-input>
         </el-form-item>
+         
+        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>  
 
-        <el-form-item label="图片选择：" prop>
+        <el-form-item label="图片选择：">
           <el-upload class="avatar-uploader" ref="uploadModify" :action="uploadUrlModify" name="files"
                      :headers="headers"
                      list-type="picture-card"
@@ -457,7 +441,10 @@
     <el-dialog title="图片预览" :visible.sync="dialogcommchecks" width="50%" append-to-body>
       <viewer :photo="commcheckList" :imgList="finishPictureOfCommand"></viewer>
     </el-dialog>
-
+   <!-- 快速备注 -->
+     <el-dialog :visible.sync="dialogRemark" title="自动回复" width="40%" append-to-body>
+        <remark @setRemark="getRemark" @cancel="dialogRemark=false" :type="'command'"></remark>
+    </el-dialog>
   </div>
 </template>
 
@@ -470,10 +457,12 @@
   import processInfo from '@/api/process.js'
   import instructMap from './instructMap'
   import Map from './Map'
+  import remark from "@/components/remark"
   // import SelectTree from "@/components/SelectTree/selectTree.vue";
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
 
   import viewer from '@/components/viewer'
+import { debug } from 'util';
 
   export default {
     inject: ['reload'],
@@ -481,16 +470,36 @@
       SelectTree,
       instructMap,
       Map,
-      viewer
+      viewer,
+      remark
     },
-    // props: ['nowItem'],
-    props:{
-        nowItem:{
-          type:Object
-        }
-    },
+    props: ['nowItem'],
     data() {
       return {
+        formRules: {
+          userGroupId: [
+            { required: true, message: '请选择组织机构', trigger: 'change' },
+          ],
+          projectItemId: [
+            { required: true, message: '请选择分部分项', trigger: 'change' }
+          ],
+           processDictId: [
+            { required: true, message: '请选择工序', trigger: 'change' }
+          ],
+           receiveUserName: [
+            { required: true, message: '请选择接收人', trigger: 'change' }
+          ],
+          planCheckTime: [
+            {  required: true, message: '请选择计划开始时间', trigger: 'change' }
+          ],
+          planFinishTime: [
+            {  required: true, message: '请选择计划完成时间', trigger: 'change' }
+          ],
+        },
+       returnRules:{
+           planFinishTime:[{ required: true, message: '请选择完成时间', trigger: 'change' }]
+       },
+        dialogRemark:false,
         returnDialog: false,
         soonFinishDialog: false,
         finishDialog: false,
@@ -749,14 +758,29 @@
       }
     },
     created() {
-      this.initForm()
-      this.receiveUserList()
+      this.initForm();
+      this.initUserGroupTree();
+      this.receiveUserList();
       this.form.batchNo = this.createUUID()  //生成批处理id
       console.log(this.nowItem)
     },
     methods: {
       reset() {  // 重置按钮
         this.reload()
+      },
+      query(){
+         this.receiveUserList();
+      },
+      getRemark(data){
+         this.transpondForm.remark = data;
+         this.modifyForm.remark = data;
+         this.finishForm.remark = data;
+         this.soonFinishForm.remark = data;
+         this.returnForm.remark = data;
+
+      },
+      checkRemark(){
+        this.dialogRemark = true;
       },
       initForm() {
         if (this.nowItem == 'add') {
@@ -770,9 +794,6 @@
           this.soonFinishForm.commandid = ObCopyData.id // 完成指令
           this.finishForm.commandid = ObCopyData.id // 复核指令
           this.modifyForm.commandid = ObCopyData.id // 修改指令
-          // this.pictureOfCommand = ObCopyData.commandUsers[0].files
-          // this.finishPictureOfCommand = ObCopyData.commandUsers[0].files
-          console.log('ObCopyDataaaaaaaaaa', ObCopyData)
           let nowUserId = localStorage.getItem('userId')
           //处理按钮显示与否
           /* -1 发起人
@@ -781,10 +802,10 @@
              2 复核
              3 退回*/
           if (ObCopyData.state == '-1' || ObCopyData.state == '0') {
-            this.innerBtn = true
-            this.returnBtn = true
-            this.soonFinishBtn = true
-            this.finishBtn = false
+            this.innerBtn = true      // 转发
+            this.returnBtn = true     // 退回
+            this.soonFinishBtn = true  // 完成
+            this.finishBtn = false     // 复核
             if (nowUserId == ObCopyData.sponsor) {
               this.soonFinishBtn = false
               this.finishBtn = false
@@ -959,52 +980,22 @@
         this.receiveData.userGroupId = data
         this.receiveUserList()
       },
-      _comfirm() {  //提交
+      _comfirm(form) {  //提交
         if (this.nowItem === 'add') {  // 新增
-          if (this.form.userGroupId === null || this.form.userGroupId === '' || this.form.userGroupId === undefined) {
-            this.$message({
-              showClose: true,
-              message: '请选择组织机构',
-              type: 'warning'
-            })
-            return false
-          }
-          if (this.form.projectItemId === '' || this.form.projectItemId === '' || this.form.projectItemId === undefined) {
-            this.$message({
-              showClose: true,
-              message: '请选择分部分项',
-              type: 'warning'
-            })
-            return false
-          }
-          /*    if (this.form.processDictId === '' || this.form.processDictId === '' || this.form.processDictId === undefined) {
-                this.$message({
-                  showClose: true,
-                  message: '请选择工序类型',
-                  type: 'warning'
-                })
-                return false
-              }*/
-          if (this.form.ReceiveUserid === '' || this.form.ReceiveUserid === '' || this.form.ReceiveUserid === undefined) {
-            this.$message({
-              showClose: true,
-              message: '请选择接收人',
-              type: 'warning'
-            })
-            return false
-          }
-          if (this.form.planCheckTime === '' || this.form.planCheckTime === '' || this.form.planCheckTime === undefined) {
-            this.$message({
-              showClose: true,
-              message: '请选择计划时间',
-              type: 'warning'
-            })
-            return false
-          }
-          this.$refs.upload.submit()
+          //debugger;
+           this.$refs[form].validate((valid) => {
+            //debugger;
+             console.log(valid,"valid")
+            if (valid) {
+                this.$refs.upload.submit();
+                this.$emit('cancel')
+                this.reload()
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
         }
-        this.$emit('cancel')
-        this.reload()
       },
       close() {
         this.$emit('cancel')
@@ -1041,10 +1032,22 @@
           this.reload()
         })
       },
-      returnCommand() {  // 退回指令
-        this.$refs.uploadReturn.submit()
-        this.$emit('cancel')
-        this.reset()
+      returnCommand(returnForm) {  // 退回指令
+        this.$refs[returnForm].validate((valid) => {
+          if (valid) {
+            this.$refs.uploadReturn.submit()
+            this.$emit('cancel')
+            this.reset()
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+
+
+        // this.$refs.uploadReturn.submit()
+        // this.$emit('cancel')
+        // this.reset()
         // })
       },
       soonFinishCommand() {  // 完成指令
@@ -1150,6 +1153,7 @@
   .checkBox {
     height: 60vh;
     overflow-x: hidden;
+    padding: 0 20px;
   }
 
   .avatar {
@@ -1397,4 +1401,35 @@
     background-size: 50% 50%;
     cursor: pointer
   }
+  /deep/.el-pagination {
+    white-space: nowrap;
+    padding: 2px 5px;
+    color: #303133;
+    font-weight: 700;
+    margin-top: 10px;
+}
+/deep/.el-upload-list--picture-card .el-upload-list__item {
+    overflow: hidden;
+    background-color: #fff;
+    border: 1px solid #c0ccda;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    margin: 0 8px 8px 0;
+    display: inline-block;
+}
+/deep/.el-upload--picture-card {
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    vertical-align: top;
+}
+
 </style>
