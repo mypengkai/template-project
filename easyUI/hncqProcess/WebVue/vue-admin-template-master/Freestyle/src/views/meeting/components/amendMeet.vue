@@ -377,7 +377,7 @@
         @size-change="handeUsersChange"
         @current-change="initDparentUser()"
       ></el-pagination>
-      <div slot="footer" class="dialog-footer">
+      <div style="margin-left:80%">
         <el-button @click="dialogusersVisible=false">取 消</el-button>
         <el-button type="primary" @click="checkUser">确 认</el-button>
       </div>
@@ -429,7 +429,7 @@
         @size-change="handeNoteNameChange"
         @current-change="initDparentUser()"
       ></el-pagination>
-      <div slot="footer" class="dialog-footer">
+      <div style="margin-left:80%">
         <el-button @click="dialogNoteNameVisible=false">取 消</el-button>
         <el-button type="primary" @click="checkNoteName">确 认</el-button>
       </div>
@@ -438,11 +438,36 @@
     <!-- 选择处理人弹框 -->
     <el-dialog
       width="70%"
-      title="选择审核人"
+      title="选择处理人"
       :visible.sync="dialogHandleFormVisible"
       class="dialogBox"
       append-to-body
     >
+       <div class="topBar">
+        <span>组织机构：</span>
+        <el-select
+          v-model="copyQueryParam.userGroupId"
+          placeholder="请选择"
+          @change="copyUserGroupOnClick()"
+        >
+          <el-option
+            v-for="item in copyUserGroupTree"
+            :key="item.id"
+            :label="item.departname"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <span>用户名：</span>
+        <el-input v-model="copyQueryParam.username" placeholder="请输入用户名"></el-input>
+
+         <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="queryCopy">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="resetCopy()">重置
+              </el-button>
+            </div>
+      </div>
       <el-table
         ref="changeSingleTable"
         :data="handlePersonData"
@@ -468,7 +493,7 @@
         @size-change="handleNextJobSizeChange"
         @current-change="loadNextJobUserList()"
       ></el-pagination>
-      <div slot="footer" class="dialog-footer">
+      <div style="margin-left:80%">
          <el-button @click="dialogHandleFormVisible=false">取 消</el-button>
          <el-button type="primary" @click="subimtHandlerPerson">确 认</el-button>
       </div>
@@ -496,6 +521,9 @@
             :value="item.id"
           ></el-option>
         </el-select>
+        <span>用户名：</span>
+        <el-input v-model="copyQueryParam.realname" placeholder="请输入用户名"></el-input>
+
          <div class="rl">
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
                          @click="queryCopy">查询
@@ -528,7 +556,7 @@
         @size-change="handleCopyPersonSizeChange"
         @current-change="initCopyUsersList()"
       ></el-pagination>
-      <div slot="footer" class="dialog-footer">
+      <div style="margin-left:80%">
         <el-button @click="dialogCopyPersonFormVisible=false">取 消</el-button>
         <el-button type="primary" @click="subimtCopyPerson">确 认</el-button>
       </div>
@@ -736,6 +764,8 @@ export default {
     },
     resetCopy(){
         this.copyQueryParam.userGroupId = '';
+        this.copyQueryParam.realname = '';
+        this.copyQueryParam.username = '';
         this.initCopyUsersList();
     },
     query(){
