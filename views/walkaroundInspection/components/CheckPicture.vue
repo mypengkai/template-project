@@ -18,8 +18,7 @@
         </el-col>
       </el-row>
       <template v-if="nowItem.type==='polling'">
-
-           <el-row>
+      <el-row>
         <el-col :span="24">
           <div class="divHeight">
             <span class="spanWord">巡视人:</span>
