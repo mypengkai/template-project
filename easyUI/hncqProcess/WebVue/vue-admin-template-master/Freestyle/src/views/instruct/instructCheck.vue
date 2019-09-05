@@ -2,69 +2,50 @@
   <div class="p20">
     <div class="topBar">
       <span>组织机构:</span>
-      <!--      <select-tree clearable :options="userGroupOption" :props="defaultProps" v-on:noDe="handleCheckChange"/>-->
       <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
-        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                   :value="item.id"></el-option>
+        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
       </el-select>
-
       <span>分部分项:</span>
-      <!--      <select-tree :options="projectItemTreeOptions" :props="projectTree" v-on:noDe="projectChange"/>-->
-
-      <select-tree clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
-                   v-on:noDe="projectItemOnClick"/>
+      <select-tree clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick"/>
       <span>创建日期:</span>
-      <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"></el-date-picker>
-      -
-      <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"></el-date-picker>
+      <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small" style="min-width:180px"
+                      value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>-
+      <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small" style="min-width:180px"
+                      value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>
       <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList()">查询
-        </el-button>
+        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList()">查询</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
     <!-- 查询列表 -->
-    <div>
-      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
-        <el-table-column prop="project" label="分部分项"></el-table-column>
-        <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
-        <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
-        <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
-        <el-table-column prop="commandUserNow" label="处理人" width="100" align="center"></el-table-column>
-        <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>
-        <el-table-column label="状态" width="120" align="center">
-          <template slot-scope="scope">
-            <template v-if="scope.row.state=='-1'">已发起,待处理</template>
-            <template v-else-if="scope.row.state=='0'">已转发</template>
-            <template v-else-if="scope.row.state=='1'">已复核</template>
-            <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
-            <template v-else-if="scope.row.state=='3'">已退回,待修改</template>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" width="100" align="center">
-          <template slot-scope="scope">
-            <el-button type="primary" size="small" icon="el-icon-search" circle
-                       @click="actionItem(scope.row.id)"></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
+      <el-table-column prop="project" label="分部分项"></el-table-column>
+      <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
+      <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
+      <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
+      <el-table-column prop="commandUserNow" label="处理人" width="100" align="center"></el-table-column>
+      <el-table-column prop="planTime" label="处理时间" width="110" align="center"></el-table-column>
+      <el-table-column label="状态" width="120" align="center">
+        <template slot-scope="scope">
+          <template v-if="scope.row.state=='-1'">已发起,待处理</template>
+          <template v-else-if="scope.row.state=='0'">已转发</template>
+          <template v-else-if="scope.row.state=='1'">已复核</template>
+          <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
+          <template v-else-if="scope.row.state=='3'">已退回,待修改</template>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" width="100" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" size="small" icon="el-icon-search" circle @click="actionItem(scope.row.id)"></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :current-page="sendData.pageNo" :page-sizes="[10,20,30]"
-                   :page-size="sendData.pageSize"
-                   layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()"
-                   @size-change="handleSizeChange" :total="total"></el-pagination>
-    <!-- 编辑弹框 -->
-    <!-- <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()"></checkBox>
-    </el-dialog> -->
+    <el-pagination class="pageList mt1" background :current-page="sendData.pageNo" :page-sizes="[10,20,30]" :page-size="sendData.pageSize"
+                   layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" @size-change="handleSizeChange" :total="total"></el-pagination>
+    <!-- 指令查看 -->
     <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogFormVisible">
-      <!-- <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox> -->
-         <orderInstruct :nowItem="nowItem"></orderInstruct>
+      <orderInstruct :nowItem="nowItem"></orderInstruct>
     </el-dialog>
   </div>
 </template>
@@ -73,7 +54,6 @@
   import api from '@/api/instruct.js'
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import Organization from '@/api/Organization.js'
-  import project from '@/api/project.js'
   import orderInstruct from "./components/orderInstruct"
   export default {
     inject: ['reload'],
@@ -133,7 +113,7 @@
         this.getinit()
       },
       getinit(){
-          api.getList(this.sendData).then(res => {
+        api.getList(this.sendData).then(res => {
           this.total = res.data.data.totalCount
           this.sendCommandList = res.data.data.data;
           console.log()

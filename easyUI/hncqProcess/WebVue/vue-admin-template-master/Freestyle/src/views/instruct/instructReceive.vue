@@ -4,86 +4,50 @@
     <div class="topBar">
       <span>组织机构:</span>
       <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
-        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                   :value="item.id"></el-option>
+        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
       </el-select>
-      <!--      <select-tree clearable :options="userGroupOption" :props="userGroupDefaultProps" v-on:noDe="handleUserGroupClickChange"/>-->
       <span>分部分项:</span>
-      <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
-                   v-on:noDe="projectItemOnClick"/>
+      <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp" v-on:noDe="projectItemOnClick"/>
       <span>创建日期:</span>
-      <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"></el-date-picker>
-      -
-      <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small"
-                      style="min-width:180px" value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"></el-date-picker>
+      <el-date-picker v-model="sendData.starttime" type="date" placeholder="选择日期" size="small" style="min-width:180px"
+                      value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>-
+      <el-date-picker v-model="sendData.endtime" type="date" placeholder="选择日期" size="small" style="min-width:180px"
+                      value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker>
       <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList()">查询
-        </el-button>
+        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList()">查询</el-button>
         <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
       </div>
     </div>
     <!-- 查询列表 -->
-    <div>
-      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
-        <el-table-column prop="projectitem" label="分部分项"></el-table-column>
-        <el-table-column prop="station" label="桩号" align="center"></el-table-column>
-        <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
-        <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
-        <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
-        <el-table-column label="状态" width="120" align="center">
-          <template slot-scope="scope">
-            <template v-if="scope.row.state=='-1'">已发起,待处理</template>
-            <template v-else-if="scope.row.state=='0'">已转发</template>
-            <template v-else-if="scope.row.state=='1'">已复核</template>
-            <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
-            <template v-else-if="scope.row.state=='3'">已退回,待修改</template>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" width="100" align="center">
-          <template slot-scope="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              size="small"
-              content="查看"
-              circle
-              @click="actionItem(scope.row.commandId)"
-            ></el-button>
-               <!-- <el-button
-              type="success"
-              icon="el-icon-edit"
-              size="small"
-              content="处理"
-              circle
-              @click="editItem(scope.row.commandId)"
-            ></el-button> -->
-
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
+      <el-table-column prop="projectitem" label="分部分项"></el-table-column>
+      <el-table-column prop="station" label="桩号" align="center"></el-table-column>
+      <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
+      <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
+      <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
+      <el-table-column label="状态" width="120" align="center">
+        <template slot-scope="scope">
+          <template v-if="scope.row.state=='-1'">已发起,待处理</template>
+          <template v-else-if="scope.row.state=='0'">已转发</template>
+          <template v-else-if="scope.row.state=='1'">已复核</template>
+          <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
+          <template v-else-if="scope.row.state=='3'">已退回,待修改</template>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" width="100" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-search" size="small" content="查看" circle @click="actionItem(scope.row.commandId)"></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 分页条 -->
-    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[10,20,30]"
-                   :page-size="sendData.pageSize"
-                   layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total"
-                   @size-change="handleSizeChange"></el-pagination>
-
+    <el-pagination class="pageList mt1" background :current-page.sync="sendData.pageNo" :page-sizes="[10,20,30]" :page-size="sendData.pageSize"
+                   layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total" @size-change="handleSizeChange">
+    </el-pagination>
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogHandVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogHandVisible=false" @comfirm="reset()"></checkBox>
     </el-dialog>
-
-    <!-- <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogFormVisible">
-         <orderInstruct :nowItem="nowItem"></orderInstruct>
-    </el-dialog> -->
-   <!-- 处理 -->
-    <!-- <el-dialog width="60%" class="dialogBox" title="指令处理" :visible.sync="dialogHandVisible"> -->
-      <!-- <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox> -->
-         <!-- <handInstruct :nowItem="nowItem" @cancel="dialogHandVisible=false" @comfirm="reset()"></handInstruct> -->
-    <!-- </el-dialog> -->
   </div>
 </template>
 
@@ -152,23 +116,18 @@
         this.sendData.pageSize = val
         this.getinit()
       },
-      // async actionItem(id) {  // 查询单个请求
-      //   let { data } = await api.searchOne({ id })
-      //   this.nowItem = data.data
-      //   this.dialogFormVisible = true
-      // },
       actionItem(id){
           api.searchOne({ id:id }).then(res=>{
                this.nowItem = res.data.data;
                this.dialogHandVisible = true
-          }) 
+          })
       },
       editItem(id){
           api.searchOne({ id:id }).then(res=>{
                this.nowItem = res.data.data;
                this.dialogHandVisible = true
-          }) 
-          
+          })
+
       },
       getinit(){
           api.myCommandReceive(this.sendData).then(res => {
