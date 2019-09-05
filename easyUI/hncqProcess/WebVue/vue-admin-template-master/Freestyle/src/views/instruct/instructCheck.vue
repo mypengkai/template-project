@@ -29,7 +29,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
+      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
         <el-table-column prop="project" label="分部分项"></el-table-column>
         <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
         <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
@@ -59,8 +59,12 @@
                    layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()"
                    @size-change="handleSizeChange" :total="total"></el-pagination>
     <!-- 编辑弹框 -->
-    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
+    <!-- <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
       <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()"></checkBox>
+    </el-dialog> -->
+    <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogFormVisible">
+      <!-- <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox> -->
+         <orderInstruct :nowItem="nowItem"></orderInstruct>
     </el-dialog>
   </div>
 </template>
@@ -70,16 +74,17 @@
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import Organization from '@/api/Organization.js'
   import project from '@/api/project.js'
-
+  import orderInstruct from "./components/orderInstruct"
   export default {
     inject: ['reload'],
     components: {
       SelectTree,
-      checkBox
+      checkBox,
+      orderInstruct
     },
     data() {
       return {
-        getList: [], // 当前列表
+        sendCommandList: [], // 当前列表
         // 组织机构树显示
         defaultProps: {
           children: 'children',
@@ -128,9 +133,10 @@
         this.getinit()
       },
       getinit(){
-          api.myCommandPerson(this.sendData).then(res => {
+          api.getList(this.sendData).then(res => {
           this.total = res.data.data.totalCount
-          this.sendCommandList = res.data.data.data
+          this.sendCommandList = res.data.data.data;
+          console.log()
         })
       },
       _searchList() {  // 列表请求

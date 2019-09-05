@@ -27,7 +27,7 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
+      <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
         <el-table-column prop="projectitem" label="分部分项"></el-table-column>
         <el-table-column prop="station" label="桩号" align="center"></el-table-column>
         <el-table-column prop="launchPerson" label="发起人" width="100" align="center"></el-table-column>
@@ -72,10 +72,18 @@
                    @size-change="handleSizeChange"></el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()"></checkBox>
+    <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogHandVisible">
+      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogHandVisible=false" @comfirm="reset()"></checkBox>
     </el-dialog>
 
+    <!-- <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogFormVisible">
+         <orderInstruct :nowItem="nowItem"></orderInstruct>
+    </el-dialog> -->
+   <!-- 处理 -->
+    <!-- <el-dialog width="60%" class="dialogBox" title="指令处理" :visible.sync="dialogHandVisible"> -->
+      <!-- <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox> -->
+         <!-- <handInstruct :nowItem="nowItem" @cancel="dialogHandVisible=false" @comfirm="reset()"></handInstruct> -->
+    <!-- </el-dialog> -->
   </div>
 </template>
 
@@ -85,16 +93,19 @@
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import project from '@/api/project.js'
   import Organization from '@/api/Organization.js'
-
+  import orderInstruct from "./components/orderInstruct"
+  import handInstruct from "./components/handInstruct"
   export default {
     inject: ['reload'],
     components: {
       checkBox,
-      SelectTree
+      SelectTree,
+      orderInstruct,
+      handInstruct
     },
     data() {
       return {
-        getList: [], // 当前列表
+        sendCommandList: [], // 当前列表
         userGroupDefaultProps: {  // 组织机构树显示
           children: 'children',
           label: 'name'
@@ -126,7 +137,9 @@
           pageSize: 10 // 每页条数
         },
         nowItem: '',
+        commandId:'',
         userGroupId: '',
+        dialogHandVisible:false,
         dialogFormVisible: false// 查看编辑弹框
       }
     },
@@ -139,14 +152,26 @@
         this.sendData.pageSize = val
         this.getinit()
       },
-      async actionItem(id) {  // 查询单个请求
-        let { data } = await api.searchOne({ id })
-        this.nowItem = data.data
-        this.dialogFormVisible = true
-
+      // async actionItem(id) {  // 查询单个请求
+      //   let { data } = await api.searchOne({ id })
+      //   this.nowItem = data.data
+      //   this.dialogFormVisible = true
+      // },
+      actionItem(id){
+          api.searchOne({ id:id }).then(res=>{
+               this.nowItem = res.data.data;
+               this.dialogHandVisible = true
+          }) 
+      },
+      editItem(id){
+          api.searchOne({ id:id }).then(res=>{
+               this.nowItem = res.data.data;
+               this.dialogHandVisible = true
+          }) 
+          
       },
       getinit(){
-          api.myCommandPerson(this.sendData).then(res => {
+          api.myCommandReceive(this.sendData).then(res => {
           this.total = res.data.data.totalCount
           this.sendCommandList = res.data.data.data
         })

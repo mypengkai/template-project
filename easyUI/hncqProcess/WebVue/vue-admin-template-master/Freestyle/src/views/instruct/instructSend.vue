@@ -31,7 +31,7 @@
             <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
             </el-button>
             <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
-                       @click="action('add')">新增
+                       @click="action()">新增
             </el-button>
         </el-col>
 
@@ -58,8 +58,16 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" icon="el-icon-search" circle
+            <!-- <el-button type="primary" size="small" icon="el-icon-search" circle
+                       @click="actionItem(scope.row.commandId)"></el-button> -->
+                 <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
+                       <el-button type="primary" size="small" icon="el-icon-search" circle
                        @click="actionItem(scope.row.commandId)"></el-button>
+                </el-tooltip> 
+                <el-tooltip class="item" effect="dark" content="修改" placement="top-start" v-if="scope.row.state==3">
+                       <el-button type="success" size="small" icon="el-icon-edit" circle
+                       @click="detailItem(scope.row.commandId)"></el-button>
+                </el-tooltip>           
           </template>
         </el-table-column>
       </el-table>
@@ -74,8 +82,14 @@
     </el-pagination>
 
     <!-- 编辑弹框 -->
-    <el-dialog width="70%" class="dialogBox" :title="nowItem=='add'?'新增指令':'查看指令'" :visible.sync="dialogFormVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox>
+    <el-dialog width="70%" class="dialogBox" :title="instruectTitle" :visible.sync="dialogFormVisible">
+      <!-- <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox> -->
+         <addInstruct @cancel="dialogFormVisible=false" @comfirm="reset()" :nowItem="nowItem"></addInstruct>
+    </el-dialog>
+    <!-- 查看 -->
+    <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogCheckVisible">
+      <!-- <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogFormVisible=false" @comfirm="reset()" ></checkBox> -->
+         <orderInstruct :nowItem="nowItem"></orderInstruct>
     </el-dialog>
   </div>
 </template>
@@ -86,12 +100,15 @@
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
   import project from '@/api/project'
   import Organization from '@/api/Organization'
-
+  import addInstruct from "./components/addInstruct"
+  import orderInstruct from "./components/orderInstruct"
   export default {
     inject: ['reload'],
     components: {
       SelectTree,
-      checkBox
+      checkBox,
+      addInstruct,
+      orderInstruct
     },
     data() {
       return {
@@ -104,6 +121,7 @@
           children: 'children',
           label: 'projectItem'
         },
+        instruectTitle:"",
         userGroupOption: [], // 组织机构树
         projectItemOptions: [],   //   工程分部分项List   条件选择
         projectItemTree: [], // 分部分项树
@@ -125,6 +143,7 @@
         name: '', // 组织机构回填显示
         projectItem: '', // 分部分项回填显示
         dialogFormVisible: false, // 查看编辑弹框
+        dialogCheckVisible:false,
         innerVisible: false, // 组织机构弹框
         projectVisible: false // 工程分项弹框
       }
@@ -134,9 +153,22 @@
       this.initUserGroup();
     },
     methods: {
-      action(val) {
-        this.nowItem = val
-        this.dialogFormVisible = true
+      action() {
+        this.instruectTitle = "指令新增";
+        this.dialogFormVisible = true;
+      },
+      detailItem(id){
+        this.instruectTitle = "指令修改"; 
+          api.searchOne({ id:id }).then(res=>{
+              this.nowItem = res.data.data;
+              this.dialogFormVisible = true;
+          })
+      },
+      actionItem(id){
+          api.searchOne({ id:id }).then(res=>{
+              this.nowItem = res.data.data;
+              this.dialogCheckVisible = true;
+          })
       },
       initUserGroup() {  // 初始化组织机构input框数据
         Organization.userGroupSelect().then(res => {
@@ -160,11 +192,11 @@
       projectItemOnClick(data) {
         this.sendData.projectItemId = data.id
       },
-      async actionItem(id) {  // 查询单个请求
-        let { data } = await api.searchOne({ id })
-        this.nowItem = data.data
-        this.dialogFormVisible = true
-      },
+      // async actionItem(id) {  // 查询单个请求
+      //   let { data } = await api.searchOne({ id })
+      //   this.nowItem = data.data
+      //   this.dialogFormVisible = true
+      // },
       getinit(){
           api.myCommandPerson(this.sendData).then(res => {
           this.total = res.data.data.totalCount
