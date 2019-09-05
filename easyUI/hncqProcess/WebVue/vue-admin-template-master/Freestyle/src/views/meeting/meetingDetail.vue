@@ -45,7 +45,7 @@
                   <span>流程:</span>
                   <el-timeline>
                     <el-timeline-item
-                      v-if="item.state !=3 && item.state !=0"
+                      v-if="item.state !=3"
                       v-for="(item, index) in newChangInfo.role"
                       :key="index"
                       :type="item.state==1? 'primary' :'danger' "
@@ -125,7 +125,7 @@
                                   <span>流程:</span>
                                   <el-timeline id="timeline">
                                     <el-timeline-item 
-                                      v-if="item.state !=3 && item.state !=0"
+                                      v-if="item.state !=3"
                                       v-for="(item, index) in newChangInfo.role"
                                       :key="index"
                                       :type="item.state==1? 'primary' :'danger' "
