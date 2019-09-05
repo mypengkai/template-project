@@ -85,140 +85,45 @@
       <div :class="{reverseBox:nowItem!=='add'}" class="elInputBox" label-width="120px">
         <!--  <el-row>
           </el-row>-->
-        <div style="overflow:auto;">
-          <el-row>
-            <el-col :span="18">
-              <el-form-item style="width:100%;" label="分部分项：" v-if="nowItem !=='add'">
-                <el-input type="textarea" readonly v-model="form.projectItem" style="min-height: 60px;"></el-input>
-              </el-form-item>
-              <el-form-item style="width:22vw" label="计划检查时间：" v-if="nowItem !=='add'">
-                <el-input autosize readonly v-model="form.planTime"></el-input>
-              </el-form-item>
-              <el-form-item style="width:22vw" label="创建时间：" v-if="nowItem !=='add'">
-                <el-input readonly v-model="form.createTime"></el-input>
-              </el-form-item>
-              <el-form-item label="指令时间轴：" v-if="nowItem !=='add'">
-                <div class="reference">
-                  <el-timeline>
-                    <el-timeline-item v-for="(activity, index) in activities2" :key="index" :icon="activity.icon"
-                                      :type="activity.type" :color="activity.color"
-                                      :size="activity.size" :timestamp="activity.timestamp">{{activity.content}}
-                    </el-timeline-item>
-                  </el-timeline>
-                </div>
-                <div class="pta">
-                  <el-timeline :reverse="reverse">
-                    <el-timeline-item v-for="(activity, index) in activities" :key="index"
-                                      :icon="convertIcon(activity, 'icon')"
-                                      :type="convertIcon(activity, 'type')" :size="convertIcon(activity,'size')">
-                      <!--                      :timestamp="activity.createTime"-->
-                      <div style="font-weight: bolder"> {{activity.createTime}}</div>
-                      <div>
-                        指令操作人: {{activity.realname}}
-                      </div>
-                      <div>
-                        指令描述: {{ activity.remark }}
-                      </div>
-                      <div>
-                        <span>影像资料:</span>
-                        <template>
-                          <ul v-if="activity.files !== mull" v-for="(node, key) in activity.files" :key="key">
-                            <li style="margin-left:10px;float: left">
-                              <template v-if="node.fileType==='jpg' ||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                                <el-image style="width: 100px; height: 100px" :src="node.filePath" fit="fill"
-                                          @click="pictureShows(activity.files)"></el-image>
-                              </template>
-                              <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                                <div class="video-box">
-                                  <video id="video" style="width:100px;height:100px">
-                                    <source :src="node.filePath" type="video/mp4">
-                                  </video>
-                                  <div class="video-img" @click="videoPlayerShow(node)"></div>
-                                </div>
-
-                                <el-dialog title="影像资料" width="50%" :visible.sync="vedioinnerVisible" append-to-body>
-                                  <!--      <viewer :imgList="processPicture"></viewer>-->
-                                  <video-player class="video-player vjs-custom-skin"
-                                                ref="videoPlayer" :playsinline="true" :options="playerOptions"
-                                  ></video-player>
-                                </el-dialog>
-
-                              </template>
+           <div class="conent">
+                 <p><span>分部分项：</span><i>{{nowItem.projectItem}}</i></p>
+                 <p><span>计划复核时间：</span><i>{{nowItem.planTime}}</i></p>
+                 <p><span>创建时间：</span><i>{{nowItem.createTime}}</i></p>
+            </div>
+            <div class="block">
+                <p>指令流程：<span v-for="(item,index) in typeConent" :key="index">
+                      <img :src="item.src" alt="">{{item.name}}
+                    </span></p>
+                <el-timeline>
+                    <el-timeline-item v-for="(item,index) in nowItem.commandUsers" :key="index">
+                     <p v-if="item.userRole==-1"><img :src="typeConent[0].src" alt="">创建人：{{item.realname}}</p>
+                     <p v-else-if="item.userRole==0"><img :src="typeConent[1].src" alt="">转发人：{{item.realname}}</p>
+                     <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
+                     <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
+                     <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
+                     <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
+                     
+                     <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !=''">计划完成时间：{{item.planFinishTime}}</p>
+                     <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !='' " >实际完成时间：{{item.finishTime}}</p>
+                     <p v-if=" item.userRole !=null || item.userRole !='' ">指令内容：{{item.remark}}</p>
+                     <p class="imgBox" v-if=" item.userRole !=null || item.userRole !='' ">影像资料：
+                        <ul>
+                            <li v-for="(node, key) in item.files" :key="key">
+                                <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                                    <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                                </template>
+                                <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                                    <video :src="node.filePath" style="width: 100px; height: 100px;"
+                                                                @click="videoPlayerShow(node)"></video>
+                                </template>
                             </li>
-
-                          </ul>
-                          <div style="clear:both"></div>
-                        </template>
-                      </div>
+                        </ul>
+                    </p> 
+                    
                     </el-timeline-item>
-                  </el-timeline>
-                </div>
-              </el-form-item>
-            </el-col>
+                </el-timeline>
+            </div>
 
-            <el-col :span="12">
-              <div style="overflow:hidden;" v-if="finishPictureOfCommand.length>100 ">
-                <div class="fl faqi">
-                  <span class="accomplish">发起指令</span>
-                  <el-tabs v-model="activeName">
-                    <el-tab-pane label="影像资料" name="first">
-                      <ul>
-                        <li v-for="(item,index) in form.pictureOfCommand" :key="index" @click="actionImg(item,index)">
-                          <img :src="item.picture" style="cursor:pointer">
-                        </li>
-                      </ul>
-                    </el-tab-pane>
-                    <el-tab-pane label="拍照地点" name="second">
-                      <div style="height:45vh">
-                        <instructMap :nowItem="nowItem"></instructMap>
-                      </div>
-                    </el-tab-pane>
-                  </el-tabs>
-                </div>
-                <div class="elhr"></div>
-                <div class="rl wanchen">
-                  <span class="accomplish">完成指令</span>
-                  <el-tabs v-model="activeName1">
-                    <el-tab-pane label="影像资料" name="first">
-                      <ul>
-                        <li v-for="(item,index) in finishPictureOfCommand" :key="index" @click="actionImgs(item,index)">
-                          <img :src="item.picture" style="cursor:pointer">
-                        </li>
-                      </ul>
-                    </el-tab-pane>
-                    <el-tab-pane label="拍照地点" name="second">
-                      <div style="height:45vh">
-                        <Map :nowItem="nowItem"></Map>
-                      </div>
-                    </el-tab-pane>
-                  </el-tabs>
-                </div>
-              </div>
-            </el-col>
-            <el-col :span="12">
-              <!-- 指令发送 -->
-              <div v-if="nowItem !=='add' && finishPictureOfCommand.length===100 " class="pictureContent">
-                <el-tabs type="border-card" v-model="tabPosition">
-                  <el-tab-pane label="影像资料" name="first">
-                    <div class="imgContation">
-                      <ul>
-                        <li v-for="(item,index) in pictureOfCommand" :key="index" @click="actionImg(item,index)">
-                          <img :src="item.picture" alt style="width:100%;height:100%">
-                        </li>
-                      </ul>
-                    </div>
-                  </el-tab-pane>
-                  <el-tab-pane label="所在位置" name="second">
-                    <div style="height:45vh">
-                      <instructMap :nowItem="nowItem"></instructMap>
-                    </div>
-                  </el-tab-pane>
-                </el-tabs>
-              </div>
-            </el-col>
-
-          </el-row>
-        </div>
 
       </div>
       <div class="tar" style=" right:10%;position: absolute;bottom: 10px;padding: 10px">
@@ -238,10 +143,10 @@
                    v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="finishBtn"
                    @click="finishDialog=true">复核指令
         </el-button>
-        <el-button type="primary"
+        <!-- <el-button type="primary"
                    v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="modifyBtn"
                    @click="modifyDialog=true">修改指令
-        </el-button>
+        </el-button> -->
         <el-button v-if="nowItem=='add'" @click="close()">取 消</el-button>
         <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('form')">确 定</el-button>
       </div>
@@ -476,6 +381,7 @@ import { debug } from 'util';
     props: ['nowItem'],
     data() {
       return {
+        
         formRules: {
           userGroupId: [
             { required: true, message: '请选择组织机构', trigger: 'change' },
@@ -499,6 +405,32 @@ import { debug } from 'util';
        returnRules:{
            planFinishTime:[{ required: true, message: '请选择完成时间', trigger: 'change' }]
        },
+         typeConent:[
+            {
+              src:require("./images/start.png"),
+              name:'创建'  
+            },
+            {
+              src:require("./images/transpond.png"),
+              name:'转发'  
+            },
+            {
+              src:require("./images/receive.png"),
+              name:'接收'  
+            },
+            {
+              src:require("./images/finish.png"),
+              name:'完成'  
+            },
+            {
+              src:require("./images/check.png"),
+              name:'复核'  
+            },
+            {
+              src:require("./images/return.png"),
+              name:'退回'  
+            },
+        ],
         dialogRemark:false,
         returnDialog: false,
         soonFinishDialog: false,
@@ -623,13 +555,13 @@ import { debug } from 'util';
           patrolId: '',  //巡视id
           planFinishTime: ''  //计划完成时间
         }, //表单校验规则
-        rulesform: {
-          transpondName: {
-            required: true,
-            message: '请选择指定人',
-            trigger: 'blur'
-          }
-        },
+        // rulesform: {
+        //   transpondName: {
+        //     required: true,
+        //     message: '请选择指定人',
+        //     trigger: 'blur'
+        //   }
+        // },
         //   转发指令
         transpondForm: {
           commanduserId: '', // 指令用户表id
@@ -1431,5 +1363,43 @@ import { debug } from 'util';
     line-height: 100px;
     vertical-align: top;
 }
-
+ .conent{
+        p{
+            margin: 10px 0;
+            span{
+                font-weight: bold;
+                display: inline-block;
+                width:120px;
+                text-align: right;
+            }
+            i{
+               font-style: normal;  
+            }
+        }
+    }
+    .block{
+        p{
+        span{
+            margin:0 5px;
+        }
+        }
+    }
+    .imgBox{
+     ul{
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        li{
+          float: left;
+          list-style: none;
+          width:100px;
+          height:100px;
+          margin: 10px;
+          img{
+            width:100%;
+            height:100%;
+          }
+        }
+     }
+  }
 </style>
