@@ -129,7 +129,7 @@
       border
       :data="myApplyChangePageList"
       style="width: 100%"
-      height="60vh"
+      height="66vh"
     >
       <el-table-column prop="meeting_summary_number" label="会议编号" align="center"></el-table-column>
       <el-table-column prop="meeting_theme" label="会议主题" align="center"></el-table-column>

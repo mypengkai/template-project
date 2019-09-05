@@ -122,7 +122,7 @@
       border
       :data="myApplyChangePageList"
       style="width: 100%"
-      height="60vh"
+      height="66vh"
     >
       <el-table-column prop="meetingSummaryNumber" label="会议编号" align="center"></el-table-column>
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
@@ -209,7 +209,7 @@
       <createChange @cancel="dialogFormVisible=false" @comfirm="query" v-if="creatFlag" />
     </el-dialog>
     <!-- 修改 -->
-    <el-dialog title="修改变更纪要" :visible.sync="dialogdealMeetVisible" class="dialogBox">
+    <el-dialog title="修改变更纪要" :visible.sync="dialogdealMeetVisible" class="dialogBox" width="80%">
       <amendMeet
         :nowItem="nowItem"
         @cancel="dialogdealMeetVisible=false"
