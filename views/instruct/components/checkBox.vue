@@ -3,26 +3,20 @@
     <el-form :model="form" ref="form" :rules="formRules" label-width="120px">
       <!-- 新增 -->
       <div :class="{reverseAddBox:nowItem=='add'}">
-
         <el-row>
           <el-col :span="12">
             <el-form-item  label="组织机构：" v-if="nowItem =='add'" prop="userGroupId">
-              <!--              <select-tree clearable :options="userGroupTree" :props="userGroupDefaultProps" v-on:noDe="handleCheckChange"/>-->
-
               <el-select style="width:16vw" v-model="form.userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
-                <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname"
-                           :value="item.id"></el-option>
+                <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item style="width:25vw" label="分部分项：" v-if="nowItem =='add'" prop="projectItemId">
-              <select-tree clearable :options="projectItemTree" ref="getSelectData" :props="projectItemDefaultProp" size="small"
-                           v-on:noDe="projectItemOnClick"/>
+              <select-tree clearable :options="projectItemTree" ref="getSelectData" :props="projectItemDefaultProp" size="small" v-on:noDe="projectItemOnClick"/>
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row>
           <el-col :span="12">
             <el-form-item  label="工序名称：" prop="processDictId" v-if="nowItem =='add'" >
@@ -30,47 +24,38 @@
                 <el-option v-for="item in processSDictOption" :key="item.id" :label="item.process" :value="item.id"/>
               </el-select>
             </el-form-item>
-
           </el-col>
           <el-col :span="12">
-            <el-form-item style="width:25vw" label="接收人：" v-if="nowItem =='add'" prop="receiveUserName">
+            <el-form-item style="width:25vw" label="处理人：" v-if="nowItem =='add'" prop="receiveUserName">
               <el-input v-model="form.receiveUserName" size="small" @focus="alertAcceptUserDialog('receive')" clearable placeholder="请选择">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row>
           <el-col :span="12">
-            <el-form-item label="计划检查时间：" v-if="nowItem =='add'" prop="planCheckTime">
-              <el-date-picker v-model="form.planCheckTime" type="date" placeholder="选择日期："
-                              value-format="yyyy-MM-dd" size="small"></el-date-picker>
+            <el-form-item label="计划复核时间：" v-if="nowItem =='add'" prop="planCheckTime">
+              <el-date-picker v-model="form.planCheckTime" type="date" placeholder="选择日期：" value-format="yyyy-MM-dd" size="small"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="计划完成时间：" v-if="nowItem =='add'" prop="planFinishTime">
-              <el-date-picker v-model="form.planFinishTime" type="date" placeholder="选择日期："
-                              value-format="yyyy-MM-dd" size="small"></el-date-picker>
+              <el-date-picker v-model="form.planFinishTime" type="date" placeholder="选择日期：" value-format="yyyy-MM-dd" size="small"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
-       
-
-          <el-row>
-            <el-col :span="24">
-              <el-form-item  style="width:52vw" label="指令内容：" v-if="nowItem =='add'">
-                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
-              </el-form-item>
-            </el-col>
-
-        
-
-
+        <el-row>
+          <el-col :span="24">
+            <el-form-item  style="width:52vw" label="指令内容：" v-if="nowItem =='add'">
+              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="图片选择：" v-if="nowItem =='add'">
               <el-upload class="avatar-uploader" ref="upload" :action="uploadUrl" name="files" :headers="headers" :limit="5"
-                         list-type="picture-card"
-                         :auto-upload="false" :on-preview="handlePictureCardPreview" :data="form">
+                         list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview" :data="form">
                 <i class="el-icon-plus"></i>
               </el-upload>
               <el-dialog :visible.sync="dialogVisible">
@@ -83,70 +68,59 @@
 
       <!-- 查看 -->
       <div :class="{reverseBox:nowItem!=='add'}" class="elInputBox" label-width="120px">
-        <!--  <el-row>
-          </el-row>-->
-           <div class="conent">
-                 <p><span>分部分项：</span><i>{{nowItem.projectItem}}</i></p>
-                 <p><span>计划复核时间：</span><i>{{nowItem.planTime}}</i></p>
-                 <p><span>创建时间：</span><i>{{nowItem.createTime}}</i></p>
-            </div>
-            <div class="block">
-                <p>指令流程：<span v-for="(item,index) in typeConent" :key="index">
-                      <img :src="item.src" alt="">{{item.name}}
-                    </span></p>
-                <el-timeline>
-                    <el-timeline-item v-for="(item,index) in nowItem.commandUsers" :key="index">
-                     <p v-if="item.userRole==-1"><img :src="typeConent[0].src" alt="">创建人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==0"><img :src="typeConent[1].src" alt="">转发人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
-                     
-                     <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !=''">计划完成时间：{{item.planFinishTime}}</p>
-                     <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !='' " >实际完成时间：{{item.finishTime}}</p>
-                     <p v-if=" item.userRole !=null || item.userRole !='' ">指令内容：{{item.remark}}</p>
-                     <p class="imgBox" v-if=" item.userRole !=null || item.userRole !='' ">影像资料：
-                        <ul>
-                            <li v-for="(node, key) in item.files" :key="key">
-                                <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                                    <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
-                                </template>
-                                <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                                    <video :src="node.filePath" style="width: 100px; height: 100px;"
-                                                                @click="videoPlayerShow(node)"></video>
-                                </template>
-                            </li>
-                        </ul>
-                    </p> 
-                    
-                    </el-timeline-item>
-                </el-timeline>
-            </div>
+        <div class="conent">
+          <p><span>分部分项：</span><i>{{nowItem.projectItem}}</i></p>
+          <p><span>工序名：</span><i>{{nowItem.process}}</i></p>
+          <p><span>创建人：</span><i>{{nowItem.realname}}</i></p>
+          <p><span>创建时间：</span><i>{{nowItem.createTime}}</i></p>
+          <p><span>计划复核时间：</span><i>{{nowItem.planTime}}</i></p>
+          <p><span>当前处理人：</span><i>{{nowItem.nowsendusername}}</i></p>
+          <p><span>状态：</span><i>
+            <template v-if="nowItem.state=='-1'">已发起,待处理</template>
+            <template v-else-if="nowItem.state=='0'">已转发</template>
+            <template v-else-if="nowItem.state=='1'">已复核</template>
+            <template v-else-if="nowItem.state=='2'">已完成,待复核</template>
+            <template v-else-if="nowItem.state=='3'">已退回,待修改</template>
+          </i></p>
+        </div>
+        <div class="block">
+          <p>指令流程：<span v-for="(item,index) in typeConent" :key="index">
+                        <img :src="item.src" alt="">{{item.name}}
+                      </span>
+          </p>
+          <el-timeline>
+            <el-timeline-item v-for="(item,index) in nowItem.commandUsers" :key="index">
+              <p v-if="item.userRole==-1"><img :src="typeConent[0].src" alt="">创建人：{{item.realname}}</p>
+              <p v-else-if="item.userRole==0"><img :src="typeConent[1].src" alt="">转发人：{{item.realname}}</p>
+              <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
+              <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
+              <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
+              <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
 
-
+              <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !=''">计划完成时间：{{item.planFinishTime}}</p>
+              <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !='' " >实际完成时间：{{item.finishTime}}</p>
+              <p v-if=" item.userRole !=null || item.userRole !='' ">指令内容：{{item.remark}}</p>
+              <div class="imgBox" v-if=" item.userRole !=null || item.userRole !='' ">影像资料：
+                <ul>
+                  <li v-for="(node, key) in item.files" :key="key">
+                    <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                      <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                    </template>
+                    <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                      <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
+                    </template>
+                  </li>
+                </ul>
+              </div>
+            </el-timeline-item>
+          </el-timeline>
+        </div>
       </div>
       <div class="tar" style=" right:10%;position: absolute;bottom: 10px;padding: 10px">
-        <el-button type="primary"
-                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="innerBtn"
-                   @click="innerTranspondDialog = true">转发指令
-        </el-button>
-        <el-button type="primary"
-                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="returnBtn"
-                   @click="returnDialog=true">退回指令
-        </el-button>
-        <el-button type="primary"
-                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="soonFinishBtn"
-                   @click="soonFinishDialog=true">完成指令
-        </el-button>
-        <el-button type="primary"
-                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="finishBtn"
-                   @click="finishDialog=true">复核指令
-        </el-button>
-        <!-- <el-button type="primary"
-                   v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="modifyBtn"
-                   @click="modifyDialog=true">修改指令
-        </el-button> -->
+        <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="innerBtn" @click="innerTranspondDialog = true">转发指令</el-button>
+        <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="returnBtn" @click="returnDialog=true">退回指令</el-button>
+        <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="soonFinishBtn" @click="soonFinishDialog=true">完成指令</el-button>
+        <el-button type="primary" v-if="nowItem !=='add' && $route.name=='instructReceive'" v-show="finishBtn" @click="finishDialog=true">复核指令</el-button>
         <el-button v-if="nowItem=='add'" @click="close()">取 消</el-button>
         <el-button type="primary" v-if="nowItem=='add'" @click="_comfirm('form')">确 定</el-button>
       </div>
@@ -154,52 +128,41 @@
 
 
     <!-- 接收人弹框 -->
-    <el-dialog class="dialogBox" width="45%"  title="选择接收人" :visible.sync="acceptUserDialog" append-to-body>
+    <el-dialog class="dialogBox" width="45%"  title="选择处理人" :visible.sync="acceptUserDialog" append-to-body>
       <div class="topBar">
         <span>组织机构:</span>
         <el-select v-model="receiveData.userGroupId" placeholder="请选择" @change="handleReceiveUserGroupCheckChange">
-          <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname"
-                     :value="item.id"></el-option>
+          <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname" :value="item.id"></el-option>
         </el-select>
-         <span>姓名:</span>
-         <el-input v-model="receiveData.realname" placeholder="请输入姓名"></el-input>
-         <el-button
-            class="pan-btn light-blue-btn"
-            type="primary"
-            icon="el-icon-search"
-            @click="query()"
-          >查询</el-button>
+        <span>姓名:</span>
+        <el-input v-model="receiveData.realname" placeholder="请输入姓名"></el-input>
+        <el-button class="pan-btn light-blue-btn" type="primary" icon="el-icon-search" @click="query()">查询</el-button>
       </div>
-      <el-table border :data="receiveUsersList" highlight-current-row height="50vh"
-                @current-change="handleCurrentChange">
+      <el-table border :data="receiveUsersList" highlight-current-row height="50vh" @current-change="handleCurrentChange">
         <el-table-column prop="username" label="姓名"></el-table-column>
         <el-table-column prop="zhiwei" label="职位"></el-table-column>
         <el-table-column prop="mobilePhone" label="电话"></el-table-column>
       </el-table>
 
-      <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[10,20,30]"
-                     :page-size="receiveData.pageSize"
-                     layout="total, sizes, prev, pager, next, jumper" @current-change="receiveUserList()"
-                     :total="total"></el-pagination>
+      <el-pagination background :current-page.sync="receiveData.pageNo" :page-sizes="[10,20,30]" :page-size="receiveData.pageSize"
+                     layout="total, sizes, prev, pager, next, jumper" @current-change="receiveUserList()" :total="total"></el-pagination>
     </el-dialog>
+
     <!-- 转发信息 -->
     <el-dialog class="dialogBox" width="40%" title="指令转发" :visible.sync="innerTranspondDialog" append-to-body>
-      <el-form :model="transpondForm" :rules="rulesform" label-width="130px">
-        <el-form-item label="指定人：" prop="transpondName">
+      <el-form :model="transpondForm" label-width="130px">
+        <el-form-item label="处理人：" prop="transpondName">
           <el-input readonly v-model="transpondForm.transpondName" @focus="alertAcceptUserDialog('transpond')" clearable placeholder="请选择">
         </el-input>
         </el-form-item>
-        <el-form-item label="计划完成时间：" prop="planFinishTime"> 
-          <el-date-picker v-model="transpondForm.planFinishTime" type="date" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd"></el-date-picker>
+        <el-form-item label="计划完成时间：" prop="planFinishTime">
+          <el-date-picker v-model="transpondForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
 
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="transpondForm.remark"></el-input>
         </el-form-item>
-
         <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
-
       </el-form>
       <div class="tar">
         <el-button @click="innerTranspondDialog = false">取 消</el-button>
@@ -211,21 +174,17 @@
     <el-dialog class="dialogBox" width="40%" title="指令退回" :visible.sync="returnDialog" append-to-body>
       <el-form :model="returnForm" label-width="130px" ref="returnForm" :rules="returnRules">
         <el-form-item label="计划完成时间：" prop="planFinishTime">
-          <el-date-picker v-model="returnForm.planFinishTime" type="date" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd"></el-date-picker>
+          <el-date-picker v-model="returnForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
 
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="returnForm.remark"></el-input>
         </el-form-item>
-     
         <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
 
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadReturn" :action="uploadUrlReturn" name="files"
-                     :headers="headers"
-                     list-type="picture-card"
-                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="returnForm">
+          <el-upload class="avatar-uploader" ref="uploadReturn" :action="uploadUrlReturn" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="returnForm">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleReturn">
@@ -243,20 +202,16 @@
     <el-dialog class="dialogBox" width="40%" title="指令完成" :visible.sync="soonFinishDialog" append-to-body>
       <el-form :model="soonFinishForm" label-width="130px">
         <el-form-item label="完成时间：" prop="planFinishTime">
-          <el-date-picker v-model="soonFinishForm.planFinishTime" type="date" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd"></el-date-picker>
+          <el-date-picker v-model="soonFinishForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="soonFinishForm.remark"></el-input>
         </el-form-item>
-
-         <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
 
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadSoonFinish" :action="uploadUrlSoonFinish" name="files"
-                     :headers="headers"
-                     list-type="picture-card"
-                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="soonFinishForm">
+          <el-upload class="avatar-uploader" ref="uploadSoonFinish" :action="uploadUrlSoonFinish" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="soonFinishForm">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleSoonFinish">
@@ -276,15 +231,10 @@
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="finishForm.remark"></el-input>
         </el-form-item>
-
         <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
-
-
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadFinish" :action="uploadUrlFinish" name="files"
-                     :headers="headers"
-                     list-type="picture-card"
-                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="finishForm">
+          <el-upload class="avatar-uploader" ref="uploadFinish" :action="uploadUrlFinish" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="finishForm">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleFinish">
@@ -306,24 +256,18 @@
           </el-input>
         </el-form-item>
         <el-form-item label="计划检查时间：" prop="planCheckTime">
-          <el-date-picker v-model="modifyForm.planCheckTime" type="date" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd"></el-date-picker>
+          <el-date-picker v-model="modifyForm.planCheckTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
         <el-form-item label="计划完成时间：" prop="planFinishTime">
-          <el-date-picker v-model="modifyForm.planFinishTime" type="date" placeholder="选择日期时间："
-                          value-format="yyyy-MM-dd"></el-date-picker>
+          <el-date-picker v-model="modifyForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="modifyForm.remark"></el-input>
         </el-form-item>
-         
-        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>  
-
+        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadModify" :action="uploadUrlModify" name="files"
-                     :headers="headers"
-                     list-type="picture-card"
-                     :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="modifyForm">
+          <el-upload class="avatar-uploader" ref="uploadModify" :action="uploadUrlModify" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="modifyForm">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleModify">
@@ -381,7 +325,7 @@ import { debug } from 'util';
     props: ['nowItem'],
     data() {
       return {
-        
+
         formRules: {
           userGroupId: [
             { required: true, message: '请选择组织机构', trigger: 'change' },
@@ -408,27 +352,27 @@ import { debug } from 'util';
          typeConent:[
             {
               src:require("./images/start.png"),
-              name:'创建'  
+              name:'创建'
             },
             {
               src:require("./images/transpond.png"),
-              name:'转发'  
+              name:'转发'
             },
             {
               src:require("./images/receive.png"),
-              name:'接收'  
+              name:'接收'
             },
             {
               src:require("./images/finish.png"),
-              name:'完成'  
+              name:'完成'
             },
             {
               src:require("./images/check.png"),
-              name:'复核'  
+              name:'复核'
             },
             {
               src:require("./images/return.png"),
-              name:'退回'  
+              name:'退回'
             },
         ],
         dialogRemark:false,
@@ -742,7 +686,6 @@ import { debug } from 'util';
               this.soonFinishBtn = false
               this.finishBtn = false
             }
-
           } else if (ObCopyData.state == '3') {
             this.innerBtn = false
             this.returnBtn = false
@@ -755,9 +698,9 @@ import { debug } from 'util';
               this.finishBtn = false
               this.modifyBtn = true
             }
-          } else if (ObCopyData.state == '2') {
+          } else if (ObCopyData.state == '2') {  //待复核
             this.innerBtn = false
-            this.returnBtn = true
+            this.returnBtn = false
             this.soonFinishBtn = false
             this.finishBtn = false
             if (nowUserId == ObCopyData.sponsor) {
@@ -1373,7 +1316,7 @@ import { debug } from 'util';
                 text-align: right;
             }
             i{
-               font-style: normal;  
+               font-style: normal;
             }
         }
     }

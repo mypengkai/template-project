@@ -1,58 +1,59 @@
 <template>
-     <div class="orderInstruct">
-            <div class="conent">
-                 <p><span>分部分项：</span><i>{{nowItem.projectItem}}</i></p>
-                 <p><span>计划复核时间：</span><i>{{nowItem.planTime}}</i></p>
-                 <p><span>创建时间：</span><i>{{nowItem.createTime}}</i></p>
-            </div>
-            <div class="block">
-                <p>指令流程：<span v-for="(item,index) in typeConent" :key="index">
-                      <img :src="item.src" alt="">{{item.name}}
-                    </span></p>
-                <el-timeline>
-                    <el-timeline-item v-for="(item,index) in nowItem.commandUsers" :key="index">
-                     <p v-if="item.userRole==-1"><img :src="typeConent[0].src" alt="">创建人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==0"><img :src="typeConent[1].src" alt="">转发人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
-                     <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
-                     
-                     <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !=''">计划完成时间：{{item.planFinishTime}}</p>
-                     <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !='' " >实际完成时间：{{item.finishTime}}</p>
-                     <p v-if=" item.userRole !=null || item.userRole !='' ">指令内容：{{item.remark}}</p>
-                     <p class="imgBox" v-if=" item.userRole !=null || item.userRole !='' ">影像资料：
-                        <ul>
-                            <li v-for="(node, key) in item.files" :key="key">
-                                <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                                    <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
-                                </template>
-                                <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                                    <video :src="node.filePath" style="width: 100px; height: 100px;"
-                                                                @click="videoPlayerShow(node)"></video>
-                                </template>
-                            </li>
-                        </ul>
-                    </p> 
-                    
-                    </el-timeline-item>
-                </el-timeline>
-            </div>
-    <!--  -->
-            <el-dialog title="图片预览" width="60%" :visible.sync="dialogpicture" append-to-body>
-            <viewer :imgList="processPicture"></viewer>
-            </el-dialog>
+  <div class="orderInstruct">
+    <div class="conent">
+      <p><span>分部分项：</span><i>{{nowItem.projectItem}}</i></p>
+      <p><span>工序名：</span><i>{{nowItem.process}}</i></p>
+      <p><span>创建人：</span><i>{{nowItem.realname}}</i></p>
+      <p><span>创建时间：</span><i>{{nowItem.createTime}}</i></p>
+      <p><span>计划复核时间：</span><i>{{nowItem.planTime}}</i></p>
+      <p><span>当前处理人：</span><i>{{nowItem.nowsendusername}}</i></p>
+      <p><span>状态：</span><i>
+        <template v-if="nowItem.state=='-1'">已发起,待处理</template>
+        <template v-else-if="nowItem.state=='0'">已转发</template>
+        <template v-else-if="nowItem.state=='1'">已复核</template>
+        <template v-else-if="nowItem.state=='2'">已完成,待复核</template>
+        <template v-else-if="nowItem.state=='3'">已退回,待修改</template>
+      </i></p>
+    </div>
+    <div class="block">
+      <p>指令流程：<span v-for="(item,index) in typeConent" :key="index">
+                    <img :src="item.src" alt="">{{item.name}}
+                  </span></p>
+      <el-timeline>
+        <el-timeline-item v-for="(item,index) in nowItem.commandUsers" :key="index">
+          <p v-if="item.userRole==-1"><img :src="typeConent[0].src" alt="">创建人：{{item.realname}}</p>
+          <p v-else-if="item.userRole==0"><img :src="typeConent[1].src" alt="">转发人：{{item.realname}}</p>
+          <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
+          <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
+          <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
+          <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
+          <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !=''">计划完成时间：{{item.planFinishTime}}</p>
+          <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !='' " >实际完成时间：{{item.finishTime}}</p>
+          <p v-if=" item.userRole !=null || item.userRole !='' ">指令内容：{{item.remark}}</p>
+          <div class="imgBox" v-if=" item.userRole !=null || item.userRole !='' ">影像资料：
+            <ul>
+              <li v-for="(node, key) in item.files" :key="key">
+                <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                  <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                </template>
+                <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                  <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
+                </template>
+              </li>
+            </ul>
+          </div>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
 
+    <el-dialog title="图片预览" width="60%" :visible.sync="dialogpicture" append-to-body>
+      <viewer :imgList="processPicture"></viewer>
+    </el-dialog>
 
-
-            <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
-            <video-player class="video-player vjs-custom-skin"
-                            ref="videoPlayer"
-                            :playsinline="true"
-                            :options="playerOptions"
-            ></video-player>
-            </el-dialog>
-     </div>
+    <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
+      <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true" :options="playerOptions"></video-player>
+    </el-dialog>
+  </div>
 </template>
 <script>
 import viewer from '@/components/viewer'
@@ -98,27 +99,27 @@ export default {
         typeConent:[
             {
               src:require("./images/start.png"),
-              name:'创建'  
+              name:'创建'
             },
             {
               src:require("./images/transpond.png"),
-              name:'转发'  
+              name:'转发'
             },
             {
               src:require("./images/receive.png"),
-              name:'接收'  
+              name:'接收'
             },
             {
               src:require("./images/finish.png"),
-              name:'完成'  
+              name:'完成'
             },
             {
               src:require("./images/check.png"),
-              name:'复核'  
+              name:'复核'
             },
             {
               src:require("./images/return.png"),
-              name:'退回'  
+              name:'退回'
             },
         ]
       }
@@ -167,7 +168,7 @@ export default {
                 text-align: right;
             }
             i{
-               font-style: normal;  
+               font-style: normal;
             }
         }
     }
