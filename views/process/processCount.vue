@@ -169,6 +169,7 @@
           orgId: '', //组织机构id
           projectItemId: '' //工程分部分项id
         },
+        orgCodeid:'',   // 组织机构id
         querydataDialog: {   //指定工序列表
           projectItemId: '',
           pageNo: 1,
@@ -202,7 +203,10 @@
       initUserGroup() {
         // 初始化组织机构
         Organization.userGroupSelect().then(res => {
-          this.userGroupOption = res.data.data
+          console.log(res,"res")
+          this.userGroupOption = res.data.data;
+          // this.orgCodeid = res.data.data.id;
+          
         })
       },
       userGroupOnChange(data) {   //选择标段改动
@@ -231,15 +235,12 @@
         // 查询接口
         this.tableData = []
         let formData = {
-          // orgId: this.queryData.orgId,
           pageNo: this.queryData.pageNo,
           pageSize: this.queryData.pageSize,
-          // starttime: this.queryData.starttime,
-          // endtime: this.queryData.endtime,
-          codeid: this.queryData.projectItemId
+          codeid: this.queryData.projectItemId,
+          orgCodeid:this.queryData.orgId
         }
         request.post('/rest/processCheck/processStatistics', formData).then(res => {
-          console.log(res)
           this.total = res.data.data.totalCount
           this.tableData = res.data.data.data
         })

@@ -628,28 +628,28 @@ export default {
           { required: true, message: "请输入增减数量", trigger: "blur" }
         ],
         departId: [
-          { required: true, message: "请选择组织机构", trigger: "change" }
+          { required: true, message: "请选择组织机构", trigger: "blur" }
         ],
         projectItemId: [
-          { required: true, message: "请选择分部分项", trigger: "change" }
+          { required: true, message: "请选择分部分项", trigger: "blur" }
         ],
         meetingName: [
-          { required: true, message: "请选择会议主持人", trigger: "change" }
+          { required: true, message: "请选择会议主持人", trigger: "blur" }
         ],
         meetingNoteName: [
-          { required: true, message: "请选择会议记录人", trigger: "change" }
+          { required: true, message: "请选择会议记录人", trigger: "blur" }
         ],
         handleUserName: [
-          { required: true, message: "请选择审核人", trigger: "change" }
+          { required: true, message: "请选择审核人", trigger: "blur" }
         ],
         copyUserName: [
-          { required: true, message: "请选择抄送人", trigger: "change" }
+          { required: true, message: "请选择抄送人", trigger: "blur" }
         ],
         meetingDatetime: [
-          { required: true, message: "请选择开会时间", trigger: "change" }
+          { required: true, message: "请选择开会时间", trigger: "blur" }
         ],
         plancompletionTime: [
-          { required: true, message: "请选择计划完成时间", trigger: "change" }
+          { required: true, message: "请选择计划完成时间", trigger: "blur" }
         ]
       }, //表单校验规则
       userGroupDefaultProps: {

@@ -335,6 +335,31 @@
       class="dialogBox"
       append-to-body
     >
+       <div class="topBar">
+        <span>组织机构：</span>
+        <el-select
+          v-model="copyQueryParam.userGroupId"
+          placeholder="请选择"
+          @change="copyUserGroupOnClick()"
+        >
+          <el-option
+            v-for="item in copyUserGroupTree"
+            :key="item.id"
+            :label="item.departname"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <span>用户名：</span>
+        <el-input v-model="copyQueryParam.username" placeholder="请输入用户名"></el-input>
+
+         <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="queryCopy">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="resetCopy()">重置
+              </el-button>
+            </div>
+      </div>
       <el-table
         ref="changeSingleTable"
         :data="handlePersonData"
@@ -567,14 +592,22 @@ export default {
     this.initUserGrouptTree();
     this.getChangeName();
     this.today();
+     
   },
   methods: {
     queryCopy(){
         this.initCopyUsersList();
     },
+     nowDate(){
+        let data = new Date();
+       
+     },
+
+
     resetCopy(){
         this.copyQueryParam.userGroupId = '';
         this.copyQueryParam.realname = '';
+        this.copyQueryParam.username = '';
         this.initCopyUsersList();
     },
     query(){
@@ -589,7 +622,7 @@ export default {
          let nowTime = new Date();
          this.myApplyChangeForm.meetingDatetime = nowTime.toLocaleDateString().replace(/\//g, "-");
          this.myApplyChangeForm.plancompletionTime = nowTime.toLocaleDateString().replace(/\//g, "-");
-
+         
     },
     //记要名称
     getChangeName() {
@@ -690,6 +723,7 @@ export default {
       //选择处理人弹框
       this.dialogHandleFormVisible = true;
       this.loadNextJobUserList();
+      this.initCopyUserGrouptTree();
     },
     loadNextJobUserList() {
       //返回所有的处理人
@@ -708,6 +742,7 @@ export default {
     },
     subimtHandlerPerson() {
       //返回处理人对象
+     
       this.myApplyChangeForm.handleUserName = this.selectedHandlerPersonRow.realname;
       this.myApplyChangeForm.userId = this.selectedHandlerPersonRow.id;
       this.dialogHandleFormVisible = false; //弹框消失

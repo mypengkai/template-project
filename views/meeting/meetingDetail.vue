@@ -385,7 +385,7 @@ ul, ol {
     height: 48px;
     line-height: 48px;
     background-color: #FFF;
-    color: red;
+    color: blue;
     cursor: pointer;
     border-bottom: 1px solid #EBEEF5;
     font-size: 13px;
@@ -397,7 +397,6 @@ ul, ol {
 /deep/.el-timeline .el-timeline-item:last-child .el-timeline-item__tail {
     display: block;
 }
-
 
 button{
    text-align: right;

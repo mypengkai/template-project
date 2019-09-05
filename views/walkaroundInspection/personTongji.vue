@@ -61,14 +61,13 @@
       <el-table-column prop="realname" label="用户姓名" min-width="80"></el-table-column>
       <el-table-column prop="job_name_cn" label="职务" min-width="80"></el-table-column>
       <el-table-column prop="CheckNumber" label="验收" min-width="80"></el-table-column>
-      <el-table-column prop="date" label="自检" min-width="80"></el-table-column>
+      <el-table-column prop="SelfCheckNumber" label="自检" min-width="80"></el-table-column>
       <el-table-column prop="ReceivedInstructNumber" label="收到指令" min-width="80"></el-table-column>
       <el-table-column prop="IssueInstructNumber" label="发出指令" min-width="80"></el-table-column>
       <el-table-column prop="CompleteInstructNumber" label="完成指令" min-width="80"></el-table-column>
       <el-table-column prop="PatrolNumber" label="巡视次数" min-width="80"></el-table-column>
-      <el-table-column prop="date" label="旁站次数" min-width="80"></el-table-column>
-     
-      <el-table-column prop="name" label="视频" min-width="80"></el-table-column>
+      <el-table-column prop="SideNumber" label="旁站次数" min-width="80"></el-table-column>
+      <el-table-column prop="RoleVideoNumber" label="视频" min-width="80"></el-table-column>
       <el-table-column prop="PhotoNumber" label="照片" min-width="80"></el-table-column>
     </el-table>
     <!-- 分页条 -->
