@@ -25,7 +25,7 @@
         </el-col>
         <el-col :span="6">
           <span>会议编号:</span>
-          <el-input placeholder="请输入会议编码" v-model="sendData.meetingSummaryNumber"></el-input>
+          <el-input placeholder="请输入会议编号" v-model="sendData.meetingSummaryNumber"></el-input>
         </el-col>
 
         <el-col :span="6">

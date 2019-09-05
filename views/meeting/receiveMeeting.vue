@@ -73,7 +73,7 @@
       style="width: 100%"
       height="66vh"
     >
-      <el-table-column prop="meetingSummaryNumber" label="会议编码" align="center"></el-table-column>
+      <el-table-column prop="meetingSummaryNumber" label="会议编号" align="center"></el-table-column>
       <el-table-column prop="meetingTheme" label="会议主题" align="center"></el-table-column>
       <el-table-column prop="meetingAddress" label="会议地址" align="center"></el-table-column>
       <el-table-column prop="addDecreaseMoney" label="增减金额(万元)" align="center"></el-table-column>
