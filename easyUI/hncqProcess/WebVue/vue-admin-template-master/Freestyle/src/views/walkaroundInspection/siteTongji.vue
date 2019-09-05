@@ -48,10 +48,10 @@
     </div>
     <el-table class="textList" :data="tableData" border style="width: 100%;" height="72vh" fit>
       <el-table-column prop="realname" label="巡视人/旁站人" align="center" width=""></el-table-column>
-      <el-table-column prop="pollingNumber" label="巡视次数" align="center" width="100"></el-table-column>
-      <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width="100"></el-table-column>
-      <el-table-column prop="commandpollingrangeNumber" label="巡视发起指令次数" align="center" width="100"></el-table-column>
-      <el-table-column prop="commandsideStationNumber" label="旁站发起指令次数" align="center" width="100"></el-table-column>
+      <el-table-column prop="pollingNumber" label="巡视次数" align="center" width=""></el-table-column>
+      <el-table-column prop="sideStationNumber" label="旁站次数" align="center" width=""></el-table-column>
+      <el-table-column prop="commandpollingrangeNumber" label="巡视发起指令次数" align="center" width=""></el-table-column>
+      <el-table-column prop="commandsideStationNumber" label="旁站发起指令次数" align="center" width=""></el-table-column>
     </el-table>
     <!-- 分页条 -->
     <el-pagination

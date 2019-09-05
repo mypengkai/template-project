@@ -188,8 +188,9 @@ export default {
                 message: "处理成功",
                 type: "warn"
               });
-              this.$emit("cancel"); //关闭弹框
               this.$emit("comfirm");
+              this.$emit("cancel"); //关闭弹框
+              
             }
           });
         } else {

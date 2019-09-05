@@ -27,7 +27,7 @@
 
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="getList" style="width: 100%" height="70vh">
+      <el-table border class="textList" :data="getList" style="width: 100%" height="72vh">
         <el-table-column prop="title" label="通知标题"></el-table-column>
         <el-table-column prop="createName" label="发起人" align="center" width="150"></el-table-column>
         <el-table-column prop="realnames" label="接收人" align="center" width="450"></el-table-column>
