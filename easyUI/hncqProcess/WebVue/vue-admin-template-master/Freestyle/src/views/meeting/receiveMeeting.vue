@@ -223,27 +223,11 @@ export default {
         pId: "0"
       }).then(res => {
         this.projectItemTreeOption = res.data.data;
-        this.$refs.getSelectData.labelModel = "";
       });
-    },
-    handleUserGroupOnClick(data) {
-      // 组织机构树点击事件
-      this.projectItemTree = []; //清空数据
-      if (data.children.length === 0) {
-        this.sendData.departId = data.id;
-        project.projectList({ orgId: data.id }).then(res => {
-          this.projectItemTree = res.data.data;
-        });
-      } else {
-        this.$message({
-          message: "施工单位下才有工程分部分项"
-        });
-        return false;
-      }
     },
     handleProjectItemChange(data) {
       // 工程分部分项id
-      this.sendData.projectItemId = data.id;
+      this.sendData.projectCode = data.id;
     },
     query() {
       //查询

@@ -27,21 +27,38 @@
           <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
           <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
           <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
-          <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !=''">计划完成时间：{{item.planFinishTime}}</p>
-          <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !='' " >实际完成时间：{{item.finishTime}}</p>
-          <p v-if=" item.userRole !=null || item.userRole !='' ">指令内容：{{item.remark}}</p>
-          <div class="imgBox" v-if=" item.userRole !=null || item.userRole !='' ">影像资料：
-            <ul>
-              <li v-for="(node, key) in item.files" :key="key">
-                <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                  <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
-                </template>
-                <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                  <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
-                </template>
-              </li>
-            </ul>
-          </div>
+           <template v-if="item.userRole==-1">
+                 <p>指令内容：{{item.remark}}</p>
+                  <div class="imgBox">影像资料：
+                    <ul>
+                      <li v-for="(node, key) in item.files" :key="key">
+                        <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                          <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                        </template>
+                        <template v-else-if="node.fileType=='mp4' || node.fileType=='mov'">
+                          <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
+                        </template>
+                      </li>
+                    </ul>
+                  </div>
+           </template>
+          <template v-else-if="item.userRole==0 || item.userRole==1 || item.userRole==2 || item.userRole==3">
+                  <p>计划完成时间：{{item.planFinishTime}}</p>
+                  <p>实际完成时间：{{item.finishTime}}</p>
+                  <p>指令内容：{{item.remark}}</p>
+                  <div class="imgBox">影像资料：
+                    <ul>
+                      <li v-for="(node, key) in item.files" :key="key">
+                        <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                          <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                        </template>
+                        <template v-else-if="node.fileType=='mp4' || node.fileType=='mov'">
+                          <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
+                        </template>
+                      </li>
+                    </ul>
+                  </div>
+          </template>
         </el-timeline-item>
       </el-timeline>
     </div>

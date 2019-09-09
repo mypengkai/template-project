@@ -129,7 +129,8 @@
         })
       },
       userGroupOnChange(data) {  // 组织机构下拉树
-        this.sendData.orgId = data
+        this.sendData.orgId = data;
+        this.sendData.departId = data;
         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
           this.projectItemTreeOptions = res.data.data
           this.$refs.getSelectData.labelModel = ''

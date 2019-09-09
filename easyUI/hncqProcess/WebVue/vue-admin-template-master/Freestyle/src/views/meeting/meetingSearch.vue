@@ -1,64 +1,5 @@
 <template>
   <div class="p20">
-    <!-- <div class="topBar">
-      <el-row>
-        <el-col :span="6">
-          <span>组织机构:</span>
-          <el-select v-model="sendData.departId" placeholder="请选择" @change="checkDepart()">
-            <el-option
-              v-for="item in userGroupTree"
-              :key="item.id"
-              :label="item.departname"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          <span>分部分项:</span>
-          <select-tree
-            clearable
-            :options="projectItemTreeOption"
-            :props="projectItemDefaultProps"
-            v-on:noDe="handleProjectItemChange"
-            ref="getSelectData"
-          />
-        </el-col>
-        <el-col :span="6">
-          <span>会议主题:</span>
-          <el-input placeholder="请输入会议主题" v-model="sendData.meetingTheme"></el-input>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="topBar">
-      <el-row>
-        <el-col :span="6">
-           <span>变更等级:</span>
-          <el-select v-model="sendData.moneyLevel" placeholder="请选择变更等级">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>
-
-        <el-col :span="6" style="margin-left:50%">
-          <el-button
-            class="pan-btn light-blue-btn"
-            type="primary"
-            icon="el-icon-search"
-            @click="query()"
-          >查询</el-button>
-          <el-button
-            type="primary"
-            class="pan-btn light-blue-btn"
-            icon="el-icon-refresh"
-            @click="reset()"
-          >重置</el-button>
-        </el-col>
-      </el-row>
-    </div> -->
      <div class="topBar">
       <el-row>
         <el-col :span="6">
@@ -258,8 +199,9 @@ export default {
         this.userGroupTree = res.data.data;
       });
     },
-    checkDepart() {
+    checkDepart(val) {
       let orgId = this.sendData.departId;
+      //this.sendData.departId = val
       // 分部分项数据
       Organization.getProjectItemFromLayer({
         userGroupId: orgId,
@@ -269,24 +211,9 @@ export default {
         this.$refs.getSelectData.labelModel = "";
       });
     },
-    handleUserGroupOnClick(data) {
-      // 组织机构树点击事件
-      this.projectItemTree = []; //清空数据
-      if (data.children.length === 0) {
-        this.sendData.departId = data.id;
-        project.projectList({ orgId: data.id }).then(res => {
-          this.projectItemTree = res.data.data;
-        });
-      } else {
-        this.$message({
-          message: "施工单位下才有工程分部分项"
-        });
-        return false;
-      }
-    },
     handleProjectItemChange(data) {
       // 工程分部分项id
-      this.sendData.projectItemId = data.id;
+      this.sendData.projectCode = data.id;
     },
     query() {
       //查询

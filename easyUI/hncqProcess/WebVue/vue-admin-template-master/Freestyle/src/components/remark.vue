@@ -1,21 +1,25 @@
 <template>
   <div class="remark">
-    <ul>
-      <li
-        v-for="(item,index) in remarkList"
-        :key="index"
-        @click="getRemark(item,index)"
-        :class="{selected:index==active}"
-      >
-        <span class="el-icon-tickets"></span>
-        <span>{{item.text}}</span>
-      </li>
-    </ul>
-
-    <div class="btnBox">
-      <el-button type="info" @click="cancel">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
-    </div>
+      <div v-if="remarkList.length>0" class="conent">
+          <ul>
+            <li
+              v-for="(item,index) in remarkList"
+              :key="index"
+              @click="getRemark(item,index)"
+              :class="{selected:index==active}"
+            >
+              <span class="el-icon-tickets"></span>
+              <span>{{item.text}}</span>
+            </li>
+          </ul>
+          <div class="btnBox">
+            <el-button type="info" @click="cancel">取消</el-button>
+            <el-button type="primary" @click="confirm">确定</el-button>
+          </div>
+      </div>
+      <div v-else>
+           暂无回复数据,如有需要请在统一回复添加
+      </div>
   </div>
 </template>
 <script>
@@ -68,10 +72,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .remark {
-  max-height: 50vh;
+  height: 50vh;
   overflow-x: hidden;
   padding: 0 30px;
   margin: 0;
+ 
   ul {
     padding: 0;
     margin: 0;
@@ -87,13 +92,11 @@ export default {
     }
   }
   .btnBox {
-    display: flex;
-    justify-content: flex-end;
-    .el-button {
-      margin: 5px;
-    }
+     margin-left:60%;
+     margin-top:35%;
   }
 }
+
 .selected {
   color: blue;
   font-weight: bold;

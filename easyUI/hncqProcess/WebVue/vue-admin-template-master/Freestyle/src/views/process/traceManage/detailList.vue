@@ -8,8 +8,13 @@
         :key="index"
         @click="pictureLook(item)"
       >
-        <div class="pictureBox">
-          <img :src="item.filePath" alt />
+        <div class="pictureBox" >
+            <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
+              <img :src="item.filePath" alt />
+            </template>
+              <template  v-else-if="item.filetype==='mp4' || item.filetype==='mov'">
+                <img :src="url" alt />
+             </template>
         </div>
         <div class="p20-contation">
           <el-row>
@@ -58,8 +63,13 @@
         :key="index"
         @click="pictureLook(item)"
       >
-        <div class="pictureBox">
-          <img :src="item.filePath" alt />
+        <div class="pictureBox" >
+            <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
+              <img :src="item.filePath" alt />
+            </template>
+              <template  v-else-if="item.filetype==='mp4' || item.filetype==='mov'">
+                <img :src="url" alt />
+             </template>
         </div>
         <div class="p20-contation">
           <el-row>
@@ -70,11 +80,10 @@
               <template v-else-if="item.infoLogType == 'sideStation'">旁站</template>
               <template v-else-if="item.infoLogType == 'meeting'">变更纪要</template>
             </el-col>
-            <el-col :span="14">
+            <el-col :span="24">
               <div
                 class="grid-content bg-purple timeOut"
-                style="color:#409eff"
-              >{{item.infoLogCreateTime}}</div>
+              ><span>创建时间:</span>&nbsp;&nbsp;{{item.infoLogCreateTime}}</div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -177,20 +186,71 @@ export default {
       hackReset: false,
       meetId: "", // 会议id
       nowItem: [], // 旁站数据 巡视
-      commandList: {} // 指令数据
+      commandList: {}, // 指令数据
+      url:'',
     };
   },
   created() {
-     
+      //this.initImg();
+      
   },
-  
+  watch:{
+      conentOptions(val){
+          //console.log(val,"val")
+          val.forEach(e => {
+              if(e.filetype=='mp4'){
+                   let str = e.filePath;
+                   let endstr = str.replace("mp4","jpg");
+                   this.url = endstr;
+                   console.log(this.url)
+                   //console.log(endstr)  
+              }else if(e.filetype=='mov'){
+                   let str = e.filePath;
+                   let endstr = str.replace("mov","jpg");
+                   this.url = endstr;
+                   console.log(endstr,"endstr")
+              }
+               //console.log(e.filePath)
+          });
+      },
+      userOptions(val){
+            val.forEach(e => {
+              if(e.filetype=='mp4'){
+                   let str = e.filePath;
+                   let endstr = str.replace("mp4","jpg");
+                   this.url = endstr;
+                   console.log(this.url)
+                   //console.log(endstr)  
+              }else if(e.filetype=='mov'){
+                   let str = e.filePath;
+                   let endstr = str.replace("mov","jpg");
+                   this.url = endstr;
+                   console.log(endstr,"endstr")
+              }
+               //console.log(e.filePath)
+          });
+      },
+       deep:true,
+  },
   computed: {
     title() {
       return this.traceType === 1 ? "工程痕迹管理" : "人员痕迹管理";
     }
   },
-
   methods: {
+     //
+    //  initImg(){
+    //      let array = this.conentOptions;
+    //      for(var i=0;i<array.length;i++){
+    //           if(array[i].filetype=='mp4' || array[i].filetype=='mov'){
+    //              let str =  array[i].filePath;
+    //              let endstr = str.substring(str.length-3); 
+    //              console.log(endstr)
+    //           }
+    //      }
+    //  },
+
+
     //查看详细
     pictureLook(item) {
       //指令
@@ -281,7 +341,6 @@ export default {
       background: url("./images/bkg007.png") no-repeat;
       background-size: 100% 100%;
       height: 150px;
-
       img {
         width: 100%;
         height: 100%;

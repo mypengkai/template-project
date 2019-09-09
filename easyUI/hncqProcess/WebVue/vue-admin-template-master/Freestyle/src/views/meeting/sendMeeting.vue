@@ -1,51 +1,5 @@
 <template>
   <div class="p20">
-    <!-- <div class="topBar">
-      <el-row>
-        <el-col :span="6">
-          <span>组织机构:</span>
-          <el-select v-model="sendData.departId" placeholder="请选择" @change="checkDepart()">
-            <el-option
-              v-for="item in userGroupTree"
-              :key="item.id"
-              :label="item.departname"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-col>
-
-        <el-col :span="6">
-          <span>分部分项:</span>
-          <select-tree
-            clearable
-            :options="projectItemTreeOption"
-            :props="projectItemDefaultProps"
-            v-on:noDe="handleProjectItemChange"
-            ref="getSelectData"
-          />
-        </el-col>
-        <el-col :span="6" style="margin-left:25%">
-          <el-button
-            class="pan-btn light-blue-btn"
-            type="primary"
-            icon="el-icon-search"
-            @click="query()"
-          >查询</el-button>
-          <el-button
-            type="primary"
-            class="pan-btn light-blue-btn"
-            icon="el-icon-refresh"
-            @click="reset()"
-          >重置</el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-circle-plus-outline"
-            class="pan-btn light-blue-btn"
-            @click="apply()"
-          >创建</el-button>
-        </el-col>
-      </el-row>
-    </div> -->
       <div class="topBar">
       <el-row>
         <el-col :span="6">

@@ -97,21 +97,38 @@
               <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
               <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
 
-              <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !=''">计划完成时间：{{item.planFinishTime}}</p>
-              <p v-if="item.userRole !=-1 || item.userRole !=null || item.userRole !='' " >实际完成时间：{{item.finishTime}}</p>
-              <p v-if=" item.userRole !=null || item.userRole !='' ">指令内容：{{item.remark}}</p>
-              <div class="imgBox" v-if=" item.userRole !=null || item.userRole !='' ">影像资料：
-                <ul>
-                  <li v-for="(node, key) in item.files" :key="key">
-                    <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                      <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
-                    </template>
-                    <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                      <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
-                    </template>
-                  </li>
-                </ul>
-              </div>
+                <template v-if="item.userRole==-1">
+                  <p>指令内容：{{item.remark}}</p>
+                    <div class="imgBox">影像资料：
+                      <ul>
+                        <li v-for="(node, key) in item.files" :key="key">
+                          <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                            <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                          </template>
+                          <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                            <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
+                          </template>
+                        </li>
+                      </ul>
+                    </div>
+              </template>
+              <template v-else-if="item.userRole==0 || item.userRole==1 || item.userRole==2 || item.userRole==3">
+                      <p>计划完成时间：{{item.planFinishTime}}</p>
+                      <p>实际完成时间：{{item.finishTime}}</p>
+                      <p>指令内容：{{item.remark}}</p>
+                      <div class="imgBox">影像资料：
+                        <ul>
+                          <li v-for="(node, key) in item.files" :key="key">
+                            <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
+                              <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                            </template>
+                            <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
+                              <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
+                            </template>
+                          </li>
+                        </ul>
+                      </div>
+              </template>
             </el-timeline-item>
           </el-timeline>
         </div>
@@ -150,7 +167,7 @@
 
     <!-- 转发信息 -->
     <el-dialog class="dialogBox" width="40%" title="指令转发" :visible.sync="innerTranspondDialog" append-to-body>
-      <el-form :model="transpondForm" label-width="130px">
+      <el-form :model="transpondForm" label-width="120px">
         <el-form-item label="处理人：" prop="transpondName">
           <el-input readonly v-model="transpondForm.transpondName" @focus="alertAcceptUserDialog('transpond')" clearable placeholder="请选择">
         </el-input>
@@ -158,11 +175,11 @@
         <el-form-item label="计划完成时间：" prop="planFinishTime">
           <el-date-picker v-model="transpondForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
-
+         <el-button type="success" style=" margin-left:50px;padding:2px " @click="checkRemark">快捷回复</el-button>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="transpondForm.remark"></el-input>
         </el-form-item>
-        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+        
       </el-form>
       <div class="tar">
         <el-button @click="innerTranspondDialog = false">取 消</el-button>
@@ -176,15 +193,15 @@
         <el-form-item label="计划完成时间：" prop="planFinishTime">
           <el-date-picker v-model="returnForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
-
+        <el-button type="success" style=" margin-left:50px;padding:2px " @click="checkRemark">快捷回复</el-button>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="returnForm.remark"></el-input>
         </el-form-item>
-        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+        
 
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadReturn" :action="uploadUrlReturn" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="returnForm">
+          <el-upload class="avatar-uploader" ref="uploadReturn" :action="fileUploadUrl" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData" >
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleReturn">
@@ -200,18 +217,19 @@
 
     <!-- 指令完成modifytBtn -->
     <el-dialog class="dialogBox" width="40%" title="指令完成" :visible.sync="soonFinishDialog" append-to-body>
-      <el-form :model="soonFinishForm" label-width="130px">
+      <el-form :model="soonFinishForm" label-width="120px">
         <el-form-item label="完成时间：" prop="planFinishTime">
           <el-date-picker v-model="soonFinishForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
+         <el-button type="success" style=" margin-left:50px;padding:2px " @click="checkRemark">快捷回复</el-button>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="soonFinishForm.remark"></el-input>
         </el-form-item>
-        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+       
 
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadSoonFinish" :action="uploadUrlSoonFinish" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="soonFinishForm">
+          <el-upload class="avatar-uploader" ref="uploadSoonFinish" :action="fileUploadUrl" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleSoonFinish">
@@ -221,20 +239,21 @@
       </el-form>
       <div class="tar">
         <el-button @click="soonFinishDialog = false">取 消</el-button>
-        <el-button type="primary" @click="soonFinishCommand">确 定</el-button>
+        <el-button type="primary" @click="soonFinishCommand()">确 定</el-button>
       </div>
     </el-dialog>
 
     <!-- 指令复核 -->
     <el-dialog class="dialogBox" width="40%" title="指令复核" :visible.sync="finishDialog" append-to-body>
-      <el-form :model="finishForm" label-width="130px">
+      <el-form :model="finishForm" label-width="120px">
+         <el-button type="success" style=" margin-left:50px;padding:2px " @click="checkRemark">快捷回复</el-button>
         <el-form-item label="备注：">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="finishForm.remark"></el-input>
         </el-form-item>
-        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
+       
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadFinish" :action="uploadUrlFinish" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="finishForm">
+          <el-upload class="avatar-uploader" ref="uploadFinish" :action="fileUploadUrl" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleFinish">
@@ -266,8 +285,8 @@
         </el-form-item>
         <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
         <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadModify" :action="uploadUrlModify" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="modifyForm">
+          <el-upload class="avatar-uploader" ref="uploadModify" :action="fileUploadUrl" name="files" :headers="headers"
+                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleModify">
@@ -285,22 +304,25 @@
     <el-dialog title="图片预览" :visible.sync="dialogcommcheck" width="50%" append-to-body>
       <viewer :photo="commcheckList" :imgList="pictureOfCommand"></viewer>
     </el-dialog>
-
-    <!-- 图片预览 接收人-->
-    <el-dialog title="图片预览" :visible.sync="dialogcommchecks" width="50%" append-to-body>
-      <viewer :photo="commcheckList" :imgList="finishPictureOfCommand"></viewer>
+    
+     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
+      <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true" :options="playerOptions"></video-player>
     </el-dialog>
-   <!-- 快速备注 -->
+
+
      <el-dialog :visible.sync="dialogRemark" title="自动回复" width="40%" append-to-body>
         <remark @setRemark="getRemark" @cancel="dialogRemark=false" :type="'command'"></remark>
     </el-dialog>
+    
+     
+
   </div>
 </template>
 
 <script>
   import request from '../../../utils/request'
   import { getToken } from '@/utils/auth'
-  import instruct from '@/api/instruct.js'
+  import instructApi from '@/api/instruct.js'
   import project from '@/api/project.js'
   import Organization from '@/api/Organization.js'
   import processInfo from '@/api/process.js'
@@ -461,6 +483,7 @@ import { debug } from 'util';
             type: 'primary',
             icon: 'el-icon-s-check'
           }],
+
         answer: '', // 转发响应变量
         nowType: 0,
         activeIndex: '1',
@@ -469,10 +492,13 @@ import { debug } from 'util';
         newactiveIndex: '1',
         newactiveIndex2: '1',
         uploadUrl: process.env.BASE_API + '/rest/command/addCommand',
-        uploadUrlReturn: process.env.BASE_API + '/rest/command/returnCommand',
-        uploadUrlSoonFinish: process.env.BASE_API + '/rest/command/soonFinishCommand',
-        uploadUrlFinish: process.env.BASE_API + '/rest/command/finishCommand',
-        uploadUrlModify: process.env.BASE_API + '/rest/command/modifyCommand',
+
+        // uploadUrlReturn: process.env.BASE_API + '/rest/command/returnCommand',
+        // uploadUrlSoonFinish: process.env.BASE_API + '/rest/command/soonFinishCommand',
+        // uploadUrlFinish: process.env.BASE_API + '/rest/command/finishCommand',
+        // uploadUrlModify: process.env.BASE_API + '/rest/command/modifyCommand',
+
+        fileUploadUrl:  process.env.BASE_API + '/rest/command/videoOrImageUpload',  // 修改
         dialogImageUrl: '',
         dialogImageUrlReturn: '',
         dialogImageUrlSoonFinish: '',
@@ -506,6 +532,15 @@ import { debug } from 'util';
         //     trigger: 'blur'
         //   }
         // },
+        //文件
+        fileData: {
+        commandid: "", // 指令id
+        typeState: -1,
+        lgt: "",
+        lat: "",
+        photoLocation: "",
+        commandsendid: ""
+      },
         //   转发指令
         transpondForm: {
           commanduserId: '', // 指令用户表id
@@ -670,6 +705,7 @@ import { debug } from 'util';
           this.soonFinishForm.commandid = ObCopyData.id // 完成指令
           this.finishForm.commandid = ObCopyData.id // 复核指令
           this.modifyForm.commandid = ObCopyData.id // 修改指令
+          this.fileData.commandid = ObCopyData.id
           let nowUserId = localStorage.getItem('userId')
           //处理按钮显示与否
           /* -1 发起人
@@ -741,13 +777,6 @@ import { debug } from 'util';
         this.initProcessByTypeId(data.id)
 
       },
-
-      /*   initProcessTypeDict() {  // 初始化新增工序类型input框数据
-           request.post('/rest/processType/getList').then(res => {
-             this.processMDictOption = res.data.data.data
-             this.initProcessByTypeId(this.processMDictOption[0].id)
-           })
-         },*/
       initProcessByTypeId(codeid) {   // 初始化新增工序通过工序类型id
         this.processSDictOption = []  //先清空
         this.processSDictOption.unshift({ process: '全部' })
@@ -777,70 +806,6 @@ import { debug } from 'util';
         })
         this.innerVisibleSon = true
       },
-      convertIcon(activity, type) {
-        // 发出指令的人
-        /* -1 发起人
-         0 转发
-         1 完成
-         2 复核
-         3 退回*/
-        if (activity.userRole == 1) {
-          if (type === 'icon') {
-            return this.activitiesIcon[3].icon
-          } else if (type === 'type') {
-            return this.activitiesIcon[3].type
-          }
-        } else if (activity.userRole == null) {
-          //转发指令的人
-          if (type === 'icon') {
-            return this.activitiesIcon[2].icon
-          } else if (type === 'type') {
-            return this.activitiesIcon[2].type
-          }
-        } else if (activity.userRole == 3) {
-          // 正在处理指令
-          if (type === 'icon') {
-            return this.activitiesIcon[1].icon
-          } else if (type === 'type') {
-            return this.activitiesIcon[1].type
-          }
-        } else if (activity.userRole == -1) {
-          //完成指令的人
-          if (type === 'icon') {
-            return this.activitiesIcon[0].icon
-          } else if (type === 'type') {
-            return this.activitiesIcon[0].type
-          }
-        } else if (activity.userRole == 0) {
-          //完成指令的人
-          if (type === 'icon') {
-            return this.activitiesIcon[1].icon
-          } else if (type === 'type') {
-            return this.activitiesIcon[1].type
-          }
-        } else if (activity.userRole == 2) {
-          //完成指令的人
-          if (type === 'icon') {
-            return this.activitiesIcon[4].icon
-          } else if (type === 'type') {
-            return this.activitiesIcon[4].type
-          }
-        } else if (activity.userRole == 3) {
-          //完成指令的人
-          if (type === 'icon') {
-            return this.activitiesIcon[5].icon
-          } else if (type === 'type') {
-            return this.activitiesIcon[5].type
-          }
-        }
-      },
-      /*    handleCheckChange(data) {  // 组织机构选择后的数据
-            this.form.userGroupId = data.id;
-            this.form.userGroupName =data.name;
-            project.projectList({orgId: data.id}).then(res => {
-              this.projectItemTree = res.data.data;
-            });
-          },*/
       handleProjectItemOnClick(data) { // 分部分项选择后的数据
         this.form.projectItemId = data.id
         this.form.projectItemName = data.name
@@ -854,23 +819,6 @@ import { debug } from 'util';
       handleReceiveUserGroupCheckChange(data) {   //选择接收人后的组织机构弹框
         this.receiveData.userGroupId = data
         this.receiveUserList()
-      },
-      _comfirm(form) {  //提交
-        if (this.nowItem === 'add') {  // 新增
-          //debugger;
-           this.$refs[form].validate((valid) => {
-            //debugger;
-             console.log(valid,"valid")
-            if (valid) {
-                this.$refs.upload.submit();
-                this.$emit('cancel')
-                this.reload()
-            } else {
-              console.log('error submit!!');
-              return false;
-            }
-          });
-        }
       },
       close() {
         this.$emit('cancel')
@@ -892,7 +840,7 @@ import { debug } from 'util';
           })
           return false
         }
-        instruct.InstructionCommand(this.transpondForm).then(res => {
+        instructApi.InstructionCommand(this.transpondForm).then(res => {
           let _message = res.data.message
           if (_message == '成功') {
             this.answer = 'success'
@@ -909,36 +857,70 @@ import { debug } from 'util';
       },
       returnCommand(returnForm) {  // 退回指令
         this.$refs[returnForm].validate((valid) => {
+          let that = this;
           if (valid) {
-            this.$refs.uploadReturn.submit()
-            this.$emit('cancel')
-            this.reset()
+              instructApi.returnCommand(that.returnForm).then(res => {
+                if (res.data.ok) {
+                  that.fileData.commandsendid = res.data.data;
+                  that.$refs.uploadReturn.submit();
+                  that.$emit('cancel')
+                  that.reset()
+              }
+                
+          });
+          //this.$emit("cancel");
+          //this.reload();
+
+            // this.$refs.uploadReturn.submit()
+            // this.$emit('cancel')
+            // this.reset()
           } else {
             console.log('error submit!!');
             return false;
           }
         });
-
-
-        // this.$refs.uploadReturn.submit()
-        // this.$emit('cancel')
-        // this.reset()
-        // })
       },
       soonFinishCommand() {  // 完成指令
-        this.$refs.uploadSoonFinish.submit()
-        this.$emit('cancel')
-        this.reset()
+          instructApi.soonFinishCommand(this.soonFinishForm).then(res => {
+                if (res.data.ok) {
+                  this.fileData.commandsendid = res.data.data;
+                  this.$refs.uploadSoonFinish.submit();
+                  this.$emit('cancel')
+                  this.reset()
+              }
+          })
+        // this.$refs.uploadSoonFinish.submit()
+        // this.$emit('cancel')
+        // this.reset()
       },
       finishCommand() {  // 完成指令
-        this.$refs.uploadFinish.submit()
-        this.$emit('cancel')
-        this.reset()
+           instructApi.finishCommand(this.finishForm).then(res => {
+                if (res.data.ok) {
+                  this.fileData.commandsendid = res.data.data;
+                  this.$refs.uploadFinish.submit();
+                  this.$emit('cancel')
+                  this.reset()
+              }
+          })
+
+        // this.$refs.uploadFinish.submit()
+        // this.$emit('cancel')
+        // this.reset()
       },
       modifyCommand() {  // 完成指令
-        this.$refs.uploadModify.submit()
-        this.$emit('cancel')
-        this.reset()
+         instructApi.finishCommand(this.modifyForm).then(res => {
+                if (res.data.ok) {
+                  this.fileData.commandsendid = res.data.data;
+                  this.$refs.uploadModify.submit();
+                  this.$emit('cancel')
+                  this.reset()
+              }
+          })
+
+
+        // this.$refs.uploadModify.submit()
+        // this.$emit('cancel')
+        // this.reset()
       },
       handleCurrentChange(val) {   //确认接收人
         if (this.dialogState === 'receive') {
@@ -975,26 +957,7 @@ import { debug } from 'util';
           S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
         )
       },
-      /*      //图片预览  (发起人)
-            actionImg(item) {
-              let array = []
-              array.push(item)
-              this.commcheckList = array
-              this.dialogcommcheck = true
-              this.pictureOfCommand.splice(index, 1)
-              this.pictureOfCommand.unshift(item)
-            },
-            //图片预览(接收人)
-            actionImgs(item) {
-              let array = []
-              array.push(item)
-              this.commcheckList = array
-              this.dialogcommchecks = true
-              this.finishPictureOfCommand.splice(index, 1)
-              this.finishPictureOfCommand.unshift(item)
-            },*/
-      pictureShows(node) {
-
+      pictureShow(node) {
         let newArr = []
         for (let i = 0; i < node.length; i++) {
           if (node[i].fileType == 'jpg' || node[i].fileType == 'png' || node[i].fileType == 'jpeg') {
@@ -1002,22 +965,13 @@ import { debug } from 'util';
           }
         }
         this.pictureOfCommand = newArr
-        // this.zhuanghao = this.currentProcess.zhuanghao
         this.dialogcommcheck = true
       },
-      videoPlayerShow(node) {
-        this.playerOptions.sources = []
-        let newArrVedio = []
-        for (let i = 0; i < node.length; i++) {
-          if (node.fileType == 'mp4' || node.fileType == 'mov') {
-            newArrVedio.push(node)
-          }
-        }
+       videoPlayerShow(node) {
         this.playerOptions.sources[0] = {
           src: node.filePath,
           type: 'video/mp4'
         }
-        this.poster = node.filePath.split('.')[0] + 'jpg'
         this.vedioinnerVisible = true
       }
     }

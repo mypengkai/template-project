@@ -2,7 +2,7 @@
   <div class="p20">
     <div class="topBar">
       <el-row>
-        <el-col :span="5">
+        <!-- <el-col :span="5">
           <span>组织机构:</span>
           <el-select v-model="sendData.orgId" placeholder="请选择" @change="userGroupOnChange">
             <el-option v-for="item in userGroupTreeOptions" :key="item.id" :label="item.departname"
@@ -13,8 +13,8 @@
           <span>分部分项:</span>
           <select-tree clearable :options="projectItemTreeOptions" ref="getSelectData" :props="projectItemDefaultProp"
                        v-on:noDe="projectItemOnClick"/>
-        </el-col>
-        <el-col :span="10">
+        </el-col> -->
+        <el-col :span="16">
           <span>巡视日期:</span>
           <el-date-picker v-model="sendData.startTime" type="date" placeholder="选择日期" size="small"
                           style="min-width:180px"
