@@ -60,13 +60,17 @@
                    layout="total, sizes, prev, pager, next, jumper" @current-change="_searchList()" :total="total" @size-change="handleSizeChange">
     </el-pagination>
 
-    <!-- 编辑弹框 -->
-    <el-dialog width="70%" class="dialogBox" :title="instruectTitle" :visible.sync="dialogFormVisible">
-      <addInstruct @cancel="dialogFormVisible=false" @comfirm="reset()" :nowItem="nowItem"></addInstruct>
+    <!-- 新增 -->
+    <el-dialog width="70%" class="dialogBox" title="指令新增" :visible.sync="dialogFormVisible">
+      <addInstruct @cancel="dialogFormVisible=false" @comfirm="reset()"  v-if="flag"></addInstruct>
     </el-dialog>
     <!-- 查看 -->
     <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogCheckVisible">
       <orderInstruct :nowItem="nowItem"></orderInstruct>
+    </el-dialog>
+    <!-- 修改 -->
+    <el-dialog width="70%" class="dialogBox" title="指令修改" :visible.sync="dialogmodVisible">
+      <modInstrucet @cancel="dialogFormVisible=false" @comfirm="reset()" :nowItem="nowItem" v-if="flag"></modInstrucet>
     </el-dialog>
   </div>
 </template>
@@ -79,13 +83,15 @@
   import Organization from '@/api/Organization'
   import addInstruct from "./components/addInstruct"
   import orderInstruct from "./components/orderInstruct"
+  import modInstrucet from "./components/modInstruct"
   export default {
     inject: ['reload'],
     components: {
       SelectTree,
       checkBox,
       addInstruct,
-      orderInstruct
+      orderInstruct,
+      modInstrucet
     },
     data() {
       return {
@@ -106,6 +112,7 @@
         orgId: '', //部门id
         sendData: {
           departId: '', //部门id
+          orgId:'',
           projectItemId: '', // 分部分项id
           starttime: '', // 开始时间
           endtime: '', // 结束时间
@@ -113,7 +120,7 @@
           pageSize: 10 // 每页条数
           // Mark: 1 //  标记：1：发送、2：接收
         },
-
+        
         nowItem: '',
         userGroupId: '',
         timeRange: '', // 时间日期范围
@@ -121,6 +128,8 @@
         projectItem: '', // 分部分项回填显示
         dialogFormVisible: false, // 查看编辑弹框
         dialogCheckVisible:false,
+        flag:false,
+        dialogmodVisible:false,
         innerVisible: false, // 组织机构弹框
         projectVisible: false // 工程分项弹框
       }
@@ -131,20 +140,30 @@
     },
     methods: {
       action() {
-        this.instruectTitle = "指令新增";
         this.dialogFormVisible = true;
+        this.flag = false
+        this.$nextTick(()=>{
+              this.flag = true
+        })
       },
       detailItem(id){
-        this.instruectTitle = "指令修改";
           api.searchOne({ id:id }).then(res=>{
               this.nowItem = res.data.data;
-              this.dialogFormVisible = true;
+              this.dialogmodVisible = true;
+          })
+          this.flag = false
+          this.$nextTick(()=>{
+                this.flag = true
           })
       },
       actionItem(id){
           api.searchOne({ id:id }).then(res=>{
               this.nowItem = res.data.data;
               this.dialogCheckVisible = true;
+          })
+          this.flag = false
+          this.$nextTick(()=>{
+                this.flag = true
           })
       },
       initUserGroup() {  // 初始化组织机构input框数据
@@ -153,7 +172,9 @@
         })
       },
       userGroupOnChange(data) {  // 组织机构下拉树
-        this.orgId = data
+        this.orgId = data;
+        this.sendData.departId = data;
+        this.sendData.orgId = data;
         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
           this.projectItemOptions = res.data.data
           this.$refs.getSelectData.labelModel = ''
@@ -167,6 +188,7 @@
         }
       },
       projectItemOnClick(data) {
+        console.log(data,"data")
         this.sendData.projectItemId = data.id
       },
       getinit(){

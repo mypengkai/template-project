@@ -173,13 +173,8 @@
       },
       query() {
         request.post('/rest/Patrol/userStatistics', {
-          // personType: this.queryData.personType || '',
-          // usergroupId: this.queryData.usergroupId || '',
-          /* startTime: this.queryData.startTime || '',
-           endTime: this.queryData.endTime || '',*/
-          // userId: this.queryData.userId || '',
-
           usergroupId: this.queryData.usergroupId ||'',
+          orgId:this.queryData.usergroupId ||'',
           realName: this.queryData.realName,
           startTime: this.queryData.startTime || '',
           endTime: this.queryData.endTime || '',

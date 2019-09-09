@@ -204,6 +204,7 @@
               message: '恭喜你，新增成功',
               type: 'success'
             })
+            
             this.dialogFormVisible = false
           }
         })

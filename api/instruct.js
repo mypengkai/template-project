@@ -15,22 +15,23 @@ export default {
   },
   // 指令退回
   returnCommand(data) {
-    return request.post('/rest/command/returnCommand', data)
+    return request.post('/rest/command/returnCommandPC', data)
   },
   // 指令复核
   finishCommand(data) {
-    return request.post('/rest/command/finishCommand', data)
+    return request.post('/rest/command/finishCommandPC', data)
   },
   // 指令完成
   soonFinishCommand(data) {
-    return request.post('/rest/command/soonFinishCommand', data)
+    return request.post('/rest/command/soonFinishCommandPC', data)
   },
   // 指令详情
   searchOne(data) {
     return request.post('/rest/command/searchOne', data)
   },
+  //修改
   modifyCommand(data) {
-    return request.post('/rest/command/modifyCommand', data)
+    return request.post('/rest/command/modifyCommandPC', data)
   },
   // 发送指令
   addCommand(data) {
@@ -39,6 +40,10 @@ export default {
   // 转发指令
   InstructionCommand(data) {
     return request.post('/rest/command/InstructionCommand', data)
+  },
+  //文件上传
+  uploadFile(data){
+    return request.post("/rest/command/videoOrImageUpload",data)
   }
 }
 

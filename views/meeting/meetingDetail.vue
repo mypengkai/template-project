@@ -8,6 +8,7 @@
                     <li><span>会议编号:</span><i>{{changeInfo.meetingSummaryNumber}}</i></li>
                     <li><span>会议主题:</span><i>{{changeInfo.meetingTheme}}</i></li>
                     <li><span>会议地点:</span><i>{{changeInfo.meetingAddress}}</i></li>
+                    <li><span>创建时间：</span><i>{{changeInfo.createTime}}</i></li>
                     <li><span>组织机构:</span><i>{{changeInfo.departname}}</i></li>
                     <li><span>分部分项:</span><i>{{changeInfo.projectItem}}</i></li>
                     <li><span>桩号:</span><i>{{(changeInfo.startStation!==null && changeInfo.startStation!=="" && changeInfo.startStation!==undefined && changeInfo.endStation!==null && changeInfo.endStation!=="" && changeInfo.endStation!==undefined) ? (changeInfo.startStation+'~'+changeInfo.endStation) : ''}}</i></li>
@@ -45,7 +46,7 @@
                   <span>流程:</span>
                   <el-timeline>
                     <el-timeline-item
-                      v-if="item.state !=3"
+                      v-if="item.state !=3 && item.state !=0"
                       v-for="(item, index) in newChangInfo.role"
                       :key="index"
                       :type="item.state==1? 'primary' :'danger' "
@@ -88,6 +89,7 @@
                                   <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
                                   <li><span>会议主题:</span><i>{{item.publicData.meetingTheme}}</i></li>
                                   <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>
+                                  <li><span>创建时间：</span><i>{{item.publicData.createTime}}</i></li>
                                   <li><span>组织机构:</span><i>{{item.publicData.departname}}</i></li>
                                   <li><span>分部分项:</span><i>{{item.publicData.projectItem}}</i></li>
                                   <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>
@@ -123,10 +125,10 @@
                                 </p>
                                 <p>
                                   <span>流程:</span>
-                                  <el-timeline id="timeline">
+                                  <el-timeline>
                                     <el-timeline-item 
-                                      v-if="item.state !=3"
-                                      v-for="(item, index) in newChangInfo.role"
+                                      v-if="item.state !=3 && item.state !=0"
+                                      v-for="(item, index) in item.role"
                                       :key="index"
                                       :type="item.state==1? 'primary' :'danger' "
                                     >
@@ -154,8 +156,8 @@
                                 </p>
                               </div>
                          </div>
-        </el-timeline-item>
-      </el-timeline>
+               </el-timeline-item>
+         </el-timeline>
     </div>
         <el-button type="primary" icon="el-icon-arrow-up" circle @click="toTop" v-show="historyChangeInfo.length>0"></el-button>
         </el-collapse-item>
@@ -342,7 +344,7 @@ ul, ol {
 .roleName{
     float: right;
     width:40%;
-    height: 55vh;
+    height: 60vh;
     overflow-x: hidden;
     p{
       span{

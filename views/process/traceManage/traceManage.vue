@@ -214,9 +214,9 @@
         request.post('/rest/mark/chakan', {
           pageNo: 1,
           pageSize: 10,
-         
           startTime: this.dateFrom, // 起始时间
           endTime: this.dateTo, // 结束时间
+          userGroupId:this.userGroupId,
           projectid: this.from.projectId, //工程ID
           orderby: this.active + 1, // 筛选(时间，类型，人员)
           type: this.searchType // 工程   人员

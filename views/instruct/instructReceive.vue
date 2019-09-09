@@ -59,6 +59,7 @@
   import Organization from '@/api/Organization.js'
   import orderInstruct from "./components/orderInstruct"
   import handInstruct from "./components/handInstruct"
+ 
   export default {
     inject: ['reload'],
     components: {
@@ -145,6 +146,7 @@
       },
       userGroupOnChange(data) {  // 组织机构下拉树
         this.sendData.orgId = data
+        this.sendData.departId = data;
         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
           this.projectItemOptions = res.data.data
           this.$refs.getSelectData.labelModel = ''
@@ -158,7 +160,7 @@
         }
       },
       projectItemOnClick(data) {  // 分部分项选择后的数据
-        this.sendData.projectId = data.id
+        this.sendData.projectItemId = data.id
       },
 
       handleUserGroupClickChange(data) {  // 组织机构下拉树
