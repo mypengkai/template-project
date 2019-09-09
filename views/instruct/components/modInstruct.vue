@@ -102,10 +102,9 @@
                 :action="fileUploadUrl"
                 name="files"
                 :headers="headers"
-                :limit="5"
+                :limit="9"
                 list-type="picture-card"
                 :auto-upload="false"
-                :on-preview="handlePictureCardPreview"
                 :data="fileData"
               >
                 <i class="el-icon-plus"></i>
@@ -307,7 +306,7 @@ export default {
     };
   },
   mounted() {
-    this.$refs.getSelectData.placeholder = this.nowItem.projectItem;
+    this.$refs.getSelectData.placeholder = this.nowItem.projectItemName;
   },
   created() {
     this.initUserGroupTree();
@@ -450,20 +449,20 @@ export default {
       this.receiveData.userGroupId = data;
       this.receiveUserList();
     },
+
     _comfirm(form) {
       //提交
       this.$refs[form].validate(valid => {
         let that = this;
         if (valid) {
-          instruct.modifyCommand(that.form).then(res => {
-            if (res.data.ok) {
-              that.fileData.commandsendid = res.data.data;
-              that.$refs.modifyupload.submit();
-              that.$emit("cancel");
-              that.reload();
-            }
-          });
-         
+           instruct.modifyCommand(that.form).then(res => {
+                if (res.data.ok) {
+                  that.fileData.commandsendid = res.data.data;
+                  that.$refs.modifyupload.submit();
+                  that.$emit('comfirm')
+                  that.$emit('cancel')
+              }
+           });   
         } else {
           console.log("error submit!!");
           return false;
@@ -479,10 +478,10 @@ export default {
       this.form.nowsendusername = val.username; // 新增接收人id名回填
       this.acceptUserDialog = false;
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
+    // handlePictureCardPreview(file) {
+    //   this.dialogImageUrl = file.url;
+    //   this.dialogVisible = true;
+    // },
 
     createUUID: function() {
       function S4() {

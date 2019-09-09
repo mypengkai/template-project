@@ -92,8 +92,8 @@
             <el-timeline-item v-for="(item,index) in nowItem.commandUsers" :key="index">
               <p v-if="item.userRole==-1"><img :src="typeConent[0].src" alt="">创建人：{{item.realname}}</p>
               <p v-else-if="item.userRole==0"><img :src="typeConent[1].src" alt="">转发人：{{item.realname}}</p>
-              <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
-              <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
+              <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">完成人：{{item.realname}}</p>
+              <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">复核人：{{item.realname}}</p>
               <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
               <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
 
@@ -201,7 +201,7 @@
 
         <el-form-item label="图片选择：">
           <el-upload class="avatar-uploader" ref="uploadReturn" :action="fileUploadUrl" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData" >
+                     list-type="picture-card" :auto-upload="false"  :data="fileData" >
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleReturn">
@@ -229,7 +229,7 @@
 
         <el-form-item label="图片选择：">
           <el-upload class="avatar-uploader" ref="uploadSoonFinish" :action="fileUploadUrl" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData">
+                     list-type="picture-card" :auto-upload="false"  :data="fileData">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleSoonFinish">
@@ -253,7 +253,7 @@
        
         <el-form-item label="图片选择：">
           <el-upload class="avatar-uploader" ref="uploadFinish" :action="fileUploadUrl" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData">
+                     list-type="picture-card" :auto-upload="false"  :data="fileData">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisibleFinish">
@@ -268,7 +268,7 @@
     </el-dialog>
 
     <!-- 指令完成modifytBtn -->
-    <el-dialog class="dialogBox" width="40%" title="指令修改" :visible.sync="modifyDialog" append-to-body>
+    <!-- <el-dialog class="dialogBox" width="40%" title="指令修改" :visible.sync="modifyDialog" append-to-body>
       <el-form :model="modifyForm" label-width="130px">
         <el-form-item label="指定人：" prop="receiveUserName">
           <el-input readonly v-model="modifyForm.receiveUserName" @focus="alertAcceptUserDialog('receive')" clearable placeholder="请选择">
@@ -298,7 +298,7 @@
         <el-button @click="modifyDialog = false">取 消</el-button>
         <el-button type="primary" @click="modifyCommand">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
     <!-- 图片预览 发起人-->
     <el-dialog title="图片预览" :visible.sync="dialogcommcheck" width="50%" append-to-body>
@@ -422,68 +422,7 @@ import { debug } from 'util';
             remark: ''
           }
         ],
-        activitiesIcon: [{// 发出指令的人
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-location-outline'
-        }, {  // 转发人
-          size: 'large',
-          type: 'warning',
-          icon: 'el-icon-refresh'
-        }, { // 正在处理
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-loading'
-        }, {  // 完成指令的人
-          size: 'large',
-          type: 'success',
-          icon: 'el-icon-check'
-        }, {  // 复核的
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-s-check'
-        }, {
-          size: 'large',
-          type: 'danger',
-          icon: 'el-icon-refresh-left'
-
-        }
-
-        ],
-        // 参考图标
-        activities2: [{
-          content: '发出',
-          timestamp: '',
-          type: 'primary',
-          icon: 'el-icon-location-outline'
-        }, {
-          content: '转发',
-          timestamp: '',
-          type: 'warning',
-          icon: 'el-icon-refresh'
-        }, {
-          content: '正在处理',
-          timestamp: '',
-          type: 'primary',
-          icon: 'el-icon-loading'
-        }, {
-          content: '退回',
-          timestamp: '',
-          type: 'danger',
-          icon: 'el-icon-refresh-left'
-        },
-          {
-            content: '完成',
-            timestamp: '',
-            type: 'success',
-            icon: 'el-icon-check'
-          }, {
-            content: '复核',
-            timestamp: '',
-            type: 'primary',
-            icon: 'el-icon-s-check'
-          }],
-
+      
         answer: '', // 转发响应变量
         nowType: 0,
         activeIndex: '1',
@@ -524,14 +463,7 @@ import { debug } from 'util';
           batchNo: '',
           patrolId: '',  //巡视id
           planFinishTime: ''  //计划完成时间
-        }, //表单校验规则
-        // rulesform: {
-        //   transpondName: {
-        //     required: true,
-        //     message: '请选择指定人',
-        //     trigger: 'blur'
-        //   }
-        // },
+        }, 
         //文件
         fileData: {
         commandid: "", // 指令id
@@ -851,6 +783,7 @@ import { debug } from 'util';
             type: this.answer,
             message: _message
           })
+          this.$emit('comfirm')
           this.$emit('cancel')
           this.reload()
         })
@@ -863,17 +796,12 @@ import { debug } from 'util';
                 if (res.data.ok) {
                   that.fileData.commandsendid = res.data.data;
                   that.$refs.uploadReturn.submit();
+                  that.$emit('comfirm')
                   that.$emit('cancel')
                   that.reset()
               }
                 
           });
-          //this.$emit("cancel");
-          //this.reload();
-
-            // this.$refs.uploadReturn.submit()
-            // this.$emit('cancel')
-            // this.reset()
           } else {
             console.log('error submit!!');
             return false;
@@ -885,43 +813,34 @@ import { debug } from 'util';
                 if (res.data.ok) {
                   this.fileData.commandsendid = res.data.data;
                   this.$refs.uploadSoonFinish.submit();
+                  this.$emit('comfirm')
                   this.$emit('cancel')
                   this.reset()
               }
           })
-        // this.$refs.uploadSoonFinish.submit()
-        // this.$emit('cancel')
-        // this.reset()
       },
       finishCommand() {  // 完成指令
            instructApi.finishCommand(this.finishForm).then(res => {
                 if (res.data.ok) {
                   this.fileData.commandsendid = res.data.data;
                   this.$refs.uploadFinish.submit();
+                  this.$emit('comfirm')
                   this.$emit('cancel')
                   this.reset()
               }
           })
-
-        // this.$refs.uploadFinish.submit()
-        // this.$emit('cancel')
-        // this.reset()
       },
-      modifyCommand() {  // 完成指令
-         instructApi.finishCommand(this.modifyForm).then(res => {
-                if (res.data.ok) {
-                  this.fileData.commandsendid = res.data.data;
-                  this.$refs.uploadModify.submit();
-                  this.$emit('cancel')
-                  this.reset()
-              }
-          })
-
-
-        // this.$refs.uploadModify.submit()
-        // this.$emit('cancel')
-        // this.reset()
-      },
+      // modifyCommand() {  // 完成指令
+      //    instructApi.finishCommand(this.modifyForm).then(res => {
+      //           if (res.data.ok) {
+      //             this.fileData.commandsendid = res.data.data;
+      //             this.$refs.uploadModify.submit();
+      //             this.$emit('comfirm')
+      //             this.$emit('cancel')
+      //             this.reset()
+      //         }
+      //     })
+      // },
       handleCurrentChange(val) {   //确认接收人
         if (this.dialogState === 'receive') {
           this.form.ReceiveUserid = val.id // 新增传接收人id
@@ -936,18 +855,15 @@ import { debug } from 'util';
         }
         this.acceptUserDialog = false
       },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = true
-      },
-      handlePictureCardPreviewReturn(file) {
+      // handlePictureCardPreview(file) {
+      //   this.dialogImageUrl = file.url
+      //   this.dialogVisible = true
+      // },
+      // handlePictureCardPreviewReturn(file) {
 
-        this.dialogImageUrlReturn = file.url
-        this.dialogVisibleReturn = true
-      },
-      /*  beforeUpload: function(file) {
-          this.commandFormData.append('files', file)
-        },*/
+      //   this.dialogImageUrlReturn = file.url
+      //   this.dialogVisibleReturn = true
+      // },
       createUUID: function() {
         function S4() {
           return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)

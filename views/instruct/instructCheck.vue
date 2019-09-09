@@ -28,6 +28,7 @@
       <el-table-column label="状态" width="120" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.state=='-1'">已发起,待处理</template>
+           <template v-else-if="scope.row.state=='-2'">已修改,待处理</template>
           <template v-else-if="scope.row.state=='0'">已转发</template>
           <template v-else-if="scope.row.state=='1'">已复核</template>
           <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
