@@ -36,7 +36,8 @@
       <el-table-column prop="nowUser" label="处理人" width="100" align="center"></el-table-column>
       <el-table-column label="状态" width="120" align="center">
         <template slot-scope="scope">
-          <template v-if="scope.row.state=='-1'"><span style="background-image: url('flag-blue.png');"></span>已发起,待处理</template>
+          <template v-if="scope.row.state=='-1'">已发起,待处理</template>
+           <template v-else-if="scope.row.state=='-2'">已修改,待处理</template>
           <template v-else-if="scope.row.state=='0'">已转发</template>
           <template v-else-if="scope.row.state=='1'">已复核</template>
           <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
@@ -48,7 +49,7 @@
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button type="primary" size="small" icon="el-icon-search" circle @click="actionItem(scope.row.commandId)"></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="修改" placement="top-start" v-if="scope.row.state==='-1' || scope.row.state==='3'">
+          <el-tooltip class="item" effect="dark" content="修改" placement="top-start" v-if="scope.row.state==='-1' || scope.row.state==='3' || scope.row.state==='-2'">
             <el-button type="success" size="small" icon="el-icon-edit" circle @click="detailItem(scope.row.commandId)"></el-button>
           </el-tooltip>
         </template>
@@ -62,15 +63,15 @@
 
     <!-- 新增 -->
     <el-dialog width="70%" class="dialogBox" title="指令新增" :visible.sync="dialogFormVisible">
-      <addInstruct @cancel="dialogFormVisible=false" @comfirm="reset()"  v-if="flag"></addInstruct>
+      <addInstruct @cancel="dialogFormVisible=false" @comfirm="_searchList()"  v-if="flag"></addInstruct>
     </el-dialog>
     <!-- 查看 -->
     <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogCheckVisible">
-      <orderInstruct :nowItem="nowItem"></orderInstruct>
+      <orderInstruct :nowItem="nowItem" v-if="flag"></orderInstruct>
     </el-dialog>
     <!-- 修改 -->
     <el-dialog width="70%" class="dialogBox" title="指令修改" :visible.sync="dialogmodVisible">
-      <modInstrucet @cancel="dialogFormVisible=false" @comfirm="reset()" :nowItem="nowItem" v-if="flag"></modInstrucet>
+      <modInstrucet @cancel="dialogmodVisible=false" @comfirm="_searchList()" :nowItem="nowItem" v-if="flag"></modInstrucet>
     </el-dialog>
   </div>
 </template>

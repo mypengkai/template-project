@@ -22,12 +22,13 @@
       <el-timeline>
         <el-timeline-item v-for="(item,index) in nowItem.commandUsers" :key="index">
           <p v-if="item.userRole==-1"><img :src="typeConent[0].src" alt="">创建人：{{item.realname}}</p>
+          <p v-if="item.userRole==-2"><img :src="typeConent[0].src" alt="">修改人：{{item.realname}}</p>
           <p v-else-if="item.userRole==0"><img :src="typeConent[1].src" alt="">转发人：{{item.realname}}</p>
-          <p v-else-if="item.userRole==1"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
-          <p v-else-if="item.userRole==2"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
+          <p v-else-if="item.userRole==2"><img :src="typeConent[3].src" alt="">完成人：{{item.realname}}</p>
+          <p v-else-if="item.userRole==1"><img :src="typeConent[4].src" alt="">复核人：{{item.realname}}</p>
           <p v-else-if="item.userRole==3"><img :src="typeConent[5].src" alt="">退回人：{{item.realname}}</p>
           <p v-else-if="item.userRole==null || item.userRole==''"><img :src="typeConent[2].src" alt="">接收人：{{item.realname}}</p>
-           <template v-if="item.userRole==-1">
+           <template v-if="item.userRole==-1 || item.userRole==-2">
                  <p>指令内容：{{item.remark}}</p>
                   <div class="imgBox">影像资料：
                     <ul>

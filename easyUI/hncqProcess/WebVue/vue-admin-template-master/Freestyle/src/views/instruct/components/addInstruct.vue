@@ -94,7 +94,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">   
-                    <el-form-item label="图片选择：">
+                  <el-form-item label="图片选择：">
                     <el-upload
                       class="avatar-uploader"
                       ref="upload"
@@ -104,14 +104,11 @@
                       :limit="5"
                       list-type="picture-card"
                       :auto-upload="false"
-                      :on-preview="handlePictureCardPreview"
                       :data="form"
+                      :on-change="upload"
                     >
-                      <i class="el-icon-plus"></i>
+                    <i class="el-icon-plus"></i>
                     </el-upload>
-                    <el-dialog :visible.sync="dialogVisible">
-                      <img width="50%" :src="dialogImageUrl" alt="图片" />
-                    </el-dialog>
                   </el-form-item>
         </el-col>
       </el-row>
@@ -195,10 +192,10 @@
           planFinishTime: [
             {  required: true, message: '请选择计划完成时间', trigger: 'blur' }
           ],
+          file: [
+               { required: true, message: '请上传图片', }
+          ],
         },
-       returnRules:{
-           planFinishTime:[{ required: true, message: '请选择完成时间', trigger: 'blur' }]
-       },
         dialogRemark:false,
         dialogVisible:false,
         processMDictOption: [],  // 工序类型下拉框
@@ -255,26 +252,11 @@
         projectItemTree: [], // 分部分项树
         receiveUsersList: [], // 接收人列表
         orgId: '',
-        //fileUploadUrl:  process.env.BASE_API + '/rest/command/videoOrImageUpload',  // 修改
-
-// -1 发起
-// 0 转发
-// 1复核
-// 2 完成（处置）
-// 3 退回
-        // handObj:{},
-        // fileData:{
-        //    commandid:'',  // 指令id
-        //    typeState:-1,
-        //    lgt:'',
-        //    lat:'',
-        //    photoLocation:'',
-        //    commandsendid:'',
-        // }
+  
       }
     },
     mounted(){
-        //  this.$refs.getSelectData.placeholder=this.nowItem.projectItem;
+        
     },
     created() {
       this.initUserGroupTree();
@@ -282,12 +264,8 @@
       this.initProcess();
       this.receiveUserList();
       this.form.batchNo = this.createUUID();  //生成批处理id
-      // this.handObj = this.nowItem;
       this.today();
     },
-        
-       
-  
     methods: {
        today(){
          let nowTime = new Date();
@@ -384,14 +362,27 @@
         this.receiveData.userGroupId = data
         this.receiveUserList();
       },
+      upload(file, fileList) {
+        
+      },
      _comfirm(form) {  //提交
                this.$refs[form].validate((valid) => {
+                 let that = this;
                   if (valid) {
-                      sessionStorage.setItem("departId",this.form.userGroupId);
-                      sessionStorage.setItem("projectId",this.form.projectItemId);
-                      this.$refs.upload.submit();
-                      this.$emit('cancel')
-                      this.reload()
+                      sessionStorage.setItem("departId",that.form.userGroupId);
+                      sessionStorage.setItem("projectId",that.form.projectItemId);
+                      console.log(that.$refs.upload)
+                      if(!that.$refs.upload.uploadFiles.length){
+                          this.$message({
+                              message:'请选择文件',
+                              
+                          })
+                          return false
+                      }
+                      that.$refs.upload.submit();
+                      that.$emit('comfirm');
+                      that.$emit('cancel') ;
+                      that.reset(); 
                   } else {
                     console.log('error submit!!');
                     return false;
@@ -407,10 +398,10 @@
           this.form.nowsendusername = val.username // 新增接收人id名回填
           this.acceptUserDialog = false
       },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = true
-      },
+      // handlePictureCardPreview(file) {
+      //   this.dialogImageUrl = file.url
+      //   this.dialogVisible = true
+      // },
      
       createUUID: function() {
         function S4() {

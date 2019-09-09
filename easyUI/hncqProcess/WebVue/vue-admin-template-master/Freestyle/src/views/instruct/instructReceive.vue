@@ -28,6 +28,7 @@
       <el-table-column label="状态" width="120" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.state=='-1'">已发起,待处理</template>
+          <template v-else-if="scope.row.state=='-2'">已修改,待处理</template>
           <template v-else-if="scope.row.state=='0'">已转发</template>
           <template v-else-if="scope.row.state=='1'">已复核</template>
           <template v-else-if="scope.row.state=='2'">已完成,待复核</template>
@@ -37,6 +38,11 @@
       <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-search" size="small" content="查看" circle @click="actionItem(scope.row.commandId)"></el-button>
+          <el-button type="success" icon="el-icon-edit" size="small" content="处理" circle @click="editItem(scope.row.commandId)" v-if="scope.row.state !='3'"></el-button> 
+          <!-- <el-button type="success" icon="el-icon-edit" size="small" content="退回" circle @click="editItem(scope.row.commandId)" v-if="scope.row.state !='3'"></el-button>
+          <el-button type="success" icon="el-icon-edit" size="small" content="转发" circle @click="editItem(scope.row.commandId)" v-if="scope.row.state !='3'"></el-button>
+          <el-button type="success" icon="el-icon-edit" size="small" content="完成" circle @click="editItem(scope.row.commandId)" v-if="scope.row.state !='3'"></el-button>
+          <el-button type="success" icon="el-icon-edit" size="small" content="复核" circle @click="editItem(scope.row.commandId)" v-if="scope.row.state !='3'"></el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -46,8 +52,13 @@
     </el-pagination>
     <!-- 编辑弹框 -->
     <el-dialog width="70%" class="dialogBox" title="指令查看" :visible.sync="dialogHandVisible">
-      <checkBox :nowItem="nowItem" v-if="nowItem"  @cancel="dialogHandVisible=false" @comfirm="reset()"></checkBox>
+      <orderInstruct :nowItem="nowItem"></orderInstruct>
     </el-dialog>
+   <!-- 指令处理 -->
+    <el-dialog width="70%" class="dialogBox" title="指令处理" :visible.sync="dialogFormVisible">
+      <handInstruct :nowItem="nowItem"   @cancel="dialogFormVisible=false" @comfirm="reset()"></handInstruct>
+    </el-dialog>
+    
   </div>
 </template>
 
@@ -59,7 +70,7 @@
   import Organization from '@/api/Organization.js'
   import orderInstruct from "./components/orderInstruct"
   import handInstruct from "./components/handInstruct"
- 
+  
   export default {
     inject: ['reload'],
     components: {
@@ -102,6 +113,8 @@
           pageSize: 10 // 每页条数
         },
         nowItem: '',
+        nowUserId:'',
+        flag:false,
         commandId:'',
         userGroupId: '',
         dialogHandVisible:false,
@@ -111,6 +124,7 @@
     created() {
       this.initUserGroup();
       this.getinit();
+      this.nowUserId = localStorage.getItem("userId");
     },
     methods: {
       handleSizeChange(val) {
@@ -126,8 +140,12 @@
       editItem(id){
           api.searchOne({ id:id }).then(res=>{
                this.nowItem = res.data.data;
-               this.dialogHandVisible = true
+               this.dialogFormVisible = true
           })
+          // this.flag = false;
+          // this.$nextTick(()=>{
+          //      this.flag = true;
+          // })
 
       },
       getinit(){
