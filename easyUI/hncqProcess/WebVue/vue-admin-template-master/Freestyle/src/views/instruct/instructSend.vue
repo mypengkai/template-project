@@ -48,7 +48,7 @@
           <el-tooltip class="item" effect="dark" content="查看" placement="top-start">
             <el-button type="primary" size="small" icon="el-icon-search" circle @click="actionItem(scope.row.commandId)"></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="修改" placement="top-start" v-if="scope.row.state==3">
+          <el-tooltip class="item" effect="dark" content="修改" placement="top-start" v-if="scope.row.state==='-1' || scope.row.state==='3'">
             <el-button type="success" size="small" icon="el-icon-edit" circle @click="detailItem(scope.row.commandId)"></el-button>
           </el-tooltip>
         </template>
@@ -120,7 +120,7 @@
           pageSize: 10 // 每页条数
           // Mark: 1 //  标记：1：发送、2：接收
         },
-        
+
         nowItem: '',
         userGroupId: '',
         timeRange: '', // 时间日期范围
