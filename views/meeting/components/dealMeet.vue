@@ -45,6 +45,13 @@
       <div class="topBar">
         <span>用户名：</span>
         <el-input v-model="users.username" placeholder="请选择" @change="checkRealname"></el-input>
+        <div class="rl">
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
+                         @click="query">查询
+              </el-button>
+              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
+              </el-button>
+          </div>
       </div>
       <el-table
         ref="changeSingleTable"
@@ -57,11 +64,12 @@
       >
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column property="realname" label="用户名"></el-table-column>
+        <!-- <el-table-column property="zhiwei" label="职位"></el-table-column> -->
         <el-table-column property="mobilePhone" label="电话"></el-table-column>
       </el-table>
       <!-- 分页条 -->
       <el-pagination
-        class="pageList mt1"
+        class="pageList"
         background
         :page-sizes="[10,20,30]"
         :page-size="users.pageSize"
@@ -71,9 +79,9 @@
         @size-change="handeUsersChange"
         @current-change="initUsername()"
       ></el-pagination>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="checkUser">确 认</el-button>
+      <div style="margin-left:70%">
         <el-button @click="dialogusersVisible=false">取 消</el-button>
+        <el-button type="primary" @click="checkUser">确 认</el-button>
       </div>
     </el-dialog>
   </div>
@@ -155,6 +163,13 @@ export default {
     checkRealname() {
       this.initUsername();
     },
+    query(){
+        this.initUsername();
+    },
+    reset(){
+         this.users.username="";
+         this.initUsername();
+    },
     handeUsersChange(val) {
       this.users.pageSize = val;
       this.initUsername();
@@ -174,23 +189,19 @@ export default {
     initUsername() {
       user.getNextmeetUser(this.users).then(res => {
         this.usersData = res.data.data.data;
-        //console.log(this.usersData, "this.usersData");
+        console.log(this.usersData, "this.usersData");
       });
     },
     //提交
     onSubmit(form) {
       this.form.isAdopt = form;
       this.$refs["form"].validate(valid => {
+        let that = this;
         if (valid) {
-          change.dealApply(this.form).then(res => {
-            if (res.data.ok == true) {
-              this.$message({
-                message: "处理成功",
-                type: "warn"
-              });
-              this.$emit("comfirm");
-              this.$emit("cancel"); //关闭弹框
-              
+          change.dealApply(that.form).then(res => {
+            if (res.data.ok) {
+              that.$emit("comfirm");
+              that.$emit("cancel"); //关闭弹框
             }
           });
         } else {
@@ -206,5 +217,12 @@ export default {
 <style lang="scss" scoped>
 .dealMee {
   padding-right: 30px;
+}
+/deep/.el-pagination {
+    white-space: nowrap;
+    padding: 2px 5px;
+    color: #303133;
+    font-weight: 700;
+    margin-top: 10px;
 }
 </style>

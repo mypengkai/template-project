@@ -8,7 +8,7 @@
                     <li><span>会议编号:</span><i>{{changeInfo.meetingSummaryNumber}}</i></li>
                     <li><span>会议主题:</span><i>{{changeInfo.meetingTheme}}</i></li>
                     <li><span>会议地点:</span><i>{{changeInfo.meetingAddress}}</i></li>
-                    <li><span>创建时间：</span><i>{{changeInfo.createTime}}</i></li>
+                   
                     <li><span>组织机构:</span><i>{{changeInfo.departname}}</i></li>
                     <li><span>分部分项:</span><i>{{changeInfo.projectItem}}</i></li>
                     <li><span>桩号:</span><i>{{(changeInfo.startStation!==null && changeInfo.startStation!=="" && changeInfo.startStation!==undefined && changeInfo.endStation!==null && changeInfo.endStation!=="" && changeInfo.endStation!==undefined) ? (changeInfo.startStation+'~'+changeInfo.endStation) : ''}}</i></li>
@@ -31,6 +31,7 @@
                         <i v-else-if="changeInfo.changeToken=='3'">备案</i>
                         <i v-else-if="changeInfo.changeToken=='7'">完成</i></li>
                     <li><span>申请人:</span><i>{{changeInfo.applyUserName}}</i></li>
+                    <li><span>申请时间：</span><i>{{changeInfo.createTime}}</i></li>
                     <li><span>现场纪要内容:</span><i>{{changeInfo.sceneSummaryContent}}</i></li>
                     <li><span>变更理由:</span><i>{{changeInfo.changeReason}}</i></li> 
                     <li><span>备注:</span><i>{{changeInfo.remarks}}</i></li>   
@@ -89,7 +90,7 @@
                                   <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
                                   <li><span>会议主题:</span><i>{{item.publicData.meetingTheme}}</i></li>
                                   <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>
-                                  <li><span>创建时间：</span><i>{{item.publicData.createTime}}</i></li>
+                                 
                                   <li><span>组织机构:</span><i>{{item.publicData.departname}}</i></li>
                                   <li><span>分部分项:</span><i>{{item.publicData.projectItem}}</i></li>
                                   <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>
@@ -112,6 +113,7 @@
                                       <i v-else-if="item.publicData.changeToken=='3'">备案</i>
                                       <i v-else-if="item.publicData.changeToken=='7'">完成</i></li>
                                   <li><span>申请人:</span><i>{{item.publicData.applyUserName}}</i></li>
+                                  <li><span>申请时间：</span><i>{{item.publicData.createTime}}</i></li>
                                   <li><span>现场纪要内容:</span><i>{{item.publicData.sceneSummaryContent}}</i></li>
                                   <li><span>变更理由:</span><i>{{item.publicData.changeReason}}</i></li>
                                   <li><span>备注:</span><i>{{item.publicData.remarks}}</i></li>      

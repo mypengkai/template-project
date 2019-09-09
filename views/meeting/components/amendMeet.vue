@@ -235,7 +235,7 @@
                                   <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
                                   <li><span>会议主题:</span><i>{{item.publicData.meetingTheme}}</i></li>
                                   <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>
-                                  <li><span>创建时间：</span><i>{{item.publicData.createTime}}</i></li>
+                                  
                                   <li><span>组织机构:</span><i>{{item.publicData.departname}}</i></li>
                                   <li><span>分部分项:</span><i>{{item.publicData.projectItem}}</i></li>
                                   <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>
@@ -259,6 +259,7 @@
                                       <i v-else-if="item.publicData.changeToken=='3'">备案</i>
                                       <i v-else-if="item.publicData.changeToken=='7'">完成</i></li>
                                   <li><span>申请人:</span><i>{{item.publicData.applyUserName}}</i></li>
+                                  <li><span>申请时间：</span><i>{{item.publicData.createTime}}</i></li>
                                   <li><span>现场纪要内容:</span><i>{{item.publicData.sceneSummaryContent}}</i></li>
                                   <li><span>变更理由:</span><i>{{item.publicData.changeReason}}</i></li>  
                                   <li><span>备注:</span><i>{{item.publicData.remarks}}</i></li> 
@@ -1028,20 +1029,27 @@ export default {
         if (res.data.ok == true) {
           this.myApplyChangeForm = res.data.data.MeetingInfo;
           localStorage.setItem("orgId", res.data.data.MeetingInfo.departId);
-
+          
           this.myApplyChangeForm.meetingName = this.myApplyChangeForm.meetingHostName;
           this.myApplyChangeForm.meetingNoteName = this.myApplyChangeForm.meetingNoteTakerName;
           this.$refs.getSelectData.placeholder = this.myApplyChangeForm.projectItem;
             let logs = res.data.data.log[0].role;
             let copynames = "";
+            let ids = "";
             logs.forEach(element => {
               if (element.state == 3) {
                 copynames += element.userName + ",";
+                ids += element.userId + ','
               }
             });
             this.myApplyChangeForm.copyUserName = copynames.substring(
               0,
               copynames.length - 1
+
+            );
+             this.myApplyChangeForm.makeCopy = ids.substring(
+              0,
+              ids.length - 1
             );
         let index = 0;
         for (let key in res.data.data.log) {

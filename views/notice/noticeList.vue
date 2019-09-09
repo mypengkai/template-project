@@ -113,7 +113,7 @@
 
 <!-- 查看 -->
     <el-dialog
-      width="40%"
+      width="50%"
       class="dialogBox"
       :title="checkTitle"
       :visible.sync="dialogFormVisibleC"
@@ -132,9 +132,17 @@
         <el-form-item label="发起人:">
           <el-input
             style="border: none;"
-            readonly="true"
+            :readonly="true"
             placeholder
             v-model="noticeDataC.createName"
+          />
+        </el-form-item>
+         <el-form-item label="发起时间:">
+          <el-input
+            style="border: none;"
+            :readonly="true"
+            placeholder
+            v-model="noticeDataC.createTime"
           />
         </el-form-item>
         <el-form-item label="接收人:">
@@ -150,7 +158,7 @@
           <el-input
             type="textarea"
             style="border: none;"
-            readonly="true"
+            :readonly="true"
             placeholder
             v-model="noticeDataC.content"
           />
@@ -366,6 +374,7 @@ export default {
       let { data } = await api.getNoticeDetail({ id });
       this.nowItem = data.data;
       this.noticeDataC = data.data;
+      console.log(this.noticeDataC)
       this.dialogFormVisibleC = true;
     },
 
