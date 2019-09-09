@@ -194,18 +194,21 @@
       // 查询按钮查询
       querySelected() {
         if (this.tabPosition == 'first') {
-          this.projecQuery()
+          sessionStorage.setItem("searchType",this.searchType)
+          this.projecQuery();
         }
         if (this.tabPosition == 'second') {
+            sessionStorage.setItem("searchType",this.searchType)
            this.peopleQuery()
         }
       },
       changeType(tab){
          if(tab.name=='first'){
-              this.searchType ='processCheck',
+              //this.searchType ='processCheck',
+              sessionStorage.setItem("searchType",this.searchType)
               this.projecQuery();
          }else if(tab.name=='second'){
-              this.searchType ='processCheck',
+              this.searchType = sessionStorage.getItem("searchType"),
               this.peopleQuery();
          }
       },

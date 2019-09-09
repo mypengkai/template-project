@@ -6,7 +6,7 @@
       </div>
     </div>
      <!-- syncId -->
-    <el-table :data="treeData" border style="width: 100%" border height="68vh" row-key="id" default-expand-all
+    <el-table :data="treeData" border style="width: 100%" height="75vh" row-key="id" default-expand-all
               :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column label="组织机构" align="left" prop="name"></el-table-column>
       <el-table-column label="同步状态" align="center" width="200">

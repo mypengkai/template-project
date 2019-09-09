@@ -101,16 +101,24 @@
     >
       <el-form class="reverseBox" ref="noticeDataC" :model="noticeDataC" label-width="120px">
         <el-form-item label="通知标题:">
-          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.title"/>
+          <el-input style="border: none;" :readonly="true"  v-model="noticeDataC.title"/>
         </el-form-item>
         <el-form-item label="发起人:">
-          <el-input style="border: none;" readonly placeholder="" v-model="noticeDataC.createName"/>
+          <el-input style="border: none;" :readonly="true"  v-model="noticeDataC.createName"/>
+        </el-form-item>
+          <el-form-item label="发起时间:">
+          <el-input
+            style="border: none;"
+            readonly="true"
+            placeholder
+            v-model="noticeDataC.createTime"
+          />
         </el-form-item>
         <el-form-item label="接收人:">
-          <el-input type="textarea" style="border: none;" readonly placeholder="" v-model="noticeDataC.realnames"/>
+          <el-input type="textarea" style="border: none;" :readonly="true"  v-model="noticeDataC.realnames"/>
         </el-form-item>
         <el-form-item label="通知内容:">
-          <el-input type="textarea" style="border: none;" readonly placeholder="" v-model="noticeDataC.content"/>
+          <el-input type="textarea" style="border: none;" :readonly="true"  v-model="noticeDataC.content"/>
         </el-form-item>
       </el-form>
       <div class="tar">

@@ -38,7 +38,7 @@
     <!-- 操作列表 -->
     <el-table ref="projectItemTreeTable" :data="dataList" class="textList" row-key="id" border
               lazy :load="loadNextProjectItemLayer" :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-              height="68vh">
+              height="72vh">
       <el-table-column label="分部分项" align="left" prop="projectItem"></el-table-column>
       <el-table-column label="编码" align="center" width="100" prop="id"></el-table-column>
       <el-table-column label="父编码" align="center" width="100" prop="pid"></el-table-column>

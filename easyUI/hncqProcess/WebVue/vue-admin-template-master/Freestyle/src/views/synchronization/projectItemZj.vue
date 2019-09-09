@@ -14,13 +14,13 @@
       </div>
     </div>
     <el-table :data="syncUserGroupDataList" class="textList" border row-key="id" default-expand-all
-              lazy :load="loadNextUserGroup" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="68vh">
+              lazy :load="loadNextUserGroup" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="75vh">
       <el-table-column label="分部分项" align="left" prop="Description"></el-table-column>
-      <el-table-column label="编码" align="center" prop="Code"></el-table-column>
-      <el-table-column label="父编码" align="center" prop="ParentCode"></el-table-column>
-      <el-table-column label="起始桩号" align="center" prop="StartStake"></el-table-column>
-      <el-table-column label="终止桩号" align="center" prop="EndStake"></el-table-column>
-      <el-table-column label="创建时间" align="center" prop="CreatedTime"></el-table-column>
+      <el-table-column label="编码" align="center" prop="Code" width="150"></el-table-column>
+      <el-table-column label="父编码" align="center" prop="ParentCode" width="150"></el-table-column>
+      <el-table-column label="起始桩号" align="center" prop="StartStake" width="150"></el-table-column>
+      <el-table-column label="终止桩号" align="center" prop="EndStake" width="150"></el-table-column>
+      <el-table-column label="创建时间" align="center" prop="CreatedTime" width="150"></el-table-column>
     </el-table>
 
   </div>

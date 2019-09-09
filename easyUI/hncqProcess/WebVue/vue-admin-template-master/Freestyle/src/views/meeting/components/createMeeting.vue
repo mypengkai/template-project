@@ -63,6 +63,7 @@
         <el-col :span="12">
           <el-form-item label="组织机构:" prop="departId">
             <el-select
+              style="width:16vw"
               v-model="myApplyChangeForm.departId"
               placeholder="请选择"
               @change="checkDepart()"

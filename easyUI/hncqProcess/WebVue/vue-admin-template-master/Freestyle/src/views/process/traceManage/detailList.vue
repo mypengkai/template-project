@@ -109,12 +109,11 @@
     <!-- ==================================================================== -->
     <!-- 指令查看 -->
     <el-dialog title="指令详情" :visible.sync="dialogTableVisibleCommied" width="60%" class="dialogBox">
-      <!-- <comm :commandId="commandId" v-if="hackReset"></comm> -->
-      <checkBox :nowItem="commandList" v-if="hackReset"></checkBox>
+      <!-- <checkBox :nowItem="commandList" v-if="hackReset"></checkBox> -->
+      <orderInstruct :nowItem="commandList" v-if="hackReset"></orderInstruct>
     </el-dialog>
     <!-- 巡视查看 -->
     <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
-      <!-- <pollingCheck :targetID="targetID" v-if="hackReset"></pollingCheck> -->
       <CheckPicture :nowItem="nowItem" v-if="hackReset"></CheckPicture>
     </el-dialog>
     <!-- 会议 -->
@@ -142,6 +141,7 @@ import realcheck from "@/views/process/components/realcheck";
 import meetingDetail from "@/views/meeting/meetingDetail";
 import CheckPicture from "@/views/walkaroundInspection/components/CheckPicture";
 import checkBox from "@/views/instruct/components/checkBox";
+import orderInstruct from "@/views/instruct/components/orderInstruct"
 export default {
   inject: ["reload"],
   name: "DetailList",
@@ -165,7 +165,8 @@ export default {
     processCheck,
     meetingDetail,
     CheckPicture,
-    checkBox
+    checkBox,
+    orderInstruct
   },
   data() {
     return {
@@ -191,26 +192,24 @@ export default {
     };
   },
   created() {
-      //this.initImg();
+     
       
   },
   watch:{
       conentOptions(val){
-          //console.log(val,"val")
+       
           val.forEach(e => {
               if(e.filetype=='mp4'){
                    let str = e.filePath;
                    let endstr = str.replace("mp4","jpg");
                    this.url = endstr;
-                   console.log(this.url)
-                   //console.log(endstr)  
+                 
               }else if(e.filetype=='mov'){
                    let str = e.filePath;
                    let endstr = str.replace("mov","jpg");
                    this.url = endstr;
-                   console.log(endstr,"endstr")
               }
-               //console.log(e.filePath)
+              
           });
       },
       userOptions(val){
@@ -219,15 +218,14 @@ export default {
                    let str = e.filePath;
                    let endstr = str.replace("mp4","jpg");
                    this.url = endstr;
-                   console.log(this.url)
-                   //console.log(endstr)  
+                 
               }else if(e.filetype=='mov'){
                    let str = e.filePath;
                    let endstr = str.replace("mov","jpg");
                    this.url = endstr;
-                   console.log(endstr,"endstr")
+                  
               }
-               //console.log(e.filePath)
+              
           });
       },
        deep:true,
@@ -238,19 +236,6 @@ export default {
     }
   },
   methods: {
-     //
-    //  initImg(){
-    //      let array = this.conentOptions;
-    //      for(var i=0;i<array.length;i++){
-    //           if(array[i].filetype=='mp4' || array[i].filetype=='mov'){
-    //              let str =  array[i].filePath;
-    //              let endstr = str.substring(str.length-3); 
-    //              console.log(endstr)
-    //           }
-    //      }
-    //  },
-
-
     //查看详细
     pictureLook(item) {
       //指令
