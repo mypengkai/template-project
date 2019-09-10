@@ -63,6 +63,7 @@
         :key="index"
         @click="pictureLook(item)"
       >
+        {{url}}
         <div class="pictureBox" >
             <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
               <img :src="item.filePath" alt />
@@ -197,19 +198,18 @@ export default {
   },
   watch:{
       conentOptions(val){
-       
           val.forEach(e => {
               if(e.filetype=='mp4'){
                    let str = e.filePath;
                    let endstr = str.replace("mp4","jpg");
                    this.url = endstr;
-                 
+                   console.log( this.url,"this.url1")
               }else if(e.filetype=='mov'){
                    let str = e.filePath;
                    let endstr = str.replace("mov","jpg");
                    this.url = endstr;
+                   console.log( this.url,"this.url2")
               }
-              
           });
       },
       userOptions(val){
@@ -223,9 +223,7 @@ export default {
                    let str = e.filePath;
                    let endstr = str.replace("mov","jpg");
                    this.url = endstr;
-                  
               }
-              
           });
       },
        deep:true,

@@ -38,7 +38,7 @@
       <el-row>
         <el-col :span="6">
           <span>变更等级:</span>
-          <el-select v-model="sendData.moneyLevel" placeholder="请选择金额等级">
+          <el-select v-model="sendData.moneyLevel" placeholder="请选择变更等级">
             <el-option
               v-for="item in options"
               :key="item.value"

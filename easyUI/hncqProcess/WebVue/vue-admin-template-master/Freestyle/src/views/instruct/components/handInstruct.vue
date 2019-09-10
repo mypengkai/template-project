@@ -236,10 +236,6 @@ export default {
       this.handData.zhidingren = val.id;
       this.acceptUserDialog = false;
     },
-    // handlePictureCardPreviewReturn(file) {
-    //   this.dialogImageUrlReturn = file.url
-    //   this.dialogVisibleReturn = true
-    // },
     initUserGroupTree() {
       // 初始化组织机构树
       Organization.userGroupSelect().then(res => {
