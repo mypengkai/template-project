@@ -22,6 +22,7 @@
       </div>
     </div>
     <!-- 右边详情列表    -->
+    <!--  -->
     <div v-if="leftTopDetils" class="particularsList">
          <div>
             <el-row>
@@ -92,8 +93,8 @@
                           content="指定验收计划" placement="top">
                 <el-button :id="scope.$index" type="success" size="small" icon="el-icon-edit-outline" circle
                            @click="appointCheckPlan(scope.row)"/>
-
               </el-tooltip>
+              
               <el-tooltip v-if="scope.row.adopt===null && scope.row.state1===1" class="item" effect="dark"
                           content="修改验收计划" placement="top">
                 <el-button :id="scope.$index" type="warning" size="small" icon="el-icon-edit" circle
@@ -135,13 +136,11 @@
         </el-form-item>
          <el-button type="success" class="checkButton" style="padding:2px;margin-left:50px;"  @click="checkRemark">快捷回复</el-button>
         <el-form-item label="备注" prop="remark">
-         
           <el-input :rows="4" v-model="form.remark" type="textarea" placeholder="请输入内容"/>
-          
         </el-form-item>
       </el-form>
        
-      <div slot="footer" class="dialog-footer">
+      <div style="margin-left:60%;">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="addProcessFunction('addProcessForm')">确 定</el-button>
       </div>
@@ -320,13 +319,10 @@
               <el-form-item label="备注:" prop="remark">
                 <el-input :rows="4" v-model="formData.remark" type="textarea" placeholder="请输入内容"/>
               </el-form-item>
-            </el-col>
-
-             
+            </el-col>  
           </el-row>
-           
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div style="margin-left:60%;">
           <el-button @click="dialogFormVisibleBL = false">取 消</el-button>
           <el-button type="primary" @click="subimitSupplementProcessFunction('supplementProcessForm')">确 定</el-button>
         </div>
@@ -368,15 +364,16 @@
                        :current-page.sync="pageForm.pageNo" background layout="total, sizes, prev, pager, next, jumper"
                        @size-change="handleSizeChange" @current-change="selectCheckPerson(currentSelectedState)"/>
 
-        <div slot="footer" class="dialog-footer">
+        <div style="margin-left:70%">
           <el-button class="btnSizes" @click="setCheckPersonDialogFormVisible = false">取 消</el-button>
           <el-button class="btnSizes" type="primary" @click="comfirmSelectedPerson()">确 定</el-button>
         </div>
       </el-dialog>
 
       <el-form ref="apponitCheckFrom" :model="apponitCheckFrom" :rules="apponitCheckFromRules" label-width="120px">
-        <el-form-item label="自检人">
-          <el-input :readonly="true" v-model="apponitCheckFrom.planSelfCheckPerson"  style="width:80%" size="small">
+        <!-- prop="planSelfCheckPerson" -->
+        <el-form-item label="自检人" >
+          <el-input :readonly="true" v-model="apponitCheckFrom.planSelfCheckPersonName"  style="width:80%" size="small">
             <el-button slot="append" icon="el-icon-search" @click="selectCheckPerson('construction')"></el-button>
           </el-input>
         </el-form-item>
@@ -387,9 +384,9 @@
                           style="width:80%" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
                           :picker-options="startTime"  size="small"/>
         </el-form-item>
-
+        <!-- prop="planCheckPerson" -->
         <el-form-item label="验收人">
-          <el-input :readonly="true" v-model="apponitCheckFrom.planCheckPerson"  style="width:80%" size="small">
+          <el-input :readonly="true" v-model="apponitCheckFrom.planCheckPersonName"  style="width:80%" size="small">
             <el-button slot="append" icon="el-icon-search" @click="selectCheckPerson('supervisor')"></el-button>
           </el-input>
         </el-form-item>
@@ -400,7 +397,7 @@
           size="small" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div style="margin-left:60%;">
         <el-button @click="appointCheckDialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitCheckPlan('apponitCheckFrom')">确 定</el-button>
       </div>
@@ -529,25 +526,25 @@
         },
         // 新增校验
         acceptRule: {
-          processMDictId: [{ required: true, message: '请选择工序类型', trigger: 'change' }],
-          processSDictId: [{ required: true, message: '请选择工序', trigger: 'change' }],
+          processMDictId: [{ required: true, message: '请选择工序类型', trigger: 'blur' }],
+          processSDictId: [{ required: true, message: '请选择工序', trigger: 'blur' }],
           remark: [{ required: true, message: '请填写备注', trigger: 'blur' }]
         },
         // 指定验收校验
 
         apponitCheckFromRules: {
-          planCheckPerson: [{ required: true, trigger: 'change', message: '请选择监理验收人' }],
-          planCheckTime: [{ required: true, trigger: 'change', message: '请选择监理验收时间' }],
-          planSelfCheckPerson: [{ required: true, trigger: 'change', message: '请选择施工单位自检人' }],
-          planSelfCheckTime: [{ required: true, trigger: 'change', message: '请选择施工单位自检时间' }]
+          planCheckPerson: [{ required: true, trigger: 'blur', message: '请选择监理验收人' }],
+          planCheckTime: [{ required: true, trigger: 'blur', message: '请选择监理验收时间' }],
+          planSelfCheckPerson: [{ required: true, trigger: 'blur', message: '请选择施工单位自检人' }],
+          planSelfCheckTime: [{ required: true, trigger: 'blur', message: '请选择施工单位自检时间' }]
         },
         
         apponitCheckFrom: {   //指定验收提交内容
-          planCheckPerson: '',   // 监理验收人
-          planCheckPersonId: '',   //监理验收人id
+          planCheckPerson: '',   // 监理验收人id
+          planCheckPersonName: '',   //监理验收人名称
           planCheckTime: '',   //监理验收时间
-          planSelfCheckPerson: '',  //施工自检人
-          planSelfCheckPersonId: '',  //施工自检人id
+          planSelfCheckPerson: '',  //施工自检人id
+          planSelfCheckPersonName: '',  //施工自检人名称
           planSelfCheckTime: '',  // 施工自检时间
           processId: ''  // 工序Id
         },
@@ -716,10 +713,9 @@
       handleNodeClick(data) {
         this.projectItemId = ''
         //展示选中的分部分项
-        this.overState(data.id);
         this.codeid = data.id
         this.showSelectedProjectItemInfo(data.id)
-        this.projectItemId = data.id
+        this.projectItemId = data.id;
         if (data.id.split('_')[1].length == 18) {
           this.addProcessBtn = true
         } else {
@@ -727,6 +723,7 @@
         }
         this.querydata.projectItemId = data.id
         this.formData.projectItemId = data.id
+        this.overState(data.id);
         this.loadAppointProcessList()
       },
       addProcess() {   // 新增弹框获取input框数据
@@ -775,13 +772,13 @@
         })
       },
       appointCheckPlan(data) {   // 编辑指定验收弹框
-        this.apponitCheckFrom = data;
-        this.apponitCheckFrom.planSelfCheckPerson = data.planSelfCheckName;
-        this.apponitCheckFrom.planCheckPerson = data.planCheckName;
+        // this.apponitCheckFrom = data;
+        this.apponitCheckFrom.planSelfCheckPersonName = data.planSelfCheckName;
+        this.apponitCheckFrom.planCheckPersonName = data.planCheckName;
         this.appointCheckDialogFormVisible = true
-        this.apponitCheckFrom.processId = data.id
+        this.apponitCheckFrom.processId = data.id;
         if (data.state2 === '1') {
-          request.post('/rest/processCheck/searchProcessCheckPersons', { processId: this.apponitCheckFrom.processId }).then(res => {
+          request.post('/rest/processCheck/searchProcessCheckPersons', { processId: data.id }).then(res => {
             this.apponitCheckFrom = res.data.data
           })
         }
@@ -825,13 +822,15 @@
       listenCheck(data, e) {  // 监听验收人单选框
         this.even = e
         if (this.currentSelectedState === 'supervisor') {
-          this.apponitCheckFrom.planCheckPerson = data.row.username;
-          this.apponitCheckFrom.planCheckPersonId = data.row.id;
+          console.log(data.row,"data.row")
+          this.apponitCheckFrom.planCheckPersonName = data.row.username;
+          this.apponitCheckFrom.planCheckPerson = data.row.id;
           this.formData.planCheckPersonName = data.row.username;
           this.formData.planCheckPerson = data.row.id;
         } else if (this.currentSelectedState === 'construction') {
-          this.apponitCheckFrom.planSelfCheckPerson = data.row.username;
-          this.apponitCheckFrom.planSelfCheckPersonId = data.row.id;
+          console.log(data.row,"data.row1")
+          this.apponitCheckFrom.planSelfCheckPersonName = data.row.username;
+          this.apponitCheckFrom.planSelfCheckPerson = data.row.id;
           this.formData.planSelfCheckPersonName = data.row.username
           this.formData.planSelfCheckPerson = data.row.id
         }
@@ -851,19 +850,17 @@
       submitCheckPlan(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            request.post('/rest/processCheck/appointProcessCheckPersons', {
-              processId: this.apponitCheckFrom.processId,
-              planSelfCheckTime: this.apponitCheckFrom.planSelfCheckTime,
-              planSelfCheckPerson: this.apponitCheckFrom.planSelfCheckPersonId,
-              planCheckTime: this.apponitCheckFrom.planCheckTime,
-              planCheckPerson: this.apponitCheckFrom.planCheckPersonId
-            }).then(res => {
-              this.$message({
-                message: '指定验收计划成功',
-                type: 'success'
-              })
-              this.appointCheckDialogFormVisible = false
-              this.loadAppointProcessList()
+            request.post('/rest/processCheck/appointProcessCheckPersons', this.apponitCheckFrom
+             ).then(res => {
+               console.log(res.data)
+               if(res.data.ok){
+                 this.$message({
+                    message: '指定验收计划成功',
+                    type: 'success'
+                  })
+                  this.appointCheckDialogFormVisible = false
+                  this.loadAppointProcessList()
+               }
             })
           } else {
             return false
@@ -872,7 +869,7 @@
       },
       // 删除接口
       deleteMainProcess(data) {
-        this.$confirm('此操作将永久删除该分部分项, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该工序, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -945,21 +942,21 @@
       overState(codeid) {  // 查看状态
         let that = this
         request.post('/rest/processCheck/processComplete', { codeid: codeid }).then(res => {
-          if (res.data) {
+          if (res.data.ok) {
             request.post('/rest/projectItemInfo/getProjectItemById/' + codeid).then(ress => {
-              if (res.data.data) {
+              if (ress.data.ok) {
                 if (res.data.data.complete && ress.data.data.iscomplete == '0') {
                   that.overProcessBtn = true
                   that.addProcessBtn = true
                   that.leftTopDetils = true
-
                 } else if (res.data.data.complete && ress.data.data.iscomplete == '1') {
                   that.overProcessBtn = false
                   that.addProcessBtn = false
                   that.leftTopDetils = true
-                } else if (!res.data.data.complete && ress.data.data.iscomplete == '0') {
+                } 
+                else if (!res.data.data.complete && ress.data.data.iscomplete == '0') {
                   that.overProcessBtn = false
-                  that.addProcessBtn = true
+                  //that.addProcessBtn = true
                   that.leftTopDetils = true
                 }
               } else if (res.data.data = null || res.data.data == '') {
@@ -976,7 +973,7 @@
         })
       },
       overProcess() {
-        this.$confirm('此操作将完成该分项,完成后将无法新增和补录工序!', '提示', {
+        this.$confirm('此操作将完成该工序,完成后将无法新增和补录工序!', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -1137,6 +1134,12 @@
     margin: 0 8px 8px 0;
     display: inline-block;
 }
-
+/deep/.el-pagination {
+    white-space: nowrap;
+    padding: 2px 5px;
+    color: #303133;
+    font-weight: 700;
+    margin-top: 10px;
+}
 
 </style>
