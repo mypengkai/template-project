@@ -59,7 +59,6 @@ export default {
     },
     getInit() {
       project.getAllResponse({ type: this.type }).then(res => {
-        console.log(res);
         this.remarkList = res.data.data;
       });
     },
@@ -72,14 +71,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .remark {
-  height: 50vh;
-  overflow-x: hidden;
+  height:50vh;
   padding: 0 30px;
   margin: 0;
- 
+  .conent{
+     
+  }
   ul {
     padding: 0;
     margin: 0;
+    height: 45vh;
+    overflow-x: hidden;
     li {
       list-style: none;
       margin: 10px 0;
@@ -92,8 +94,7 @@ export default {
     }
   }
   .btnBox {
-     margin-left:60%;
-     margin-top:35%;
+     margin-left:70%;
   }
 }
 

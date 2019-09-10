@@ -30,7 +30,7 @@
         <el-table-column prop="title" label="通知标题"></el-table-column>
         <el-table-column prop="createName" label="发起人" align="center" width="150"></el-table-column>
         <el-table-column prop="realnames" label="接收人" align="center" width="450"></el-table-column>
-        <el-table-column prop="createTime" label="发起时间" align="center" width="150"></el-table-column>
+        <el-table-column prop="createTime" label="发送时间" align="center" width="150"></el-table-column>
         <el-table-column fixed="right" label="操作" width="80" align="center">
           <template slot-scope="scope">
             <el-button
@@ -167,7 +167,7 @@
           userGroupId: '',
           realname: '',
           position: '',
-
+           type:1, 
           pageNo: 1, // 当前页
           pageSize: 10// 每页条数
         },

@@ -3,11 +3,11 @@ import request from '@/utils/request'
 export default {
   // 查询通知列表
   getList(data) {
-    return request.post('/rest/notice/noticeList?type=0', data)
+    return request.post('/rest/notice/noticeList', data)
   },
   // 查询通知列表
   getListReceive(data) {
-    return request.post('/rest/notice/noticeList?type=1', data)
+    return request.post('/rest/notice/noticeList', data)
   },
   // 新增通知
   createNotice(data) {

@@ -138,9 +138,9 @@
         </el-col>
       </el-row>
 
-      <el-form-item label="审核人:" prop="handleUserName">
+      <el-form-item label="处理人:" prop="handleUserName">
         <el-input
-          placeholder="请选择审核人"
+          placeholder="请选择处理人"
           v-model="myApplyChangeForm.handleUserName"
           :readonly="true"
           class="input-with-select"
@@ -670,7 +670,7 @@ export default {
           { required: true, message: "请选择会议记录人", trigger: "blur" }
         ],
         handleUserName: [
-          { required: true, message: "请选择审核人", trigger: "blur" }
+          { required: true, message: "请选择处理人", trigger: "blur" }
         ],
         copyUserName: [
           { required: true, message: "请选择抄送人", trigger: "blur" }

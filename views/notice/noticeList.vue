@@ -52,7 +52,7 @@
         <el-table-column prop="title" label="通知标题"></el-table-column>
         <el-table-column prop="createName" label="发起人" align="center" width="150"></el-table-column>
         <el-table-column prop="realnames" label="接收人" align="center" width="450"></el-table-column>
-        <el-table-column prop="createTime" label="发起时间" align="center" width="150"></el-table-column>
+        <el-table-column prop="createTime" label="发送时间" align="center" width="150"></el-table-column>
         <el-table-column fixed="right" label="操作" width="80" align="center">
           <template slot-scope="scope">
             <el-button
@@ -69,7 +69,6 @@
     <!-- 分页条 -->
     <el-pagination
       class="pageList mt1"
-      background
       :current-page.sync="noticeData.pageNo"
       :page-sizes="[10,20,30]"
       :page-size="10"
@@ -306,6 +305,7 @@ export default {
       receiveData: {
         pageNo: 1, // 当前页
         pageSize: 10, // 每页条数
+        type:0,
         userGroupId: "",
         projectItemId: "", // 分部分项id
         realname: "", //用户真实名字
@@ -374,7 +374,6 @@ export default {
       let { data } = await api.getNoticeDetail({ id });
       this.nowItem = data.data;
       this.noticeDataC = data.data;
-      console.log(this.noticeDataC)
       this.dialogFormVisibleC = true;
     },
 
@@ -384,7 +383,6 @@ export default {
         if (res.data.data) {
           this.total = res.data.data.totalCount;
           this.getList = res.data.data.data;
-          let getList = this.getList;
         }
       });
     },
@@ -420,6 +418,7 @@ export default {
       //接收人列表
       processInfo.getUsersByDepartId(this.receiveData).then(res => {
         this.total = res.data.data.totalCount;
+        console.log(res.data.data)
         this.receiveUsersList = res.data.data.data;
       });
     },

@@ -56,10 +56,13 @@
             <el-input
               v-model="form.nowsendusername"
               size="small"
-              @focus="alertAcceptUserDialog()"
               clearable
               placeholder="请选择"
-            ></el-input>
+              :readonly="true"
+            >
+            <!--   @focus="alertAcceptUserDialog()" -->
+            <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog"></el-button>
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>

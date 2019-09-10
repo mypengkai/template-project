@@ -139,7 +139,7 @@
 
       <el-form-item label="处理人:" prop="handleUserName">
         <el-input
-          placeholder="请选择审核人"
+          placeholder="请选择处理人"
           v-model="myApplyChangeForm.handleUserName"
           :readonly="true"
           class="input-with-select"
@@ -514,7 +514,7 @@ export default {
         projectItemId: [ { required: true, message: "请选择分部分项", trigger: "change" } ],
         meetingName: [{ required: true, message: "请选择会议主持人", trigger: "change" }  ],
         meetingNoteName: [ { required: true, message: "请选择会议记录人", trigger: "change" } ],
-        handleUserName: [{ required: true, message: "请选择审核人", trigger: "change" } ],
+        handleUserName: [{ required: true, message: "请选择处理人", trigger: "change" } ],
         copyUserName: [{ required: true, message: "请选择抄送人", trigger: "change" } ],
         meetingDatetime: [ { required: true, message: "请选择开会时间", trigger: "change" }  ],
         plancompletionTime: [ { required: true, message: "请选择计划完成时间", trigger: "change" }  ]  
