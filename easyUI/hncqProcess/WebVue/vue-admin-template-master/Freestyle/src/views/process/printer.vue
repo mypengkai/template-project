@@ -156,14 +156,14 @@
           </el-form>
         </el-col>
 
-        <el-col :span="6" >
+        <!-- <el-col :span="6" >
           <el-form label-width="80px" :model="form">
             <el-form-item label="桩号:">
               <el-input  v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
             </el-form-item>
           </el-form>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <el-col :span="6" style="margin-left:25%">
             <span>
               <el-button
                 type="primary"
