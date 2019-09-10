@@ -267,39 +267,6 @@
       </div>
     </el-dialog>
 
-    <!-- 指令完成modifytBtn -->
-    <!-- <el-dialog class="dialogBox" width="40%" title="指令修改" :visible.sync="modifyDialog" append-to-body>
-      <el-form :model="modifyForm" label-width="130px">
-        <el-form-item label="指定人：" prop="receiveUserName">
-          <el-input readonly v-model="modifyForm.receiveUserName" @focus="alertAcceptUserDialog('receive')" clearable placeholder="请选择">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="计划检查时间：" prop="planCheckTime">
-          <el-date-picker v-model="modifyForm.planCheckTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="计划完成时间：" prop="planFinishTime">
-          <el-date-picker v-model="modifyForm.planFinishTime" type="date" placeholder="选择日期时间：" value-format="yyyy-MM-dd"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="备注：">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="modifyForm.remark"></el-input>
-        </el-form-item>
-        <el-button type="danger" style=" margin-bottom:10px;padding:0 " @click="checkRemark">快捷回复</el-button>
-        <el-form-item label="图片选择：">
-          <el-upload class="avatar-uploader" ref="uploadModify" :action="fileUploadUrl" name="files" :headers="headers"
-                     list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreviewReturn" :data="fileData">
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisibleModify">
-            <img width="50%" :src="dialogImageUrlModify" alt="图片">
-          </el-dialog>
-        </el-form-item>
-      </el-form>
-      <div class="tar">
-        <el-button @click="modifyDialog = false">取 消</el-button>
-        <el-button type="primary" @click="modifyCommand">确 定</el-button>
-      </div>
-    </el-dialog> -->
-
     <!-- 图片预览 发起人-->
     <el-dialog title="图片预览" :visible.sync="dialogcommcheck" width="50%" append-to-body>
       <viewer :photo="commcheckList" :imgList="pictureOfCommand"></viewer>
@@ -830,17 +797,6 @@ import { debug } from 'util';
               }
           })
       },
-      // modifyCommand() {  // 完成指令
-      //    instructApi.finishCommand(this.modifyForm).then(res => {
-      //           if (res.data.ok) {
-      //             this.fileData.commandsendid = res.data.data;
-      //             this.$refs.uploadModify.submit();
-      //             this.$emit('comfirm')
-      //             this.$emit('cancel')
-      //             this.reset()
-      //         }
-      //     })
-      // },
       handleCurrentChange(val) {   //确认接收人
         if (this.dialogState === 'receive') {
           this.form.ReceiveUserid = val.id // 新增传接收人id
@@ -855,15 +811,6 @@ import { debug } from 'util';
         }
         this.acceptUserDialog = false
       },
-      // handlePictureCardPreview(file) {
-      //   this.dialogImageUrl = file.url
-      //   this.dialogVisible = true
-      // },
-      // handlePictureCardPreviewReturn(file) {
-
-      //   this.dialogImageUrlReturn = file.url
-      //   this.dialogVisibleReturn = true
-      // },
       createUUID: function() {
         function S4() {
           return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)

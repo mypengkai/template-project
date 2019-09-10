@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="24">
         <div class="viewLeft">
-          <ul v-for="(item,index) in imgList" :key="index">
+          <!-- <ul v-for="(item,index) in imgList" :key="index">
             <li>图片名称：{{item.fileName}}</li>
             <li>图片格式：{{item.fileType}}</li>
             <li>图片大小：{{item.fileSize}}</li>
@@ -11,6 +11,15 @@
             <li>纬度：{{item.lat}}</li>
             <li>桩号：{{zhuanghao}}</li>
             <li>拍照地点：{{item.photoLocation}}</li>
+          </ul> -->
+          <ul>
+            <li>图片名称：{{imgList[0].fileName}}</li>
+            <li>图片格式：{{imgList[0].fileType}}</li>
+            <li>图片大小：{{imgList[0].fileSize}}</li>
+            <li>经度：{{imgList[0].lgt}}</li>
+            <li>纬度：{{imgList[0].lat}}</li>
+            <li>桩号：{{imgList[0].zhuanghao}}</li>
+            <li>拍照地点：{{imgList[0].photoLocation}}</li>
           </ul>
         </div>
         <div class="viewRight">

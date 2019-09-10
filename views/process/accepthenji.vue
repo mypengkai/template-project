@@ -186,23 +186,32 @@
             label: '自主验收'
           }
         ],
+//         0 已指定工序，待制定计划
+// 1 已指定计划，待自检
+// 2 已自检，待验收
+// 3 验收不通过
+// 4 验收已完成
         checkStateOption: [
           {
             //验收状态
             value: '0',
-            label: '已指定工序'
+            label: '已指定工序,待制定计划'
           },
           {
             value: '1',
-            label: '已指定计划'
+            label: '已指定计划,待自检'
           },
           {
             value: '2',
-            label: '已自检未验收'
+            label: '已自检,待验收'
           },
           {
             value: '3',
-            label: '已验收未通过'
+            label: '验收不通过'
+          },
+          {
+            value:'4',
+             label: '验收已完成'
           }
         ],
         dialogTableVisible: false,

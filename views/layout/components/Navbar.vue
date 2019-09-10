@@ -50,9 +50,9 @@
         <el-form-item label="手机号码" label-width="120px">
           <el-input type="number" v-model="form.mobilePhone"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" label-width="120px">
+        <!-- <el-form-item label="邮箱" label-width="120px">
           <el-input v-model="form.email"></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>

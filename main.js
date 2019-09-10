@@ -11,6 +11,7 @@ import router from './router'
 import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
+import 'babel-polyfill'
 import ltx from './utils/permission'
 import echarts from 'echarts'
 import VideoPlayer from 'vue-video-player' //视频
