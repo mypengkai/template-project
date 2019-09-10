@@ -1,6 +1,7 @@
 <template>
-  <div class="demo-image__preview" style="overflow-y: auto; height: 80vh;padding:0 20px">
-    <table border="0" cellspacing="0" cellpadding="0"
+  <div class="demo-image__preview" style="padding:0 20px">
+       <div class="conentBox" style="overflow-y: auto; height: 75vh;">
+             <table border="0" cellspacing="0" cellpadding="0"
            style="width: 100%; text-align: center; line-height: 28px;border-collapse:collapse;border:none;">
       <tr>
         <th width=20%>分部分项</th>
@@ -141,7 +142,10 @@
         </td>
       </tr>
     </table>
+            
+       </div>
     <br/>
+
     <div style="text-align: center;">
       <el-button v-if="currentProcess.previousPage==='yes'" size="mini" type="primary" icon="el-icon-arrow-left"
                  class="pan-btn light-blue-btn" @click="processPageOne('0')">上一道工序

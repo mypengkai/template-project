@@ -134,7 +134,7 @@
         <el-form-item label="工序验收次数" prop="checkNum">
           <el-input-number v-model="checkNum" controls-position="right" :min="1" :max="100" size="small"></el-input-number>
         </el-form-item>
-         <el-button type="success" class="checkButton" style="padding:2px;margin-left:50px;"  @click="checkRemark">快捷回复</el-button>
+         <!-- <el-button type="success" class="checkButton" style="padding:2px;margin-left:50px;"  @click="checkRemark">快捷回复</el-button> -->
         <el-form-item label="备注" prop="remark">
           <el-input :rows="4" v-model="form.remark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
@@ -276,17 +276,17 @@
 
           <el-row>
             <el-col :span="12">
+                     <el-button type="success"  style="padding:2px;margin-left:50px;"  @click="checkSelf">快捷回复</el-button>
                      <el-form-item label="自检描述:" prop="selfCheckDescribe">
                         <el-input :rows="2" v-model="formData.selfCheckDescribe" type="textarea" placeholder="请输入内容"
                                   style="width: 100%;"/>
-                        </el-input>
                     </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-button type="success"  style="padding:2px;margin-left:50px;"  @click="checkPlan">快捷回复</el-button>
               <el-form-item label="验收描述:" prop="checkDescribe">
                 <el-input :rows="2" v-model="formData.checkDescribe" type="textarea" placeholder="请输入内容"
                           style="width: 100%;"/>
-                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -315,7 +315,6 @@
 
           <el-row>
             <el-col :span="24">
-              <el-button type="success" class="checkButton" style="padding:2px;margin-left:50px;"  @click="checkRemark">快捷回复</el-button>
               <el-form-item label="备注:" prop="remark">
                 <el-input :rows="4" v-model="formData.remark" type="textarea" placeholder="请输入内容"/>
               </el-form-item>
@@ -407,10 +406,14 @@
       <processCheck :real-list="chakanData" :processInfoId="processInfoId"/>
     </el-dialog>
 
-    <!-- 自动回复 -->
-     <el-dialog :visible.sync="dialogRemark" title="自动回复">
-        <remark @setRemark="getRemark" @cancel="dialogRemark=false" :type="'selfcheck'"></remark>
+    <!-- 自动回复(自检) -->
+     <el-dialog :visible.sync="dialogSelfRemark" title="自动回复">
+        <remark @setRemark="getRemarkSelf" @cancel="dialogSelfRemark=false" :type="'selfcheck'"></remark>
     </el-dialog>
+   <!-- 验收 -->
+      <el-dialog :visible.sync="dialogPlanRemark" title="自动回复">
+        <remark @setRemark="getRemarkPlan" @cancel="dialogPlanRemark=false" :type="'realcheck'"></remark>
+    </el-dialog> 
   </div>
 </template>
 
@@ -460,6 +463,7 @@
           }
         },
         title:'选择验收人',
+        remarkType:'',
         userGroupDefaultProps: {   // 组织机构树显示
           children: 'children',
           label: 'name'
@@ -471,7 +475,8 @@
         userGroupTree: [], // 组织机构树
         projectItemTree: [], // 分部分项树
         projectItemOptions: [], // 分部分项树
-        dialogRemark:false,
+        dialogSelfRemark:false,
+        dialogPlanRemark:false,
         addProcessBtn: false,
         isShowProjectItem: false, // 默认工程分部分项不显示
         userGroupOption: [], // 组织机构树
@@ -742,11 +747,8 @@
         this.dialogFormVisibleBL = true;
         this.initProcessByTypeId(this.treeFrom.id);
         // this.clearUploadedImage();
-        // this.formData = {}; //清空
+        this.formData = {}; //清空
       },
-
-
-
       addProcessFunction(formName) {  // 新增工序
         const fromData = {
           userGroupId: this.userGroupId,
@@ -772,14 +774,16 @@
         })
       },
       appointCheckPlan(data) {   // 编辑指定验收弹框
-        // this.apponitCheckFrom = data;
-        this.apponitCheckFrom.planSelfCheckPersonName = data.planSelfCheckName;
-        this.apponitCheckFrom.planCheckPersonName = data.planCheckName;
         this.appointCheckDialogFormVisible = true
         this.apponitCheckFrom.processId = data.id;
-        if (data.state2 === '1') {
-          request.post('/rest/processCheck/searchProcessCheckPersons', { processId: data.id }).then(res => {
-            this.apponitCheckFrom = res.data.data
+        if (data.state1 == '1') {
+          request.post('/rest/processCheck/searchProcessCheckPersons', { processId: data.id }).then(res => { 
+           this.apponitCheckFrom.planSelfCheckPersonName = res.data.data.selfCheckUser;
+           this.apponitCheckFrom.planSelfCheckPerson = res.data.data.planSelfCheckPerson;
+           this.apponitCheckFrom.planCheckPersonName = res.data.data.checkUser;
+           this.apponitCheckFrom.planCheckPerson = res.data.data.planCheckPerson;
+           this.apponitCheckFrom.planSelfCheckTime = res.data.data.planSelfCheckTime;
+           this.apponitCheckFrom.planCheckTime = res.data.data.planCheckTime;
           })
         }
       },
@@ -822,13 +826,12 @@
       listenCheck(data, e) {  // 监听验收人单选框
         this.even = e
         if (this.currentSelectedState === 'supervisor') {
-          console.log(data.row,"data.row")
           this.apponitCheckFrom.planCheckPersonName = data.row.username;
           this.apponitCheckFrom.planCheckPerson = data.row.id;
           this.formData.planCheckPersonName = data.row.username;
           this.formData.planCheckPerson = data.row.id;
         } else if (this.currentSelectedState === 'construction') {
-          console.log(data.row,"data.row1")
+          
           this.apponitCheckFrom.planSelfCheckPersonName = data.row.username;
           this.apponitCheckFrom.planSelfCheckPerson = data.row.id;
           this.formData.planSelfCheckPersonName = data.row.username
@@ -898,13 +901,20 @@
         this.pageForm.position = '';
         this.selectCheckPerson(this.currentSelectedState);
       },
-     // 自动回复备注
-     checkRemark(){
-         this.dialogRemark = true
+     // 自动回复备注(自检)
+     checkSelf(){
+         this.dialogSelfRemark = true;
      },
-     getRemark(data){
-         this.formData.remark = data;
-         this.form.remark = data;
+     // 验收（回复）
+     checkPlan(){
+         this.dialogPlanRemark = true;
+     },
+     getRemarkSelf(data){
+         this.formData.selfCheckDescribe = data;
+         
+     },
+     getRemarkPlan(data){
+          this.formData.checkDescribe = data;
      },
       selfBeforeUplad(file) {  //自检图片上传之前
         this.leakRepairUploadForm.append('files[]', file)

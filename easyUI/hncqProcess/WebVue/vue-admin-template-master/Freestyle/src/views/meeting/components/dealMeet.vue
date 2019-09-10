@@ -1,9 +1,9 @@
 <template>
   <div class="dealMee">
     <el-form ref="form" :model="form" :rules="rules" label-width="150px">
-      <el-form-item label="审核人:" prop="name" v-if="flag">
+      <el-form-item label="处理人:" prop="name" v-if="flag">
         <el-input
-          placeholder="请选择审核人"
+          placeholder="请选择处理人"
           v-model="form.name"
           :readonly="true"
           class="input-with-select"
@@ -30,14 +30,15 @@
         <div style="display:flex;justify-content:flex-end">
           <el-button @click="$emit('cancel')">取消</el-button>
           <el-button type="warning" @click="onSubmit('0')">不通过</el-button>
-          <el-button type="primary" @click="onSubmit('1')">{{buttomName}}</el-button>
+          <el-button type="primary" @click="onSubmit('1')" v-if="isPass">通过</el-button>
+          <el-button type="primary" @click="onSubmit('1')" v-if="isDone">完成</el-button>
         </div>
       </el-form-item>
     </el-form>
     <!-- 审核人 -->
     <el-dialog
       width="70%"
-      title="审核人"
+      title="处理人"
       :visible.sync="dialogusersVisible"
       class="dialogBox"
       append-to-body
@@ -46,12 +47,19 @@
         <span>用户名：</span>
         <el-input v-model="users.username" placeholder="请选择" @change="checkRealname"></el-input>
         <div class="rl">
-              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
-                         @click="query">查询
-              </el-button>
-              <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
-              </el-button>
-          </div>
+          <el-button
+            type="primary"
+            class="pan-btn light-blue-btn"
+            icon="el-icon-search"
+            @click="query"
+          >查询</el-button>
+          <el-button
+            type="primary"
+            class="pan-btn light-blue-btn"
+            icon="el-icon-refresh"
+            @click="reset()"
+          >重置</el-button>
+        </div>
       </div>
       <el-table
         ref="changeSingleTable"
@@ -118,13 +126,15 @@ export default {
         moneyLevel: "" // 金额等级
       },
       usersData: [],
-      buttomName: "通过", // 按钮名称
+      // buttomName: "通过", // 按钮名称
       usersTotal: 0,
+      isDone:false,
+      isPass:true,
       dialogusersVisible: false,
       handleUser: null,
       flag: true,
       rules: {
-        name: [{ required: true, message: "请选择审核人", trigger: "change" }],
+        name: [{ required: true, message: "请选择处理人", trigger: "change" }],
         plancompletionTime: [
           { required: true, message: "请选择计划完成时间", trigger: "change" }
         ],
@@ -150,11 +160,15 @@ export default {
         money_position[i].moneyLevel == this.moneyLevel &&
         money_position[i].job_name_cn == zhiwei
       ) {
-        this.buttomName = "完成";
+        // this.buttomName = "完成";
+        this.isDone = true;
+        this.isPass = false;
         this.flag = false;
         break;
       } else {
-        this.buttomName = "通过";
+        // this.buttomName = "通过";
+         this.isDone = false;
+        this.isPass = true;
         this.flag = true;
       }
     }
@@ -163,12 +177,12 @@ export default {
     checkRealname() {
       this.initUsername();
     },
-    query(){
-        this.initUsername();
+    query() {
+      this.initUsername();
     },
-    reset(){
-         this.users.username="";
-         this.initUsername();
+    reset() {
+      this.users.username = "";
+      this.initUsername();
     },
     handeUsersChange(val) {
       this.users.pageSize = val;
@@ -192,6 +206,22 @@ export default {
         console.log(this.usersData, "this.usersData");
       });
     },
+
+//     isAdopt: 1
+// checkExplain: 滚滚滚
+// meetingId: f6323b406d1aaa94016d1b5ee7340098
+// userId: 40288a8f6c216896016c21ab3b1d0002
+// name: 周杰
+// plancompletionTime: 2019-09-12
+// remarks: 国服
+
+// isAdopt: 0
+// checkExplain: 发电房
+// meetingId: f6323b406d1aaa94016d1b5e4a460090
+// userId: 40288a8f6cd27ea9016cd291ecc30009
+// name: 陈驰
+// plancompletionTime: 2019-09-12
+// remarks: 发电房
     //提交
     onSubmit(form) {
       this.form.isAdopt = form;
@@ -219,10 +249,10 @@ export default {
   padding-right: 30px;
 }
 /deep/.el-pagination {
-    white-space: nowrap;
-    padding: 2px 5px;
-    color: #303133;
-    font-weight: 700;
-    margin-top: 10px;
+  white-space: nowrap;
+  padding: 2px 5px;
+  color: #303133;
+  font-weight: 700;
+  margin-top: 10px;
 }
 </style>

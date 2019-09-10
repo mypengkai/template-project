@@ -2,7 +2,9 @@
   <div class="handInstruct">
     <el-form :model="handData" ref="handData" :rules="rules" label-width="120px">
       <el-form-item label="处理人：" prop="zhidingrenName" v-if="nameShow">
-        <el-input v-model="handData.zhidingrenName" @focus="alertDialog"></el-input>
+        <el-input v-model="handData.zhidingrenName" :readonly="true">
+             <el-button slot="append" icon="el-icon-search" @click="alertDialog"></el-button>
+        </el-input>
       </el-form-item>
 
       <el-form-item label="计划处理时间：" prop="planFinishTime">
@@ -32,7 +34,6 @@
       </el-form-item>
     </el-form>
     <div class="tar">
-      <!-- <el-button type="info" @click="close">取 消</el-button> -->
       <el-button type="success" @click="infoCheck('handData')" v-if="innerBtn">指令转发</el-button>
       <el-button type="danger" @click="infoReturn('handData')" v-if="returnBtn">指令退回</el-button>
       <el-button type="primary" @click="infoDone('handData')" v-if="soonFinishBtn">指令完成</el-button>

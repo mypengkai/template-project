@@ -91,7 +91,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="createrealname" label="申请人" align="center"></el-table-column>
-      <el-table-column prop="realname" label="审核人" align="center"></el-table-column>
+      <el-table-column prop="realname" label="处理人" align="center"></el-table-column>
       <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">

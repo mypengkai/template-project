@@ -52,7 +52,7 @@
           <span>工序状态:</span>
           <el-select v-model="queryData.checkState" placeholder="请选择" size="small">
             <el-option
-              v-for="item in checkStateOptions"
+              v-for="item in checkStateOption"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -164,19 +164,29 @@
           value: '1',
           label: '自主验收'
         }],
-        checkStateOptions: [{   //验收状态
-          value: '0',
-          label: '已指定工序'
-        }, {
-          value: '1',
-          label: '已指定计划'
-        }, {
-          value: '2',
-          label: '已自检未验收'
-        }, {
-          value: '3',
-          label: '已验收未通过'
-        }],
+        checkStateOption: [
+          {
+            //验收状态
+            value: '0',
+            label: '已指定工序,待制定计划'
+          },
+          {
+            value: '1',
+            label: '已指定计划,待自检'
+          },
+          {
+            value: '2',
+            label: '已自检,待验收'
+          },
+          {
+            value: '3',
+            label: '验收不通过'
+          },
+          {
+            value:'4',
+            label: '验收已完成'
+          }
+        ],
         dialogTableVisible: false,
         userGroupOptions: [],  //  组织机构List     条件选择
         projectItemOptions: [],   //   工程分部分项List   条件选择

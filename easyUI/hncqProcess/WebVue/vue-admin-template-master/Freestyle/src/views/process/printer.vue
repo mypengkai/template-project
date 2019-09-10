@@ -1,102 +1,5 @@
 <template>
   <div class="p20">
-    <!-- <div class="topBar">
-      <el-row>
-        <el-col :span="6">
-          <el-form :inline="true" class="grid-content">
-            <el-form-item label="组织机构：">
-              <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange" size="small">
-                <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                           :value="item.id"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="6">
-          <el-form :inline="true" class="grid-content">
-            <el-form-item label="分部分项：">
-              <select-tree clearable :options="projectItemOptions" ref="getSelectData" :props="projectItemDefaultProp"
-                           v-on:noDe="projectItemOnClick" size="small"/>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="10">
-          <div class="grid-content">
-            <span>创建日期：</span>
-            <el-date-picker
-              v-model="form.startTime"
-              type="date"
-              size="small"
-              value-format="yyyy-MM-dd"
-              placeholder="选择开始日期"
-            />
-            -
-            <el-date-picker
-              v-model="form.endTime"
-              type="date"
-              size="small"
-              value-format="yyyy-MM-dd"
-              placeholder="选择结束日期"
-            />
-          </div>
-        </el-col>
-      </el-row>
-      
-      <el-row>
-        <el-col :span="6">
-          <el-form label-width="80px" :model="form">
-            <el-form-item label="打印状态:">
-              <el-select v-model="form.type" placeholder="请选择" size="small">
-                <el-option 
-                  v-for="item in options"
-                  :key="item.type"
-                  :label="item.label"
-                  :value="item.type"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form label-width="80px" :model="form">
-            <el-form-item label="桩号:">
-              <el-input  v-model="form.station" placeholder="请输入桩号" size="small"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-
-        <el-col :span="6">
-          <div class="grid-content">
-            <span>
-              <el-button
-                type="primary"
-                class="pan-btn light-blue-btn"
-                icon="el-icon-search"
-                @click="querySelected"
-              >查询</el-button>
-            </span>
-            <span>
-              <el-button
-                type="primary"
-                class="pan-btn light-blue-btn"
-                icon="el-icon-refresh"
-                @click="reset()"
-              >重置</el-button>
-            </span>
-            <span>
-              <el-button
-                type="primary"
-                class="pan-btn light-blue-btn"
-                icon="el-icon-printer"
-                @click="printClick"
-                v-if="form.type ==0 && tableData.length>0"
-              >打印验收凭证</el-button>
-            </span>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-   -->
      <div class="topBar">
       <el-row>
         <el-col :span="6">
@@ -192,10 +95,6 @@
         </el-col>
       </el-row>
     </div>
- 
-
-
-
     <div class="printerTable">
       <el-table
         class="textList"
@@ -213,10 +112,24 @@
         <el-table-column prop="projectName" label="分部分项" ></el-table-column>
         <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
         <el-table-column prop="processname" label="工序名称" width="120"></el-table-column>
-       
         <el-table-column prop="realitychecktime" label="验收时间" width="150" align="center"></el-table-column>
         <el-table-column prop="realname" label="验收人" width="100" align="center"></el-table-column>
         <el-table-column prop="checkdescribe" label="验收说明" width="150"></el-table-column>
+        <el-table-column
+        fixed="right"
+        label="操作"
+        align="center"
+        width="100">
+        <template slot-scope="scope">
+          <el-button  @click="handleClick(scope.row)"
+              type="primary"
+              circle
+              align="center"
+              size="small"
+              icon="el-icon-search"
+             ></el-button>
+        </template>
+      </el-table-column>
       </el-table>
     </div>
     <!-- 分页 -->
@@ -298,15 +211,6 @@
         dataList: [] // 选中打印
       }
     },
-    // 监听查询参数变化重新获取数据渲染页面
-    watch: {
-      form: {
-        handler: function(val) {
-          this.querySelected()
-        },
-        deep: true
-      }
-    },
     created() {
       this.initUserGroup()
     },
@@ -315,14 +219,10 @@
       this.querySelected()
     },
     methods: {
-      // 初始化组织机构input框数据
-      /*     initProjectGroup() {
-             request.get('/rest/organizate/depart').then(res => {
-               if (res.status == 200) {
-                 this.userGroupOption = res.data.data
-               }
-             })
-           },*/
+       handleClick(id){
+
+       },
+
       initUserGroup() {  //初始化组织机构树
         Organization.userGroupSelect().then(res => {
           this.userGroupOption = res.data.data
@@ -344,11 +244,6 @@
       },
       projectItemOnClick(data) {
         this.form.projectItemId = data.id
-      },
-      // 分部分项
-      partialClick(data) {
-        this.form.projectName = data.projectItem
-        this.form.projectCode = data.projectCode
       },
       // 查询数据
       querySelected() {
@@ -384,7 +279,6 @@
         this.dialogVisible = true
         this.dataList = this.multipleSelection
         this.flag = false
-        console.log(this.dataList)
         this.$nextTick(() => {
           this.flag = true
         })
