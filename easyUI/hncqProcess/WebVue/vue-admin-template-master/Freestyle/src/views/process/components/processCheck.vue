@@ -142,7 +142,7 @@
         </td>
       </tr>
     </table>
-            
+
        </div>
     <br/>
 
@@ -178,10 +178,11 @@
     props:{
         realList:{
           type:Object
-        },
-        processInfoId:{
-            type:String
         }
+        // ,
+        // processInfoId:{
+        //     type:String
+        // }
     },
     components: {
       viewer
@@ -194,7 +195,7 @@
         CheckFile: [],
         SelfCheckFile: [],
         currentProcess: {},
-        currentProcessInfoId: this.processInfoId,
+        currentProcessInfoId: '',
         playerOptions: {
           playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
           autoplay: true, //如果true,浏览器准备好时开始回放。
@@ -224,7 +225,8 @@
     watch: {
       realList: {
         handler(newVal, oldVal) {
-          this.currentProcess = newVal
+          this.currentProcess = newVal;
+          this.currentProcessInfoId = newVal.infoId;
         },
         deep: true
       }
