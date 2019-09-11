@@ -22,7 +22,7 @@
                    :default-expand-all="false" v-on:noDe="handleUserGroupCheckChange"
                    ref="ProjectItem_userGroup"/>
         </el-col>
-        
+
         <el-col :span="6">
         <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="initProjectList">查询
         </el-button>
@@ -149,7 +149,7 @@
 
     <!-- 设置关键部位 -->
     <el-dialog :visible.sync="dialogSetPartKeyVisible" title="设置关键工序" :fullscreen="true">
-      <el-form class="reverseBox" ref="setProjectItemKey" label-width="120px" :rules="setProjectItemKeyRules">
+      <el-form class="reverseBox" ref="setProjectItemKey" label-width="120px">
         <el-form-item label="组织机构:" prop="userGroupId">
           <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
                        :default-expand-all="false" v-on:noDe="handleSetKeyUserGroupCheckChange"
@@ -473,7 +473,15 @@
       loadNextLayer(node, resolve) {  //异步加载下一级分部分项
         if (node.level > 0) {
           api.getAllProjectItemTree({ userGroupId: this.setProjectItemOrgId, pId: node.data.id }).then(res => {
-            resolve(res.data.data)
+            let childNodes=[];
+            for(let i=0;i<res.data.data.length;i++){
+              childNodes.push({
+                id: res.data.data[i].id,
+                projectItem: res.data.data[i].projectItem,
+                isLeaf: !res.data.data[i].projectItem
+              })
+            }
+            resolve(childNodes)
           })
         }
       },
