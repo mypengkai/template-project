@@ -16,7 +16,7 @@
     </div>
     <!-- 列表 -->
     <div>
-      <el-table border :data="userList" class="textList" style="width: 100%" height="70vh">
+      <el-table border :data="userList" class="textList" style="width: 100%" height="72vh">
         <el-table-column prop="userName" label="用户账号" />
         <el-table-column prop="realName" label="姓名" align="center"/>
         <el-table-column prop="departName" label="组织机构" align="center"/>

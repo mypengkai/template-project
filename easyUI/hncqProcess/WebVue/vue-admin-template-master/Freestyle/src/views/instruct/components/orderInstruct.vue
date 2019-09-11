@@ -9,6 +9,7 @@
       <p><span>当前处理人：</span><i>{{nowItem.nowsendusername}}</i></p>
       <p><span>状态：</span><i>
         <template v-if="nowItem.state=='-1'">已发起,待处理</template>
+        <template v-else-if="nowItem.state=='-2'">已修改，待处理</template>
         <template v-else-if="nowItem.state=='0'">已转发</template>
         <template v-else-if="nowItem.state=='1'">已复核</template>
         <template v-else-if="nowItem.state=='2'">已完成,待复核</template>
