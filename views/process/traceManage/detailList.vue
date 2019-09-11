@@ -63,7 +63,7 @@
         :key="index"
         @click="pictureLook(item)"
       >
-        {{url}}
+
         <div class="pictureBox" >
             <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
               <img :src="item.filePath" alt />
@@ -193,8 +193,8 @@ export default {
     };
   },
   created() {
-     
-      
+
+
   },
   watch:{
       conentOptions(val){
@@ -218,7 +218,7 @@ export default {
                    let str = e.filePath;
                    let endstr = str.replace("mp4","jpg");
                    this.url = endstr;
-                 
+
               }else if(e.filetype=='mov'){
                    let str = e.filePath;
                    let endstr = str.replace("mov","jpg");
