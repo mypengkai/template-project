@@ -16,7 +16,7 @@
           设置关键部位
         </el-button>
          <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setDeparent">
-          设置组织机构
+          设置分部分项编码
         </el-button>
         </el-col>
       </el-row>

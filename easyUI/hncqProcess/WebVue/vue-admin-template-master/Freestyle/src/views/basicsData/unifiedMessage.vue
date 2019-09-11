@@ -41,7 +41,7 @@
       </el-col>
 
     </div>
-   
+
 
     <!-- 数据列表 -->
     <el-table
@@ -221,7 +221,7 @@ export default {
       });
     },
     deleteText(unifiedId) {
-      this.$confirm("确定删除次条数据?", "提示", {
+      this.$confirm("确定删除该条数据?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
