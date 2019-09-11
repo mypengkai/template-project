@@ -11,7 +11,7 @@
       </div>
     </div>
     <!-- 列表  -->
-    <el-table border :data="positionList" style="width: 100%" height="70vh" class="textList">
+    <el-table border :data="positionList" style="width: 100%" height="72vh" class="textList">
       <el-table-column prop="job_id" label="编号" align="center"/>
       <el-table-column prop="job_name_cn" label="岗位中文名" align="center"/>
       <el-table-column prop="job_name_en" label="岗位英文名" align="center"/>

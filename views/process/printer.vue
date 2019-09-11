@@ -108,14 +108,14 @@
       >
         
         <el-table-column type="selection" width="50" align="center" v-if="form.type==0"></el-table-column>
-        <el-table-column prop="processNumber" label="打印编码" width="100"></el-table-column>
+        <el-table-column prop="processNumber" label="打印编码" width="100" v-if="form.type==1"></el-table-column>
         <el-table-column prop="projectName" label="分部分项" ></el-table-column>
         <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
         <el-table-column prop="processname" label="工序名称" width="120"></el-table-column>
         <el-table-column prop="realitychecktime" label="验收时间" width="150" align="center"></el-table-column>
         <el-table-column prop="realname" label="验收人" width="100" align="center"></el-table-column>
         <el-table-column prop="checkdescribe" label="验收说明" width="150"></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
         fixed="right"
         label="操作"
         align="center"
@@ -129,7 +129,7 @@
               icon="el-icon-search"
              ></el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       </el-table>
     </div>
     <!-- 分页 -->
@@ -219,9 +219,9 @@
       this.querySelected()
     },
     methods: {
-       handleClick(id){
+      //  handleClick(id){
 
-       },
+      //  },
 
       initUserGroup() {  //初始化组织机构树
         Organization.userGroupSelect().then(res => {

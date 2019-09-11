@@ -10,7 +10,7 @@
         <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="AddRoleDialog()">新增</el-button>
       </div>
     </div>
-    <el-table border  :data="tableData" class="textList" height="70vh">
+    <el-table border  :data="tableData" class="textList" height="75vh">
       <el-table-column prop="rolecode" label="角色编码"/>
       <el-table-column prop="rolename" label="角色名称"/>
       <el-table-column fixed="right" label="操作" align="center">

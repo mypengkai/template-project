@@ -92,7 +92,6 @@
       title="选择用户"
       :visible.sync="acceptUserDialog"
       append-to-body
-      v-if="flag"
     >
       <div>
         <el-form label-width="80px">
@@ -366,11 +365,7 @@ export default {
           resolve(res.data.data);
         });
     },
-    filterNode(value, data, node) {
-      //过滤分部分项
-      if (!value) return true;
-      return data.label.indexOf(value) !== -1;
-    },
+   
     projectItemOnClick(data) {
       // 分部分项选择后的数据
       this.form.projectItemId = data.id;

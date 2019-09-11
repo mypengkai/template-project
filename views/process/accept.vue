@@ -732,7 +732,8 @@
         this.loadAppointProcessList()
       },
       addProcess() {   // 新增弹框获取input框数据
-        this.dialogFormVisible = true
+        this.dialogFormVisible = true;
+        this.apponitCheckFrom={};      // 清空
         this.checkNum = 1
         this.seq = 1
         this.form = {

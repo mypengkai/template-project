@@ -1,25 +1,6 @@
 <template>
   <div class="p20">
     <div class="topBar">
-      <!-- <span>组织机构:</span>
-      <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
-        <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
-                   :value="item.id"></el-option>
-      </el-select>
-      <span>分部分项:</span>
-
-      <select-tree clearable lazy show-checkbox :options="projectItemTreeOptions" ref="getSelectData"
-                   :props="projectItemDefaultProp"
-                   v-on:noDe="projectItemOnClick"/>
-      <div class="rl">
-        <el-button type="primary" icon="el-icon-search" class="pan-btn light-blue-btn" @click="_searchList">查询
-        </el-button>
-        <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn"
-                   @click="action('add')">新增
-        </el-button>
-      </div>-->
-
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
@@ -63,7 +44,7 @@
               type="primary"
               icon="el-icon-circle-plus-outline"
               class="pan-btn light-blue-btn"
-              @click="action('add')"
+              @click="action()"
             >新增</el-button>
           </div>
         </el-col>
@@ -71,14 +52,13 @@
     </div>
     <!-- 查询列表 -->
     <div>
-      <el-table border class="textList" :data="groupList" style="width: 100%" height="68vh">
+      <el-table border class="textList" :data="groupList" style="width: 100%" height="72vh">
         <el-table-column align="center" prop="groupName" width="150" label="组名" />
         <el-table-column align="center" prop="groupUser" label="组员" />
         <el-table-column align="center" prop="createTime" width="150" label="创建时间" />
         <el-table-column align="center" prop="realname" width="100" label="创建人" />
         <el-table-column fixed="right" label="操作" width="100" align="center">
           <template slot-scope="scope">
-            <!--            <el-button type="warning" size="small" icon="el-icon-edit" circle @click="Edit(scope.row)"/>-->
             <el-button
               type="danger"
               size="small"
@@ -118,6 +98,10 @@
         @comfirm="_searchList()"
       ></checkBox>
     </el-dialog>
+    <!-- 新增 -->
+    <el-dialog title="新增" :visible.sync="dialogVisible"  fullscreen>
+         <addNumber @cancel="dialogVisible=false"  @comfirm="_searchList()" v-if="flag"></addNumber>
+    </el-dialog>
   </div>
 </template>
 
@@ -128,12 +112,13 @@ import api from "../../api/numberGroup";
 import Organization from "@/api/Organization";
 import SelectTree from "@/components/SelectTree/syncSelectTree.vue";
 import project from "@/api/project";
-
+import addNumber from "./components/addNumber";
 export default {
   inject: ["reload"],
   components: {
     SelectTree,
-    checkBox
+    checkBox,
+    addNumber
   },
   data() {
     return {
@@ -157,14 +142,14 @@ export default {
         pageNo: 1, // 当前页
         pageSize: 10 // 每页条数
       },
-
+      flag:false,
       nowItem: "",
       name: "", // 组织机构回填显示
       projectItem: "", // 分部分项回填显示
       dialogFormVisible: false, // 查看编辑弹框
       innerVisible: false, // 组织机构弹框
       projectVisible: false, // 工程分项弹框
-
+      dialogVisible:false,   // 新增
       userGroupOption: [],
       projectItemTreeOptions: [], // 分部分项树
       userGroupId: "",
@@ -186,9 +171,14 @@ export default {
     this.initUserGrouptTree();
   },
   methods: {
-    action(val) {
-      this.nowItem = val;
-      this.dialogFormVisible = true;
+    action() {
+     
+      this.dialogVisible = true;
+       this.flag = false;
+          this.$nextTick(()=>{
+              this.flag = true;
+          })
+      // this.dialogFormVisible = true;
     },
     initUserGrouptTree() {
       // 组织机构树
@@ -310,18 +300,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* .el-select .el-input {
-     width: 130px;
-   }*/
-
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
 }
-
-/*  .dialogBox {
-    margin-top: -2vh;
-  }*/
-
 .mybox {
   /deep/ .el-range-editor.el-input__inner {
     padding: 3px 0px;
