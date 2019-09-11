@@ -309,11 +309,12 @@ export default {
   },
   mounted() {
     this.$refs.getSelectData.placeholder = this.nowItem.projectItemName;
+    this.initProject();
+    this.initProcess();
   },
   created() {
     this.initUserGroupTree();
-    this.initProject();
-    this.initProcess();
+   
     this.receiveUserList();
     this.form.batchNo = this.createUUID(); //生成批处理id
     this.handObj = this.nowItem;

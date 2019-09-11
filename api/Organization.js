@@ -23,6 +23,10 @@ export default {
   },
   getAllProjectItemTree(data) {   //异步获取组织机构
     return request.post('/rest/projectItemInfo/getProjectBQItemByIdNotZroe', data)
+  },
+  //设置组织机构
+  setDeparent(data){
+     return request.post("/rest/projectItemInfo/setItemOrgCode",data) 
   }
 }
 

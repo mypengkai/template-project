@@ -23,7 +23,7 @@
                   </div>
            </el-col>
        </el-row>
-    <el-table border :data="rechargeList" style="width: 100%" height="68vh" class="textList">
+    <el-table border :data="rechargeList" style="width: 100%" height="72vh" class="textList">
       <el-table-column align="center" prop="departname" label="组织机构"/>
       <el-table-column align="center" prop="remainSmsNum" label="剩余短信"/>
       <el-table-column align="center" prop="sendSmsSuccessNum" label="发送成功"/>
@@ -52,11 +52,9 @@
             v-on:noDe="handleRechargeUserGroupNodeClick"
           />
         </el-form-item>
-
         <el-form-item label="剩余短信数量:" prop="remainSmsNum">
           <el-input type="number" v-model.number="rechargeForm.remainSmsNum" @focus="rechargeUserGroup.flag=false"></el-input>
         </el-form-item>
-
         <el-col :span="8">
           <el-form-item label="总发送:" prop="sendAllNum">
             <el-input v-model.number="rechargeForm.sendAllNum" :readonly="true" :disabled="true"></el-input>
@@ -72,12 +70,12 @@
             <el-input v-model.number="rechargeForm.sendSmsFailNum" :readonly="true" :disabled="true"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item label="提醒余额:" prop="warnMoney">
             <el-input v-model.number="rechargeForm.warnMoney" @focus="rechargeUserGroup.flag=false"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="6">
           <el-form-item label="是否提醒:" prop="isWarn">
             <el-switch v-model="rechargeForm.isWarn" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
           </el-form-item>
@@ -242,6 +240,7 @@ export default {
     handleRechargeUserGroupNodeClick(data){
       this.rechargeUserGroup.selectedRechargeUserGroup=data;
       this.rechargeUserGroup.value=data.name;
+      this.queryData.departid=data.id;
       this.rechargeForm.departId=data.id;
     },
     saveRecharge(rechargeForm){   //保存
@@ -273,6 +272,6 @@ export default {
 
 <style scoped lang="scss">
 /deep/.el-form-item {
-     margin-bottom: 5px; 
+     margin-bottom: 18px; 
 }
 </style>

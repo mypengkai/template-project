@@ -48,7 +48,7 @@
       :data="tableData"
       :row-style="{height: '0'}"
       class="textList"
-      height="68vh"
+      height="72vh"
       stripe
       highlight-current-row
       border

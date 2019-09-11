@@ -11,11 +11,19 @@
         </el-col>
         <el-col :span="6">
           <span>短信类型:</span>
-          <el-input v-model="smsLog.smsContent" placeholder="请输入短信类型" />
+          <el-select v-model="smsLog.type" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              >
+            </el-option>
+          </el-select>
         </el-col>
         <el-col :span="6">
           <span>用户名:</span>
-          <el-input v-model="smsLog.smsRealname" placeholder="请输入用户名" />
+          <el-input v-model="smsLog.realName" placeholder="请输入用户名" />
         </el-col>
       </el-row>
     </div>
@@ -23,8 +31,10 @@
       <el-row>
         <el-col :span="12">
           <span>发送时间:</span>
-          <el-date-picker v-model="smsLog.stateTime" type="date" placeholder="请选择"></el-date-picker>-
-          <el-date-picker v-model="smsLog.endTime" type="date" placeholder="请选择"></el-date-picker>
+          <el-date-picker v-model="smsLog.timeStart" type="date" placeholder="请选择"  value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd"></el-date-picker>-
+          <el-date-picker v-model="smsLog.timeEnd" type="date" placeholder="请选择"  value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd"></el-date-picker>
         </el-col>
 
         <el-col :span="6" style="margin-left:10%">
@@ -44,15 +54,14 @@
       </el-row>
     </div>
 
-    <el-table border :data="smsLogList" style="width: 100%" height="60vh" class="textList">
+    <el-table border :data="smsLogList" style="width: 100%" height="66vh" class="textList">
       <el-table-column prop="realname" label="用户名" align="center" width="150" />
       <el-table-column prop="sendPhone" label="手机号码" align="center" width="150" />
       <el-table-column prop="smsDate" label="发送时间" align="center" width="150" />
       <el-table-column prop="smsContent" label="发送内容" align="left" />
       <el-table-column label="短信类型" align="center" width="120">
         <template slot-scope="scope">
-          <template v-if="scope.row.type==='log'">日志</template>
-          <template v-else-if="scope.row.type==='processCheck'">工序验收</template>
+          <template v-if="scope.row.type==='processCheck'">工序验收</template>
           <template v-else-if="scope.row.type==='selfCheck'">自主验收</template>
           <template v-else-if="scope.row.type==='polling'">巡视</template>
           <template v-else-if="scope.row.type==='command'">指令</template>
@@ -62,7 +71,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="sendNum" label="发送数量" align="center" width="100" />
-      <el-table-column fixed="right" label="操作" align="center" width="100">
+      <!-- <el-table-column fixed="right" label="操作" align="center" width="100">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top">
             <el-button
@@ -74,7 +83,7 @@
             ></el-button>
           </el-tooltip>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <!-- 分页 -->
     <el-pagination
@@ -91,13 +100,12 @@
 
     <!-- 详情查看 -->
 
-    <el-dialog title="详情查看" :visible.sync="dialogVisible" width="30%"></el-dialog>
+    <!-- <el-dialog title="详情查看" :visible.sync="dialogVisible" width="30%"></el-dialog> -->
   </div>
 </template>
 
 <script>
 import smsRechargeAPI from "../../api/smsRecharge";
-
 export default {
   inject: ["reload"],
   name: "smsSendLog",
@@ -105,13 +113,39 @@ export default {
     return {
       smsLog: {
         sendPhone: "",
-        smsContent: "",
-        smsRealname: "",
-        stateTime: "",
-        endTime: "",
+        type: "",
+        realName: "",
+        timeStart: "",
+        timeEnd: "",
+        smsContent:"",
         pageNo: 1,
         pageSize: 10
       },
+      options: [{
+          value: 'processCheck',
+          label: '工序验收'
+        }, {
+          value: 'selfCheck',
+          label: '自主验收',
+        }, {
+          value: 'polling',
+          label: '巡视'
+        }, {
+          value: 'command',
+          label: '指令'
+        }, {
+          value: 'sideStation',
+          label: '旁站'
+        }, {
+          value: 'notice',
+          label: '通知'
+        }, {
+          value: 'meeting',
+          label: '变更纪要'
+        },],
+
+
+      dialogVisible:false,
       smsLogList: [], //手机短信记录
       total: 0
     };
@@ -122,6 +156,7 @@ export default {
   methods: {
     getSmsLogList() {
       //查询短信发送记录
+      console.log(this.smsLog,"this.smsLog")
       smsRechargeAPI.getSmsInfoLogList(this.smsLog).then(res => {
         this.total = res.data.data.totalCount;
         this.smsLogList = res.data.data.data;

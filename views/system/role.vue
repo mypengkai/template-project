@@ -209,6 +209,6 @@ export default {
 }
 .shu {
   overflow-y: auto;
-  height: 500px;
+  height: 50vh;
 }
 </style>
