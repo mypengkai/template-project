@@ -53,7 +53,7 @@
                      @click="overProcess()">完成分项
           </el-button>
         </div>
-     
+
       <!-- 操作列表 -->
       <!--   state1   adopt
          0       null   已指定工序，待指定计划
@@ -94,7 +94,7 @@
                 <el-button :id="scope.$index" type="success" size="small" icon="el-icon-edit-outline" circle
                            @click="appointCheckPlan(scope.row)"/>
               </el-tooltip>
-              
+
               <el-tooltip v-if="scope.row.adopt===null && scope.row.state1===1" class="item" effect="dark"
                           content="修改验收计划" placement="top">
                 <el-button :id="scope.$index" type="warning" size="small" icon="el-icon-edit" circle
@@ -139,7 +139,7 @@
           <el-input :rows="4" v-model="form.remark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
       </el-form>
-       
+
       <div style="margin-left:60%;">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="addProcessFunction('addProcessForm')">确 定</el-button>
@@ -318,7 +318,7 @@
               <el-form-item label="备注:" prop="remark">
                 <el-input :rows="4" v-model="formData.remark" type="textarea" placeholder="请输入内容"/>
               </el-form-item>
-            </el-col>  
+            </el-col>
           </el-row>
         </el-form>
         <div style="margin-left:60%;">
@@ -413,7 +413,7 @@
    <!-- 验收 -->
       <el-dialog :visible.sync="dialogPlanRemark" title="自动回复">
         <remark @setRemark="getRemarkPlan" @cancel="dialogPlanRemark=false" :type="'realcheck'"></remark>
-    </el-dialog> 
+    </el-dialog>
   </div>
 </template>
 
@@ -543,7 +543,7 @@
           planSelfCheckPerson: [{ required: true, trigger: 'blur', message: '请选择施工单位自检人' }],
           planSelfCheckTime: [{ required: true, trigger: 'blur', message: '请选择施工单位自检时间' }]
         },
-        
+
         apponitCheckFrom: {   //指定验收提交内容
           planCheckPerson: '',   // 监理验收人id
           planCheckPersonName: '',   //监理验收人名称
@@ -615,7 +615,7 @@
           checkDescribe: [{ required: true, trigger: 'change', message: '请输入验收描述' }],
           remark:[{ required: true, trigger: 'change', message: '请填写备注'}]
         },
-       
+
 
         dialogVisibleSelf: false,  //自检图片预览
         dialogVisibleCheck: false,   //验收图片预览
@@ -643,12 +643,12 @@
                if (this.$refs['apponitCheckFrom'] != undefined) {
                         this.$refs["apponitCheckFrom"].resetFields();
                  }
-        },   
+        },
          dialogFormVisible:function(val,oldVla){
                if (this.$refs['addProcessForm'] != undefined) {
                         this.$refs["addProcessForm"].resetFields();
                  }
-        },             
+        },
       },
 
     mounted() {
@@ -777,7 +777,7 @@
         this.appointCheckDialogFormVisible = true
         this.apponitCheckFrom.processId = data.id;
         if (data.state1 == '1') {
-          request.post('/rest/processCheck/searchProcessCheckPersons', { processId: data.id }).then(res => { 
+          request.post('/rest/processCheck/searchProcessCheckPersons', { processId: data.id }).then(res => {
            this.apponitCheckFrom.planSelfCheckPersonName = res.data.data.selfCheckUser;
            this.apponitCheckFrom.planSelfCheckPerson = res.data.data.planSelfCheckPerson;
            this.apponitCheckFrom.planCheckPersonName = res.data.data.checkUser;
@@ -831,7 +831,7 @@
           this.formData.planCheckPersonName = data.row.username;
           this.formData.planCheckPerson = data.row.id;
         } else if (this.currentSelectedState === 'construction') {
-          
+
           this.apponitCheckFrom.planSelfCheckPersonName = data.row.username;
           this.apponitCheckFrom.planSelfCheckPerson = data.row.id;
           this.formData.planSelfCheckPersonName = data.row.username
@@ -911,7 +911,7 @@
      },
      getRemarkSelf(data){
          this.formData.selfCheckDescribe = data;
-         
+
      },
      getRemarkPlan(data){
           this.formData.checkDescribe = data;
@@ -922,7 +922,7 @@
       checkBeforeUplad(file) {  //验收图片上传之前
         this.leakRepairUploadForm.append('files[]', file)
       },
-     
+
       subimitSupplementProcessFunction(form) {  //补录工序
         this.formData.userGroupId = this.userGroupId
         this.formData.projectItemId = this.projectItemId
@@ -963,7 +963,7 @@
                   that.overProcessBtn = false
                   that.addProcessBtn = false
                   that.leftTopDetils = true
-                } 
+                }
                 else if (!res.data.data.complete && ress.data.data.iscomplete == '0') {
                   that.overProcessBtn = false
                   //that.addProcessBtn = true
@@ -983,7 +983,7 @@
         })
       },
       overProcess() {
-        this.$confirm('此操作将完成该工序,完成后将无法新增和补录工序!', '提示', {
+        this.$confirm('此操作将完成该分项,完成后将无法新增和补录工序!', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -1073,7 +1073,7 @@
     border: 1px solid #DCDFE6;
     border-radius: 10px;
 
- 
+
 
   }
    .btnDiv {
@@ -1108,7 +1108,7 @@
     margin-left: 0;
   }
 
-  
+
 
   .blgx {
     height: 60vh;
@@ -1131,7 +1131,7 @@
     line-height: 100px;
     vertical-align: top;
 }
- 
+
 /deep/.el-upload-list--picture-card .el-upload-list__item {
     overflow: hidden;
     background-color: #fff;

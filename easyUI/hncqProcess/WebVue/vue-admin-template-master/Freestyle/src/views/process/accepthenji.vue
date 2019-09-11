@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
-         
+
           <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
             <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname"
                        :value="item.id"></el-option>
@@ -15,7 +15,7 @@
           <select-tree clearable :options="projectItemTreeOption" ref="getSelectData" :props="projectItemDefaultProp"
                        v-on:noDe="projectItemOnClick"/>
 
-    
+
 
         </el-col>
 
@@ -195,7 +195,7 @@
           {
             //验收状态
             value: '0',
-            label: '已指定工序,待制定计划'
+            label: '已指定工序,待指定计划'
           },
           {
             value: '1',
