@@ -70,10 +70,10 @@
         class="textList"
         @current-change="handeUserCheck"
       >
-        <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column property="realname" label="用户名"></el-table-column>
-        <!-- <el-table-column property="zhiwei" label="职位"></el-table-column> -->
-        <el-table-column property="mobilePhone" label="电话"></el-table-column>
+        <el-table-column type="index" width="50" ></el-table-column>
+        <el-table-column property="realname" label="用户名" align="center"></el-table-column>
+        <el-table-column property="zhiwei" label="职位" align="center"></el-table-column>
+        <el-table-column property="mobilePhone" label="电话" align="center"></el-table-column>
       </el-table>
       <!-- 分页条 -->
       <el-pagination
@@ -203,6 +203,7 @@ export default {
     initUsername() {
       user.getNextmeetUser(this.users).then(res => {
         this.usersData = res.data.data.data;
+        this.usersTotal = res.data.data.totalCount;
         console.log(this.usersData, "this.usersData");
       });
     },

@@ -28,7 +28,7 @@
            </el-col>
       </el-row>
     </div>
-    <el-table border :data="userBindMobileList" class="textList" style="width: 100%" height="70vh">
+    <el-table border :data="userBindMobileList" class="textList" style="width: 100%" height="72vh">
       <el-table-column prop="realname" label="姓名" align="center" width="150" />
       <el-table-column prop="username" label="用户名" align="center" width="150" />
       <el-table-column prop="imei" label="设备身份码" align="center" />

@@ -7,7 +7,7 @@
       <span>发送时间:</span>
 
       <el-date-picker
-        v-model="noticeData.starttime"
+        v-model="noticeData.startTime"
         type="date"
         placeholder="选择日期"
         size="small"
@@ -221,7 +221,7 @@
         :page-size="receiveData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="receiveUserList()"
-        :total="total"
+        :total="totals"
       ></el-pagination>
       <div style="margin-left:70%;margin-top:10px;">
       <el-button @click="acceptUserDialog = false">取消</el-button>
@@ -252,10 +252,12 @@ export default {
       orgId: "",
       getList: [], // 当前列表
       total: 0,
+      totals:0,
       noticeData: {
         title: "",
         startTime: "",
         endTime: "",
+        type: '0',
         pageNo: 1, // 当前页
         pageSize: 10 // 每页条数
       },
@@ -276,7 +278,6 @@ export default {
         userGroupId: "",
         realname: "",
         position: "",
-        // type: '0',
         pageNo: 1, // 当前页
         pageSize: 10 // 每页条数
       },
@@ -380,7 +381,7 @@ export default {
     _searchList() {
       // 列表请求
       api.getList(this.noticeData).then(res => {
-        if (res.data.data) {
+        if (res.data.ok) {
           this.total = res.data.data.totalCount;
           this.getList = res.data.data.data;
         }
@@ -417,8 +418,7 @@ export default {
     receiveUserList() {
       //接收人列表
       processInfo.getUsersByDepartId(this.receiveData).then(res => {
-        this.total = res.data.data.totalCount;
-        console.log(res.data.data)
+        this.totals = res.data.data.totalCount;
         this.receiveUsersList = res.data.data.data;
       });
     },

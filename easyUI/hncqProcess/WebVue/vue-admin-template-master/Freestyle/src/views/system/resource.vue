@@ -45,7 +45,8 @@
 
     <!-- 新增/修改弹框 -->
     <el-dialog :title="newTitle" :visible.sync="dialogFormVisible" :before-close="closeResourceDialog" :append-to-body="true" :lock-scroll="false" class="dialogBox">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+       <div style="height:60vh;overflow-x:hidden">
+            <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
         <el-form-item label="菜单名称：" prop="title">
           <el-input v-model="ruleForm.title"/>
         </el-form-item>
@@ -85,8 +86,8 @@
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
+       </div>
     </el-dialog>
-
   </div>
 
 </template>

@@ -149,9 +149,8 @@
         total: 0,
         noticeData: {
           title: '',
-          users: '',
-          starttime: '',
-          endtime: '',
+          startTime: '',
+          endTime: '',
           pageNo: 1, // 当前页
           pageSize: 10 // 每页条数
         },
@@ -231,7 +230,6 @@
           if (res.data.data) {
             this.total = res.data.data.totalCount
             this.getList = res.data.data.data
-            let getList = this.getList
           }
 
         })

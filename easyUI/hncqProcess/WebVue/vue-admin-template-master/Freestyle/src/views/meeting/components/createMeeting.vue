@@ -335,22 +335,8 @@
       append-to-body
     >
        <div class="topBar">
-        <span>组织机构：</span>
-        <el-select
-          v-model="copyQueryParam.userGroupId"
-          placeholder="请选择"
-          @change="copyUserGroupOnClick()"
-        >
-          <el-option
-            v-for="item in copyUserGroupTree"
-            :key="item.id"
-            :label="item.departname"
-            :value="item.id"
-          ></el-option>
-        </el-select>
         <span>用户名：</span>
-        <el-input v-model="copyQueryParam.username" placeholder="请输入用户名"></el-input>
-
+        <el-input v-model="handleQueryParam.username" placeholder="请输入用户名"></el-input>
          <div class="rl">
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
                          @click="queryCopy">查询
@@ -369,8 +355,9 @@
         @current-change="handlePersonCurrentChange"
       >
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column property="realname" label="用户名"></el-table-column>
-        <el-table-column property="mobilePhone" label="电话"></el-table-column>
+        <el-table-column property="realname" label="用户名" align="center"></el-table-column>
+         <el-table-column property="zhiwei" label="职位" align="center"></el-table-column>
+        <el-table-column property="mobilePhone" label="电话" align="center"></el-table-column>
       </el-table>
       <!-- 分页条 -->
       <el-pagination
@@ -557,7 +544,8 @@ export default {
         username: "", //用户名
         pageNo: 1,
         pageSize: 10,
-        moneyLevel: ""
+        moneyLevel: "",
+        meetingType:'1'
       },
       copyUserGroupTree: [], //处理人组织机构Tree
       copyPersonData: [], //处理人数据列表
@@ -596,6 +584,7 @@ export default {
   methods: {
     queryCopy(){
         this.initCopyUsersList();
+        this.loadNextJobUserList();
     },
      nowDate(){
           let curDate = new Date()
@@ -615,8 +604,9 @@ export default {
     resetCopy(){
         this.copyQueryParam.userGroupId = '';
         this.copyQueryParam.realname = '';
-        this.copyQueryParam.username = '';
+        this.handleQueryParam.username = '';
         this.initCopyUsersList();
+        this.loadNextJobUserList();
     },
     query(){
         this.initDparentUser();
@@ -731,14 +721,14 @@ export default {
       //选择处理人弹框
       this.dialogHandleFormVisible = true;
       this.loadNextJobUserList();
-      this.initCopyUserGrouptTree();
     },
     loadNextJobUserList() {
-      //返回所有的处理人
-      user.getNextJobUserByCurrentId(this.handleQueryParam).then(res => {
+      //返回所有的处理人  getNextmeetUser   getNextJobUserByCurrentId
+      user.getNextmeetUser(this.handleQueryParam).then(res => {
+        console.log(res.data.data)
         this.handlerPersonTotal = res.data.data.totalCount;
         this.handlePersonData = res.data.data.data;
-        console.log(this.handlePersonData)
+        
       });
     },
     handleNextJobSizeChange(val) {
@@ -786,6 +776,10 @@ export default {
       this.initCopyUsersList();
     },
     handleCopySelectionChange(item) {
+      // console.log(item,"item")
+      // let array = [];
+      // array.push(item);
+      // console.log(array,"array")
       this.multipleSelectionCopy = item;
     },
     subimtCopyPerson() {
@@ -793,15 +787,8 @@ export default {
       let ids = "",
         names = "";
       for (let i = 0; i < this.multipleSelectionCopy.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += this.multipleSelectionCopy[i].id;
-
-        if (names.length > 0) {
-          names += ",";
-        }
-        names += this.multipleSelectionCopy[i].username;
+        ids += this.multipleSelectionCopy[i].id + ',';
+        names += this.multipleSelectionCopy[i].username +',';
       }
       this.myApplyChangeForm.copyUserName = names;
       this.myApplyChangeForm.makeCopy = ids;

@@ -121,7 +121,7 @@
             size="small"
             circle
             @click="officerItem(scope.row.commandId)"
-            v-if="scope.row.state =='2' && nowUserId==scope.row.sponsor"
+            v-if="scope.row.state =='2' "
           ></el-button>
         </el-tooltip> 
          

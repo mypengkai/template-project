@@ -446,19 +446,6 @@
       append-to-body
     >
        <div class="topBar">
-        <span>组织机构：</span>
-        <el-select
-          v-model="copyQueryParam.userGroupId"
-          placeholder="请选择"
-          @change="copyUserGroupOnClick()"
-        >
-          <el-option
-            v-for="item in copyUserGroupTree"
-            :key="item.id"
-            :label="item.departname"
-            :value="item.id"
-          ></el-option>
-        </el-select>
         <span>用户名：</span>
         <el-input v-model="copyQueryParam.username" placeholder="请输入用户名"></el-input>
 
@@ -480,8 +467,9 @@
         @current-change="handlePersonCurrentChange"
       >
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column property="realname" label="用户名"></el-table-column>
-        <el-table-column property="mobilePhone" label="电话"></el-table-column>
+        <el-table-column property="realname" label="用户名" align="center"></el-table-column>
+        <el-table-column property="zhiwei" label="职位" align="center"></el-table-column>
+        <el-table-column property="mobilePhone" label="电话" align="center"></el-table-column>
       </el-table>
       <!-- 分页条 -->
       <el-pagination
@@ -718,7 +706,8 @@ export default {
         username: "", //用户名
         pageNo: 1,
         pageSize: 10,
-        moneyLevel: ""
+        moneyLevel: "",
+        meetingType:'1'
       },
       copyUserGroupTree: [], //处理人组织机构Tree
       copyPersonData: [], //处理人数据列表
@@ -763,12 +752,14 @@ export default {
   methods: {
     queryCopy(){
         this.initCopyUsersList();
+        this.loadNextJobUserList();
     },
     resetCopy(){
         this.copyQueryParam.userGroupId = '';
         this.copyQueryParam.realname = '';
-        this.copyQueryParam.username = '';
+        this.handleQueryParam.username = '';
         this.initCopyUsersList();
+        this.loadNextJobUserList();
     },
     query(){
         this.initDparentUser();
@@ -777,6 +768,7 @@ export default {
         this.users.realname = "";
         this.users.position ="";
         this.initDparentUser();
+
     },
 
 
@@ -894,7 +886,7 @@ export default {
     },
     loadNextJobUserList() {
       //返回所有的处理人
-      user.getNextJobUserByCurrentId(this.handleQueryParam).then(res => {
+      user.getNextmeetUser(this.handleQueryParam).then(res => {
         this.handlerPersonTotal = res.data.data.totalCount;
         this.handlePersonData = res.data.data.data;
       });
