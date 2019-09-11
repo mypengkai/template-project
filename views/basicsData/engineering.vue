@@ -1,19 +1,5 @@
 <template>
   <div class="p20" ref="projectContent">
-    <!-- 选择区域 -->
-    <!-- <div class="topBar">
-      <span>组织机构:</span>
-      <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
-                   :default-expand-all="false" v-on:noDe="handleUserGroupCheckChange"
-                   ref="ProjectItem_userGroup"/>
-      <div class="rl">
-        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="initProjectList">查询
-        </el-button>
-        <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setProjectItemKeyBtn">
-          设置关键部位
-        </el-button>
-      </div>
-    </div> -->
      <div class="topBar">
       <el-row>
         <el-col :span="6">
@@ -23,11 +9,14 @@
                    ref="ProjectItem_userGroup"/>
         </el-col>
 
-        <el-col :span="6">
+        <el-col :span="8" style="margin-left:30%">
         <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="initProjectList">查询
         </el-button>
         <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setProjectItemKeyBtn">
           设置关键部位
+        </el-button>
+         <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setDeparent">
+          设置组织机构
         </el-button>
         </el-col>
       </el-row>
@@ -515,6 +504,21 @@
       },
       ImportDataComfim() {   //确认数据导入
 
+      },
+      setDeparent(){
+          if(this.queryParamData.userGroupId==""){
+              this.$message({
+                message:"请选择组织机构"
+              })
+              return false
+          }
+          organization.setDeparent({departId:this.queryParamData.userGroupId}).then(res=>{
+             if(res.data.ok){
+                this.$message({
+                  message:"设置成功"
+                })
+             }
+          })
       }
     }
   }
