@@ -9,7 +9,16 @@
 
           <h4>桩号: {{ item.commandzhuanghao }}</h4>
           <h4>拍摄地点: {{ item.commandphotoLocation }}</h4>
-          <img :src="item.commandfilePath" alt>
+          <!-- <img :src="item.commandfilePath" alt> -->
+          <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
+              <img :src="item.pollingfilePath" alt />
+            </template>
+             <template  v-else-if="item.filetype==='mp4'">
+                <img :src="(item.pollingfilePath.replace('mp4','jpg'))" alt  />
+            </template>
+            <template  v-else-if="item.filetype==='mov'">
+                <img :src="(item.pollingfilePath.replace('mov','jpg'))" alt  />
+            </template>
         </el-timeline-item>
       </el-timeline>
     </div>
@@ -32,7 +41,7 @@
       shoot() {
         homePage.getPicMessage().then(res => {
           this.weekData = res.data.data
-          console.log(this.weekData)
+          console.log(this.weekData,'weekData')
         })
       }
     }
