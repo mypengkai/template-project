@@ -5,7 +5,7 @@
         <el-col :span="12">
           <el-form-item label="组织机构：" prop="departname">
             <el-select
-              style="width:16vw"
+             style="width:100%"
               v-model="form.departname"
               placeholder="请选择"
               @change="userGroupOnChange"
@@ -21,7 +21,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item style="width:25vw" label="分部分项：" prop="projectItemId">
+          <el-form-item style="width:100%" label="分部分项：" prop="projectItemId">
             <select-tree
               clearable
               :options="projectItemTree"
@@ -37,7 +37,7 @@
         <el-col :span="12">
           <el-form-item label="工序名称：" prop="process">
             <el-select @change="changeProcess"
-              style="width:16vw"
+             style="width:100%"
               v-model="form.process"
               placeholder="请选择工序"
               size="small"
@@ -52,7 +52,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item style="width:25vw" label="处理人：" prop="nowsendusername">
+          <el-form-item style="width:100%" label="处理人：" prop="nowsendusername">
             <el-input
               v-model="form.nowsendusername"
               size="small"
@@ -70,6 +70,7 @@
         <el-col :span="12">
           <el-form-item label="计划复核时间：" prop="planCheckTime">
             <el-date-picker
+              style="width:100%"
               v-model="form.planCheckTime"
               type="date"
               placeholder="选择日期："
@@ -81,6 +82,7 @@
         <el-col :span="12">
           <el-form-item label="计划处理时间：" prop="planFinishTime">
             <el-date-picker
+              style="width:100%"
               v-model="form.planFinishTime"
               type="date"
               placeholder="选择日期："
@@ -92,7 +94,7 @@
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item style="width:52vw" label="指令内容：">
+          <el-form-item style="width:100%" label="指令内容：">
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
         </el-col>
@@ -115,7 +117,7 @@
                   </el-form-item>
         </el-col>
       </el-row>
-        <div class="tar" style=" right:10%;position: absolute;bottom: 10px;padding: 10px">
+        <div class="tar" style="margin:10px;">
         <el-button  @click="close()">取 消</el-button>
         <el-button type="primary"  @click="_comfirm('form')">确 定</el-button>
       </div>
@@ -173,7 +175,6 @@
       remark,
       orderInstruct
     },
-    props:['nowItem'],
     data() {
       return {
         formRules: {

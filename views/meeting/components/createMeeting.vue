@@ -167,7 +167,7 @@
               type="datetime"
               placeholder="选择开会时间"
               size="small"
-              style="min-width:180px"
+              style="width:100%"
               :picker-options="pickerOptions"
             ></el-date-picker>
           </el-form-item>
@@ -179,7 +179,7 @@
               type="date"
               placeholder="选择计划时间"
               size="small"
-              style="min-width:180px"
+               style="width:100%"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
               :picker-options="pickerOptions"
