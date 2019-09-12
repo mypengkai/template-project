@@ -63,7 +63,7 @@
         <el-col :span="12">
           <el-form-item label="组织机构:" prop="departId">
             <el-select
-              style="width:16vw"
+             style="width:100%"
               v-model="myApplyChangeForm.departId"
               placeholder="请选择"
               @change="checkDepart()"
@@ -232,9 +232,9 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位"></el-input>
         <div class="rl">
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
                          @click="query">查询
@@ -254,9 +254,9 @@
         @current-change="handeUserCheck"
       >
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column property="username" label="用户名"></el-table-column>
-        <el-table-column property="zhiwei" label="职位"></el-table-column>
-        <el-table-column property="mobilePhone" label="电话"></el-table-column>
+        <el-table-column property="username" label="用户名" align="center"></el-table-column>
+        <el-table-column property="zhiwei" label="职位" align="center"></el-table-column>
+        <el-table-column property="mobilePhone" label="电话" align="center"></el-table-column>
       </el-table>
       <!-- 分页条 -->
       <el-pagination
@@ -283,9 +283,9 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位"></el-input>
          <div class="rl">
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
                          @click="query">查询
@@ -304,9 +304,9 @@
         @current-change="handeNoteNameCheck"
       >
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column property="username" label="用户名"></el-table-column>
-        <el-table-column property="zhiwei" label="职位"></el-table-column>
-        <el-table-column property="mobilePhone" label="电话"></el-table-column>
+        <el-table-column property="username" label="用户名" align="center"></el-table-column>
+        <el-table-column property="zhiwei" label="职位" align="center"></el-table-column>
+        <el-table-column property="mobilePhone" label="电话" align="center"></el-table-column>
       </el-table>
       <!-- 分页条 -->
       <el-pagination
@@ -677,13 +677,15 @@ export default {
         this.noteNameTotal = res.data.data.totalCount;
       });
     },
-    checkRealname() {
-      this.initDparentUser();
-    },
-    checkPosition() {
-      this.initDparentUser();
-    },
+    // checkRealname() {
+    //   this.initDparentUser();
+    // },
+    // checkPosition() {
+    //   this.initDparentUser();
+    // },
     handleUserOnclick() {
+      this.users.realname = "";
+      this.users.position ="";
       this.dialogusersVisible = true;
       this.initDparentUser();
     },
@@ -701,6 +703,8 @@ export default {
     },
     // 会议记录人
     handleNoteUserOnclick() {
+      this.users.realname = "";
+      this.users.position ="";
       this.dialogNoteNameVisible = true;
       this.initDparentUser();
     },
@@ -719,6 +723,7 @@ export default {
 
     handlePersonOnclick() {
       //选择处理人弹框
+     
       this.dialogHandleFormVisible = true;
       this.loadNextJobUserList();
     },

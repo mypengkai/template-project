@@ -12,9 +12,12 @@
             <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
               <img :src="item.filePath" alt />
             </template>
-              <template  v-else-if="item.filetype==='mp4' || item.filetype==='mov'">
-                <img :src="url" alt />
-             </template>
+            <template  v-else-if="item.filetype==='mp4'">
+                <img :src="(item.filePath.replace('mp4','jpg'))" alt  />
+            </template>
+            <template  v-else-if="item.filetype==='mov'">
+                <img :src="(item.filePath.replace('mov','jpg'))" alt  />
+            </template>
         </div>
         <div class="p20-contation">
           <el-row>
@@ -68,9 +71,12 @@
             <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
               <img :src="item.filePath" alt />
             </template>
-              <template  v-else-if="item.filetype==='mp4' || item.filetype==='mov'">
-                <img :src="url" alt />
-             </template>
+             <template  v-else-if="item.filetype==='mp4'">
+                <img :src="(item.filePath.replace('mp4','jpg'))" alt  />
+            </template>
+            <template  v-else-if="item.filetype==='mov'">
+                <img :src="(item.filePath.replace('mov','jpg'))" alt  />
+            </template>
         </div>
         <div class="p20-contation">
           <el-row>
@@ -189,44 +195,11 @@ export default {
       meetId: "", // 会议id
       nowItem: [], // 旁站数据 巡视
       commandList: {}, // 指令数据
-      url:'',
     };
   },
   created() {
 
 
-  },
-  watch:{
-      conentOptions(val){
-          val.forEach(e => {
-              if(e.filetype=='mp4'){
-                   let str = e.filePath;
-                   let endstr = str.replace("mp4","jpg");
-                   this.url = endstr;
-                   console.log( this.url,"this.url1")
-              }else if(e.filetype=='mov'){
-                   let str = e.filePath;
-                   let endstr = str.replace("mov","jpg");
-                   this.url = endstr;
-                   console.log( this.url,"this.url2")
-              }
-          });
-      },
-      userOptions(val){
-            val.forEach(e => {
-              if(e.filetype=='mp4'){
-                   let str = e.filePath;
-                   let endstr = str.replace("mp4","jpg");
-                   this.url = endstr;
-
-              }else if(e.filetype=='mov'){
-                   let str = e.filePath;
-                   let endstr = str.replace("mov","jpg");
-                   this.url = endstr;
-              }
-          });
-      },
-       deep:true,
   },
   computed: {
     title() {

@@ -64,7 +64,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="组织机构:" prop="departId">
-            <el-select
+            <el-select style="width:100%"
               v-model="myApplyChangeForm.departId"
               placeholder="请选择"
               @change="checkDepart()"
@@ -343,9 +343,9 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位"></el-input>
         <div class="rl">
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
                          @click="query">查询
@@ -394,9 +394,9 @@
     >
       <div class="topBar">
         <span>用户名：</span>
-        <el-input v-model="users.realname" placeholder="请输入用户名" @change="checkRealname"></el-input>
+        <el-input v-model="users.realname" placeholder="请输入用户名"></el-input>
         <span>职位：</span>
-        <el-input v-model="users.position" placeholder="请输入职位" @change="checkPosition"></el-input>
+        <el-input v-model="users.position" placeholder="请输入职位"></el-input>
          <div class="rl">
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-search"
                          @click="query">查询
@@ -839,13 +839,15 @@ export default {
         this.noteNameTotal = res.data.data.totalCount;
       });
     },
-    checkRealname() {
-      this.initDparentUser();
-    },
-    checkPosition() {
-      this.initDparentUser();
-    },
+    // checkRealname() {
+    //   this.initDparentUser();
+    // },
+    // checkPosition() {
+    //   this.initDparentUser();
+    // },
     handleUserOnclick() {
+      this.users.realname = "";
+      this.users.position ="";
       this.dialogusersVisible = true;
       this.initDparentUser();
     },
@@ -863,6 +865,8 @@ export default {
     },
     // 会议记录人
     handleNoteUserOnclick() {
+      this.users.realname = "";
+      this.users.position ="";
       this.dialogNoteNameVisible = true;
       this.initDparentUser();
     },
