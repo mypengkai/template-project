@@ -71,11 +71,11 @@
         <td colspan="3" height="400px">
           <div class="block">
             <template v-if="currentProcess.SelfCheckFile!==null">
-              <el-timeline  v-for="(item, index) in currentProcess.SelfCheckFile" :key="index">
-                <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px;text-align: left">
-                  <el-card>
-                    <h4 style="text-align: left;">完成状态:{{item.isadopt=='1'?'通过':'不通过'}}</h4>
-                    <h4 style="text-align: left;">自检描述:{{item.checkexplain}}</h4>
+              <el-timeline>
+                <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px;text-align: left" v-for="(item, index) in currentProcess.SelfCheckFile" :key="index">
+                  <el-card class="elCard">
+                    <h4 style="text-align: left;">完成状态:<span>{{item.isadopt=='1'?'通过':'不通过'}}</span></h4>
+                    <h4 style="text-align: left;">自检描述:<span>{{item.checkexplain}}</span></h4>
                     <h4 style="text-align: left;">影像资料:</h4>
                     <template v-if="item.infolist!==null">
                       <ul v-for="(node, key) in item.infolist" :key="key" style="margin-left:10px">
@@ -107,11 +107,11 @@
         </td>
         <td colspan="2">
           <template v-if="currentProcess.CheckFile!==null">
-            <el-timeline v-for="(item, index) in currentProcess.CheckFile" :key="index">
-              <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px;text-align: left">
-                <el-card>
-                  <h4 style="text-align: left;">完成状态:{{item.isadopt=='1'?'通过':'不通过'}}</h4>
-                  <h4 style="text-align: left;">验收描述:{{item.checkexplain}}</h4>
+            <el-timeline>
+              <el-timeline-item :timestamp="item.createtime" placement="top" style="padding: 10px;text-align: left" v-for="(item, index) in currentProcess.CheckFile" :key="index">
+                <el-card  class="elCard">
+                  <h4 style="text-align: left;">完成状态:<span>{{item.isadopt=='1'?'通过':'不通过'}}</span></h4>
+                  <h4 style="text-align: left;">验收描述:<span>{{item.checkexplain}}</span></h4>
                   <h4 style="text-align: left;">影像资料:</h4>
                   <template v-if="item.infolist!==null">
                     <ul v-for="(node, key) in item.infolist" :key="key">
@@ -334,7 +334,13 @@
     list-style-type: none;
 
   }
-
+.elCard{
+   h4{
+     span{
+        font-weight: normal;
+     }
+   }
+}
   /deep/ .el-dialog__wrapper {
     overflow-y: hidden;
   }
