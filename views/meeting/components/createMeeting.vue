@@ -781,10 +781,6 @@ export default {
       this.initCopyUsersList();
     },
     handleCopySelectionChange(item) {
-      // console.log(item,"item")
-      // let array = [];
-      // array.push(item);
-      // console.log(array,"array")
       this.multipleSelectionCopy = item;
     },
     subimtCopyPerson() {

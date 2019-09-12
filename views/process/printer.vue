@@ -45,7 +45,7 @@
     <div class="topBar">
       <el-row>
         <el-col :span="6">
-         <el-form label-width="80px" :model="form">
+         <el-form label-width="80px">
             <el-form-item label="打印状态:">
               <el-select v-model="form.type" placeholder="请选择" size="small">
                 <el-option 
@@ -72,7 +72,7 @@
                 type="primary"
                 class="pan-btn light-blue-btn"
                 icon="el-icon-search"
-                @click="querySelected"
+                @click="query"
               >查询</el-button>
             </span>
             <span>
@@ -108,7 +108,7 @@
       >
         
         <el-table-column type="selection" width="50" align="center" v-if="form.type==0"></el-table-column>
-        <el-table-column prop="processNumber" label="打印编码" width="100" v-if="form.type==1"></el-table-column>
+        <el-table-column prop="processNumber" label="打印编码" width="100"></el-table-column>
         <el-table-column prop="projectName" label="分部分项" ></el-table-column>
         <el-table-column prop="Station" label="桩号" width="120" align="center"></el-table-column>
         <el-table-column prop="processname" label="工序名称" width="120"></el-table-column>
@@ -213,16 +213,19 @@
     },
     created() {
       this.initUserGroup()
+       // 默认搜未打印数据
+      this.querySelected()
     },
     mounted() {
-      // 默认搜未打印数据
-      this.querySelected()
+     
     },
     methods: {
       //  handleClick(id){
 
       //  },
-
+      query(){
+          this.querySelected(); 
+      },
       initUserGroup() {  //初始化组织机构树
         Organization.userGroupSelect().then(res => {
           this.userGroupOption = res.data.data
