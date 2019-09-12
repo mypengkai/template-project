@@ -233,7 +233,7 @@
         <el-dialog
           :visible.sync="setCheckPersonDialogFormVisible"
           width="50%"
-          title="选中验收人"
+          :title="title"
           :append-to-body="true"
         >
           <div class="topBar">
@@ -1129,6 +1129,9 @@ export default {
     },
     selectCheckPerson(type) {
       // 验收人弹框数据
+      //  this.pageForm.realname="";
+      //  this.pageForm.position="";
+
       let that = this;
       this.setCheckPersonDialogFormVisible = true;
       this.checkPersonData = [];
@@ -1201,7 +1204,6 @@ export default {
     },
     // 编辑指定验收接口
     submitCheckPlan(formName) {
-      alert(1);
       this.$refs[formName].validate(valid => {
         if (valid) {
           request
@@ -1216,6 +1218,8 @@ export default {
                   message: "指定验收计划成功",
                   type: "success"
                 });
+                 this.pageForm.realname = "";
+                 this.pageForm.position = "";
                 // this.apponitCheckFrom.planSelfCheckPersonName="";
                 // this.apponitCheckFrom.planCheckPersonName="";
                 this.appointCheckDialogFormVisible = false;
@@ -1374,9 +1378,10 @@ export default {
         request
           .post("/rest/processCheck/itemComplete", { codeid: this.codeid })
           .then(res => {
-            if (res.data.data != "false") {
+            if (res.data.ok) {
               this.overProcessBtn = false;
               this.addProcessBtn = false;
+              // this.showSelectedProjectItemInfo(itemId);
             }
           });
       });

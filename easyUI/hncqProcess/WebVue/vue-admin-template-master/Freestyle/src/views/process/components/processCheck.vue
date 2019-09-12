@@ -143,7 +143,6 @@
             <div class="class">
               <template v-if="currentProcess.CheckFile!==null">
                 <el-timeline>
-                   <!-- item.createtime -->
                   <el-timeline-item
                     :timestamp="'验收时间：'+item.createtime"
                     placement="top"
@@ -222,7 +221,6 @@
       <viewer :imgList="processPicture" :zhuanghao="zhuanghao"></viewer>
     </el-dialog>
     <el-dialog title="影像资料" width="50%" :visible.sync="vedioinnerVisible" append-to-body>
-      <!--      <viewer :imgList="processPicture"></viewer>-->
       <video-player
         class="video-player vjs-custom-skin"
         ref="videoPlayer"
@@ -256,8 +254,6 @@ export default {
       imginnerVisible: false,
       processPicture: [],
       zhuanghao: "",
-      // checkTime:'',
-      // selfTime:'',
       CheckFile: [],
       SelfCheckFile: [],
       currentProcess: {},
@@ -304,8 +300,6 @@ export default {
      
   },
   methods: {
-     
-
     pictureShows(node) {
       let newArr = [];
       for (let i = 0; i < node.length; i++) {
