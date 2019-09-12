@@ -211,10 +211,9 @@
         v-if="currentProcess.nextPage==='yes'"
         size="mini"
         type="primary"
-        icon="el-icon-arrow-right"
-        class="pan-btn light-blue-btn"
         @click="processPageOne('1')"
-      >下一道工序</el-button>
+      >下一道工序 <i class="el-icon-arrow-right"></i>
+      </el-button>
     </div>
 
     <!-- 图片详情弹出层 -->
