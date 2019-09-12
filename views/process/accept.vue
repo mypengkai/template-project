@@ -475,6 +475,7 @@
                 <el-upload
                   class="avatar-uploader"
                   ref="uploadSelf"
+                   :on-success="handActive"
                   :action="leakRepairProcessUrl"
                   name="files"
                   :headers="headers"
@@ -493,6 +494,7 @@
                 <el-upload
                   class="avatar-uploader"
                   ref="uploadCheck"
+                  :on-success="handActive"
                   :action="leakRepairProcessUrl"
                   name="files"
                   :headers="headers"
@@ -1305,6 +1307,16 @@ export default {
             });
         }
       });
+    },
+    handActive(response,file,fileList){
+      //  console.log(response.ok,"response")
+      //  console.log(file,"file")
+      //  console.log(fileList,"fileList")
+     
+      //  if(response.ok){
+      //      this.dialogFormVisibleBL = false;
+      //      this.clearUploadedImage();
+      //  }
     },
     clearUploadedImage() {
       this.$refs.uploadSelf.clearFiles();

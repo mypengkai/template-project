@@ -352,6 +352,11 @@ export default {
                 that.getSmsRechargeList();
                 that.rechargeForm={};
                 that.dialogVisible = false; //关闭弹框
+              }else{
+                 this.$message({
+                     type: "danger",
+                     message: res.data.message
+                 })
               }
             });
         }
