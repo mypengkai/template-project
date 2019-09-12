@@ -28,7 +28,7 @@
           </el-select>
         </el-form-item>
           <el-form-item label="分部分项:" prop="groupId">
-            <div style="height:41vh;overflow-y:auto;border:1px solid #DCDFE6; width:31vw;border-radius: 5px">
+            <div style="min-height:42vh; max-height:50vh;overflow-y:auto;border:1px solid #DCDFE6; width:100%;border-radius: 5px">
                <el-tree
               :data="setProjectItem"
               :props="defaultSetKeyProjectItemProps"
@@ -77,6 +77,7 @@
               <el-button type="primary" class="pan-btn light-blue-btn" icon="el-icon-refresh" @click="reset()">重置
               </el-button>
             </div>
+      </div>
         <el-table
           border
           :data="receiveUsersList"
@@ -90,11 +91,12 @@
           <el-table-column prop="zhiwei" label="职务"></el-table-column>
           <el-table-column prop="mobilePhone" label="电话"></el-table-column>
         </el-table>
-        <el-pagination style="margin-top:10px;"
-          background
+        <el-pagination 
+           class="pageList"
           :current-page.sync="receiveData.pageNo"
           :page-sizes="[10,20,30]"
           :page-size="receiveData.pageSize"
+          @size-change="handeUsersChange"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="receiveUserList()"
           :total="total"
@@ -103,7 +105,7 @@
           <el-button @click="acceptUserDialog = false">取消</el-button>
           <el-button type="primary" @click="toggleSelection()">确定</el-button>
         </div>
-      </div>
+      
     </el-dialog>
   </div>
 </template>
@@ -195,6 +197,10 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+    handeUsersChange(val) {
+      this.receiveData.pageSize = val;
+      this.receiveUserList();
+    },
     alertAcceptUserDialog(){
       this.acceptUserDialog = true
     },
@@ -273,17 +279,25 @@ export default {
   .conentLeft {
     float: left;
     width: 40%;
-    height:70vh;
+    //height:70vh;
   }
   .conentRight {
     float: left;
     width: 60%;
     padding: 0 30px;
-    height:70vh;
+    //height:70vh;
   }
   .btn{
       margin-left:80%;
       margin-top:20px;
   }
 }
+/deep/.el-pagination {
+  white-space: nowrap;
+  padding: 2px 5px;
+  color: #303133;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
 </style>
