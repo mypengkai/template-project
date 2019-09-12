@@ -28,7 +28,7 @@
           </el-select>
         </el-form-item>
           <el-form-item label="分部分项:" prop="groupId">
-            <div style="min-height:42vh; max-height:50vh;overflow-y:auto;border:1px solid #DCDFE6; width:100%;border-radius: 5px">
+            <div style="height:42vh; overflow-y:auto;border:1px solid #DCDFE6; width:100%;border-radius: 5px">
                <el-tree
               :data="setProjectItem"
               :props="defaultSetKeyProjectItemProps"
