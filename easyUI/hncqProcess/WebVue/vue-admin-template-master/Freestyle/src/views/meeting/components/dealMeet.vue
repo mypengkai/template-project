@@ -13,6 +13,7 @@
       </el-form-item>
       <el-form-item label="计划完成时间:" prop="plancompletionTime" v-if="flag">
         <el-date-picker
+          style="width:100%"
           type="date"
           placeholder="选择计划完成时间"
           v-model="form.plancompletionTime"

@@ -193,7 +193,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="指定工序">
       <el-form ref="addProcessForm" :model="form" :rules="acceptRule" label-width="120px">
         <el-form-item label="工序名称" prop="processSDictId">
-          <el-select v-model="form.processSDictId" placeholder="请选择工序" size="small">
+          <el-select v-model="form.processSDictId" placeholder="请选择工序" size="small" style="width:100%">
             <el-option
               v-for="item in processSDictOption"
               :key="item.id"
@@ -204,10 +204,10 @@
         </el-form-item>
 
         <el-form-item label="工序验收序号" prop="seq">
-          <el-input-number v-model="seq" controls-position="right" :min="1" :max="100" size="small"></el-input-number>
+          <el-input-number v-model="seq" controls-position="right" :min="1" :max="100" size="small" style="width:100%"></el-input-number>
         </el-form-item>
         <el-form-item label="工序验收次数" prop="checkNum">
-          <el-input-number
+          <el-input-number  style="width:100%"
             v-model="checkNum"
             controls-position="right"
             :min="1"
@@ -308,7 +308,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="分部分项:">
-                <el-input v-model="projectItem" :disabled="true" size="small"></el-input>
+                <el-input v-model="projectItem" :disabled="true" size="small" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -325,7 +325,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="24">
               <el-form-item label="工序:" prop="processDictId">
                 <el-select
                   v-model="formData.processDictId"
@@ -341,7 +341,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12"></el-col>
+           
           </el-row>
           <el-row>
             <el-col :span="12">

@@ -168,7 +168,7 @@
               type="date"
               placeholder="选择开会时间"
               size="small"
-              style="min-width:180px"
+              style="width:100%"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd "
             ></el-date-picker>
@@ -181,7 +181,7 @@
               type="date"
               placeholder="选择计划时间"
               size="small"
-              style="min-width:180px"
+              style="width:100%"
               value-format="yyyy-MM-dd"
               format="yyyy-MM-dd"
             ></el-date-picker>

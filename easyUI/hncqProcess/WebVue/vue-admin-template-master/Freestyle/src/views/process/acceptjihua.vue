@@ -174,7 +174,7 @@
           },
           {
             value: '3',
-            label: '验收不通过'
+            label: '不通过,待自检'
           }
         ],
         dialogTableVisible: false,

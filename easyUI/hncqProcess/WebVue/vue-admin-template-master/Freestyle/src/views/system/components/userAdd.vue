@@ -241,6 +241,7 @@
 <style lang="scss" scoped>
   .reverseBox {
     height: 60vh;
+    padding: 0 30px;
     overflow-y: auto;
 
   /deep/ .el-form-item__label {

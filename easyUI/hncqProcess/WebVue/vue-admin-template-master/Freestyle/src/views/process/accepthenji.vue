@@ -207,11 +207,11 @@
           },
           {
             value: '3',
-            label: '验收不通过'
+            label: '不通过,待自检'
           },
           {
             value:'4',
-             label: '验收已完成'
+             label: '已验收,通过'
           }
         ],
         dialogTableVisible: false,
