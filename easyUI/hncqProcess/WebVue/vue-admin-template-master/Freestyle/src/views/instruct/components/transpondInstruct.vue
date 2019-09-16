@@ -85,7 +85,7 @@
 
     <!-- 快捷回复 -->
     <el-dialog width="50%" class="dialogBox" title="指令完成" :visible.sync="dialogremarkVisible" append-to-body>
-      <remark @cancel="dialogremarkVisible=false"></remark>
+      <remark @cancel="dialogremarkVisible=false" @setRemark="getRemark" :type="'command'"></remark>
     </el-dialog>
   </div>
 </template>
@@ -144,6 +144,9 @@ export default {
     },
     checkRemark() {
       this.dialogremarkVisible = true;
+    },
+    getRemark(data){
+      this.transpondForm.remark = data
     },
     receiveUserList() {
       //接收人列表

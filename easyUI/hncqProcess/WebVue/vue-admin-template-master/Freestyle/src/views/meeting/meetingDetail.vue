@@ -89,12 +89,10 @@
                                 <ol>
                                   <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
                                   <li><span>会议主题:</span><i>{{item.publicData.meetingTheme}}</i></li>
-                                  <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>
-                                 
+                                  <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>                                
                                   <li><span>组织机构:</span><i>{{item.publicData.departname}}</i></li>
                                   <li><span>分部分项:</span><i>{{item.publicData.projectItem}}</i></li>
-                                  <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>
-                                 
+                                  <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>                                 
                                   <li><span>会议主持人:</span><i>{{item.publicData.meetingHostName}}</i></li>
                                   <li><span>会议记录人:</span><i>{{item.publicData.meetingNoteTakerName}}</i></li>
                                   <li><span>开会时间:</span><i>{{item.publicData.meetingDatetime}}</i></li>
@@ -238,7 +236,7 @@ export default {
 
   created() {
     this.initChangeDetail();
-    console.log(this.changeId)
+    //console.log(this.changeId)
   },
   methods: {
     initChangeDetail() {
