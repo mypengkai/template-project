@@ -72,7 +72,7 @@ export default {
         this.dialogremarkVisible = true
     },
     getRemark(data){
-        this.returnForm.remark = data
+        this.finishForm.remark = data
     },
     close(){
         this.$emit('cancel')

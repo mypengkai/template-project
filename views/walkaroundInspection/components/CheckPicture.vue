@@ -170,7 +170,7 @@
                 <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
                   <video
                     :src="node.filePath"
-                    style="width: 100px; height: 100px;"
+                    style="width: 100px; height: 100px;display: block;"
                     @click="videoPlayerShow(node)"
                   ></video>
                 </template>
@@ -306,14 +306,13 @@ export default {
     li {
       list-style: none;
       float: left;
-      width: 12vh;
-      height: 12vh;
       margin: 5px;
       img {
         width: 100%;
         height: 100%;
         display: block;
       }
+      
     }
   }
 }
