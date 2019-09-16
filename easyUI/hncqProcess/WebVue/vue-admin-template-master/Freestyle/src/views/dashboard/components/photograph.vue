@@ -41,7 +41,6 @@
       shoot() {
         homePage.getPicMessage().then(res => {
           this.weekData = res.data.data
-          console.log(this.weekData,'weekData')
         })
       }
     }

@@ -92,8 +92,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .officeBox {
-  height: 50vh;
-  overflow-x: hidden;
+  // height: 50vh;
+  // overflow-x: hidden;
   padding: 0 30px;
 }
 /deep/.el-upload-list--picture-card .el-upload-list__item {

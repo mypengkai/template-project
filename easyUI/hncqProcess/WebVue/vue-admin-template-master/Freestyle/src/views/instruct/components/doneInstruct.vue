@@ -3,6 +3,7 @@
     <el-form :model="soonFinishForm" label-width="120px" ref="soonFinishForm" :rules="rules">
       <el-form-item label="完成时间：" prop="planFinishTime">
         <el-date-picker
+          style="width:100%"
           v-model="soonFinishForm.planFinishTime"
           type="date"
           placeholder="选择日期时间："
@@ -118,8 +119,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.returnBox {
-  height: 50vh;
+.doneBox {
+  max-height: 50vh;
   overflow-x: hidden;
   padding: 0 30px;
 }
