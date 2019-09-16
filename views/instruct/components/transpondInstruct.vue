@@ -13,6 +13,7 @@
       </el-form-item>
       <el-form-item label="计划完成时间：" prop="planFinishTime">
         <el-date-picker
+          style="width:100%"
           v-model="transpondForm.planFinishTime"
           type="date"
           placeholder="选择日期时间："
@@ -193,3 +194,10 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.transpondBox{
+ max-height: 50vh;
+ overflow-x: hidden;
+ padding: 0 30px;
+}
+</style>

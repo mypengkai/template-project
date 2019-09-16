@@ -3,6 +3,7 @@
     <el-form :model="returnForm" label-width="130px" ref="returnForm" :rules="returnRules">
       <el-form-item label="计划完成时间：" prop="planFinishTime">
         <el-date-picker
+          style="width:100%"
           v-model="returnForm.planFinishTime"
           type="date"
           placeholder="选择日期时间："
@@ -120,7 +121,7 @@ export default {
 
 <style lang="scss" scoped>
 .returnBox {
-  height: 50vh;
+  max-height: 50vh;
   overflow-x: hidden;
   padding: 0 30px;
 }
