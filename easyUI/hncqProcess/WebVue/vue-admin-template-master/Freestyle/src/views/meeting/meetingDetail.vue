@@ -173,11 +173,12 @@
 
 
     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
-      <video-player class="video-player vjs-custom-skin"
+      <!-- <video-player class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     :playsinline="true"
                     :options="playerOptions"
-      ></video-player>
+      ></video-player> -->
+      <fileVideo :fileData="node" v-if="flag"></fileVideo>
     </el-dialog>
   </div>
 </template>
@@ -185,6 +186,7 @@
 <script>
 import change from "@/api/change";
 import viewer from "@/components/viewer";
+import fileVideo from "@/components/video"
 export default {
   name: "changeDetail",
   props: {
@@ -194,7 +196,8 @@ export default {
     }
   },
   components:{
-      viewer
+      viewer,
+      fileVideo
   },
   data() {
     return {
@@ -203,7 +206,8 @@ export default {
       historyChangeInfoKey: [],
       historyChangeInfo: [], //历史的变更记录
       newChangInfo: [], //新的变更记录
-
+      flag:false,
+      node:{},
       vedioinnerVisible:false,
       dialogpicture:false,
       processPicture:[],
@@ -275,10 +279,15 @@ export default {
       this.dialogpicture = true;
     },
      videoPlayerShow(node) {
-        this.playerOptions.sources[0] = {
-          src: node.filePath,
-          type: 'video/mp4'
-        }
+        // this.playerOptions.sources[0] = {
+        //   src: node.filePath,
+        //   type: 'video/mp4'
+        // }
+        this.flag = false;
+        this.$nextTick(()=>{
+          this.flag = true
+        })
+        this.node = node
         this.vedioinnerVisible = true
       }
   }

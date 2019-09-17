@@ -16,6 +16,18 @@ export default {
     initEacht() {
       this.chart = echarts.init(this.$refs.meetEacth); //定义
       let option = {
+         title: {
+            text: '不通过统计',
+            x: '2',
+            textStyle: {
+              color: '#000',
+              fontSize: '18'
+            },
+            subtextStyle: {
+              color: '#90979c',
+              fontSize: '16'
+            }
+          },
         xAxis: {
           type: "category",
           data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]

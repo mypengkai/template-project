@@ -70,12 +70,14 @@
     </el-dialog>
 
     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
-      <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true" :options="playerOptions"></video-player>
+      <!-- <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true" :options="playerOptions"></video-player> -->
+      <fileVideo :fileData="node" v-if="flag"></fileVideo>
     </el-dialog>
   </div>
 </template>
 <script>
 import viewer from '@/components/viewer'
+import fileVideo from "@/components/video"
 export default {
     props:{
         nowItem:{
@@ -83,12 +85,15 @@ export default {
         }
     },
     components:{
-        viewer
+        viewer,
+        fileVideo
     },
     data(){
         return{
           formData:{},
           dialogpicture:false,
+          flag:false,
+          node:{},
           vedioinnerVisible:false,
           processPicture:[],
           playerOptions: {
@@ -163,10 +168,15 @@ export default {
       this.dialogpicture = true;
     },
      videoPlayerShow(node) {
-        this.playerOptions.sources[0] = {
-          src: node.filePath,
-          type: 'video/mp4'
-        }
+        // this.playerOptions.sources[0] = {
+        //   src: node.filePath,
+        //   type: 'video/mp4'
+        // }
+        this.flag = false;
+        this.$nextTick(()=>{
+            this.flag = true
+        })
+        this.node = node
         this.vedioinnerVisible = true
       }
     }

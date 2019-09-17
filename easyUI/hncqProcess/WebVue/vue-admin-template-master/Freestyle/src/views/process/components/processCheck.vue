@@ -212,7 +212,9 @@
         type="primary"
         class="pan-btn light-blue-btn"
         @click="processPageOne('1')"
-      >下一道工序 <i class="el-icon-arrow-right"></i>
+      >
+        下一道工序
+        <i class="el-icon-arrow-right"></i>
       </el-button>
     </div>
 
@@ -221,12 +223,13 @@
       <viewer :imgList="processPicture" :zhuanghao="zhuanghao"></viewer>
     </el-dialog>
     <el-dialog title="影像资料" width="50%" :visible.sync="vedioinnerVisible" append-to-body>
-      <video-player
+      <!-- <video-player
         class="video-player vjs-custom-skin"
         ref="videoPlayer"
         :playsinline="true"
         :options="playerOptions"
-      ></video-player>
+      ></video-player> -->
+      <videoFile :fileData="node" v-if="flag"></videoFile>
     </el-dialog>
   </div>
 </template>
@@ -234,7 +237,7 @@
 <script>
 import request from "@/utils/request";
 import viewer from "@/components/viewer";
-
+import videoFile from "@/components/video";
 export default {
   // props: ['realList', 'processInfoId'],
   props: {
@@ -247,7 +250,8 @@ export default {
     // }
   },
   components: {
-    viewer
+    viewer,
+    videoFile
   },
   data() {
     return {
@@ -282,8 +286,10 @@ export default {
           fullscreenToggle: true //全屏按钮
         }
       },
+      node:{},
       processVedio: [],
-      vedioinnerVisible: false
+      vedioinnerVisible: false,
+      flag:false
     };
   },
   watch: {
@@ -293,12 +299,9 @@ export default {
         this.currentProcessInfoId = newVal.infoId;
       },
       deep: true
-    },
-   
+    }
   },
-  created() {
-     
-  },
+  created() {},
   methods: {
     pictureShows(node) {
       let newArr = [];
@@ -316,11 +319,16 @@ export default {
       this.imginnerVisible = true;
     },
     videoPlayerShow(node) {
-      this.playerOptions.sources = [];
-      this.playerOptions.sources[0] = {
-        src: node.filePath,
-        type: "video/mp4"
-      };
+      // this.playerOptions.sources = [];
+      // this.playerOptions.sources[0] = {
+      //   src: node.filePath,
+      //   type: "video/mp4"
+      // };
+      this.flag=false;
+      this.$nextTick(()=>{
+          this.flag=true;
+      })
+      this.node = node
       this.vedioinnerVisible = true;
     },
     processPageOne(state) {
@@ -387,14 +395,14 @@ td {
   border: 1px solid #ddd;
 }
 
-/*.video-js .vjs-icon-placeholder {
-    width: 30%;
-    height: 30%;
+.video-js .vjs-icon-placeholder {
+    width: 100%;
+    height: 100%;
     display: block;
-  }*/
+  }
 .vjs-custom-skin > .video-js {
-  width: 35%;
-  height: 40%;
+  width: 100%;
+  height: 100%;
 }
 
 /deep/ ul,
