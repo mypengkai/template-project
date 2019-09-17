@@ -295,7 +295,6 @@ export default {
         //   src: node.filePath,
         //   type: 'video/mp4'
         // }
-        alert(1)
         this.flag = false;
         this.$nextTick(()=>{
           this.flag = true
