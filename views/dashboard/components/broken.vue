@@ -15,20 +15,6 @@
         homePage.getUserMessage().then(res => {
           let testData = res.data.data // 取整个数组
           console.log('testdata', testData)
-          // testData.forEach(v => {
-          /* // v.name == "planCheck" && (v.name1 = "任务验收"); // 要
-           // v.name == "processCheck" && (v.name1 = "工序验收");
-           // v.name == "planSelfCheck" && (v.name1 = "自检");
-           // v.name == "realityCheck" && (v.name1 = "实际验收数");
-           // v.name == "realitySelfCheck" && (v.name1 = "实际自检数");
-            v.name == "polling" && (v.name1 = "工序验收"); // 要
-           // v.name == "polling" && (v.name1 = "巡视"); // 要
-           v.name == "planCheck" && (v.name1 = "旁站"); // 要
-           v.name == "z_realitySelfCheck" && (v.name1 = "巡视");
-           v.name == "command" && (v.name1 = "指令");  // 要
-           v.name == "log" && (v.name1 = "通知");  // 要
-           v.name == "z_realityCheck" && (v.name1 = "会议纪要"); // 要*/
-          // })
           let command = testData.command
           let meeting = testData.meeting
           let polling = testData.polling

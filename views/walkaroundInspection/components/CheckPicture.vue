@@ -191,12 +191,13 @@
     </el-dialog>
 
     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
-      <video-player
+      <!-- <video-player
         class="video-player vjs-custom-skin"
         ref="videoPlayer"
         :playsinline="true"
         :options="playerOptions"
-      ></video-player>
+      ></video-player> -->
+      <fileVideo  :fileData="node" v-if="flag"></fileVideo>
     </el-dialog>
   </div>
 </template>
@@ -204,11 +205,12 @@
 <script>
 import viewer from "@/components/viewer";
 import Map from "./Map";
-
+import fileVideo from "@/components/video"
 export default {
   components: {
     Map,
-    viewer
+    viewer,
+    fileVideo
   },
   props: {
     nowItem: {
@@ -219,6 +221,8 @@ export default {
     return {
       activeName: "image",
       dialogpicture: false,
+      flag:false,
+      node:{},
       playerOptions: {
         playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
         autoplay: true, //如果true,浏览器准备好时开始回放。
@@ -266,10 +270,15 @@ export default {
       this.dialogpicture = true;
     },
     videoPlayerShow(node) {
-      this.playerOptions.sources[0] = {
-        src: node.filePath,
-        type: "video/mp4"
-      };
+      // this.playerOptions.sources[0] = {
+      //   src: node.filePath,
+      //   type: "video/mp4"
+      // };
+      this.flag = false
+      this.$nextTick(()=>{
+         this.flag = true
+      })
+      this.node = node
       this.vedioinnerVisible = true;
     }
   }

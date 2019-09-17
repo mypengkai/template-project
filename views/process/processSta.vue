@@ -4,9 +4,6 @@
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
-          <!--
-            <select-tree :options="userGroupOption" :props="userGroupDefaultProp" v-on:noDe="userGroupOnClick"/>
-          -->
           <el-select v-model="userGroupId" placeholder="请选择" @change="userGroupOnChange">
             <el-option v-for="item in userGroupOption" :key="item.id" :label="item.departname" :value="item.id"></el-option>
           </el-select>
@@ -46,7 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-table class="textList" border :data="footerTable" border style="width: 100%" height="60vh">
+    <el-table class="textList" border :data="footerTable"  style="width: 100%" height="60vh">
       <el-table-column prop="projectitemname" label="分部分项" min-width="90"></el-table-column>
       <el-table-column prop="processname" label="工序名称" min-width="90"></el-table-column>
       <el-table-column prop="realitySelfCheckTime" label="自检时间" min-width="90"></el-table-column>

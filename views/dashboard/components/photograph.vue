@@ -6,7 +6,6 @@
         <el-timeline-item v-for="(item, index) in weekData" :key="index">
           <h4>时间: {{ item.commandcreateTime }}</h4>
           <h4>分部分项:{{ item.projectItem }}</h4>
-
           <h4>桩号: {{ item.commandzhuanghao }}</h4>
           <h4>拍摄地点: {{ item.commandphotoLocation }}</h4>
           <!-- <img :src="item.commandfilePath" alt> -->
@@ -57,7 +56,7 @@
   img {
     width: 20vw;
     max-width: 150px;
-    height: 200px;
+    height: 150px;
   }
 
   .templateBox {

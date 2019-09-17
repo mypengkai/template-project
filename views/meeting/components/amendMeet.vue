@@ -320,11 +320,12 @@
     </el-dialog>
     <!-- 视屏 -->
     <el-dialog title="影像资料" width="60%" :visible.sync="vedioinnerVisible" append-to-body>
-      <video-player class="video-player vjs-custom-skin"
+      <!-- <video-player class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     :playsinline="true"
                     :options="playerOptions"
-      ></video-player>
+      ></video-player> -->
+      <fileVideo :fileData="node" v-if="flag"></fileVideo>
     </el-dialog>
 
 
@@ -563,6 +564,8 @@ import project from "@/api/project";
 import user from "@/api/user";
 import change from "@/api/change";
 import tool from "@/utils/common.js";
+import fileVideo from "@/components/video"
+import viewer from "@/components/viewer"
 export default {
   name: "createChange",
   data() {
@@ -607,6 +610,8 @@ export default {
          newChangInfo:[],
           dialogpicture:false,
           processPicture:[],
+          node:{},
+          flag:false,
          playerOptions: {
           playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
           autoplay: true, //如果true,浏览器准备好时开始回放。
@@ -724,7 +729,9 @@ export default {
   },
   components: {
     SelectTree,
-    changeSelectPerson
+    changeSelectPerson,
+    fileVideo,
+    viewer
   },
   props: {
     nowItem: {
@@ -1011,10 +1018,15 @@ export default {
       this.dialogpicture = true;
     },
      videoPlayerShow(node) {
-        this.playerOptions.sources[0] = {
-          src: node.filePath,
-          type: 'video/mp4'
-        }
+        // this.playerOptions.sources[0] = {
+        //   src: node.filePath,
+        //   type: 'video/mp4'
+        // }
+        this.flag = false;
+        this.$nextTick(()=>{
+           this.flag = true
+        })
+        this.node = node
         this.vedioinnerVisible = true
       },
 
