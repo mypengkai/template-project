@@ -47,7 +47,7 @@ export default {
           }
         ],
         poster: "", //你的封面地址
-        width:document.documentElement.clientWidth,
+        //width:document.documentElement.clientWidth,
         notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {
           timeDivider: true,
@@ -79,8 +79,8 @@ export default {
   display: block;
 }
 .vjs-custom-skin > .video-js {
-  width: 35%;
-  height: 40%;
+  width: 100%;
+  height: 100%;
 }
 ul {
   padding: 0;
