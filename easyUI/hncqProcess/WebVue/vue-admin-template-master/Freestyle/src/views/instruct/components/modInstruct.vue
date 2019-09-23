@@ -310,7 +310,7 @@ export default {
     };
   },
   mounted() {
-    this.$refs.getSelectData.placeholder = this.nowItem.projectItemName;
+    this.$refs.getSelectData.labelModel = this.nowItem.projectItemName;
     this.initProject();
     this.initProcess();
   },

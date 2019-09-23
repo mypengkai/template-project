@@ -802,7 +802,6 @@ export default {
         pId: "0"
       }).then(res => {
         this.projectItemTreeOption = res.data.data;
-        this.$refs.getSelectData.labelModel = "";
       });
     },
     // 获取分部分项
@@ -1040,7 +1039,7 @@ export default {
           
           this.myApplyChangeForm.meetingName = this.myApplyChangeForm.meetingHostName;
           this.myApplyChangeForm.meetingNoteName = this.myApplyChangeForm.meetingNoteTakerName;
-          this.$refs.getSelectData.placeholder = this.myApplyChangeForm.projectItem;
+          this.$refs.getSelectData.labelModel = this.myApplyChangeForm.projectItem;
             let logs = res.data.data.log[0].role;
             let copynames = "";
             let ids = "";
