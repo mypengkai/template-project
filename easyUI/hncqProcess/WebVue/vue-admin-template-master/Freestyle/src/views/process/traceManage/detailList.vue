@@ -8,16 +8,16 @@
         :key="index"
         @click="pictureLook(item)"
       >
-        <div class="pictureBox" >
-            <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
-              <img :src="item.filePath" alt />
-            </template>
-            <template  v-else-if="item.filetype==='mp4'">
-                <img :src="(item.filePath.replace('mp4','jpg'))" alt  />
-            </template>
-            <template  v-else-if="item.filetype==='mov'">
-                <img :src="(item.filePath.replace('mov','jpg'))" alt  />
-            </template>
+        <div class="pictureBox">
+          <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
+            <img :src="item.filePath" alt />
+          </template>
+          <template v-else-if="item.filetype==='mp4'">
+            <img :src="(item.filePath.replace('mp4','jpg'))" alt />
+          </template>
+          <template v-else-if="item.filetype==='mov'">
+            <img :src="(item.filePath.replace('mov','jpg'))" alt />
+          </template>
         </div>
         <div class="p20-contation">
           <el-row>
@@ -30,10 +30,11 @@
             </el-col>
           </el-row>
           <el-row>
-               <el-col :span="24">
-              <div
-                class="grid-content bg-purple timeOut"
-              ><span>创建时间:</span>&nbsp;&nbsp;{{item.infoLogCreateTime}}</div>
+            <el-col :span="24">
+              <div class="grid-content bg-purple timeOut">
+                <span>创建时间:</span>
+                &nbsp;&nbsp;{{item.infoLogCreateTime}}
+              </div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -66,17 +67,16 @@
         :key="index"
         @click="pictureLook(item)"
       >
-
-        <div class="pictureBox" >
-            <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
-              <img :src="item.filePath" alt />
-            </template>
-             <template  v-else-if="item.filetype==='mp4'">
-                <img :src="(item.filePath.replace('mp4','jpg'))" alt  />
-            </template>
-            <template  v-else-if="item.filetype==='mov'">
-                <img :src="(item.filePath.replace('mov','jpg'))" alt  />
-            </template>
+        <div class="pictureBox">
+          <template v-if="item.filetype=='jpg'||item.filetype == 'png' ||item.filetype == 'jpeg'">
+            <img :src="item.filePath" alt />
+          </template>
+          <template v-else-if="item.filetype==='mp4'">
+            <img :src="(item.filePath.replace('mp4','jpg'))" alt />
+          </template>
+          <template v-else-if="item.filetype==='mov'">
+            <img :src="(item.filePath.replace('mov','jpg'))" alt />
+          </template>
         </div>
         <div class="p20-contation">
           <el-row>
@@ -88,9 +88,10 @@
               <template v-else-if="item.infoLogType == 'meeting'">变更纪要</template>
             </el-col>
             <el-col :span="24">
-              <div
-                class="grid-content bg-purple timeOut"
-              ><span>创建时间:</span>&nbsp;&nbsp;{{item.infoLogCreateTime}}</div>
+              <div class="grid-content bg-purple timeOut">
+                <span>创建时间:</span>
+                &nbsp;&nbsp;{{item.infoLogCreateTime}}
+              </div>
             </el-col>
           </el-row>
           <h3>{{item.projectItem}}</h3>
@@ -120,7 +121,7 @@
       <orderInstruct :nowItem="commandList" v-if="hackReset"></orderInstruct>
     </el-dialog>
     <!-- 巡视查看 -->
-    <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="60%" class="dialogBox">
+    <el-dialog title="巡视详情" :visible.sync="dialogTableVisiblePolling" width="80%" class="dialogBox">
       <CheckPicture :nowItem="nowItem" v-if="hackReset"></CheckPicture>
     </el-dialog>
     <!-- 会议 -->
@@ -132,7 +133,7 @@
       <processCheck :processInfoId="processInfoId" :realList="realList" v-if="hackReset"></processCheck>
     </el-dialog>
     <!-- 旁站 -->
-    <el-dialog title="旁站详情" :visible.sync="dialogTableVisibleSelfcheck">
+    <el-dialog title="旁站详情" :visible.sync="dialogTableVisibleSelfcheck" width="80%">
       <CheckPicture :nowItem="nowItem" v-if="hackReset"></CheckPicture>
     </el-dialog>
   </div>
@@ -148,7 +149,7 @@ import realcheck from "@/views/process/components/realcheck";
 import meetingDetail from "@/views/meeting/meetingDetail";
 import CheckPicture from "@/views/walkaroundInspection/components/CheckPicture";
 import checkBox from "@/views/instruct/components/checkBox";
-import orderInstruct from "@/views/instruct/components/orderInstruct"
+import orderInstruct from "@/views/instruct/components/orderInstruct";
 export default {
   inject: ["reload"],
   name: "DetailList",
@@ -158,10 +159,10 @@ export default {
       default: 1
     },
     conentOptions: {
-       type:Array
+      type: Array
     }, //工程数据
     userOptions: {
-       type:Array
+      type: Array
     } //人员数据
   },
   components: {
@@ -194,13 +195,10 @@ export default {
       hackReset: false,
       meetId: "", // 会议id
       nowItem: [], // 旁站数据 巡视
-      commandList: {}, // 指令数据
+      commandList: {} // 指令数据
     };
   },
-  created() {
-
-
-  },
+  created() {},
   computed: {
     title() {
       return this.traceType === 1 ? "工程痕迹管理" : "人员痕迹管理";

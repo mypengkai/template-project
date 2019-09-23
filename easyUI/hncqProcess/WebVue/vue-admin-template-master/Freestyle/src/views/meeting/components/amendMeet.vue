@@ -290,11 +290,23 @@
                                             <ul>
                                               <li v-for="(node, key) in item.fileinfos" :key="key">
                                                 <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                                                    <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px">
+                                                    <!-- <img :src="node.filePath" alt=""  @click="pictureShow(item.fileinfos)"   style="width: 100px; height: 100px"> -->
+                                                    <el-image
+                                        style="width: 100px; height: 100px"
+                                        :src="node.filePath"
+                                        fit="fill"
+                                        @click="pictureShow(item.fileinfos)"
+                                      ></el-image>
                                                 </template>
                                                 <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                                                  <video :src="node.filePath" style="width: 100px; height: 100px;"
-                                                        @click="videoPlayerShow(node)"></video>
+                                                  <!-- <video :src="node.filePath" style="width: 100px; height: 100px;"
+                                                        @click="videoPlayerShow(node)"></video> -->
+                                                         <div class="video-box">
+                                                            <video id="video2" style="width:100px;height:100px">
+                                                              <source :src="node.filePath" type="video/mp4" />
+                                                            </video>
+                                                            <div class="video-img" @click="videoPlayerShow(node)"></div>
+                                                          </div>
                                                 </template>
                                               </li>
                                           </ul>
@@ -1172,5 +1184,26 @@ ul, ol {
     color: #303133;
     font-weight: 700;
     margin-top: 10px;
+}
+.video-box {
+  position: relative;
+}
+
+.video-box video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+.video-box .video-img {
+  text-align: center;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  bottom: 0;
+  width: 100%;
+  z-index: 999;
+  background: url(../../../imgs/play.png) no-repeat;
+  background-size: 50% 50%;
+  cursor: pointer;
 }
 </style>

@@ -35,10 +35,22 @@
                     <ul>
                       <li v-for="(node, key) in item.files" :key="key">
                         <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                          <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                          <!-- <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px"> -->
+                           <el-image
+                                style="width: 100px; height: 100px"
+                                :src="node.filePath"
+                                fit="fill"
+                                @click="pictureShow(item.files)"
+                              ></el-image>
                         </template>
                         <template v-else-if="node.fileType=='mp4' || node.fileType=='mov'">
-                          <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video>
+                          <!-- <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video> -->
+                           <div class="video-box">
+                                <video id="video2" style="width:100px;height:100px">
+                                  <source :src="node.filePath" type="video/mp4" />
+                                </video>
+                                <div class="video-img" @click="videoPlayerShow(node)"></div>
+                              </div>
                         </template>
                       </li>
                     </ul>
@@ -52,7 +64,13 @@
                     <ul>
                       <li v-for="(node, key) in item.files" :key="key">
                         <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                          <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px">
+                          <!-- <img :src="node.filePath" alt=""  @click="pictureShow(item.files)"   style="width: 100px; height: 100px"> -->
+                           <el-image
+                                style="width: 100px; height: 100px"
+                                :src="node.filePath"
+                                fit="fill"
+                                @click="pictureShow(item.files)"
+                              ></el-image>
                         </template>
                         <template v-else-if="node.fileType=='mp4' || node.fileType=='mov'">
                           <!-- <video :src="node.filePath" style="width: 100px; height: 100px;" @click="videoPlayerShow(node)"></video> -->

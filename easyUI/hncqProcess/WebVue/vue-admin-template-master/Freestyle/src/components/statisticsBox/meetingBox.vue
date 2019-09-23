@@ -7,15 +7,9 @@
 import echarts from "echarts";
 import request from "@/utils/request";
 export default {
-  props: ["formData"],
+  //props: ["formData"],
   data() {
     return {
-      setData: {
-        departId: "",
-        itemInfoId: "",
-        startTime: "",
-        endTime: ""
-      },
       statisicsData: []
     };
   },
@@ -25,7 +19,7 @@ export default {
   methods: {
     init() {
       request
-        .post("/rest/projectItemInfo/notPassStatistics", this.setData)
+        .post("/rest/projectItemInfo/notPassStatistics", null)
         .then(res => {
           if (res.data.ok) {
             this.statisicsData = res.data.data.data;

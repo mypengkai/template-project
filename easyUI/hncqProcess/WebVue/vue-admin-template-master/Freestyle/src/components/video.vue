@@ -75,7 +75,7 @@ export default {
 <style lang="scss" scoped>
 .video-js .vjs-icon-placeholder {
   width: 100%;
-  height: 100%;
+  height: 50vh;
   display: block;
 }
 .vjs-custom-skin > .video-js {

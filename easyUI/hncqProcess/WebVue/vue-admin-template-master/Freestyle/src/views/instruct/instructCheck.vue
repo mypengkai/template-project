@@ -20,7 +20,7 @@
     <!-- 查询列表 -->
     <el-table border class="textList" :data="sendCommandList" style="width: 100%" height="72vh">
       <el-table-column prop="project" label="分部分项"></el-table-column>
-      <el-table-column prop="Station" label="桩号" align="center"></el-table-column>
+      <el-table-column prop="Station" label="桩号" align="center" width="150"></el-table-column>
       <el-table-column prop="initiator" label="发起人" width="100" align="center"></el-table-column>
       <el-table-column prop="createTime" label="发起时间" width="150" align="center"></el-table-column>
       <el-table-column prop="commandUserNow" label="处理人" width="100" align="center"></el-table-column>
@@ -94,7 +94,7 @@
           pageNo: 1, // 当前页
           pageSize: 10 // 每页条数
         },
-        nowItem: '',
+        nowItem: {},
         userGroupId: '',
         dialogFormVisible: false // 查看编辑弹框
       }
@@ -117,7 +117,6 @@
         api.getList(this.sendData).then(res => {
           this.total = res.data.data.totalCount
           this.sendCommandList = res.data.data.data;
-          console.log()
         })
       },
       _searchList() {  // 列表请求
@@ -134,7 +133,6 @@
         this.sendData.departId = data;
         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
           this.projectItemTreeOptions = res.data.data
-          this.$refs.getSelectData.labelModel = ''
         })
       },
       loadNextNode(node, resolve) {  //异步获取下一级节点数据

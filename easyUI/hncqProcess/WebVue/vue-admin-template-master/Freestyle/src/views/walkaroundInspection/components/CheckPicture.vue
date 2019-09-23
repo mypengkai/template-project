@@ -1,12 +1,12 @@
 <template>
   <div class="reverseBox">
-    <div style="width: 50%;float: left;padding:0 5px;">
+    <div style="width: 60%;float: left;padding:0 5px;">
       <el-row>
         <el-col :span="24">
-           <div class="divHeight">
-              <span class="spanWord">分部分项:</span>
-              <span>{{nowItem.projectItem}}</span>
-          </div> 
+          <div class="divHeight">
+            <span class="spanWord">分部分项:</span>
+            <span>{{nowItem.projectItem}}</span>
+          </div>
         </el-col>
       </el-row>
       <el-row>
@@ -18,41 +18,41 @@
         </el-col>
       </el-row>
       <template v-if="nowItem.type==='polling'">
-      <el-row>
-        <el-col :span="24">
-          <div class="divHeight">
-            <span class="spanWord">巡视人:</span>
-            <span>{{nowItem.createName}}</span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <div class="divHeight">
-            <span class="spanWord">巡视时间:</span>
-            <span>{{nowItem.createTime}}</span>
-          </div>
-        </el-col>
-      </el-row>
+        <el-row>
+          <el-col :span="24">
+            <div class="divHeight">
+              <span class="spanWord">巡视人:</span>
+              <span>{{nowItem.createName}}</span>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <div class="divHeight">
+              <span class="spanWord">巡视时间:</span>
+              <span>{{nowItem.createTime}}</span>
+            </div>
+          </el-col>
+        </el-row>
       </template>
-     <template v-if="nowItem.type==='sideStation'">
-            <el-row>
-        <el-col :span="24">
-          <div class="divHeight">
-            <span class="spanWord">旁站人:</span>
-            <span>{{nowItem.createName}}</span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <div class="divHeight">
-            <span class="spanWord">旁站时间:</span>
-            <span>{{nowItem.createTime}}</span>
-          </div>
-        </el-col>
-      </el-row>
-    </template> 
+      <template v-if="nowItem.type==='sideStation'">
+        <el-row>
+          <el-col :span="24">
+            <div class="divHeight">
+              <span class="spanWord">旁站人:</span>
+              <span>{{nowItem.createName}}</span>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <div class="divHeight">
+              <span class="spanWord">旁站时间:</span>
+              <span>{{nowItem.createTime}}</span>
+            </div>
+          </el-col>
+        </el-row>
+      </template>
 
       <template v-if="nowItem.type==='polling'">
         <el-row>
@@ -87,14 +87,14 @@
             </div>
           </el-col>
         </el-row>
-         <el-row>
-        <el-col :span="24">
-          <div class="divHeight">
-            <span class="spanWord">巡视描述:</span>
-            <span>{{nowItem.describe}}</span>
-          </div>
-        </el-col>
-      </el-row>
+        <el-row>
+          <el-col :span="24">
+            <div class="divHeight">
+              <span class="spanWord">巡视描述:</span>
+              <span>{{nowItem.describe}}</span>
+            </div>
+          </el-col>
+        </el-row>
       </template>
       <template v-else-if="nowItem.type==='sideStation'">
         <el-row>
@@ -137,17 +137,15 @@
             </div>
           </el-col>
         </el-row>
-          <el-row>
-        <el-col :span="24">
-          <div class="divHeight">
-            <span class="spanWord">旁站描述:</span>
-            <span>{{nowItem.describe}}</span>
-          </div>
-        </el-col>
-      </el-row>
+        <el-row>
+          <el-col :span="24">
+            <div class="divHeight">
+              <span class="spanWord">旁站描述:</span>
+              <span>{{nowItem.describe}}</span>
+            </div>
+          </el-col>
+        </el-row>
       </template>
-     
-      
 
       <el-row>
         <el-col :span="24">
@@ -158,27 +156,30 @@
         </el-col>
       </el-row>
     </div>
-    <div style="width: 50%;float: right; padding:0 5px;">
+    <div style="width: 40%;float: right; padding:0 5px;">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="影像资料" name="image">
           <div class="condition">
             <ul v-for="(node, key) in nowItem.pictureOfCommand" :key="key">
               <li>
-                <template v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'">
-                     <img :src="node.filePath" alt=""  @click="pictureShow(nowItem.pictureOfCommand)"   style=" display:block;  width: 100px; height: 100px">
+                <template
+                  v-if="node.fileType=='jpg'||node.fileType == 'png' ||node.fileType == 'jpeg'"
+                >
+                  <!-- <img :src="node.filePath" alt=""  @click="pictureShow(nowItem.pictureOfCommand)"   style=" display:block;  width: 100px; height: 100px"> -->
+                  <el-image
+                    style="width: 100px; height: 100px"
+                    :src="node.filePath"
+                    fit="fill"
+                    @click="pictureShow(nowItem.pictureOfCommand)"
+                  ></el-image>
                 </template>
                 <template v-else-if="node.fileType==='mp4' || node.fileType==='mov'">
-                  <!-- <video
-                    :src="node.filePath"
-                    style="width: 100px; height: 100px;display: block;"
-                    @click="videoPlayerShow(node)"
-                  ></video> -->
                   <div class="video-box">
-                                <video id="video2" style="width:100px;height:100px">
-                                  <source :src="node.filePath" type="video/mp4" />
-                                </video>
-                                <div class="video-img" @click="videoPlayerShow(node)"></div>
-                              </div>
+                    <video id="video2" style="width:100px;height:100px">
+                      <source :src="node.filePath" type="video/mp4" />
+                    </video>
+                    <div class="video-img" @click="videoPlayerShow(node)"></div>
+                  </div>
                 </template>
               </li>
             </ul>
@@ -202,8 +203,8 @@
         ref="videoPlayer"
         :playsinline="true"
         :options="playerOptions"
-      ></video-player> -->
-      <fileVideo  :fileData="node" v-if="flag"></fileVideo>
+      ></video-player>-->
+      <fileVideo :fileData="node" v-if="flag"></fileVideo>
     </el-dialog>
   </div>
 </template>
@@ -211,7 +212,7 @@
 <script>
 import viewer from "@/components/viewer";
 import Map from "./Map";
-import fileVideo from "@/components/video"
+import fileVideo from "@/components/video";
 export default {
   components: {
     Map,
@@ -227,8 +228,8 @@ export default {
     return {
       activeName: "image",
       dialogpicture: false,
-      flag:false,
-      node:{},
+      flag: false,
+      node: {},
       playerOptions: {
         playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
         autoplay: true, //如果true,浏览器准备好时开始回放。
@@ -280,11 +281,11 @@ export default {
       //   src: node.filePath,
       //   type: "video/mp4"
       // };
-      this.flag = false
-      this.$nextTick(()=>{
-         this.flag = true
-      })
-      this.node = node
+      this.flag = false;
+      this.$nextTick(() => {
+        this.flag = true;
+      });
+      this.node = node;
       this.vedioinnerVisible = true;
     }
   }
@@ -293,7 +294,7 @@ export default {
 
 <style lang="scss" scoped>
 .reverseBox {
-  height: 70vh;
+  height: 68vh;
   padding: 0 20px;
   overflow-y: auto;
 
@@ -327,7 +328,6 @@ export default {
         height: 100%;
         display: block;
       }
-      
     }
   }
 }
@@ -342,9 +342,9 @@ export default {
   // line-height: 35px;
   // height: 35px;
   margin: 5px 0;
-  span:first-child{
-      height: 35px;
-      display: inline-block;
+  span:first-child {
+    height: 35px;
+    display: inline-block;
   }
 }
 .video-box {
