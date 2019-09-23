@@ -15,7 +15,8 @@ export default {
   },
   getMytask(params) {
     return request.post('/rest/command/waitHandle', {params})
-  }
+  },
+  
 }
 
 

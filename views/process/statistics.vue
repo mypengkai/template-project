@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
-          <el-select v-model="sendData.departId" placeholder="请选择组织机构">
+          <el-select v-model="sendData.departId" placeholder="请选择组织机构" @change="checkDepart()">
             <el-option
               v-for="item in userGroupTree"
               :key="item.id"
@@ -14,8 +14,13 @@
           </el-select>
         </el-col>
         <el-col :span="6">
-          <span>工序:</span>
-          <el-input v-model="sendData.process" placeholder="请输入工序"></el-input>
+          <span>分部分项:</span>
+          <select-tree
+            clearable
+            :options="projectItemTreeOption"
+            :props="projectItemDefaultProps"
+            v-on:noDe="handleProjectItemChange"
+          />
         </el-col>
         <el-col :span="6">
           <el-button
@@ -34,18 +39,28 @@
       </el-row>
     </div>
     <el-tabs v-model="activeName">
-      <el-tab-pane label="不通过详细信息" name="first">
+      <el-tab-pane label="不通过记录" name="first">
         <div class="instruct">
-          <el-table :data="tableData" border style="width: 100%" class="textList" height="66vh">
-            <el-table-column prop="date" label="日期"></el-table-column>
-            <el-table-column prop="name" label="姓名"></el-table-column>
-            <el-table-column prop="number" label="数量">
-              <template slot-scope="scope">
-                <div v-if="scope.row.number==0">{{scope.row.number}}</div>
-                <div @click="routerGo(scope.row)" v-else>{{scope.row.number}}</div>
-              </template>
+          <el-table :data="tableData" border style="width: 100%" class="textList" height="64vh">
+            <el-table-column prop="projectItem" label="分部分项"></el-table-column>
+            <el-table-column prop="commandNumber" label="指令" width="100" align="center">
+                   <template slot-scope="scope">
+                      <div v-if="scope.row.commandNumber==0">{{scope.row.commandNumber}}</div>
+                      <div v-else-if="scope.row.commandNumber !=0" @click="routerInstruct">{{scope.row.commandNumber}}</div>
+                   </template>
             </el-table-column>
-            <el-table-column prop="address" label="地址"></el-table-column>
+            <el-table-column prop="meetingNumber" label="变更纪要"  width="100" align="center">
+                    <template slot-scope="scope">
+                      <div v-if="scope.row.meetingNumber==0">{{scope.row.meetingNumber}}</div>
+                      <div v-else-if="scope.row.meetingNumber !=0" @click="routermeeting">{{scope.row.meetingNumber}}</div>
+                   </template>
+            </el-table-column>
+            <el-table-column prop="processNumber" label="工序"  width="100" align="center">
+                  <template slot-scope="scope">
+                      <div v-if="scope.row.processNumber==0">{{scope.row.processNumber}}</div>
+                      <div v-else-if="scope.row.processNumber !=0" @click="routerprocess">{{scope.row.processNumber}}</div>
+                   </template>
+            </el-table-column>
           </el-table>
           <!-- 分页 -->
           <el-pagination
@@ -60,9 +75,9 @@
           ></el-pagination>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="不通过统计图表" name="second">
+      <el-tab-pane label="不通过统计" name="second">
         <div class="meeting">
-          <meetingBox></meetingBox>
+          <meetingBox :formData="tableData"></meetingBox>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -72,46 +87,32 @@
 //import instructBox from "@/components/statisticsBox/instructBox.vue";
 import meetingBox from "@/components/statisticsBox/meetingBox.vue";
 import Organization from "@/api/Organization";
+import request from "@/utils/request";
+import SelectTree from "@/components/SelectTree/syncSelectTree.vue";
 export default {
   inject: ["reload"],
-  components: { meetingBox },
+  components: { meetingBox, SelectTree },
   data() {
     return {
       sendData: {
         departId: "", // 组织机构id
-        process: "", // 工序名称
-        pageNo: 1,
-        pageSize: 10
+        itemInfoId: "", // 分部分项
+        startTime: "",
+        endTime: "",
+        pageSize:10,
+        pageNo:1
       },
       activeName: "second",
       total: 0,
+      seletList: [],
+      projectItemTreeOption: [], // 分部分项树
       userGroupTree: [], // 组织机构数据
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小二",
-          number: 0,
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          number: 1,
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小龙",
-          number: 0,
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小三",
-          number: 3,
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      projectItemDefaultProps: {
+        // 工程分项树显示
+        children: "children",
+        label: "projectItem"
+      },
+      tableData: []
     };
   },
   created() {
@@ -125,23 +126,56 @@ export default {
         this.userGroupTree = res.data.data;
       });
     },
+    checkDepart() {
+      let orgId = this.sendData.departId;
+      // 分部分项数据
+      Organization.getProjectItemFromLayer({
+        userGroupId: orgId,
+        pId: "0"
+      }).then(res => {
+        this.projectItemTreeOption = res.data.data;
+      });
+    },
     // 重置
     reset() {
-        this.sendData.departId = '';
-        this.sendData.process = "";
-        this.query();
+      this.sendData.departId = "";
+      this.sendData.itemInfoId = "";
+      this.query();
     },
     // 查询
-    query() {},
+    query() {
+        this.querySelected();
+    },
     handleSizeChange(val) {
       this.sendData.pageSize = val;
       this.querySelected();
     },
     //初始化列表数据
-    querySelected() {},
-    routerGo(data) {
-      alert(1);
-      console.log(data, "data");
+    querySelected() {
+      request
+        .post("/rest/projectItemInfo/notPassStatistics", this.sendData)
+        .then(res => {
+          if (res.data.ok) {
+            this.tableData = res.data.data.data;
+            this.total = res.data.data.totalCount
+          }
+        });
+    },
+    handleProjectItemChange(data) {
+      // 工程分部分项id
+      this.sendData.itemInfoId = data.id;
+    },
+    // 指令
+    routerInstruct(){
+       this.$router.push({path:'/instruct/instructCheck'})
+    },
+    //变更纪要
+    routermeeting(){
+       this.$router.push({path:'/meeting/meetingSearch'})
+    },
+    //工序
+    routerprocess(){
+       this.$router.push({path:"/accept/accepthj"})
     }
   }
 };
