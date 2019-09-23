@@ -8,7 +8,7 @@
           <li>视频大小：{{fileData.fileSize}}</li>
           <li>经度：{{fileData.lgt}}</li>
           <li>纬度：{{fileData.lat}}</li>
-          <li>拍照地点：{{fileData.photoLocation}}</li>
+          <li>录像地点：{{fileData.photoLocation}}</li>
         </ul>
       </el-col>
       <el-col :span="16">
