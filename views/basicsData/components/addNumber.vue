@@ -13,7 +13,7 @@
           <el-input v-model="addForm.groupName"></el-input>
         </el-form-item>
         <el-form-item label="组员:" prop="groupUser">
-         <el-input v-model="addForm.groupUser">
+         <el-input v-model="addForm.groupUser" :readonly="true">
                   <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog()"></el-button>
         </el-input>
         </el-form-item>
