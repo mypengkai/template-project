@@ -144,7 +144,7 @@
               <!--                <el-option v-for="item in userGroupOptionBL" :key="item.id" :label="item.departname"-->
               <!--                           :value="item.id"></el-option>-->
               <!--              </el-select>-->
-              <el-input v-model="departname" readonly="true"></el-input>
+              <el-input v-model="departname" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

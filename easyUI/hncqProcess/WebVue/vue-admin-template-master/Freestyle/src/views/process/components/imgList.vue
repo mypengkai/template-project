@@ -23,21 +23,21 @@
       <div class="headData">
         <!-- 工序名 -->
         <div class="fl">
-                    <span class="fl processName">
-                        <p>工序名称:</p>
-                    </span>
+          <span class="fl processName">
+            <p>工序名称:</p>
+          </span>
           <span class="rl" style="width:70%">
-                        <p>{{ item.processName }}</p>
-                    </span>
+            <p>{{ item.processName }}</p>
+          </span>
         </div>
         <!-- 状态 -->
         <div class="rl">
-                    <span class="fl stateName">
-                        <p>状态</p>
-                    </span>
+          <span class="fl stateName">
+            <p>状态</p>
+          </span>
           <span class="rl" style="width:70%">
-                        <p>{{ item.state2 }}</p>
-                    </span>
+            <p>{{ item.state2 }}</p>
+          </span>
         </div>
       </div>
       <!-- 自检盒子 -->
@@ -47,29 +47,29 @@
         </div>
         <!-- 计划盒子 -->
         <div class="selfPlanBox">
-                    <span style="width:20%" class="br1">
-                        <p>计划</p>
-                    </span>
+          <span style="width:20%" class="br1">
+            <p>计划</p>
+          </span>
           <span style="width:40%" class="br1">
-                        <p class="bt1">时间</p>
-                        <p>{{ item.planSelfCheckTime }}</p>
-                    </span>
+            <p class="bt1">时间</p>
+            <p>{{ item.planSelfCheckTime }}</p>
+          </span>
           <span style="width:40%">
-                        <p class="bt1">自检人</p>
-                        <p>{{ item.planSelfCheckPerson }}</p>
-                    </span>
+            <p class="bt1">自检人</p>
+            <p>{{ item.planSelfCheckPerson }}</p>
+          </span>
         </div>
         <!-- 实际盒子 -->
         <div class="selfRealityBox">
-                    <span style="width:20%" class="br1">
-                        <p>实际</p>
-                    </span>
+          <span style="width:20%" class="br1">
+            <p>实际</p>
+          </span>
           <span style="width:40%" class="br1">
-                        <p>{{ item.realitySelfCheckTime }}</p>
-                    </span>
+            <p>{{ item.realitySelfCheckTime }}</p>
+          </span>
           <span style="width:40%">
-                        <p>{{ item.realitySelfCheckPerson }}</p>
-                    </span>
+            <p>{{ item.realitySelfCheckPerson }}</p>
+          </span>
         </div>
       </div>
       <!-- 验收盒子 -->
@@ -79,73 +79,75 @@
         </div>
         <!-- 计划盒子 -->
         <div class="selfPlanBox">
-
-                    <span style="width:50%" class="br1">
-                        <p class="bt1">时间</p>
-                        <p>{{ item.planCheckTime }}</p>
-                    </span>
+          <span style="width:50%" class="br1">
+            <p class="bt1">时间</p>
+            <p>{{ item.planCheckTime }}</p>
+          </span>
           <span style="width:50%">
-                        <p class="bt1">验收人</p>
-                        <p>{{ item.planCheckPerson }}</p>
-                    </span>
+            <p class="bt1">验收人</p>
+            <p>{{ item.planCheckPerson }}</p>
+          </span>
         </div>
         <!-- 实际盒子 -->
         <div class="selfRealityBox">
-
-                    <span style="width:50%" class="br1">
-                        <p>{{ item.realityCheckTime }}</p>
-                    </span>
+          <span style="width:50%" class="br1">
+            <p>{{ item.realityCheckTime }}</p>
+          </span>
           <span style="width:50%">
-                        <p>{{ item.realityCheckPerson }}</p>
-                    </span>
+            <p>{{ item.realityCheckPerson }}</p>
+          </span>
         </div>
       </div>
     </div>
     <!-- 轮播图 -->
     <div class="describeBox" v-for="(item,index) in datac" :key="index">
-            <span class="fl">
-                <p class="br1">自检描述: {{ item.selfCheckDescribe }}</p>
-                <div class="" v-if="imgData!=null">
-
-         <ul>
+      <span class="fl">
+        <p class="br1">自检描述: {{ item.selfCheckDescribe }}</p>
+        <div class v-if="imgData!=null">
+          <ul>
             <li v-for="(item,index) in imgData" :key="index">
-              <img :src="item.filePath" alt @click="$emit('imgLeft',0,imginnerVisible=true)"
-                   style="width:100%;height:100%;cursor:pointer">
+              <img
+                :src="item.filePath"
+                alt
+                @click="$emit('imgLeft',0,imginnerVisible=true)"
+                style="width:100%;height:100%;cursor:pointer"
+              />
             </li>
           </ul>
 
-
-                  <!-- <el-carousel :interval="5000" arrow="always" height="40vh">
+          <!-- <el-carousel :interval="5000" arrow="always" height="40vh">
                       <el-carousel-item v-for="(item,index) in imgData" :key="index">
                           <img :src="item.filePath" alt="" @click="$emit('imgLeft',0,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
                       </el-carousel-item>
-                  </el-carousel> -->
-                </div>
-                <div v-else>
-                    <div class="zjimg">没有初验图片</div>
-                </div>
-            </span>
+          </el-carousel>-->
+        </div>
+        <div v-else>
+          <div class="zjimg">没有初验图片</div>
+        </div>
+      </span>
       <span class="rl">
-                <p>验收描述: {{ item.describe }}</p>
-                <div v-if="imgData2!=null">
-
-        <ul>
+        <p>验收描述: {{ item.describe }}</p>
+        <div v-if="imgData2!=null">
+          <ul>
             <li v-for="(item,index) in imgData2" :key="index">
-              <img :src="item.filePath" alt @click="$emit('imgLeft',1,imginnerVisible=true)"
-                   style="width:100%;height:100%;cursor:pointer">
+              <img
+                :src="item.filePath"
+                alt
+                @click="$emit('imgLeft',1,imginnerVisible=true)"
+                style="width:100%;height:100%;cursor:pointer"
+              />
             </li>
           </ul>
-                  <!-- <el-carousel :interval="5000" arrow="always" height="40vh">
+          <!-- <el-carousel :interval="5000" arrow="always" height="40vh">
              <el-carousel-item v-for="(item,index) in imgData2" :key="index">
                  <img :src="item.filePath" alt="" @click="$emit('imgLeft',1,imginnerVisible=true)" style="width:100%;height:100%;cursor:pointer">
              </el-carousel-item>
-         </el-carousel> -->
-                </div>
-                <div v-else>
-                      <div class="ysimg">没有验收图片</div>
-                </div>
-            </span>
-
+          </el-carousel>-->
+        </div>
+        <div v-else>
+          <div class="ysimg">没有验收图片</div>
+        </div>
+      </span>
     </div>
     <!-- 这里开始 -->
     <!-- <el-row>
@@ -201,10 +203,16 @@
         <el-col :span="12" v-else>
             <div class="ysimg">没有验收图片</div>
         </el-col>
-    </el-row> -->
+    </el-row>-->
     <!-- 照片详情信息查看 -->
-    <el-dialog width="60%" top="5vh" :title="imgForm.state" :visible.sync="imginnerVisible" append-to-body
-               class="dialogBox">
+    <el-dialog
+      width="60%"
+      top="5vh"
+      :title="imgForm.state"
+      :visible.sync="imginnerVisible"
+      append-to-body
+      class="dialogBox"
+    >
       <el-form class="reverseBox" :model="imgForm" label-width="100px">
         <div style="width:50%">
           <el-form-item label="验收描述:">
@@ -220,7 +228,7 @@
         <el-form-item label="图片展示:">
           <el-carousel :interval="3000" arrow="always" height="30vh">
             <el-carousel-item v-for="item in imgData3" :key="item.index">
-              <img :src="item.filePath" alt="" style="width:100%;height:100%;">
+              <img :src="item.filePath" alt style="width:100%;height:100%;" />
             </el-carousel-item>
           </el-carousel>
         </el-form-item>
@@ -230,39 +238,39 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      chakanData: Array,
-      imgData: Array,
-      imgData2: Array,
-      imgId: String,
-      zijian: String,
-      yanshou: String,
-      imgForm: Object,
-      imgData3: Array
-    },
-    data() {
-      return {
-        imginnerVisible: false,
-        datac: []
-      }
-    },
-    created() {
-      this.srty()
-    },
-    methods: {
-      srty() {
-        this.datac = this.chakanData
-        console.log(this.datac)
-      }
+export default {
+  props: {
+    chakanData: Array,
+    imgData: Array,
+    imgData2: Array,
+    imgId: String,
+    zijian: String,
+    yanshou: String,
+    imgForm: Object,
+    imgData3: Array
+  },
+  data() {
+    return {
+      imginnerVisible: false,
+      datac: []
+    };
+  },
+  created() {
+    this.srty();
+  },
+  methods: {
+    srty() {
+      this.datac = this.chakanData;
+      console.log(this.datac);
     }
   }
+};
 </script>
 
 <style lang="scss" scoped>
-  .imgez {
-    height: 60vh;
-    overflow-y: auto;
+.imgez {
+  height: 60vh;
+  overflow-y: auto;
 
   .zj,
   .ys {
@@ -289,11 +297,10 @@
     height: 45vh;
     line-height: 45vh;
   }
-
-  }
-  .reverseBox {
-    height: 68vh;
-    overflow-y: auto;
+}
+.reverseBox {
+  height: 68vh;
+  overflow-y: auto;
 
   /deep/ .el-input__inner {
     padding: 0 0.5vw;
@@ -310,37 +317,35 @@
   /deep/ .el-input {
     font-size: 0.7vw;
   }
-
-  }
-  .database {
-    width: 100%;
-    height: 50.6vh;
-    border: 1px solid #666;
+}
+.database {
+  width: 100%;
+  height: 50.6vh;
+  border: 1px solid #666;
 
   .headData {
     height: 7vh;
 
-  div {
-    width: 50%;
+    div {
+      width: 50%;
 
-  .processName {
-    width: 30%;
-    border-right: 1px solid #666;
-  }
+      .processName {
+        width: 30%;
+        border-right: 1px solid #666;
+      }
 
-  .stateName {
-    width: 30%;
-    border-right: 1px solid #666;
-    border-left: 1px solid #666;
-  }
+      .stateName {
+        width: 30%;
+        border-right: 1px solid #666;
+        border-left: 1px solid #666;
+      }
 
-  span {
-    display: block;
-    height: 7vh;
-    text-align: center;
-  }
-
-  }
+      span {
+        display: block;
+        height: 7vh;
+        text-align: center;
+      }
+    }
   }
   .selfinspection {
     width: 50%;
@@ -348,107 +353,101 @@
     border-top: 1px solid #666;
     border-right: 1px solid #666;
 
-  .textName {
-    height: 5vh;
-    border-bottom: 1px solid #666;
-    text-align: center;
-  }
+    .textName {
+      height: 5vh;
+      border-bottom: 1px solid #666;
+      text-align: center;
+    }
 
-  .selfPlanBox {
-    height: 18vh;
-    border-bottom: 1px solid #666;
+    .selfPlanBox {
+      height: 18vh;
+      border-bottom: 1px solid #666;
 
-  span {
-    display: block;
-    float: left;
-    height: 18vh;
-    text-align: center;
-  }
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
+    .selfRealityBox {
+      height: 18vh;
 
-  }
-  .selfRealityBox {
-    height: 18vh;
-
-  span {
-    display: block;
-    float: left;
-    height: 18vh;
-    text-align: center;
-  }
-
-  }
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
   }
   .acceptance {
     width: 50%;
     height: 42vh;
     border-top: 1px solid #666;
 
-  .textNameOne {
-    height: 5vh;
-    border-bottom: 1px solid #666;
-    text-align: center;
-  }
+    .textNameOne {
+      height: 5vh;
+      border-bottom: 1px solid #666;
+      text-align: center;
+    }
 
-  .selfPlanBox {
-    height: 18vh;
-    border-bottom: 1px solid #666;
+    .selfPlanBox {
+      height: 18vh;
+      border-bottom: 1px solid #666;
 
-  span {
-    display: block;
-    float: left;
-    height: 18vh;
-    text-align: center;
-  }
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
+    .selfRealityBox {
+      height: 18vh;
 
+      span {
+        display: block;
+        float: left;
+        height: 18vh;
+        text-align: center;
+      }
+    }
   }
-  .selfRealityBox {
-    height: 18vh;
-
-  span {
-    display: block;
-    float: left;
-    height: 18vh;
-    text-align: center;
-  }
-
-  }
-  }
-  }
-  .describeBox {
-    height: 50vh;
-    border: 1px solid #666;
-    margin-top: 1vh;
+}
+.describeBox {
+  height: 50vh;
+  border: 1px solid #666;
+  margin-top: 1vh;
 
   span {
     width: 50%;
     display: block;
     text-align: center;
 
-  p {
-    height: 5vh;
-    border-bottom: 1px solid #666;
-    padding: transparent !important;
-  }
-
+    p {
+      height: 5vh;
+      border-bottom: 1px solid #666;
+      padding: transparent !important;
+    }
   }
   ul {
     padding: 0;
     margin: 0;
 
-  li {
-    list-style: none;
-    float: left;
-    width: 33%;
-    height: 15vh;
-    padding: 1%;
+    li {
+      list-style: none;
+      float: left;
+      width: 33%;
+      height: 15vh;
+      padding: 1%;
 
-  img {
-    width: 100%;
-    height: 100%;
-    display: block;
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
   }
-
-  }
-  }
-  }
+}
 </style>
