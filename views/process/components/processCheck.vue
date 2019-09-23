@@ -15,7 +15,9 @@
         </tr>
         <tr>
           <td>{{currentProcess.projectItem}}</td>
-          <td>{{currentProcess.projectid.split('_')[1]}}</td>
+          <template v-if="currentProcess.projectid != undefined">
+                <td>{{currentProcess.projectid.split('_')[1]}}</td>
+          </template>
           <td>{{currentProcess.zhuanghao}}</td>
           <td>{{currentProcess.iscomplete == '1' ? '已完成' : '未完成'}}</td>
         </tr>

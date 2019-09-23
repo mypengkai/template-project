@@ -81,7 +81,7 @@ export default {
       margin: 0;
       li {
         list-style-type: none;
-        line-height: 3vh;
+        line-height: 5vh;
         color: black;
       }
     }

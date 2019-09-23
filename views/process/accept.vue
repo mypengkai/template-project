@@ -325,7 +325,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="24">
+            <el-col :span="12">
               <el-form-item label="工序:" prop="processDictId">
                 <el-select
                   v-model="formData.processDictId"
@@ -888,39 +888,39 @@ export default {
       },
       supplementProcessRules: {
         userGroupId: [
-          { required: true, trigger: "change", message: "请选择组织机构" }
+          { required: true, trigger: "blur", message: "请选择组织机构" }
         ],
         projectItemId: [
-          { required: true, trigger: "change", message: "请选择分部分项" }
+          { required: true, trigger: "blur", message: "请选择分部分项" }
         ],
         processDictId: [
-          { required: true, trigger: "change", message: "请选择工序" }
+          { required: true, trigger: "blur", message: "请选择工序" }
         ],
         planSelfCheckTime: [
-          { required: true, trigger: "change", message: "请选择计划自检时间" }
+          { required: true, trigger: "blur", message: "请选择计划自检时间" }
         ],
         planCheckTime: [
-          { required: true, trigger: "change", message: "请选择计划验收时间" }
+          { required: true, trigger: "blur", message: "请选择计划验收时间" }
         ],
         SelfCheckTime: [
-          { required: true, trigger: "change", message: "请选择实际自检时间" }
+          { required: true, trigger: "blur", message: "请选择实际自检时间" }
         ],
         CheckTime: [
-          { required: true, trigger: "change", message: "请选择实际验收时间" }
+          { required: true, trigger: "blur", message: "请选择实际验收时间" }
         ],
         planSelfCheckPersonName: [
-          { required: true, trigger: "change", message: "请选择施工单位自检人" }
+          { required: true, trigger: "blur", message: "请选择施工单位自检人" }
         ],
         planCheckPersonName: [
-          { required: true, trigger: "change", message: "请选择监理验收人" }
+          { required: true, trigger: "blur", message: "请选择监理验收人" }
         ],
         selfCheckDescribe: [
-          { required: true, trigger: "change", message: "请输入自检描述" }
+          { required: true, trigger: "blur", message: "请输入自检描述" }
         ],
         checkDescribe: [
-          { required: true, trigger: "change", message: "请输入验收描述" }
+          { required: true, trigger: "blur", message: "请输入验收描述" }
         ],
-        remark: [{ required: true, trigger: "change", message: "请填写备注" }]
+        remark: [{ required: true, trigger: "blur", message: "请填写备注" }]
       },
 
       dialogVisibleSelf: false, //自检图片预览

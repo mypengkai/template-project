@@ -229,7 +229,7 @@ export default {
         pageNo: 1, // 当前页
         pageSize: 10 // 每页条数
       },
-      nowItem: "",
+      nowItem: {},
       nowUserId: "",
       flag: false,
       commandId: "",
