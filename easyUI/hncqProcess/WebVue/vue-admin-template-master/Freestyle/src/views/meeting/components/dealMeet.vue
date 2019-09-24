@@ -135,9 +135,9 @@ export default {
       handleUser: null,
       flag: true,
       rules: {
-        name: [{ required: true, message: "请选择处理人", trigger: "change" }],
+        name: [{ required: true, message: "请选择处理人", trigger: "blur" }],
         plancompletionTime: [
-          { required: true, message: "请选择计划完成时间", trigger: "change" }
+          { required: true, message: "请选择计划完成时间", trigger: "blur" }
         ],
         checkExplain: [
           { required: true, message: "请输入处理说明", trigger: "blur" }
@@ -153,8 +153,6 @@ export default {
     // 当前登录用户职位
     const zhiwei = userinfo.job_name_en;
     let money_position = tool.money_position;
-
-    //debugger;
     // 金额等级 职位 都想等 是完
     for (var i = 0; i < money_position.length; i++) {
       if (

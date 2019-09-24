@@ -147,7 +147,7 @@
         <el-form-item label="分部分项:" prop="projectItem">
           <div style="height:66vh;overflow-y:auto;border:1px solid #ccc;border-radius: 5px">
             <el-tree :data="setProjectItemKey" :props="defaultSetKeyProjectItemProps" lazy show-checkbox node-key="id"
-                     :load="loadNextLayer" highlight-current
+                     :load="loadNextLayer" highlight-current :default-checked-keys="defaultCheckedMenusKey"
                      :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>
           </div>
         </el-form-item>
@@ -166,7 +166,7 @@
   import treeTable from '@/components/TreeTable'
   import api from '@/api/project'
   import organization from '@/api/Organization'
-
+  import role from '@/api/role.js'
   export default {
     name: 'engineering',
     data() {
@@ -207,6 +207,7 @@
           flag: false,
           selectedUserGroup: null  //选中的对象
         },
+        defaultCheckedMenusKey:[],  // 默认选中数组
         //父工程分部分项树
         defaultProjectTreeProps: {
           children: 'children',
@@ -450,13 +451,16 @@
       handleSetKeyUserGroupCheckChange(item) {  //设置关键工序的条件
         this.setProjectItemOrgId = item.id
         api.getAllProjectItemTree({ userGroupId: item.id, pId: '0' }).then(res => {
-          this.setProjectItemKey = res.data.data
+          this.setProjectItemKey = res.data.data;
         })
       },
+   
+
+
       setProjectItemKeyBtn() {  //设置关键工序
         this.dialogSetPartKeyVisible = true
         api.getAllProjectItemKeyIds().then(res => {
-          this.getSelectedKeyIds = res.data.data
+          this.getSelectedKeyIds = res.data.data;
         })
       },
       loadNextLayer(node, resolve) {  //异步加载下一级分部分项
@@ -469,9 +473,15 @@
                 projectItem: res.data.data[i].projectItem,
                 isLeaf: !res.data.data[i].projectItem
               })
+              if(res.data.data[i].iskey=='1'){
+                    this.defaultCheckedMenusKey.push(res.data.data[i])
+              }
             }
-            resolve(childNodes)
+             resolve(childNodes)
+             this.$refs.setKeyProjectItemTree.setCheckedKeys(this.defaultCheckedMenusKey,false);
+             console.log(this.$refs.setKeyProjectItemTree.setCheckedNodes(this.defaultCheckedMenusKey,false))
           })
+           
         }
       },
       filterNode(value, data, node) {  //过滤分部分项
@@ -479,7 +489,7 @@
         return data.label.indexOf(value) !== -1
       },
       submitSetKeyProjectItem() {  //设置关键工序
-        let ids = this.$refs.setKeyProjectItemTree.getCheckedKeys()
+        let ids = this.$refs.setKeyProjectItemTree.getCheckedKeys();
         let paramIds = ''
         for (let id of ids) {
           paramIds += id + ','
@@ -490,12 +500,14 @@
             message: '请选择需要设置的分部分项'
           })
         } else {
-          api.setKeyProjectItemByIds({ ids: paramIds + this.getSelectedKeyIds }).then(res => {
-            this.$message({
-              type: 'success',
-              message: '设置成功'
-            })
-            this.dialogSetPartKeyVisible = false
+          api.setKeyProjectItemByIds({ ids: paramIds }).then(res => {
+             if(res.data.ok){
+                  this.$message({
+                      type: 'success',
+                      message: '设置成功'
+                  })
+                this.dialogSetPartKeyVisible = false
+             }
           })
         }
       },
