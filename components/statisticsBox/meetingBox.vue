@@ -7,26 +7,26 @@
 import echarts from "echarts";
 import request from "@/utils/request";
 export default {
-  //props: ["formData"],
+  props: ["formData"],
   data() {
     return {
-      statisicsData: []
+      //statisicsData: [],
+      //  sendData: {
+      //   departId: "", // 组织机构id
+      //   itemInfoId: "", // 分部分项
+      //   startTime: "",
+      //   endTime: "",
+      //   pageSize:10,
+      //   pageNo:1
+      // },
     };
   },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init() {
-      request
-        .post("/rest/projectItemInfo/notPassStatistics", null)
-        .then(res => {
-          if (res.data.ok) {
-            this.statisicsData = res.data.data.data;
+  watch:{
+      formData(val){
             let mNumber = null;
             let cNumber = null;
             let pNumber = null;
-            this.statisicsData.forEach(element => {
+            val.forEach(element => {
               mNumber += Number(element.meetingNumber);
               cNumber += Number(element.commandNumber);
               pNumber += Number(element.processNumber);
@@ -34,9 +34,33 @@ export default {
             let dataX = ["指令", "变更纪要", "工序"];
             let dataY = [cNumber, mNumber, pNumber];
             this.initEacht(dataX, dataY);
-          }
-        });
-    },
+      },
+      deep:true
+  },
+  mounted() {
+    //this.init();
+  },
+  methods: {
+    // init() {
+    //   request
+    //     .post("/rest/projectItemInfo/notPassStatistics", this.sendData)
+    //     .then(res => {
+    //       if (res.data.ok) {
+    //         this.statisicsData = res.data.data.data;
+    //         let mNumber = null;
+    //         let cNumber = null;
+    //         let pNumber = null;
+    //         this.statisicsData.forEach(element => {
+    //           mNumber += Number(element.meetingNumber);
+    //           cNumber += Number(element.commandNumber);
+    //           pNumber += Number(element.processNumber);
+    //         });
+    //         let dataX = ["指令", "变更纪要", "工序"];
+    //         let dataY = [cNumber, mNumber, pNumber];
+    //         this.initEacht(dataX, dataY);
+    //       }
+    //     });
+    // },
 
     initEacht(dataX, dataY) {
       this.chart = echarts.init(this.$refs.meetEacth); //定义

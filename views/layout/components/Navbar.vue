@@ -12,7 +12,6 @@
           <span
             style="display: inline-block;width: 100px;height: 40px;color:#000;vertical-align: inherit;">{{userName}}</span>
           <i class="el-icon-caret-bottom"/>
-
         </div>
 
         <!-- 修改个人信息功能 -->
@@ -305,10 +304,9 @@
   }
 
   .avatar-container {
-    display: inline-block;
     position: absolute;
     right: 35px;
-
+    display: inline-block;
   .avatar-wrapper {
     cursor: pointer;
     margin-top: 1.8vh;

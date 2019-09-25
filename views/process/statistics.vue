@@ -1,6 +1,6 @@
 <template>
   <div class="p20">
-    <div class="topBar" v-if="activeName=='first'">
+    <div class="topBar">
       <el-row>
         <el-col :span="6">
           <span>组织机构:</span>
@@ -41,7 +41,7 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="不通过记录" name="first">
         <div class="instruct">
-          <el-table :data="tableData" border style="width: 100%" class="textList" height="64vh">
+          <el-table :data="tableData" border style="width: 100%;" class="textList" height="64vh">
             <el-table-column prop="projectItem" label="分部分项"></el-table-column>
             <el-table-column prop="commandNumber" label="指令" width="100" align="center">
                    <template slot-scope="scope">
@@ -62,17 +62,7 @@
                    </template>
             </el-table-column>
           </el-table>
-          <!-- 分页 -->
-          <el-pagination
-            class="pageList pt20"
-            @size-change="handleSizeChange"
-            @current-change="querySelected"
-            :current-page="sendData.pageNo"
-            :page-sizes="[10,20,30]"
-            :page-size="sendData.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-          ></el-pagination>
+        
         </div>
       </el-tab-pane>
       <el-tab-pane label="不通过统计" name="second">
@@ -81,6 +71,17 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+      <!-- 分页 -->
+          <el-pagination
+            class="pageList pt20 mt1"
+            @size-change="handleSizeChange"
+            @current-change="querySelected"
+            :current-page="sendData.pageNo"
+            :page-sizes="[10,20,30]"
+            :page-size="sendData.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+          ></el-pagination>
   </div>
 </template>
 <script>
@@ -190,5 +191,9 @@ export default {
     height: 100%;
   }
   
+}
+/deep/.el-tabs__content {
+    overflow: hidden;
+    /* position: relative; */
 }
 </style>

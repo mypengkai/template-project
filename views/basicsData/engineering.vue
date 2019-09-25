@@ -169,6 +169,7 @@
   import role from '@/api/role.js'
   export default {
     name: 'engineering',
+    inject: ["reload"],
     data() {
       return {
         describe: '工程分部分项',
@@ -506,6 +507,7 @@
                       type: 'success',
                       message: '设置成功'
                   })
+                this.reload();
                 this.dialogSetPartKeyVisible = false
              }
           })

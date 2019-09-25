@@ -59,8 +59,8 @@
     <div class="topBar">
       <el-row>
         <el-col :span="6">
-          <el-form label-width="80px">
-            <el-form-item label="打印状态:">
+          <el-form >
+            <el-form-item label="打印状态：">
               <el-select v-model="form.type" placeholder="请选择" size="small" @change="query">
                 <el-option
                   v-for="item in options"
