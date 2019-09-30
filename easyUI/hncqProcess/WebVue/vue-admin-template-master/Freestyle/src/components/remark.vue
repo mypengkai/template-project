@@ -13,7 +13,7 @@
             </li>
           </ul>
           <div class="btnBox">
-            <el-button type="info" @click="cancel">取消</el-button>
+            <el-button type="default"  @click="cancel">取消</el-button>
             <el-button type="primary" @click="confirm">确定</el-button>
           </div>
       </div>
@@ -75,7 +75,7 @@ export default {
   padding: 0 30px;
   margin: 0;
   .conent{
-     
+
   }
   ul {
     padding: 0;

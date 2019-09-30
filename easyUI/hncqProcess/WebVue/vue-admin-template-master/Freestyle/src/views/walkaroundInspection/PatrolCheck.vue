@@ -34,13 +34,13 @@
     <!-- 查询列表 -->
     <el-table class="textList" border :data="pollingPageList" style="width: 100%" height="72vh">
       <el-table-column prop="realname" label="巡视人" align="center" width="100"></el-table-column>
-      <el-table-column prop="departname" label="组织机构" width="100"></el-table-column>
+      <el-table-column prop="departname" label="组织机构" width="100" align="center"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
-      <el-table-column prop="job_name_cn" label="职位" width="100"></el-table-column>
-      <el-table-column prop="zhuanghao" label="桩号" width="100"></el-table-column>
+      <el-table-column prop="job_name_cn" label="职位" width="120" align="center"></el-table-column>
+      <el-table-column prop="zhuanghao" label="桩号" width="140" align="center"></el-table-column>
       <el-table-column prop="describe" label="巡视描述" width="150"></el-table-column>
       <el-table-column prop="photoLocation" label="拍照地点" width="150"></el-table-column>
-      <el-table-column prop="createTime" label="巡视时间" align="center" width="150"></el-table-column>
+      <el-table-column prop="createTime" label="巡视时间" align="center" width="100"></el-table-column>
       <el-table-column fixed="right" label="操作" align="center" width="80">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="查看" placement="top">

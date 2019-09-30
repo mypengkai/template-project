@@ -34,11 +34,11 @@
     </div>
     <!-- 查询列表 -->
     <el-table border  class="textList" :data="sideStationPollingPageList" style="width: 100%" height="72vh">
-      <el-table-column prop="realname" label="旁站人" width="100"></el-table-column>
-      <el-table-column prop="departname" label="组织机构" width="100"></el-table-column>
+      <el-table-column prop="realname" label="旁站人" width="100" align="center"></el-table-column>
+      <el-table-column prop="departname" label="组织机构" width="100" align="center"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
-      <el-table-column prop="job_name_cn" label="职位" width="100"></el-table-column>
-      <el-table-column prop="zhuanghao" label="桩号" width="100"></el-table-column>
+      <el-table-column prop="job_name_cn" label="职位" width="100" align="center"></el-table-column>
+      <el-table-column prop="zhuanghao" label="桩号" width="100" align="center"></el-table-column>
       <el-table-column prop="describe" label="旁站描述" width="150"></el-table-column>
       <el-table-column prop="photoLocation" label="拍照地点"  width="150"></el-table-column>
       <el-table-column prop="createTime" align="center" width="150" label="创建时间"></el-table-column>
