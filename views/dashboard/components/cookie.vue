@@ -98,7 +98,7 @@
     height: 120px;
     border-radius: 60px;
     margin: 0 auto;
-    /*cursor: pointer;*/
+    cursor: pointer;
     text-align: center;
   }
 

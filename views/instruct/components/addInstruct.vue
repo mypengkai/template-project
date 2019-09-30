@@ -1,11 +1,11 @@
 <template>
   <div class="addInstrucet">
-    <el-form :model="form" ref="form" :rules="formRules" label-width="120px">
+    <el-form :model="form" ref="form" :rules="formRules" label-width="130px">
       <el-row>
         <el-col :span="12">
           <el-form-item label="组织机构：" prop="departname">
             <el-select
-             style="width:100%"
+              style="width:100%"
               v-model="form.departname"
               placeholder="请选择"
               @change="userGroupOnChange"
@@ -37,10 +37,10 @@
         <el-col :span="12">
           <el-form-item label="工序名称：" prop="process">
             <el-select @change="changeProcess"
-             style="width:100%"
-              v-model="form.process"
-              placeholder="请选择工序"
-              size="small"
+                       style="width:100%"
+                       v-model="form.process"
+                       placeholder="请选择工序"
+                       size="small"
             >
               <el-option
                 v-for="item in processSDictOption"
@@ -60,8 +60,8 @@
               placeholder="请选择"
               :readonly="true"
             >
-            <!--   @focus="alertAcceptUserDialog()" -->
-            <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog"></el-button>
+              <!--   @focus="alertAcceptUserDialog()" -->
+              <el-button slot="append" icon="el-icon-search" @click="alertAcceptUserDialog"></el-button>
             </el-input>
           </el-form-item>
         </el-col>
@@ -98,46 +98,47 @@
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.remark"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24">   
-                  <el-form-item label="图片选择：">
-                    <el-upload
-                      class="avatar-uploader"
-                      ref="upload"
-                      :action="uploadUrl"
-                      name="files"
-                      :headers="headers"
-                      :limit="5"
-                      list-type="picture-card"
-                      :auto-upload="false"
-                      :data="form"
-                      :on-change="upload"
-                    >
-                    <i class="el-icon-plus"></i>
-                    </el-upload>
-                  </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="图片选择：">
+            <el-upload
+              class="avatar-uploader"
+              ref="upload"
+              :action="uploadUrl"
+              name="files"
+              :headers="headers"
+              :limit="5"
+              list-type="picture-card"
+              :auto-upload="false"
+              :data="form"
+              :on-change="upload"
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+          </el-form-item>
         </el-col>
       </el-row>
-        <div class="tar" style="margin:10px;">
-        <el-button  @click="close()">取 消</el-button>
-        <el-button type="primary"  @click="_comfirm('form')">确 定</el-button>
+      <div class="tar" style="margin:10px;">
+        <el-button @click="close()">取 消</el-button>
+        <el-button type="primary" @click="_comfirm('form')">确 定</el-button>
       </div>
     </el-form>
-     <!-- 接收人弹框 -->
-    <el-dialog class="dialogBox" width="45%"  title="选择处理人" :visible.sync="acceptUserDialog" append-to-body>
+    <!-- 接收人弹框 -->
+    <el-dialog class="dialogBox" width="45%" title="选择处理人" :visible.sync="acceptUserDialog" append-to-body>
       <div class="topBar">
         <span>组织机构:</span>
         <el-select v-model="receiveData.userGroupId" placeholder="请选择" @change="handleReceiveUserGroupCheckChange">
           <el-option v-for="item in userGroupTree" :key="item.id" :label="item.departname"
                      :value="item.id"></el-option>
         </el-select>
-         <span>姓名:</span>
-         <el-input v-model="receiveData.realname" placeholder="请输入姓名"></el-input>
-         <el-button
-            class="pan-btn light-blue-btn"
-            type="primary"
-            icon="el-icon-search"
-            @click="query()"
-          >查询</el-button>
+        <span>姓名:</span>
+        <el-input v-model="receiveData.realname" placeholder="请输入姓名"></el-input>
+        <el-button
+          class="pan-btn light-blue-btn"
+          type="primary"
+          icon="el-icon-search"
+          @click="query()"
+        >查询
+        </el-button>
       </div>
       <el-table border :data="receiveUsersList" highlight-current-row height="50vh"
                 @current-change="handleCurrentChange">
@@ -157,15 +158,13 @@
 <script>
   import request from '../../../utils/request'
   import { getToken } from '@/utils/auth'
-  import instruct from '@/api/instruct.js'
   import project from '@/api/project.js'
   import Organization from '@/api/Organization.js'
   import processInfo from '@/api/process.js'
-  import remark from "@/components/remark"
+  import remark from '@/components/remark'
   import SelectTree from '@/components/SelectTree/syncSelectTree.vue'
-  import orderInstruct from "./orderInstruct"
+  import orderInstruct from './orderInstruct'
   import viewer from '@/components/viewer'
-  import { debug } from 'util';
 
   export default {
     inject: ['reload'],
@@ -179,32 +178,32 @@
       return {
         formRules: {
           departname: [
-            { required: true, message: '请选择组织机构', trigger: 'blur' },
+            { required: true, message: '请选择组织机构', trigger: 'blur' }
           ],
           projectItemId: [
             { required: true, message: '请选择分部分项', trigger: 'blur' }
           ],
-           process: [
+          process: [
             { required: true, message: '请选择工序', trigger: 'blur' }
           ],
-           nowsendusername: [
+          nowsendusername: [
             { required: true, message: '请选择处理人', trigger: 'blur' }
           ],
           planCheckTime: [
-            {  required: true, message: '请选择计划开始时间', trigger: 'blur' }
+            { required: true, message: '请选择计划开始时间', trigger: 'blur' }
           ],
           planFinishTime: [
-            {  required: true, message: '请选择计划完成时间', trigger: 'blur' }
+            { required: true, message: '请选择计划完成时间', trigger: 'blur' }
           ],
           file: [
-               { required: true, message: '请上传图片', }
-          ],
+            { required: true, message: '请上传图片' }
+          ]
         },
-        dialogRemark:false,
-        dialogVisible:false,
+        dialogRemark: false,
+        dialogVisible: false,
         processMDictOption: [],  // 工序类型下拉框
         processSDictOption: [],  // 工序下拉框
-        acceptUserDialog:false,
+        acceptUserDialog: false,
         answer: '', // 转发响应变量
         uploadUrl: process.env.BASE_API + '/rest/command/addCommand',  // 新增
         dialogImageUrl: '',
@@ -222,23 +221,23 @@
           userGroupId: '', // 组织机构id
           departname: '',   //组织机构名称
           processDictId: '', // 工序字典的工序id 非必传
-          process:'',        // 工序名称
+          process: '',        // 工序名称
           projectItemId: '', // 分部分项id
           projectItem: '',  //分部分项名称
           ReceiveUserid: '', // 接收人id
-          nowsendusername:'', // 接收人名称
+          nowsendusername: '', // 接收人名称
           planCheckTime: '', // 计划检查时间
           commandType: '', // 指令类型
           batchNo: '',
           patrolId: '',  //巡视id
           planFinishTime: '',  //计划完成时间
-          commandid:'',  // 指令id
-        }, 
+          commandid: ''  // 指令id
+        },
         userGroupDefaultProps: {  // 组织机构树显示
           children: 'children',
           label: 'name'
         },
-        handList:'', // 流程数据
+        handList: '', // 流程数据
         // 工程分项树显示
         projectItemDefaultProp: {
           children: 'children',
@@ -255,43 +254,43 @@
         userGroupTree: [], // 组织机构树
         projectItemTree: [], // 分部分项树
         receiveUsersList: [], // 接收人列表
-        orgId: '',
-  
+        orgId: ''
+
       }
     },
-    mounted(){
-        
+    mounted() {
+
     },
     created() {
-      this.initUserGroupTree();
-      this.initProject();
-      this.initProcess();
-      this.receiveUserList();
-      this.form.batchNo = this.createUUID();  //生成批处理id
-      this.today();
+      this.initUserGroupTree()
+      this.initProject()
+      this.initProcess()
+      this.receiveUserList()
+      this.form.batchNo = this.createUUID()  //生成批处理id
+      this.today()
     },
     methods: {
-       today(){
-         let nowTime = new Date();
-         this.form.planCheckTime = nowTime.toLocaleDateString().replace(/\//g, "-");
-         this.form.planFinishTime = nowTime.toLocaleDateString().replace(/\//g, "-");
-       },
+      today() {
+        let nowTime = new Date()
+        this.form.planCheckTime = nowTime.toLocaleDateString().replace(/\//g, '-')
+        this.form.planFinishTime = nowTime.toLocaleDateString().replace(/\//g, '-')
+      },
       reset() {  // 重置按钮
         this.reload()
       },
-      query(){
-         this.receiveUserList();
+      query() {
+        this.receiveUserList()
       },
-      getRemark(data){
-         this.transpondForm.remark = data;
-         this.modifyForm.remark = data;
-         this.finishForm.remark = data;
-         this.soonFinishForm.remark = data;
-         this.returnForm.remark = data;
+      getRemark(data) {
+        this.transpondForm.remark = data
+        this.modifyForm.remark = data
+        this.finishForm.remark = data
+        this.soonFinishForm.remark = data
+        this.returnForm.remark = data
 
       },
-      checkRemark(){
-        this.dialogRemark = true;
+      checkRemark() {
+        this.dialogRemark = true
       },
       initUserGroupTree() {   // 初始化组织机构树
         Organization.userGroupSelect().then(res => {
@@ -306,9 +305,9 @@
         })
       },
       // 初始分部分项
-      initProject(){
-         let data = sessionStorage.getItem("departId")
-         Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
+      initProject() {
+        let data = sessionStorage.getItem('departId')
+        Organization.getProjectItemFromLayer({ userGroupId: data, pId: '0' }).then(res => {
           this.projectItemTree = res.data.data
         })
       },
@@ -328,21 +327,21 @@
       },
       initProcessByTypeId(codeid) {   // 初始化新增工序通过工序类型id
         request.post('/rest/processCheck/numberSdData', { codeid: codeid }).then(res => {
-          this.processSDictOption = res.data.data;
+          this.processSDictOption = res.data.data
         })
       },
-      initProcess(){
-          let codeid = sessionStorage.getItem("projectId")
-          request.post('/rest/processCheck/numberSdData', { codeid: codeid }).then(res => {
-          this.processSDictOption = res.data.data;
+      initProcess() {
+        let codeid = sessionStorage.getItem('projectId')
+        request.post('/rest/processCheck/numberSdData', { codeid: codeid }).then(res => {
+          this.processSDictOption = res.data.data
         })
       },
       // 选择工序
-      changeProcess(val){
-          this.form.processDictId = val
+      changeProcess(val) {
+        this.form.processDictId = val
       },
       processTypeChangeProcess(data) {    // 点击新增工序--工序类型改变工序
-        this.initProcessByTypeId(data);
+        this.initProcessByTypeId(data)
       },
       receiveUserList() {  //接收人列表
         processInfo.getUsersByDepartId(this.receiveData).then(res => {
@@ -350,8 +349,7 @@
           this.receiveUsersList = res.data.data.data
         })
       },
-     
-     
+
       handleProjectItemOnClick(data) { // 分部分项选择后的数据
         this.form.projectItemId = data.id
         this.form.projectItemName = data.name
@@ -364,49 +362,50 @@
       },
       handleReceiveUserGroupCheckChange(data) {   //选择接收人后的组织机构弹框
         this.receiveData.userGroupId = data
-        this.receiveUserList();
+        this.receiveUserList()
       },
       upload(file, fileList) {
-        
+
       },
-     _comfirm(form) {  //提交
-               this.$refs[form].validate((valid) => {
-                 let that = this;
-                  if (valid) {
-                      sessionStorage.setItem("departId",that.form.userGroupId);
-                      sessionStorage.setItem("projectId",that.form.projectItemId);
-                      console.log(that.$refs.upload)
-                      if(!that.$refs.upload.uploadFiles.length){
-                          this.$message({
-                              message:'请选择文件',
-                              
-                          })
-                          return false
-                      }
-                      that.$refs.upload.submit();
-                      that.$emit('comfirm');
-                      that.$emit('cancel') ;
-                      that.reset(); 
-                  } else {
-                    console.log('error submit!!');
-                    return false;
-                  }
-                });
-           
+      _comfirm(form) {  //提交
+        this.$refs[form].validate((valid) => {
+          let that = this
+          if (valid) {
+            sessionStorage.setItem('departId', that.form.userGroupId)
+            sessionStorage.setItem('projectId', that.form.projectItemId)
+            console.log(that.$refs.upload)
+            if (!that.$refs.upload.uploadFiles.length) {
+              this.$message({
+                message: '请选择文件',
+                type: 'error'
+
+              })
+              return false
+            }
+            that.$refs.upload.submit()
+            that.$emit('comfirm')
+            that.$emit('cancel')
+            that.reset()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+
       },
       close() {
         this.$emit('cancel')
       },
       handleCurrentChange(val) {   //确认接收人
-          this.form.ReceiveUserid = val.id // 新增传接收人id
-          this.form.nowsendusername = val.username // 新增接收人id名回填
-          this.acceptUserDialog = false
+        this.form.ReceiveUserid = val.id // 新增传接收人id
+        this.form.nowsendusername = val.username // 新增接收人id名回填
+        this.acceptUserDialog = false
       },
       // handlePictureCardPreview(file) {
       //   this.dialogImageUrl = file.url
       //   this.dialogVisible = true
       // },
-     
+
       createUUID: function() {
         function S4() {
           return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
@@ -415,8 +414,8 @@
         return (
           S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
         )
-      },
-     
+      }
+
     }
   }
 </script>
@@ -651,13 +650,16 @@
   li {
     list-style-type: none;
   }
+
   .video-box {
     position: relative;
   }
+
   .video-box video {
     display: inline-block;
     vertical-align: baseline;
   }
+
   .video-box .video-img {
     text-align: center;
     position: absolute;
@@ -670,14 +672,16 @@
     background-size: 50% 50%;
     cursor: pointer
   }
-  /deep/.el-pagination {
+
+  /deep/ .el-pagination {
     white-space: nowrap;
     padding: 2px 5px;
     color: #303133;
     font-weight: 700;
     margin-top: 10px;
-}
-/deep/.el-upload-list--picture-card .el-upload-list__item {
+  }
+
+  /deep/ .el-upload-list--picture-card .el-upload-list__item {
     overflow: hidden;
     background-color: #fff;
     border: 1px solid #c0ccda;
@@ -688,8 +692,9 @@
     height: 100px;
     margin: 0 8px 8px 0;
     display: inline-block;
-}
-/deep/.el-upload--picture-card {
+  }
+
+  /deep/ .el-upload--picture-card {
     background-color: #fbfdff;
     border: 1px dashed #c0ccda;
     border-radius: 6px;
@@ -699,8 +704,9 @@
     height: 100px;
     line-height: 100px;
     vertical-align: top;
-}
-/deep/.el-collapse-item__header {
+  }
+
+  /deep/ .el-collapse-item__header {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -718,5 +724,5 @@
     -webkit-transition: border-bottom-color .3s;
     transition: border-bottom-color .3s;
     outline: 0;
-}
+  }
 </style>
