@@ -1,43 +1,60 @@
 import router from './router'
 import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
-import 'nprogress/nprogress.css'// Progress 进度条样式
-import { Message } from 'element-ui'
-import { getToken } from '@/utils/auth' // 验权
-import {generateIndexRouter } from '@/utils/index'
-import {constantRouterMap } from '@/router'
+import 'nprogress/nprogress.css' // Progress 进度条样式
+import {
+  Message
+} from 'element-ui'
+import {
+  getToken
+} from '@/utils/auth' // 验权
+import {
+  generateIndexRouter
+} from '@/utils/index'
+import {
+  constantRouterMap
+} from '@/router'
 
 const whiteList = ['/login', '/platform'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start();
   if (getToken()) {
     if (to.path === '/login') {
-      next({ path: '/' })
+      next({
+        path: '/'
+      })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      if (store.getters.permissionList.length ===0) {
+      if (store.getters.permissionList.length === 0) {
         store.dispatch('GetPermissionList').then(res => { // 根据用户token 拿到资源资源信息
-          const menuData=res.data.data;
+          const menuData = res.data.data;
           console.log(menuData)
           if (menuData === null || menuData === "" || menuData === undefined) {
             return;
           }
           let constRoutes = generateIndexRouter(menuData);
           // 添加主界面路由
-          store.dispatch('UpdateAppRouter',  { constRoutes }).then(() => {
+          store.dispatch('UpdateAppRouter', {
+            constRoutes
+          }).then(() => {
             // 根据roles权限生成可访问的路由表
             // 动态添加可访问路由表
             console.log(store.getters.addRouters)
-            router.addRoutes(store.getters.addRouters);
+            router.addRoutes(store.getters.addRouters)
             //得到按钮列表
-            store.dispatch('getButtonList').then(res=>{
+            store.dispatch('getButtonList').then(res => {
               const redirect = decodeURIComponent(from.query.redirect || to.path)
               if (to.path === redirect) {
                 // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-                next({ ...to, replace: true })
+                next({
+                  ...to,
+                  replace: true
+                })
               } else {
                 // 跳转到目的路由
-                next({ path: redirect })
+                next({
+                  path: redirect
+                })
               }
             });
           });
@@ -49,7 +66,12 @@ router.beforeEach((to, from, next) => {
             type: 'error'
           });
           store.dispatch('LogOut').then(() => {
-            next({ path: '/login', query: { redirect: to.fullPath } })
+            next({
+              path: '/login',
+              query: {
+                redirect: to.fullPath
+              }
+            })
           })
         })
       } else {
