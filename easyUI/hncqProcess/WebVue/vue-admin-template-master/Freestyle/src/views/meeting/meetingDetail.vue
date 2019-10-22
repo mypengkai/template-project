@@ -264,7 +264,6 @@ export default {
 
   created() {
     this.initChangeDetail();
-    //console.log(this.changeId)
   },
   methods: {
     initChangeDetail() {
