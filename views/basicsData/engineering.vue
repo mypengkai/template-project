@@ -1,33 +1,25 @@
 <template>
   <div class="p20" ref="projectContent">
-     <div class="topBar">
+    <div class="topBar">
       <el-row>
         <el-col :span="6">
-        <span>组织机构:</span>
-         <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
-                   :default-expand-all="false" v-on:noDe="handleUserGroupCheckChange"
-                   ref="ProjectItem_userGroup"/>
+          <span>组织机构:</span>
+          <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
+                   :default-expand-all="false" v-on:noDe="handleUserGroupCheckChange" ref="ProjectItem_userGroup"/>
         </el-col>
 
         <el-col :span="8" style="margin-left:30%">
-        <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="initProjectList">查询
-        </el-button>
-        <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setProjectItemKeyBtn">
-          设置关键部位
-        </el-button>
-         <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setDeparent">
-          设置分部分项编码
-        </el-button>
+          <el-button type="primary" icon="el-icon-refresh" class="pan-btn light-blue-btn" @click="initProjectList('')">查询</el-button>
+          <el-button type="primary" icon="el-icon-circle-plus-outline" class="pan-btn light-blue-btn" @click="projectAdd('add')">添加</el-button>
+          <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setProjectItemKeyBtn">设置关键部位</el-button>
+          <el-button type="primary" icon="el-icon-s-tools" class="pan-btn light-blue-btn" @click="setDeparent">设置分部分项编码</el-button>
         </el-col>
       </el-row>
     </div>
 
-
-
     <!-- 操作列表 -->
     <el-table ref="projectItemTreeTable" :data="dataList" class="textList" row-key="id" border
-              lazy :load="loadNextProjectItemLayer" :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-              height="72vh">
+              lazy :load="loadNextProjectItemLayer" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="72vh">
       <el-table-column label="分部分项" align="left" prop="projectItem"></el-table-column>
       <el-table-column label="编码" align="center" width="100" prop="id"></el-table-column>
       <el-table-column label="父编码" align="center" width="100" prop="pid"></el-table-column>
@@ -49,81 +41,72 @@
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="修改" placement="top">
-            <el-button v-ltx="'engineeringUpdate'" type="warning" size="small" icon="el-icon-edit" circle
-                       @click="updateProject(scope.row)"/>
+            <el-button v-ltx="'engineeringUpdate'" type="warning" size="small" icon="el-icon-edit" circle @click="updateProject(scope.row)"/>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="新增" placement="top">
+            <el-button type="warning" size="small" icon="el-icon-circle-plus-outline" circle @click="projectAdd(scope.row)"/>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="删除" placement="top">
+            <el-button type="warning" size="small" icon="el-icon-delete" circle @click="deleteProject(scope.row)"/>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <!-- 新增弹框 -->
     <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" class="dialogBox">
-       <div class="projectBox">
-                <el-form class="reverseBox" :model="projectForm" :rules="rules" ref="addProjectForm" label-width="120px">
-        <el-form-item label="组织机构:">
-          <el-input v-model="userGroup.value" @focus="InitUserGroupTree" placeholder="请选择组织机构" :readonly="true"
-                    suffix-icon="el-icon-arrow-down"/>
-          <el-popover ref="userGroupPopover" v-model="userGroup.flag" placement="bottom-start" width="350"
-                      trigger="click">
-            <el-tree :data="orgUserGroupList" :props="defaultUserGroupProps" highlight-current
-                     :default-expand-all="true" @node-click="handleUserGroupNodeClick"/>
-          </el-popover>
-        </el-form-item>
-        <el-form-item label="分部分项:" prop="projectItem">
-          <el-input v-model="projectForm.projectItem" placeholder="请输入分部分项"/>
-        </el-form-item>
-        <el-form-item label="编码:" prop="id">
-          <el-input v-model="projectForm.id" placeholder="编码" :readonly="true"/>
-        </el-form-item>
-        <el-form-item label="父工程分部分项:">
-          <el-input v-model="projectItem.value" placeholder="请选择分部分项" :readonly="true"/>
-        </el-form-item>
-        <el-form-item label="父编码:">
-          <el-input v-model="projectForm.pid" placeholder="请输入编码" :readonly="true"/>
-        </el-form-item>
-        <el-form-item label="桩号:">
-          <el-col :span="11">
-            <el-input v-model="projectForm.startStation" placeholder="请输入起始桩号"/>
-          </el-col>
-          <el-col :span="2">~</el-col>
-          <el-col :span="11">
-            <el-input v-model="projectForm.endStation" placeholder="请输入终止桩号"/>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="经纬度:">
-          <el-col :span="11">
-            <el-input v-model="projectForm.lgt" placeholder="请输入经度"/>
-          </el-col>
-          <el-col :span="2">~</el-col>
-          <el-col :span="11">
-            <el-input v-model="projectForm.lat" placeholder="请输入纬度"/>
-          </el-col>
-        </el-form-item>
-      </el-form>
-      <div class="tar">
-        <el-button @click="dialogFormVisible=false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit()">保 存</el-button>
+      <div class="projectBox">
+        <el-form class="reverseBox" :model="projectForm" :rules="rules" ref="addProjectForm" label-width="120px">
+          <el-form-item label="组织机构:">
+            <el-input v-model="userGroup.value" @focus="InitUserGroupTree" placeholder="请选择组织机构" :readonly="true" suffix-icon="el-icon-arrow-down"/>
+            <el-popover ref="userGroupPopover" v-model="userGroup.flag" placement="bottom-start" width="350" trigger="click">
+              <el-tree :data="orgUserGroupList" :props="defaultUserGroupProps" highlight-current :default-expand-all="true" @node-click="handleUserGroupNodeClick"/>
+            </el-popover>
+          </el-form-item>
+          <el-form-item label="分部分项:" prop="projectItem">
+            <el-input v-model="projectForm.projectItem" placeholder="请输入分部分项"/>
+          </el-form-item>
+          <el-form-item label="编码:" prop="id">
+            <el-input v-model="projectForm.id" placeholder="编码" :readonly="isUpdateId"/>
+          </el-form-item>
+          <el-form-item label="父工程分部分项:">
+            <el-input v-model="projectItem.value" placeholder="请选择分部分项" :readonly="true"/>
+          </el-form-item>
+          <el-form-item label="父编码:">
+            <el-input v-model="projectForm.pid" placeholder="请输入编码" :readonly="true"/>
+          </el-form-item>
+          <el-form-item label="桩号:">
+            <el-col :span="11">
+              <el-input v-model="projectForm.startStation" placeholder="请输入起始桩号"/>
+            </el-col>
+            <el-col :span="2">~</el-col>
+            <el-col :span="11">
+              <el-input v-model="projectForm.endStation" placeholder="请输入终止桩号"/>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="经纬度:">
+            <el-col :span="11">
+              <el-input v-model="projectForm.lgt" placeholder="请输入经度"/>
+            </el-col>
+            <el-col :span="2">~</el-col>
+            <el-col :span="11">
+              <el-input v-model="projectForm.lat" placeholder="请输入纬度"/>
+            </el-col>
+          </el-form-item>
+        </el-form>
+        <div class="tar">
+          <el-button @click="dialogFormVisible=false">取 消</el-button>
+          <el-button type="primary" @click="onSubmit()">保 存</el-button>
+        </div>
       </div>
-       </div>
     </el-dialog>
 
     <!-- 数据上传 -->
     <el-dialog :visible.sync="dialogImportDataVisible" title="导入数据" width="30%">
       <el-form label-width="80px">
         <el-form-item label="组织机构:">
-          <el-input v-model="userGroupImport.value" @focus="InitImportUserGroupTree" placeholder="请选择组织机构"
-                    :readonly="true" suffix-icon="el-icon-more-outline"/>
-          <el-popover
-            v-model="userGroupImport.flag"
-            placement="bottom-start"
-            width="350"
-            trigger="click">
-            <el-tree
-              :data="dataImportUserGroupList"
-              :props="defaultUserGroupProps"
-              highlight-current
-              :default-expand-all="true"
-              @node-click="handleImportUserGroupNodeClick"
-            />
+          <el-input v-model="userGroupImport.value" @focus="InitImportUserGroupTree" placeholder="请选择组织机构" :readonly="true" suffix-icon="el-icon-more-outline"/>
+          <el-popover v-model="userGroupImport.flag" placement="bottom-start" width="350" trigger="click">
+            <el-tree :data="dataImportUserGroupList" :props="defaultUserGroupProps" highlight-current :default-expand-all="true" @node-click="handleImportUserGroupNodeClick"/>
           </el-popover>
         </el-form-item>
         <el-form-item label="文件上传:">
@@ -141,14 +124,12 @@
       <el-form class="reverseBox" ref="setProjectItemKey" label-width="120px">
         <el-form-item label="组织机构:" prop="userGroupId">
           <select-tree clearable :options="userGroupTree" :props="defaultUserGroupProps" node-key="id"
-                       :default-expand-all="false" v-on:noDe="handleSetKeyUserGroupCheckChange"
-                       ref="setKeyProjectItem_userGroup"/>
+                       :default-expand-all="false" v-on:noDe="handleSetKeyUserGroupCheckChange" ref="setKeyProjectItem_userGroup"/>
         </el-form-item>
         <el-form-item label="分部分项:" prop="projectItem">
           <div style="height:66vh;overflow-y:auto;border:1px solid #ccc;border-radius: 5px">
             <el-tree :data="setProjectItemKey" :props="defaultSetKeyProjectItemProps" lazy show-checkbox node-key="id"
-                     :load="loadNextLayer" highlight-current :default-checked-keys="defaultCheckedMenusKey"
-                     :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>
+                     :load="loadNextLayer" highlight-current :default-checked-keys="defaultCheckedMenusKey" :filter-node-method="filterNode" ref="setKeyProjectItemTree"/>
           </div>
         </el-form-item>
       </el-form>
@@ -260,7 +241,10 @@
         setProjectItemKey: [],  //分部分项
         setProjectItemOrgId: '',  //设置关键工序中的组织机构id
         filterText: '',  //过滤数据
-        getSelectedKeyIds: ''  //得到选中的关键部位
+        getSelectedKeyIds: '',  //得到选中的关键部位
+        isUpdateId: false,  //修改或删除的时候，编码是否可以修改
+        node_had: null,   //异步请求的时候得到下一级node
+        resolve_had: null,
       }
     },
     components: {
@@ -276,20 +260,25 @@
       this.initOrganizationTreeTable()
     },
     methods: {
-      initProjectList() {
-        if (this.$tool.isEmptyStr(this.queryParamData.userGroupId)) {
-          this.$message({
-            type: 'warn',
-            message: '请选择组织机构'
-          })
-        } else {
-          api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: '0' }).then(res => {
-            this.dataList = res.data.data
-          })
+      initProjectList(id) {
+        if(this.$tool.isEmptyStr(id)){
+          if (this.$tool.isEmptyStr(this.queryParamData.userGroupId)) {
+            this.$message({
+              type: 'warn',
+              message: '请选择组织机构'
+              })
+          } else {
+            api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: '0' }).then(res => {
+              this.dataList = res.data.data
+            })
+          }
         }
+
       },
       loadNextProjectItemLayer(tree, treeNode, resolve) {  //异步加载列表中分部分项
-        api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: tree.id }).then(res => {
+        this.node_had = tree;
+        this.resolve_had = resolve;
+          api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: tree.id }).then(res => {
           resolve(res.data.data)
         })
       },
@@ -301,6 +290,7 @@
       },
       projectAdd(method) {   //新增父分部分项
         this.dialogFormVisible = true   //表单是否可见
+        this.isUpdateId=false;
         if (method === 'add') {      // pid=null  父id为空的情况
           this.projectForm = {
             id: '',
@@ -340,15 +330,17 @@
             createTime: ''
           }
           this.projectItem.value = method.projectItem
+          this.projectForm.pid = method.id;
           this.projectForm.fuid = method.id
           this.userGroup.value = method.departname
-          this.projectForm.userGroupId = method.departId
+          this.projectForm.userGroupId = method.userGroupId
         }
       },
       updateProject(data) {   //修改工程分部分项
         this.dialogFormTitle = data.projectItem + '~修改'
         this.getProjectItemById(data)
         this.dialogFormVisible = true   //表单是否可见
+        this.isUpdateId=true;  //修改时，编码不能被动
       },
       deleteProject(data) {    //删除工程分部分项
         this.$confirm('即将删除, 是否继续?', '提示', {
@@ -356,7 +348,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.projectItemDelete(data)
+          this.loadNextProjectItemLayer(this.node_had, null, this.resolve_had);
         })
       },
       ImportProjectFromExcel() {   //工程分部分项从Excel导入
@@ -402,17 +394,16 @@
         this.projectItem.flag = false  //隐藏
       },
       onSubmit() {  //提交数据新增
-        let that = this
         this.$refs['addProjectForm'].validate((valid) => {
           if (valid) {
-            api.projectAdd(that.projectForm).then(res => {
+            api.projectAdd(this.projectForm).then(res => {
               this.$message({
                 type: 'success',
-                message: that.dialogFormTitle + '完成!'
+                message: this.dialogFormTitle + '完成!'
               })
               //刷新列表
-              that.initProjectList()
-              that.dialogFormVisible = false  //关闭弹框
+              this.loadNextProjectItemLayer(this.node_had, null, this.resolve_had);
+              this.dialogFormVisible = false  //关闭弹框
             })
           }
         })
@@ -424,7 +415,7 @@
             message: res.data.message
           })
           //刷新列表
-          this.initProjectList()
+          this.initProjectList(data.pid);
         })
       },
       getProjectItemById(data) {
@@ -455,7 +446,7 @@
           this.setProjectItemKey = res.data.data;
         })
       },
-   
+
 
 
       setProjectItemKeyBtn() {  //设置关键工序
@@ -482,7 +473,7 @@
              this.$refs.setKeyProjectItemTree.setCheckedKeys(this.defaultCheckedMenusKey,false);
              console.log(this.$refs.setKeyProjectItemTree.setCheckedNodes(this.defaultCheckedMenusKey,false))
           })
-           
+
         }
       },
       filterNode(value, data, node) {  //过滤分部分项
