@@ -988,7 +988,7 @@ export default {
       });
     },
     initProcessByTypeId(codeid) {
-      console.log(codeid,'codied')
+      console.log(codeid, "codied");
       // 初始化新增工序通过工序类型id
       this.processSDictOption = []; //先清空
       this.processSDictOption.unshift({ process: "全部" });
@@ -1058,7 +1058,7 @@ export default {
       this.codeid = data.id;
       this.showSelectedProjectItemInfo(data.id);
       this.projectItemId = data.id;
-      
+
       if (data.hasChildren) {
         this.addProcessBtn = false;
       } else {
@@ -1346,12 +1346,12 @@ export default {
       request
         .post("/rest/processCheck/processComplete", { codeid: codeid })
         .then(res => {
-          console.log(res.data, "res.data000");
+          console.log(res.data.data.complete, "complete");
           if (res.data.ok) {
             request
               .post("/rest/projectItemInfo/getProjectItemById/" + codeid)
               .then(ress => {
-                console.log(ress.data.data, "ress.data");
+                console.log(ress.data.data.iscomplete, "iscomplete");
                 if (ress.data.ok) {
                   if (
                     res.data.data.complete &&
@@ -1367,14 +1367,19 @@ export default {
                     that.overProcessBtn = false;
                     that.addProcessBtn = false;
                     that.leftTopDetils = true;
-                  }
-                   else if (
-                    !res.data.data.complete
-                     &&
+                  } else if (
+                    !res.data.data.complete &&
                     ress.data.data.iscomplete == "0"
                   ) {
                     that.overProcessBtn = false;
                     //that.addProcessBtn = true
+                    that.leftTopDetils = true;
+                  } else if (
+                    !res.data.data.complete &&
+                    ress.data.data.iscomplete == "1"
+                  ) {
+                    that.overProcessBtn = false;
+                    that.addProcessBtn = false;
                     that.leftTopDetils = true;
                   }
                 }
