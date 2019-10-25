@@ -33,6 +33,7 @@ export default {
   },
   created() {
     this.formData.forEach(element => {
+      console.log(element,'el')
       this.processids += element.processid + ",";
     });
   },
@@ -68,8 +69,8 @@ export default {
       window.print();
       this.previewShur();      // 改变打印数据的状态（已打印，未打印）
       // 重新加载页面，以刷新数据。以防打印完之后，页面不能操作的问题
-      window.location.reload();
       document.body.innerHTML = oldContent;
+      window.location.reload();
       return false;
     }
   }

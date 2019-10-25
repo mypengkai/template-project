@@ -39,7 +39,6 @@ router.beforeEach((to, from, next) => {
           }).then(() => {
             // 根据roles权限生成可访问的路由表
             // 动态添加可访问路由表
-            console.log(store.getters.addRouters)
             router.addRoutes(store.getters.addRouters)
             //得到按钮列表
             store.dispatch('getButtonList').then(res => {

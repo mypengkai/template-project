@@ -50,7 +50,7 @@
             <span style="font-size:14px;">桩号: {{ treeFrom.startStation}}-{{treeFrom.endStation }}</span>
           </el-col>
           <el-col :span="8">
-            <span style="font-size:14px;">编码: {{ treeFrom.id.split('_')[1] }}</span>
+            <span style="font-size:14px;">编码: {{ treeFrom.id.split("_")[1]}}</span>
           </el-col>
           <el-col :span="4">
             <span style="font-size:14px;">状态: {{ treeFrom.iscomplete=='0'?'未完成':'已完成'}}</span>
@@ -193,7 +193,12 @@
     <el-dialog :visible.sync="dialogFormVisible" title="指定工序">
       <el-form ref="addProcessForm" :model="form" :rules="acceptRule" label-width="120px">
         <el-form-item label="工序名称" prop="processSDictId">
-          <el-select v-model="form.processSDictId" placeholder="请选择工序" size="small" style="width:100%">
+          <el-select
+            v-model="form.processSDictId"
+            placeholder="请选择工序"
+            size="small"
+            style="width:100%"
+          >
             <el-option
               v-for="item in processSDictOption"
               :key="item.id"
@@ -204,10 +209,18 @@
         </el-form-item>
 
         <el-form-item label="工序验收序号" prop="seq">
-          <el-input-number v-model="seq" controls-position="right" :min="1" :max="100" size="small" style="width:100%"></el-input-number>
+          <el-input-number
+            v-model="seq"
+            controls-position="right"
+            :min="1"
+            :max="100"
+            size="small"
+            style="width:100%"
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="工序验收次数" prop="checkNum">
-          <el-input-number  style="width:100%"
+          <el-input-number
+            style="width:100%"
             v-model="checkNum"
             controls-position="right"
             :min="1"
@@ -308,7 +321,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="分部分项:">
-                <el-input v-model="projectItem" :disabled="true" size="small" ></el-input>
+                <el-input v-model="projectItem" :disabled="true" size="small"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -341,7 +354,6 @@
                 </el-select>
               </el-form-item>
             </el-col>
-           
           </el-row>
           <el-row>
             <el-col :span="12">
@@ -475,7 +487,7 @@
                 <el-upload
                   class="avatar-uploader"
                   ref="uploadSelf"
-                   :on-success="handActive"
+                  :on-success="handActive"
                   :action="leakRepairProcessUrl"
                   name="files"
                   :headers="headers"
@@ -976,6 +988,7 @@ export default {
       });
     },
     initProcessByTypeId(codeid) {
+      console.log(codeid,'codied')
       // 初始化新增工序通过工序类型id
       this.processSDictOption = []; //先清空
       this.processSDictOption.unshift({ process: "全部" });
@@ -1045,11 +1058,13 @@ export default {
       this.codeid = data.id;
       this.showSelectedProjectItemInfo(data.id);
       this.projectItemId = data.id;
-      if (data.id.split("_")[1].length == 18) {
-        this.addProcessBtn = true;
-      } else {
+      
+      if (data.hasChildren) {
         this.addProcessBtn = false;
+      } else {
+        this.addProcessBtn = true;
       }
+
       this.querydata.projectItemId = data.id;
       this.formData.projectItemId = data.id;
       this.overState(data.id);
@@ -1105,8 +1120,8 @@ export default {
       // 编辑指定验收弹框
       this.appointCheckDialogFormVisible = true;
       //this.apponitCheckFrom={};
-      this.apponitCheckFrom.planSelfCheckPersonName="";
-      this.apponitCheckFrom.planCheckPersonName=""
+      this.apponitCheckFrom.planSelfCheckPersonName = "";
+      this.apponitCheckFrom.planCheckPersonName = "";
       this.apponitCheckFrom.processId = data.id;
       if (data.state1 == "1") {
         request
@@ -1218,8 +1233,8 @@ export default {
                   message: "指定验收计划成功",
                   type: "success"
                 });
-                 this.pageForm.realname = "";
-                 this.pageForm.position = "";
+                this.pageForm.realname = "";
+                this.pageForm.position = "";
                 // this.apponitCheckFrom.planSelfCheckPersonName="";
                 // this.apponitCheckFrom.planCheckPersonName="";
                 this.appointCheckDialogFormVisible = false;
@@ -1312,11 +1327,10 @@ export default {
         }
       });
     },
-    handActive(response,file,fileList){
+    handActive(response, file, fileList) {
       //  console.log(response.ok,"response")
       //  console.log(file,"file")
       //  console.log(fileList,"fileList")
-     
       //  if(response.ok){
       //      this.dialogFormVisibleBL = false;
       //      this.clearUploadedImage();
@@ -1332,10 +1346,12 @@ export default {
       request
         .post("/rest/processCheck/processComplete", { codeid: codeid })
         .then(res => {
+          console.log(res.data, "res.data000");
           if (res.data.ok) {
             request
               .post("/rest/projectItemInfo/getProjectItemById/" + codeid)
               .then(ress => {
+                console.log(ress.data.data, "ress.data");
                 if (ress.data.ok) {
                   if (
                     res.data.data.complete &&
@@ -1351,20 +1367,23 @@ export default {
                     that.overProcessBtn = false;
                     that.addProcessBtn = false;
                     that.leftTopDetils = true;
-                  } else if (
-                    !res.data.data.complete &&
+                  }
+                   else if (
+                    !res.data.data.complete
+                     &&
                     ress.data.data.iscomplete == "0"
                   ) {
                     that.overProcessBtn = false;
                     //that.addProcessBtn = true
                     that.leftTopDetils = true;
                   }
-                } else if ((res.data.data = null || res.data.data == "")) {
-                  that.overProcessBtn = true;
-                  that.leftTopDetils = true;
-                } else {
-                  that.leftTopDetils = true;
                 }
+                //  else if ((res.data.data = null || res.data.data == "")) {
+                //   that.overProcessBtn = true;
+                //   that.leftTopDetils = true;
+                // } else {
+                //   that.leftTopDetils = true;
+                // }
               });
           }
         });

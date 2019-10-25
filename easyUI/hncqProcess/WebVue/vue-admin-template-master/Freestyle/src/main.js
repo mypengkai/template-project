@@ -14,7 +14,7 @@ import VideoPlayer from 'vue-video-player' //视频
 // 图片预览
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
-
+import "@/utils/permission"
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
