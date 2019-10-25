@@ -52,7 +52,7 @@
          </el-table>
     </div>
      </div>
-    <div class="btn"> 
+    <div class="btn">
         <el-button @click="close">取消</el-button>
         <el-button type="primary" @click="submitForm('addForm')">确定</el-button>
     </div>
@@ -91,7 +91,7 @@
           <el-table-column prop="zhiwei" label="职务"></el-table-column>
           <el-table-column prop="mobilePhone" label="电话"></el-table-column>
         </el-table>
-        <el-pagination 
+        <el-pagination
            class="pageList"
           :current-page.sync="receiveData.pageNo"
           :page-sizes="[10,20,30]"
@@ -105,7 +105,7 @@
           <el-button @click="acceptUserDialog = false">取消</el-button>
           <el-button type="primary" @click="toggleSelection()">确定</el-button>
         </div>
-      
+
     </el-dialog>
   </div>
 </template>
@@ -178,7 +178,7 @@ export default {
     checkGroup(data) {
       console.log(data);
       this.addForm.userGroupId = data;
-      Organization.getAllProjectItemTree({ userGroupId: data, pId: "0" }).then(
+      Organization.getAllProjectItemTree({ userGroupId: data, pId: "0", iskey: "0" }).then(
         res => {
           if (res.data.ok) {
             this.setProjectItem = res.data.data;
@@ -186,7 +186,7 @@ export default {
         }
       );
     },
-    // 
+    //
      receiveUserList() {
       //接收人列表
       processInfo.getUsersByDepartId(this.receiveData).then(res => {
@@ -212,7 +212,7 @@ export default {
         this.receiveUserList();
     },
     toggleSelection() {
-      this.acceptUserDialog = false; 
+      this.acceptUserDialog = false;
       this.formData = this.multipleSelection;
       let items = this.multipleSelection;
       let names="";
@@ -232,7 +232,8 @@ export default {
       if (node.level > 0) {
         Organization.getAllProjectItemTree({
           userGroupId: this.addForm.userGroupId,
-          pId: node.data.id
+          pId: node.data.id,
+          iskey: "1"
         }).then(res => {
           resolve(res.data.data);
         });
@@ -272,9 +273,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .addNumber {
-  
+
   .conent{
-      overflow: hidden; 
+      overflow: hidden;
   }
   .conentLeft {
     float: left;
