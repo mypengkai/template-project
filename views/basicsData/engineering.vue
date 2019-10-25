@@ -268,7 +268,7 @@
               message: '请选择组织机构'
               })
           } else {
-            api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: '0' }).then(res => {
+            api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: '0', iskey: "0" }).then(res => {
               this.dataList = res.data.data
             })
           }
@@ -278,7 +278,7 @@
       loadNextProjectItemLayer(tree, treeNode, resolve) {  //异步加载列表中分部分项
         this.node_had = tree;
         this.resolve_had = resolve;
-          api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: tree.id }).then(res => {
+          api.getAllProjectItemTree({ userGroupId: this.queryParamData.userGroupId, pId: tree.id, iskey: "1" }).then(res => {
           resolve(res.data.data)
         })
       },
@@ -337,7 +337,8 @@
         }
       },
       updateProject(data) {   //修改工程分部分项
-        this.dialogFormTitle = data.projectItem + '~修改'
+        this.dialogFormTitle = data.projectItem + '~修改';
+
         this.getProjectItemById(data)
         this.dialogFormVisible = true   //表单是否可见
         this.isUpdateId=true;  //修改时，编码不能被动
@@ -442,7 +443,7 @@
       },
       handleSetKeyUserGroupCheckChange(item) {  //设置关键工序的条件
         this.setProjectItemOrgId = item.id
-        api.getAllProjectItemTree({ userGroupId: item.id, pId: '0' }).then(res => {
+        api.getAllProjectItemTree({ userGroupId: item.id, pId: '0', iskey: "0" }).then(res => {
           this.setProjectItemKey = res.data.data;
         })
       },
@@ -457,7 +458,7 @@
       },
       loadNextLayer(node, resolve) {  //异步加载下一级分部分项
         if (node.level > 0) {
-          api.getAllProjectItemTree({ userGroupId: this.setProjectItemOrgId, pId: node.data.id }).then(res => {
+          api.getAllProjectItemTree({ userGroupId: this.setProjectItemOrgId, pId: node.data.id , iskey: "1" }).then(res => {
             let childNodes=[];
             for(let i=0;i<res.data.data.length;i++){
               childNodes.push({
