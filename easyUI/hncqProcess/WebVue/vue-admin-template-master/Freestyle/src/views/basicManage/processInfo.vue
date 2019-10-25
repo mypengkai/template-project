@@ -46,7 +46,6 @@
         </el-table-column>
       </el-table>
     </div>
-
     <!--分页-->
 
     <el-pagination

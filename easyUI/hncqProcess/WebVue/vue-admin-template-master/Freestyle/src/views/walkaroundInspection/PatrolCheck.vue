@@ -37,7 +37,7 @@
       <el-table-column prop="departname" label="组织机构" width="100" align="center"></el-table-column>
       <el-table-column prop="projectItem" label="分部分项"></el-table-column>
       <el-table-column prop="job_name_cn" label="职位" width="120" align="center"></el-table-column>
-      <el-table-column prop="zhuanghao" label="桩号" width="140" align="center"></el-table-column>
+      <el-table-column prop="zhuanghao" label="桩号" width="145" align="center"></el-table-column>
       <el-table-column prop="describe" label="巡视描述" width="150"></el-table-column>
       <el-table-column prop="photoLocation" label="拍照地点" width="150"></el-table-column>
       <el-table-column prop="createTime" label="巡视时间" align="center" width="100"></el-table-column>

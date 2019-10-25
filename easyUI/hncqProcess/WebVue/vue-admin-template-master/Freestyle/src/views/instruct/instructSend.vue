@@ -102,7 +102,7 @@
             v-if="scope.row.state==='-1' || scope.row.state==='3' || scope.row.state==='-2'"
           >
             <el-button
-              type="success"
+              type="warning"
               size="small"
               icon="el-icon-edit"
               circle
