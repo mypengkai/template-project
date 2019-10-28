@@ -189,6 +189,7 @@ export default {
     userGroupOnChange(data) {
       // 组织机构下拉树
       this.orgId = data;
+      this.sendData.departId = data;
       Organization.getProjectItemFromLayer({
         userGroupId: data,
         pId: "0"

@@ -211,7 +211,7 @@
           :rows="4"
           v-model="myApplyChangeForm.remarks"
           type="textarea"
-          placeholder="请输入内容"
+          placeholder="请输入备注内容"
         />
       </el-form-item>
       <el-form-item>
