@@ -212,7 +212,7 @@
           :rows="4"
           v-model="myApplyChangeForm.remarks"
           type="textarea"
-          placeholder="请输入内容"
+          placeholder="请输入备注内容"
         />
       </el-form-item>
       <el-form-item>
@@ -235,18 +235,15 @@
                                   <li><span>会议编号:</span><i>{{item.publicData.meetingSummaryNumber}}</i></li>
                                   <li><span>会议主题:</span><i>{{item.publicData.meetingTheme}}</i></li>
                                   <li><span>会议地点:</span><i>{{item.publicData.meetingAddress}}</i></li>
-                                  
                                   <li><span>组织机构:</span><i>{{item.publicData.departname}}</i></li>
                                   <li><span>分部分项:</span><i>{{item.publicData.projectItem}}</i></li>
                                   <li><span>桩号:</span><i>{{(item.publicData.startStation!==null && item.publicData.startStation!=="" && item.publicData.startStation!==undefined && item.publicData.endStation!==null && item.publicData.endStation!=="" && item.publicData.endStation!==undefined) ? (item.publicData.startStation+'~'+item.publicData.endStation) : ''}}</i></li>
-                                 
                                   <li><span>变更等级:</span>
                                       <el-tag  type="info" v-if="item.publicData.moneyLevel==='one_level'">一级</el-tag>
                                       <el-tag  type="success" v-else-if="item.publicData.moneyLevel==='two_level'">二级</el-tag> 
                                       <el-tag type="warning" v-else-if="item.publicData.moneyLevel==='three_level'">三级</el-tag> 
                                       <el-tag  type="danger" v-else-if="item.publicData.moneyLevel==='four_level'">四级</el-tag> 
                                   </li>
-                                  
                                   <li><span>会议主持人:</span><i>{{item.publicData.meetingHostName}}</i></li>
                                   <li><span>会议记录人:</span><i>{{item.publicData.meetingNoteTakerName}}</i></li>
                                   <li><span>开会时间:</span><i>{{item.publicData.meetingDatetime}}</i></li>

@@ -177,7 +177,7 @@ export default {
     // 选择组织机构触发分部分项
     checkGroup(data) {
       console.log(data);
-      this.addForm.userGroupId = data;
+      this.addForm.organizationId = data;
       Organization.getAllProjectItemTree({ userGroupId: data, pId: "0", iskey: "0" }).then(
         res => {
           if (res.data.ok) {
@@ -231,7 +231,7 @@ export default {
       //异步加载下一级分部分项
       if (node.level > 0) {
         Organization.getAllProjectItemTree({
-          userGroupId: this.addForm.userGroupId,
+          userGroupId: this.addForm.organizationId,
           pId: node.data.id,
           iskey: "1"
         }).then(res => {
@@ -247,6 +247,17 @@ export default {
     close() {
       this.$emit("cancel");
     },
+
+//    organizationId: 030001003001
+// groupId: 030001003001_T01J001F001ZV001QD001
+// groupName: 测试【四组】
+// groupUserId: 40288a8f6cd27ea9016cd291ecc30009,40288a8f6ce12592016ce14a6ef20008,
+// groupUser: 陈驰,徐翔,
+// phoneNumber: 18627839094,18627839094,
+// userGroupId: 030001003001
+
+
+
     submitForm(formName) {
       let ids = this.$refs.setKeyProjectItemTree.getCheckedKeys();
       this.addForm.groupId = ids.join(",");
