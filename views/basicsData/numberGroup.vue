@@ -99,8 +99,8 @@
       ></checkBox>
     </el-dialog>
     <!-- 新增 -->
-    <el-dialog title="新增" :visible.sync="dialogVisible"  fullscreen>
-         <addNumber @cancel="dialogVisible=false"  @comfirm="_searchList()" v-if="flag"></addNumber>
+    <el-dialog title="新增" :visible.sync="dialogVisible" fullscreen>
+      <addNumber @cancel="dialogVisible=false" @comfirm="_searchList()" v-if="flag"></addNumber>
     </el-dialog>
   </div>
 </template>
@@ -138,18 +138,18 @@ export default {
       total: 0,
       sendData: {
         departId: "", //部门id
-        projectItemId: "", // 分部分项id
+        groupId: "", // 分部分项id
         pageNo: 1, // 当前页
         pageSize: 10 // 每页条数
       },
-      flag:false,
+      flag: false,
       nowItem: "",
       name: "", // 组织机构回填显示
       projectItem: "", // 分部分项回填显示
       dialogFormVisible: false, // 查看编辑弹框
       innerVisible: false, // 组织机构弹框
       projectVisible: false, // 工程分项弹框
-      dialogVisible:false,   // 新增
+      dialogVisible: false, // 新增
       userGroupOption: [],
       projectItemTreeOptions: [], // 分部分项树
       userGroupId: "",
@@ -172,12 +172,11 @@ export default {
   },
   methods: {
     action() {
-     
       this.dialogVisible = true;
-       this.flag = false;
-          this.$nextTick(()=>{
-              this.flag = true;
-          })
+      this.flag = false;
+      this.$nextTick(() => {
+        this.flag = true;
+      });
       // this.dialogFormVisible = true;
     },
     initUserGrouptTree() {
@@ -211,7 +210,7 @@ export default {
     },
     projectItemOnClick(data) {
       // 分部分项选择后的数据
-      this.sendData.projectItemId = data.id;
+      this.sendData.groupId = data.id;
     },
     /*   async actionItem(id) {  // 查询单个请求
            let { data } = await api.searchOne({ id })
@@ -242,51 +241,48 @@ export default {
         this._searchList();
       });
     },
-    addProcessFunction(formName) {
-      // 新增
-      const fromData = {
-        userGroupId: this.userGroupId,
-        processMDictId: this.form.processMDictId,
-        processDictId: this.form.processSDictId,
-        projectItemId: this.projectItemId,
-        remark: this.form.remark,
-        checkNum: this.checkNum,
-        seq: this.seq
-      };
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          request.post("/rest/processCheck/addProcess", fromData).then(res => {
-            if (res.data.respCode == 0) {
-              this.$message({
-                message: "恭喜你，新增成功",
-                type: "success"
-              });
-              this.loadAppointProcessList();
-              this.dialogFormVisible = false;
-            }
-          });
-        }
-      });
-    },
+    // addProcessFunction(formName) {
+    //   // 新增
+    //   const fromData = {
+    //     userGroupId: this.userGroupId,
+    //     processMDictId: this.form.processMDictId,
+    //     processDictId: this.form.processSDictId,
+    //     projectItemId: this.projectItemId,
+    //     remark: this.form.remark,
+    //     checkNum: this.checkNum,
+    //     seq: this.seq
+    //   };
+    //   this.$refs[formName].validate(valid => {
+    //     if (valid) {
+    //       request.post("/rest/processCheck/addProcess", fromData).then(res => {
+    //         if (res.data.respCode == 0) {
+    //           this.$message({
+    //             message: "恭喜你，新增成功",
+    //             type: "success"
+    //           });
+    //           this.loadAppointProcessList();
+    //           this.dialogFormVisible = false;
+    //         }
+    //       });
+    //     }
+    //   });
+    // },
     handleSizeChange(val) {
       this.sendData.pageSize = val;
       this._searchList();
     },
-    handleUserGroupChange(data) {
-      // 组织机构树点击事件
-      this.projectItemTree = []; //清空数据
-      if (data.children.length === 0) {
-        this.sendData.departId = data.id;
-        project.projectList({ orgId: data.id }).then(res => {
-          this.projectItemTree = res.data.data;
-        });
-      } else {
-      }
-    },
-    projectItemOnClick(data) {
-      // 工程分部分项id
-      this.sendData.projectItemId = data.id;
-    },
+    // handleUserGroupChange(data) {
+    //   // 组织机构树点击事件
+    //   this.projectItemTree = []; //清空数据
+    //   if (data.children.length === 0) {
+    //     this.sendData.departId = data.id;
+    //     project.projectList({ orgId: data.id }).then(res => {
+    //       this.projectItemTree = res.data.data;
+    //     });
+    //   } else {
+    //   }
+    // },
+
     reset() {
       // 重置按钮
       this.reload();
