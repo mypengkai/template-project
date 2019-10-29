@@ -17,6 +17,7 @@
           <span>分部分项:</span>
           <select-tree
             clearable
+            ref="infoItemName"
             :options="projectItemTreeOption"
             :props="projectItemDefaultProps"
             v-on:noDe="handleProjectItemChange"
@@ -141,6 +142,7 @@ export default {
     reset() {
       this.sendData.departId = "";
       this.sendData.itemInfoId = "";
+      this.$refs.infoItemName.labelModel = "";
       this.query();
     },
     // 查询
@@ -164,6 +166,7 @@ export default {
     },
     handleProjectItemChange(data) {
       // 工程分部分项id
+      console.log(data,'data')
       this.sendData.itemInfoId = data.id;
     },
     // 指令
